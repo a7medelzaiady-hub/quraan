@@ -114,7 +114,7 @@ select.inp{padding-left:28px;cursor:pointer}
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
-    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addSurah('hadith-section','hd',true,false)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
+    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,false)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
   </div>
 </div>
 
@@ -128,8 +128,19 @@ select.inp{padding-left:28px;cursor:pointer}
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-function getExtraForNewSurah(includeNextPlan, label) {
-    var nextPlanHtml = includeNextPlan ? `<input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">` : '';
+function getExtraForNewSurah(includeNextPlan, label, prefix, idx) {
+    var nextPlanHtml = '';
+    if (includeNextPlan) {
+        var nId = prefix + 'nxt' + idx;
+        nextPlanHtml = `<div style="grid-column: 1 / -1; margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
+            <div class="flbl" style="color:#133020; font-size:12px;">ما سيتم حفظه القادم:</div>
+            <div class="surah-row" style="background:#fff; margin-bottom:0; box-shadow:none;">
+                <div class="ac-wrap"><input class="inp nxt-sr" id="sr-${nId}" placeholder="اسم السورة..."><div class="ac-drop" id="drop-${nId}"></div></div>
+                <div class="sel-wrap"><select class="inp nxt-sel" id="sel-${nId}" onchange="toggleRange('rng-${nId}',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>
+                <div class="range-row hidden" id="rng-${nId}" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num nxt-f" id="f-${nId}" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num nxt-t" id="t-${nId}" type="number" placeholder="إلى آية"></div></div>
+            </div>
+        </div>`;
+    }
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
             <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
@@ -140,7 +151,16 @@ function getExtraForNewSurah(includeNextPlan, label) {
 }
 
 function getExtraForNewMur(includeNextPlan, label) {
-    var nextPlanHtml = includeNextPlan ? `<input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">` : '';
+    var nextPlanHtml = '';
+    if (includeNextPlan) {
+        nextPlanHtml = `<div style="grid-column: 1 / -1; margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
+            <div class="flbl" style="color:#133020; font-size:12px;">ما سيتم حفظه القادم:</div>
+            <div class="q-row" style="background:#fff; margin-bottom:0; box-shadow:none;">
+                <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="من س"></div>
+                <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="إلى س"></div>
+            </div>
+        </div>`;
+    }
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
             <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
@@ -154,27 +174,34 @@ function addSurah(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
   var label = (prefix === 'ns') ? 'السورة' : (prefix === 'ps' ? 'الماضي' : 'القسم');
-  var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label) : '';
+  var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label, prefix, idx) : '';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
-    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + extraHtml;
+    '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
+    '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
+    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num main-f" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + extraHtml;
   document.getElementById(containerId).appendChild(div);
   setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
+  if (includeNextPlan) {
+      var nId = prefix + 'nxt' + idx;
+      setupAC(document.getElementById('sr-'+nId), document.getElementById('drop-'+nId));
+  }
 }
 
 function addQuestion(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  var label = (prefix === 'mq') ? 'المذكرة' : (prefix === 'pm' ? 'الماضي' : 'السراج');
+  var label = (prefix === 'mq') ? 'المذكرة' : (prefix === 'pm' ? 'الماضي' : (prefix === 'sj' ? 'السراج' : 'الحديث'));
   var extraHtml = withExtra ? getExtraForNewMur(includeNextPlan, label) : '';
+  var pFrom = (prefix === 'hd' || prefix === 'sj') ? 'من رقم' : 'من س';
+  var pTo = (prefix === 'hd' || prefix === 'sj') ? 'إلى رقم' : 'إلى س';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
-    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + extraHtml;
+    '<div class="frow"><input class="inp num main-qf" id="qf-'+prefix+idx+'" type="number" placeholder="'+pFrom+'"></div>'+
+    '<div class="frow"><input class="inp num main-qt" id="qt-'+prefix+idx+'" type="number" placeholder="'+pTo+'"></div>' + extraHtml;
   document.getElementById(containerId).appendChild(div);
 }
 
 function setupAC(inp,drop){
+  if(!inp || !drop) return;
   inp.addEventListener('input',function(){
     var val=inp.value;
     if(!val.trim()){drop.style.display='none';return;}
@@ -186,24 +213,31 @@ function setupAC(inp,drop){
 }
 function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
 function delRow(id){document.getElementById(id).remove();}
-function toggleRange(rngId,val){document.getElementById(rngId).classList.toggle('hidden',val!=='range');}
+function toggleRange(rngId,val){var el = document.getElementById(rngId); if(el) el.classList.toggle('hidden',val!=='range');}
 
 function collectData(containerId, isQ) {
   var res=[];
   document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
     var item={
-        nextPlan: row.querySelector('.next-plan')?.value || '',
         rating: row.querySelector('.rating-sel')?.value || '',
         errors: row.querySelector('.error-inp')?.value || ''
     };
     if(!isQ){
-        item.sr = row.querySelector('input[id^="sr-"]')?.value;
-        item.type = row.querySelector('select')?.value;
-        item.f = row.querySelector('input[id^="f-"]')?.value;
-        item.t = row.querySelector('input[id^="t-"]')?.value;
+        item.sr = row.querySelector('.main-sr')?.value;
+        item.type = row.querySelector('.main-sel')?.value;
+        item.f = row.querySelector('.main-f')?.value;
+        item.t = row.querySelector('.main-t')?.value;
+        
+        item.nextPlanSr = row.querySelector('.nxt-sr')?.value;
+        item.nextPlanType = row.querySelector('.nxt-sel')?.value;
+        item.nextPlanF = row.querySelector('.nxt-f')?.value;
+        item.nextPlanT = row.querySelector('.nxt-t')?.value;
     } else {
-        item.f = row.querySelector('input[id^="qf-"]')?.value;
-        item.t = row.querySelector('input[id^="qt-"]')?.value;
+        item.f = row.querySelector('.main-qf')?.value;
+        item.t = row.querySelector('.main-qt')?.value;
+        
+        item.nextPlanF = row.querySelector('.nxt-qf')?.value;
+        item.nextPlanT = row.querySelector('.nxt-qt')?.value;
     }
     if(item.sr || item.f) res.push(item);
   });
@@ -232,7 +266,10 @@ function buildReportHTML(nm, data) {
                 if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
                 html += `</div>`;
             }
-            if(item.nextPlan) html += `<div style="font-size:11px; color:#8ab89a; margin-top:3px;">القادم: ${item.nextPlan}</div>`;
+            if(item.nextPlanSr) {
+                var nxtTxt = item.nextPlanSr + (item.nextPlanType==='range' ? ' ('+item.nextPlanF+' - '+item.nextPlanT+')' : ' كاملة');
+                html += `<div style="font-size:11px; color:#8ab89a; margin-top:5px; padding-top:4px; border-top:1px dashed #285438;">القادم: ${nxtTxt}</div>`;
+            }
             html += `</div>`;
         });
         html += `</div>`;
@@ -264,7 +301,9 @@ function buildReportHTML(nm, data) {
                 if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
                 html += `</div>`;
             }
-            if(item.nextPlan) html += `<div style="font-size:11px; color:#8ab89a; margin-top:3px;">القادم: ${item.nextPlan}</div>`;
+            if(item.nextPlanF || item.nextPlanT) {
+                html += `<div style="font-size:11px; color:#8ab89a; margin-top:5px; padding-top:4px; border-top:1px dashed #285438;">القادم: من س${item.nextPlanF} إلى س${item.nextPlanT}</div>`;
+            }
             html += `</div>`;
         });
         html += `</div>`;
@@ -288,7 +327,7 @@ function buildReportHTML(nm, data) {
     if(data.sj && data.sj.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">💡 السراج</div>`;
         data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            html += `<div class="rep-item">من رقم ${item.f} إلى رقم ${item.t}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
@@ -303,8 +342,7 @@ function buildReportHTML(nm, data) {
     if(data.hd && data.hd.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث والأذكار</div>`;
         data.hd.forEach(function(item) {
-            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
-            html += `<div class="rep-item">${txt}`;
+            html += `<div class="rep-item">من رقم ${item.f} إلى رقم ${item.t}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
@@ -347,7 +385,7 @@ async function generateAndShare(){
   var data = {
     ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
     mq: collectData('mur-questions', true), pm: collectData('past-mur', true),
-    sj: collectData('suraj-section', true), hd: collectData('hadith-section', false)
+    sj: collectData('suraj-section', true), hd: collectData('hadith-section', true)
   };
 
   var zone = document.getElementById('capture-zone');
@@ -391,7 +429,7 @@ addSurah('past-surahs','ps',true,false);
 addQuestion('mur-questions','mq',true,true);
 addQuestion('past-mur','pm',true,false);
 addQuestion('suraj-section','sj',true,false);
-addSurah('hadith-section','hd',true,false);
+addQuestion('hadith-section','hd',true,false);
 </script>
 </body>
 </html>
