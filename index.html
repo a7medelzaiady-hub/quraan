@@ -300,19 +300,16 @@ function buildReportHTML(nm, data) {
         html += `</div>`;
     }
 
-    if(data.sj && data.sj.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">💡 الاذكار</div>`;
-        data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+    if(data.hd && data.hd.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث والأذكار</div>`;
+        data.hd.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
                 if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
                 html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
             }
             html += `</div>`;
         });
