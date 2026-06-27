@@ -278,11 +278,11 @@ function buildReportHTML(nm, data) {
         html += `</div>`;
     }
 
-    if(data.hd && data.hd.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث</div>`;
-        data.hd.forEach(function(item) {
-            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
-            html += `<div class="rep-item">${txt}</div>`;
+  
+    if(data.sj && data.sj.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">💡 الحديث</div>`;
+        data.sj.forEach(function(item) {
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
         });
         html += `</div>`;
     }
