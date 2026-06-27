@@ -77,11 +77,11 @@ select.inp{padding-left:28px;cursor:pointer}
 
 <div class="body">
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات الطالب</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم الطالب</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم الطالب...">
+        <div class="flbl">اسم البطل</div>
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
         <button onclick="loadStudentData()" class="add-btn" style="margin-top:10px">استرجاع بيانات سابقة</button>
       </div>
     </div>
@@ -186,7 +186,7 @@ function collectData(containerId, isQ) {
 
 function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم الطالب'); return;}
+  if(!nm){alert('يرجى إدخال اسم البطل'); return;}
   
   var data = { 
     ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
@@ -199,7 +199,7 @@ function generateAndShare(){
 function loadStudentData() {
   var nm = document.getElementById('inp-student').value.trim();
   var data = localStorage.getItem('rep_' + nm);
-  if (!data) { alert('لا يوجد بيانات لهذا الطالب'); return; }
+  if (!data) { alert('لا يوجد بيانات لهذا البطل'); return; }
   var obj = JSON.parse(data);
   // إعادة بناء الحقول (تنبيه: هذا الجزء يتطلب دالة مساعدة لملء الحقول إذا رغبت بالاسترجاع الكامل للواجهة)
   alert('تم العثور على بيانات، يمكنك رؤيتها في التخزين المحلي للمتصفح.');
