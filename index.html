@@ -6,36 +6,24 @@
 <title>مركز خادم القرآن - متابعة الحفظ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
-  --green-deep:#0b1e14;
-  --green-mid:#133020;
-  --green-light:#1c422c;
-  --gold:#d4af53;
-  --gold-light:#ebd084;
-  --white:#ffffff;
-  --cream:#f9f5ee;
-  --border:#dde8e0;
-  --text:#1a1a1a;
-  --sub:#5a6b61;
-  --red:#dc2626;
+  --green-deep:#0b1e14;--green-mid:#133020;--green-light:#1c422c;
+  --gold:#d4af53;--gold-light:#ebd084;--white:#ffffff;
+  --cream:#f9f5ee;--border:#dde8e0;--text:#1a1a1a;--sub:#5a6b61;--red:#dc2626;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);min-height:100vh;overflow-x:hidden}
-
-.hdr{background:linear-gradient(160deg,var(--green-deep) 0%,var(--green-mid) 100%);padding:20px 16px 24px;text-align:center;position:relative}
+.hdr{background:linear-gradient(160deg,var(--green-deep),var(--green-mid));padding:20px 16px 24px;text-align:center}
 .hdr-emblem{width:56px;height:56px;margin:0 auto 10px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
-.hdr-title{color:var(--white);font-family:'Amiri',serif;font-size:22px;font-weight:700}
+.hdr-title{color:#fff;font-family:'Amiri',serif;font-size:22px;font-weight:700}
 .hdr-subtitle{color:var(--gold-light);font-size:13px;font-weight:600;margin-top:6px}
-
 .body{padding:14px 14px 100px}
-.section{background:var(--white);border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.section{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .sec-head{background:var(--green-mid);padding:11px 14px;border-radius:14px 14px 0 0}
-.sec-head-title{color:var(--white);font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.sec-head-title{color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
 .sec-head-title i{color:var(--gold-light);font-size:16px}
 .sec-body{padding:12px}
-
 .flbl{font-size:11px;color:var(--sub);margin-bottom:4px;font-weight:600}
 .frow{margin-bottom:9px}
 .inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Cairo',sans-serif;color:var(--text);background:#fafcfa;outline:none}
@@ -43,190 +31,25 @@ html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);m
 .sel-wrap{position:relative}
 .sel-wrap::after{content:'▾';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--green-mid);font-size:12px;pointer-events:none}
 select.inp{padding-left:28px;cursor:pointer}
-
 .ac-wrap{position:relative}
-.ac-drop{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:var(--white);border:1.5px solid var(--green-mid);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
+.ac-drop{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:#fff;border:1.5px solid var(--green-mid);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
 .ac-item{padding:9px 13px;font-size:13px;font-family:'Amiri',serif;cursor:pointer;border-bottom:.5px solid #eef4f0}
-
-.surah-row, .q-row{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
+.surah-row,.q-row{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
 .q-row{grid-template-columns:1fr 1fr}
-.del-btn{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.del-btn{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#fff;border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
 .range-row.hidden{display:none}
-
 .add-btn{width:100%;padding:8px;margin-top:2px;border:1.5px dashed var(--green-mid);border-radius:9px;background:transparent;color:var(--green-mid);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
-
-.submit-wrap{position:fixed;bottom:0;right:0;left:0;background:var(--white);padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
+.submit-wrap{position:fixed;bottom:0;right:0;left:0;background:#fff;padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
 .submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-mid),var(--green-light));color:var(--gold-light);border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer}
-
-.render-container{position:absolute;top:-9999px;left:0;width:520px;}
-
-/* ===== REPORT CARD - Child-friendly Pro Design ===== */
-.rep-card{
-  width:520px;
-  background:#fff;
-  font-family:'Cairo',sans-serif;
-  overflow:hidden;
-  border-radius:0;
-}
-
-/* Top banner */
-.rep-banner{
-  background:linear-gradient(135deg,#0b4d2e 0%,#1a7a4a 60%,#0b4d2e 100%);
-  padding:22px 24px 18px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.rep-banner::before{
-  content:'';
-  position:absolute;
-  top:-30px;right:-30px;
-  width:130px;height:130px;
-  border-radius:50%;
-  background:rgba(212,175,83,.12);
-}
-.rep-banner::after{
-  content:'';
-  position:absolute;
-  bottom:-40px;left:-20px;
-  width:100px;height:100px;
-  border-radius:50%;
-  background:rgba(255,255,255,.06);
-}
-.rep-mosque{font-size:38px;display:block;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
-.rep-center-name{
-  font-family:'Amiri',serif;
-  font-size:20px;
-  color:#ffd97d;
-  font-weight:700;
-  letter-spacing:.5px;
-  text-shadow:0 1px 4px rgba(0,0,0,.4);
-}
-.rep-supervisor{
-  font-size:11px;
-  color:rgba(255,220,120,.75);
-  margin-top:3px;
-}
-
-/* Hero badge */
-.rep-hero-badge{
-  background:linear-gradient(135deg,#ffd700,#f5a623,#ffd700);
-  margin:0 24px;
-  margin-top:-1px;
-  padding:10px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  border-radius:0 0 16px 16px;
-  box-shadow:0 4px 12px rgba(245,166,35,.35);
-}
-.rep-hero-badge .star{font-size:18px}
-.rep-hero-name{font-size:16px;font-weight:900;color:#3d2600;letter-spacing:.3px}
-
-/* Date bar */
-.rep-date-bar{
-  background:#f0fdf4;
-  border-bottom:2px dashed #bbf7d0;
-  padding:7px 24px;
-  font-size:11px;
-  color:#166534;
-  font-weight:700;
-  text-align:center;
-}
-
-/* Body */
-.rep-body{padding:14px 18px 18px}
-
-/* Section */
-.rep-sec{margin-bottom:14px}
-.rep-sec-header{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:8px;
-  padding-bottom:5px;
-  border-bottom:2px solid;
-}
-.rep-sec-icon{
-  width:30px;height:30px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;
-}
-.rep-sec-label{font-size:13px;font-weight:800;letter-spacing:.2px}
-
-/* Color themes per section */
-.sec-new    .rep-sec-header{border-color:#86efac} .sec-new    .rep-sec-icon{background:#dcfce7} .sec-new    .rep-sec-label{color:#15803d}
-.sec-past   .rep-sec-header{border-color:#93c5fd} .sec-past   .rep-sec-icon{background:#dbeafe} .sec-past   .rep-sec-label{color:#1d4ed8}
-.sec-mur    .rep-sec-header{border-color:#fde68a} .sec-mur    .rep-sec-icon{background:#fef9c3} .sec-mur    .rep-sec-label{color:#92400e}
-.sec-pmur   .rep-sec-header{border-color:#c4b5fd} .sec-pmur   .rep-sec-icon{background:#ede9fe} .sec-pmur   .rep-sec-label{color:#6d28d9}
-.sec-suraj  .rep-sec-header{border-color:#fdba74} .sec-suraj  .rep-sec-icon{background:#ffedd5} .sec-suraj  .rep-sec-label{color:#c2410c}
-.sec-hadith .rep-sec-header{border-color:#6ee7b7} .sec-hadith .rep-sec-icon{background:#d1fae5} .sec-hadith .rep-sec-label{color:#065f46}
-
-/* Items */
-.rep-items{display:flex;flex-direction:column;gap:5px}
-.rep-item{
-  background:#f8fafc;
-  border:1px solid #e2e8f0;
-  border-radius:10px;
-  padding:8px 11px;
-  position:relative;
-  overflow:hidden;
-}
-.rep-item::before{
-  content:'';
-  position:absolute;
-  right:0;top:0;bottom:0;
-  width:4px;
-  border-radius:0 10px 10px 0;
-}
-.sec-new    .rep-item::before{background:#22c55e}
-.sec-past   .rep-item::before{background:#3b82f6}
-.sec-mur    .rep-item::before{background:#f59e0b}
-.sec-pmur   .rep-item::before{background:#8b5cf6}
-.sec-suraj  .rep-item::before{background:#f97316}
-.sec-hadith .rep-item::before{background:#10b981}
-
-.rep-item-main{font-size:12.5px;font-weight:700;color:#1e293b}
-.rep-item-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
-.rep-badge{
-  font-size:10.5px;font-weight:700;
-  padding:2px 8px;border-radius:20px;
-  display:inline-flex;align-items:center;gap:3px;
-}
-.badge-rating{background:#fef9c3;color:#92400e}
-.badge-error{background:#fee2e2;color:#991b1b}
-.rep-next{
-  margin-top:5px;
-  padding:5px 8px;
-  background:#f0fdf4;
-  border-radius:7px;
-  font-size:11px;
-  color:#15803d;
-  display:flex;align-items:center;gap:5px;
-  font-weight:700;
-}
-
-/* Footer */
-.rep-footer{
-  background:linear-gradient(135deg,#0b4d2e,#1a7a4a);
-  padding:12px 24px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.rep-footer-text{font-size:10px;color:rgba(255,220,100,.8);font-weight:600}
-.rep-stars{font-size:14px;letter-spacing:2px}
-.rep-watermark{font-size:9px;color:rgba(255,255,255,.35)}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div class="hdr-emblem">🕌</div>
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
 </div>
-
 <div class="body">
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل</div></div>
@@ -238,125 +61,101 @@ select.inp{padding-left:28px;cursor:pointer}
       </div>
     </div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
     <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
     <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
     <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
     <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
     <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
   </div>
-
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
   </div>
 </div>
-
 <div class="submit-wrap">
   <button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button>
 </div>
-
-<div class="render-container" id="capture-zone"></div>
 
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-function getExtraForNewSurah(includeNextPlan, label, prefix, idx) {
-    var nextPlanHtml = '';
-    if (includeNextPlan) {
-        var nId = prefix + 'nxt' + idx;
-        nextPlanHtml = `<div style="grid-column: 1 / -1; margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
-            <div class="flbl" style="color:#133020; font-size:12px;">ما سيتم حفظه القادم:</div>
-            <div class="surah-row" style="background:#fff; margin-bottom:0; box-shadow:none;">
-                <div class="ac-wrap"><input class="inp nxt-sr" id="sr-${nId}" placeholder="اسم السورة..."><div class="ac-drop" id="drop-${nId}"></div></div>
-                <div class="sel-wrap"><select class="inp nxt-sel" id="sel-${nId}" onchange="toggleRange('rng-${nId}',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>
-                <div class="range-row hidden" id="rng-${nId}" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num nxt-f" id="f-${nId}" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num nxt-t" id="t-${nId}" type="number" placeholder="إلى آية"></div></div>
-            </div>
-        </div>`;
-    }
-    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
-        </div>
-        ${nextPlanHtml}
-    </div>`;
+function getExtraForNewSurah(includeNextPlan,label,prefix,idx){
+  var nextPlanHtml='';
+  if(includeNextPlan){var nId=prefix+'nxt'+idx;
+    nextPlanHtml=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc;">
+      <div class="flbl" style="color:#133020;font-size:12px;">ما سيتم حفظه القادم:</div>
+      <div class="surah-row" style="background:#fff;margin-bottom:0;">
+        <div class="ac-wrap"><input class="inp nxt-sr" id="sr-${nId}" placeholder="اسم السورة..."><div class="ac-drop" id="drop-${nId}"></div></div>
+        <div class="sel-wrap"><select class="inp nxt-sel" id="sel-${nId}" onchange="toggleRange('rng-${nId}',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>
+        <div class="range-row hidden" id="rng-${nId}" style="grid-column:1/-1;"><div class="frow"><input class="inp num nxt-f" id="f-${nId}" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num nxt-t" id="t-${nId}" type="number" placeholder="إلى آية"></div></div>
+      </div></div>`;}
+  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
+      <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+      <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+    </div>${nextPlanHtml}</div>`;
 }
 
-function getExtraForQ(includeNextPlan, label, isRange) {
-    var pFrom = isRange ? 'من رقم' : 'من س';
-    var pTo   = isRange ? 'إلى رقم' : 'إلى س';
-    var nextPlanHtml = '';
-    if (includeNextPlan) {
-        nextPlanHtml = `<div style="grid-column: 1 / -1; margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
-            <div class="flbl" style="color:#133020; font-size:12px;">ما سيتم حفظه القادم:</div>
-            <div class="q-row" style="background:#fff; margin-bottom:0; box-shadow:none;">
-                <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="${pFrom}"></div>
-                <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="${pTo}"></div>
-            </div>
-        </div>`;
-    }
-    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
-        </div>
-        ${nextPlanHtml}
-    </div>`;
+function getExtraForQ(includeNextPlan,label,isRange){
+  var pFrom=isRange?'من رقم':'من س', pTo=isRange?'إلى رقم':'إلى س';
+  var nextPlanHtml='';
+  if(includeNextPlan){nextPlanHtml=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc;">
+    <div class="flbl" style="color:#133020;font-size:12px;">ما سيتم حفظه القادم:</div>
+    <div class="q-row" style="background:#fff;margin-bottom:0;">
+      <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="${pFrom}"></div>
+      <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="${pTo}"></div>
+    </div></div>`;}
+  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
+      <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+      <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+    </div>${nextPlanHtml}</div>`;
 }
 
 function addSurah(containerId,prefix,withExtra,includeNextPlan){
-  counters[prefix]++; var idx=counters[prefix];
-  var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
-  var label = (prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':'القسم');
-  var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label, prefix, idx) : '';
+  counters[prefix]++;var idx=counters[prefix];
+  var div=document.createElement('div');div.className='surah-row';div.id='row-'+prefix+idx;
+  var label=(prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':'القسم');
+  var extraHtml=withExtra?getExtraForNewSurah(includeNextPlan,label,prefix,idx):'';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
     '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num main-f" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + extraHtml;
+    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column:1/-1;"><div class="frow"><input class="inp num main-f" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>'+extraHtml;
   document.getElementById(containerId).appendChild(div);
-  setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
-  if (includeNextPlan) {
-      var nId = prefix + 'nxt' + idx;
-      setupAC(document.getElementById('sr-'+nId), document.getElementById('drop-'+nId));
-  }
+  setupAC(document.getElementById('sr-'+prefix+idx),document.getElementById('drop-'+prefix+idx));
+  if(includeNextPlan){var nId=prefix+'nxt'+idx;setupAC(document.getElementById('sr-'+nId),document.getElementById('drop-'+nId));}
 }
 
 function addQuestion(containerId,prefix,withExtra,includeNextPlan){
-  counters[prefix]++; var idx=counters[prefix];
-  var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  var isRange = (prefix==='hd' || prefix==='sj');
-  var label = (prefix==='mq')?'المذكرة':(prefix==='pm'?'الماضي':(prefix==='sj'?'السراج':'الحديث'));
-  var pFrom = isRange ? 'من رقم' : 'من س';
-  var pTo   = isRange ? 'إلى رقم' : 'إلى س';
-  var extraHtml = withExtra ? getExtraForQ(includeNextPlan, label, isRange) : '';
+  counters[prefix]++;var idx=counters[prefix];
+  var div=document.createElement('div');div.className='q-row';div.id='qrow-'+prefix+idx;
+  var isRange=(prefix==='hd'||prefix==='sj');
+  var label=(prefix==='mq')?'المذكرة':(prefix==='pm'?'الماضي':(prefix==='sj'?'السراج':'الحديث'));
+  var pFrom=isRange?'من رقم':'من س', pTo=isRange?'إلى رقم':'إلى س';
+  var extraHtml=withExtra?getExtraForQ(includeNextPlan,label,isRange):'';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num main-qf" id="qf-'+prefix+idx+'" type="number" placeholder="'+pFrom+'"></div>'+
-    '<div class="frow"><input class="inp num main-qt" id="qt-'+prefix+idx+'" type="number" placeholder="'+pTo+'"></div>' + extraHtml;
+    '<div class="frow"><input class="inp num main-qt" id="qt-'+prefix+idx+'" type="number" placeholder="'+pTo+'"></div>'+extraHtml;
   document.getElementById(containerId).appendChild(div);
 }
 
 function setupAC(inp,drop){
-  if(!inp||!drop) return;
+  if(!inp||!drop)return;
   inp.addEventListener('input',function(){
     var val=inp.value;
     if(!val.trim()){drop.style.display='none';return;}
@@ -370,224 +169,401 @@ function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;doc
 function delRow(id){document.getElementById(id).remove();}
 function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range');}
 
-function collectData(containerId, isQ) {
+function collectData(containerId,isQ){
   var res=[];
   document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
-    var item={
-        rating: row.querySelector('.rating-sel')?.value || '',
-        errors: row.querySelector('.error-inp')?.value || ''
-    };
+    var item={rating:row.querySelector('.rating-sel')?.value||'',errors:row.querySelector('.error-inp')?.value||''};
     if(!isQ){
-        item.sr   = row.querySelector('.main-sr')?.value;
-        item.type = row.querySelector('.main-sel')?.value;
-        item.f    = row.querySelector('.main-f')?.value;
-        item.t    = row.querySelector('.main-t')?.value;
-        item.nextPlanSr   = row.querySelector('.nxt-sr')?.value;
-        item.nextPlanType = row.querySelector('.nxt-sel')?.value;
-        item.nextPlanF    = row.querySelector('.nxt-f')?.value;
-        item.nextPlanT    = row.querySelector('.nxt-t')?.value;
+      item.sr=row.querySelector('.main-sr')?.value;item.type=row.querySelector('.main-sel')?.value;
+      item.f=row.querySelector('.main-f')?.value;item.t=row.querySelector('.main-t')?.value;
+      item.nextPlanSr=row.querySelector('.nxt-sr')?.value;item.nextPlanType=row.querySelector('.nxt-sel')?.value;
+      item.nextPlanF=row.querySelector('.nxt-f')?.value;item.nextPlanT=row.querySelector('.nxt-t')?.value;
     } else {
-        item.f         = row.querySelector('.main-qf')?.value;
-        item.t         = row.querySelector('.main-qt')?.value;
-        item.nextPlanF = row.querySelector('.nxt-qf')?.value;
-        item.nextPlanT = row.querySelector('.nxt-qt')?.value;
+      item.f=row.querySelector('.main-qf')?.value;item.t=row.querySelector('.main-qt')?.value;
+      item.nextPlanF=row.querySelector('.nxt-qf')?.value;item.nextPlanT=row.querySelector('.nxt-qt')?.value;
     }
-    if(item.sr||item.f) res.push(item);
+    if(item.sr||item.f)res.push(item);
   });
   return res;
 }
 
-function buildReportHTML(nm, data) {
-    var today = new Date();
-    var days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    var months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-    var dateStr = days[today.getDay()] + '، ' + today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+// ═══════════════════════════════════════════════
+//  CANVAS-BASED REPORT GENERATOR (RTL-correct)
+// ═══════════════════════════════════════════════
 
-    function itemHtml(secClass, mainText, item, useRaqam) {
-        var meta = '';
-        if(item.rating) meta += `<span class="rep-badge badge-rating">${item.rating}</span>`;
-        if(item.errors && item.errors != '0') meta += `<span class="rep-badge badge-error">❌ ${item.errors} خطأ</span>`;
-        var metaRow = meta ? `<div class="rep-item-meta">${meta}</div>` : '';
-        
-        var nextRow = '';
-        if(!useRaqam && item.nextPlanSr) {
-            var nxt = item.nextPlanSr + (item.nextPlanType==='range' ? ` (${item.nextPlanF}–${item.nextPlanT})` : ' كاملة');
-            nextRow = `<div class="rep-next">🎯 القادم: ${nxt}</div>`;
-        }
-        if(useRaqam && (item.nextPlanF || item.nextPlanT)) {
-            nextRow = `<div class="rep-next">🎯 القادم: من ${item.nextPlanF} إلى ${item.nextPlanT}</div>`;
-        }
-        
-        return `<div class="rep-item"><div class="rep-item-main">${mainText}</div>${metaRow}${nextRow}</div>`;
-    }
+var C_W = 600; // canvas width
 
-    var sections = '';
-
-    if(data.ns && data.ns.length) {
-        var items = data.ns.map(function(item) {
-            var txt = item.sr + (item.type==='range' ? ` (آية ${item.f}–${item.t})` : ' كاملة');
-            return itemHtml('sec-new', txt, item, false);
-        }).join('');
-        sections += `<div class="rep-sec sec-new">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">📖</div>
-                <div class="rep-sec-label">السور الجديدة</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    if(data.ps && data.ps.length) {
-        var items = data.ps.map(function(item) {
-            var txt = item.sr + (item.type==='range' ? ` (آية ${item.f}–${item.t})` : ' كاملة');
-            return itemHtml('sec-past', txt, item, false);
-        }).join('');
-        sections += `<div class="rep-sec sec-past">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">📚</div>
-                <div class="rep-sec-label">ماضي السور</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    if(data.mq && data.mq.length) {
-        var items = data.mq.map(function(item) {
-            return itemHtml('sec-mur', `من سؤال ${item.f} إلى سؤال ${item.t}`, item, true);
-        }).join('');
-        sections += `<div class="rep-sec sec-mur">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">✏️</div>
-                <div class="rep-sec-label">أسئلة المذكرة الجديدة</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    if(data.pm && data.pm.length) {
-        var items = data.pm.map(function(item) {
-            return itemHtml('sec-pmur', `من سؤال ${item.f} إلى سؤال ${item.t}`, item, true);
-        }).join('');
-        sections += `<div class="rep-sec sec-pmur">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">📋</div>
-                <div class="rep-sec-label">ماضي المذكرة</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    if(data.sj && data.sj.length) {
-        var items = data.sj.map(function(item) {
-            return itemHtml('sec-suraj', `من رقم ${item.f} إلى رقم ${item.t}`, item, true);
-        }).join('');
-        sections += `<div class="rep-sec sec-suraj">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">💡</div>
-                <div class="rep-sec-label">السراج</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    if(data.hd && data.hd.length) {
-        var items = data.hd.map(function(item) {
-            return itemHtml('sec-hadith', `من رقم ${item.f} إلى رقم ${item.t}`, item, true);
-        }).join('');
-        sections += `<div class="rep-sec sec-hadith">
-            <div class="rep-sec-header">
-                <div class="rep-sec-icon">📿</div>
-                <div class="rep-sec-label">الحديث والأذكار</div>
-            </div>
-            <div class="rep-items">${items}</div>
-        </div>`;
-    }
-
-    return `<div class="rep-card">
-        <div class="rep-banner">
-            <span class="rep-mosque">🕌</span>
-            <div class="rep-center-name">مركز خادم القرآن الكريم</div>
-            <div class="rep-supervisor">تحت إشراف الشيخ عبدالرحمن</div>
-        </div>
-        <div class="rep-hero-badge">
-            <span class="star">⭐</span>
-            <span class="rep-hero-name">بطلنا: ${nm}</span>
-            <span class="star">⭐</span>
-        </div>
-        <div class="rep-date-bar">📅 ${dateStr}</div>
-        <div class="rep-body">${sections}</div>
-        <div class="rep-footer">
-            <div class="rep-footer-text">مركز خادم القرآن الكريم</div>
-            <div class="rep-stars">⭐⭐⭐</div>
-            <div class="rep-watermark">تقرير متابعة الحفظ</div>
-        </div>
-    </div>`;
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
 }
 
-function showImageModal(imgSrc) {
-    var modal = document.createElement('div');
-    modal.id = 'img-modal';
-    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;overflow-y:auto;';
-    modal.innerHTML = '<img src="'+imgSrc+'" style="max-width:100%;max-height:78vh;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);margin-bottom:16px;">'
-        + '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">'
-        + '<button id="modal-close-btn" style="padding:10px 28px;background:#d4af53;color:#0b1e14;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
-        + '<button id="modal-save-btn" style="padding:10px 28px;background:#1c422c;color:#ebd084;border:1.5px solid #d4af53;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حفظ الصورة</button>'
-        + '</div>';
-    document.body.appendChild(modal);
-    document.getElementById('modal-close-btn').addEventListener('click', function(){ modal.remove(); });
-    document.getElementById('modal-save-btn').addEventListener('click', function(){
-        var a = document.createElement('a');
-        a.href = imgSrc;
-        a.download = 'تقرير_' + document.getElementById('inp-student').value.trim() + '.png';
-        a.click();
+function txt(ctx, text, x, y, font, color, align) {
+  ctx.save();
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = align || 'right';
+  ctx.textBaseline = 'top';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function wrapText(ctx, text, x, y, maxW, font, color, lineH) {
+  ctx.save();
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'top';
+  var words = text.split(' ');
+  var line = '';
+  var ly = y;
+  for (var i = 0; i < words.length; i++) {
+    var test = words[i] + (line ? ' ' + line : '');
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, ly);
+      line = words[i];
+      ly += lineH;
+    } else { line = test; }
+  }
+  if (line) ctx.fillText(line, x, ly);
+  ctx.restore();
+  return ly + lineH;
+}
+
+function ratingColor(r) {
+  if (!r) return null;
+  if (r.includes('ممتاز')) return {bg:'#d1fae5', fg:'#065f46'};
+  if (r.includes('جيد جداً')) return {bg:'#dbeafe', fg:'#1e40af'};
+  if (r.includes('جيد')) return {bg:'#fef9c3', fg:'#854d0e'};
+  return {bg:'#fee2e2', fg:'#991b1b'};
+}
+
+var SECTIONS = [
+  {key:'ns', label:'السور الجديدة',    icon:'📖', stripe:'#22c55e', hBg:'#dcfce7', hFg:'#15803d'},
+  {key:'ps', label:'ماضي السور',       icon:'📚', stripe:'#3b82f6', hBg:'#dbeafe', hFg:'#1d4ed8'},
+  {key:'mq', label:'المذكرة الجديدة', icon:'✏️', stripe:'#f59e0b', hBg:'#fef9c3', hFg:'#92400e'},
+  {key:'pm', label:'ماضي المذكرة',    icon:'📋', stripe:'#8b5cf6', hBg:'#ede9fe', hFg:'#6d28d9'},
+  {key:'sj', label:'السراج',           icon:'💡', stripe:'#f97316', hBg:'#ffedd5', hFg:'#c2410c'},
+  {key:'hd', label:'الحديث والأذكار',  icon:'📿', stripe:'#10b981', hBg:'#d1fae5', hFg:'#065f46'},
+];
+
+function calcHeight(data) {
+  // rough height estimate: header + sections
+  var h = 240; // header area
+  SECTIONS.forEach(function(sec) {
+    var items = data[sec.key] || [];
+    if (!items.length) return;
+    h += 48; // section header
+    items.forEach(function(item) {
+      var lines = 1;
+      if (item.rating || item.errors) lines++;
+      if (item.nextPlanSr || item.nextPlanF) lines++;
+      h += 30 + lines * 22 + 20;
     });
-    modal.addEventListener('click', function(e){ if(e.target === modal) modal.remove(); });
+    h += 12;
+  });
+  h += 60; // footer
+  return Math.max(h, 400);
+}
+
+async function drawReport(nm, data) {
+  var totalH = calcHeight(data);
+  var canvas = document.createElement('canvas');
+  var dpr = 2;
+  canvas.width  = C_W * dpr;
+  canvas.height = totalH * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // ── background
+  ctx.fillStyle = '#f8fdf9';
+  ctx.fillRect(0, 0, C_W, totalH);
+
+  // ── decorative top wave via clip
+  var gy = ctx.createLinearGradient(0, 0, C_W, 180);
+  gy.addColorStop(0, '#0a3d20');
+  gy.addColorStop(0.5, '#1a6b40');
+  gy.addColorStop(1, '#0a3d20');
+  ctx.fillStyle = gy;
+  ctx.beginPath();
+  ctx.moveTo(0,0); ctx.lineTo(C_W,0); ctx.lineTo(C_W,140);
+  ctx.bezierCurveTo(C_W*0.75,170, C_W*0.25,110, 0,150);
+  ctx.closePath();
+  ctx.fill();
+
+  // ── subtle circles in header
+  ctx.save();
+  ctx.globalAlpha=0.08;
+  ctx.fillStyle='#ffd700';
+  ctx.beginPath();ctx.arc(C_W-60,30,70,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(80,90,50,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+
+  // ── mosque emoji
+  ctx.font = '48px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('🕌', C_W/2, 14);
+
+  // ── center name
+  ctx.save();
+  ctx.font = 'bold 22px Cairo, serif';
+  ctx.fillStyle = '#ffd97d';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.shadowColor='rgba(0,0,0,0.4)';ctx.shadowBlur=6;
+  ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 70);
+  ctx.restore();
+
+  ctx.font = '13px Cairo, serif';
+  ctx.fillStyle = 'rgba(255,220,120,0.75)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 98);
+
+  // ── gold hero badge
+  var badgeY = 120;
+  var bx=40, bw=C_W-80;
+  var gBadge = ctx.createLinearGradient(bx, badgeY, bx+bw, badgeY);
+  gBadge.addColorStop(0,'#f9a825');
+  gBadge.addColorStop(0.5,'#ffd740');
+  gBadge.addColorStop(1,'#f9a825');
+  ctx.save();
+  rr(ctx, bx, badgeY, bw, 42, 12);
+  ctx.fillStyle = gBadge;
+  ctx.shadowColor='rgba(0,0,0,0.25)';ctx.shadowBlur=10;ctx.shadowOffsetY=3;
+  ctx.fill();
+  ctx.restore();
+
+  // star left & right
+  ctx.font = '20px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('⭐', bx+28, badgeY+21);
+  ctx.fillText('⭐', bx+bw-28, badgeY+21);
+  ctx.font = 'bold 17px Cairo, serif';
+  ctx.fillStyle = '#3d1c00';
+  ctx.textAlign = 'center'; ctx.textBaseline='middle';
+  ctx.fillText('بطلنا: ' + nm, C_W/2, badgeY+21);
+
+  // ── date bar
+  var today=new Date();
+  var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  var months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  var dateStr='📅  ' + days[today.getDay()] + '، ' + today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+
+  var dateBarY = badgeY + 52;
+  ctx.fillStyle = '#e8faf0';
+  ctx.fillRect(0, dateBarY, C_W, 30);
+  ctx.strokeStyle = '#86efac'; ctx.lineWidth=1.5;
+  ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(0, dateBarY+30); ctx.lineTo(C_W, dateBarY+30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = 'bold 12px Cairo, sans-serif';
+  ctx.fillStyle = '#166534';
+  ctx.textAlign = 'center'; ctx.textBaseline='middle';
+  ctx.fillText(dateStr, C_W/2, dateBarY+15);
+
+  // ── SECTIONS
+  var cy = dateBarY + 42;
+  var pad = 20;
+
+  SECTIONS.forEach(function(sec) {
+    var items = (data[sec.key] || []).filter(function(i){ return i.sr||i.f; });
+    if (!items.length) return;
+
+    // section header pill
+    var shH = 36;
+    rr(ctx, pad, cy, C_W-pad*2, shH, 10);
+    ctx.fillStyle = sec.hBg;
+    ctx.fill();
+    // left accent stripe inside header
+    rr(ctx, pad, cy, 6, shH, 3);
+    ctx.fillStyle = sec.stripe;
+    ctx.fill();
+
+    ctx.font = '18px serif';
+    ctx.textAlign = 'right'; ctx.textBaseline='middle';
+    ctx.fillText(sec.icon, C_W-pad-10, cy+shH/2);
+
+    ctx.font = 'bold 15px Cairo, sans-serif';
+    ctx.fillStyle = sec.hFg;
+    ctx.textAlign = 'right'; ctx.textBaseline='middle';
+    ctx.fillText(sec.label, C_W-pad-38, cy+shH/2);
+
+    cy += shH + 8;
+
+    // items
+    items.forEach(function(item) {
+      // measure content height
+      var contentLines = 1;
+      if (item.rating || item.errors) contentLines++;
+      if (item.nextPlanSr || item.nextPlanF) contentLines++;
+      var itemH = 16 + contentLines * 24 + 12;
+
+      // card
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.07)'; ctx.shadowBlur=8; ctx.shadowOffsetY=2;
+      rr(ctx, pad, cy, C_W-pad*2, itemH, 10);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.restore();
+
+      // left stripe
+      rr(ctx, pad, cy, 5, itemH, 3);
+      ctx.fillStyle = sec.stripe;
+      ctx.fill();
+
+      var tx = C_W - pad - 16;
+      var ty = cy + 12;
+
+      // main text
+      var mainLabel = '';
+      if (item.sr) {
+        mainLabel = item.sr + (item.type==='range' ? '  (آية '+item.f+'–'+item.t+')' : '  كاملة');
+      } else {
+        var isRaqam = (sec.key==='sj'||sec.key==='hd');
+        var unit = isRaqam ? 'رقم' : 'سؤال';
+        mainLabel = 'من '+unit+' '+item.f+'  إلى '+unit+' '+item.t;
+      }
+      ctx.font = 'bold 14px Cairo, sans-serif';
+      ctx.fillStyle = '#1e293b';
+      ctx.textAlign = 'right'; ctx.textBaseline='top';
+      ctx.fillText(mainLabel, tx, ty);
+      ty += 24;
+
+      // rating + errors badges
+      if (item.rating || item.errors) {
+        var bx2 = tx;
+        if (item.rating) {
+          var rc = ratingColor(item.rating);
+          var rw = ctx.measureText(item.rating).width + 18;
+          ctx.font = '11px Cairo, sans-serif';
+          rw = ctx.measureText(item.rating).width + 18;
+          rr(ctx, bx2-rw, ty-1, rw, 20, 10);
+          ctx.fillStyle = rc.bg; ctx.fill();
+          ctx.font = 'bold 11px Cairo, sans-serif';
+          ctx.fillStyle = rc.fg; ctx.textAlign='right'; ctx.textBaseline='top';
+          ctx.fillText(item.rating, bx2-9, ty+4);
+          bx2 -= rw + 8;
+        }
+        if (item.errors && item.errors !== '0' && item.errors !== '') {
+          var etxt = '❌ ' + item.errors + ' خطأ';
+          ctx.font = 'bold 11px Cairo, sans-serif';
+          var ew = ctx.measureText(etxt).width + 18;
+          rr(ctx, bx2-ew, ty-1, ew, 20, 10);
+          ctx.fillStyle = '#fee2e2'; ctx.fill();
+          ctx.fillStyle = '#991b1b'; ctx.textAlign='right'; ctx.textBaseline='top';
+          ctx.fillText(etxt, bx2-9, ty+4);
+        }
+        ty += 24;
+      }
+
+      // next plan
+      var hasPlan = item.nextPlanSr || (item.nextPlanF && item.nextPlanT);
+      if (hasPlan) {
+        // dashed separator
+        ctx.save();
+        ctx.strokeStyle='#bbf7d0'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.moveTo(pad+10, ty-2); ctx.lineTo(C_W-pad-10, ty-2); ctx.stroke();
+        ctx.restore();
+
+        var nxt = '';
+        if (item.nextPlanSr) {
+          nxt = 'القادم: ' + item.nextPlanSr + (item.nextPlanType==='range' ? ' (آية '+item.nextPlanF+'–'+item.nextPlanT+')' : ' كاملة');
+        } else {
+          var isRaqam2 = (sec.key==='sj'||sec.key==='hd');
+          var unit2 = isRaqam2 ? 'رقم' : 'سؤال';
+          nxt = 'القادم:  من '+unit2+' '+item.nextPlanF+'  إلى '+unit2+' '+item.nextPlanT;
+        }
+        // green pill bg
+        ctx.save();
+        ctx.font='bold 11px Cairo, sans-serif';
+        var nw = Math.min(ctx.measureText(nxt).width+30, C_W-pad*2-20);
+        rr(ctx, tx-nw, ty+1, nw, 20, 8);
+        ctx.fillStyle='#e8fdf0'; ctx.fill();
+        ctx.font='bold 11px Cairo, sans-serif';
+        ctx.fillStyle='#166534'; ctx.textAlign='right'; ctx.textBaseline='middle';
+        ctx.fillText('🎯  ' + nxt, tx-8, ty+11);
+        ctx.restore();
+      }
+
+      cy += itemH + 8;
+    });
+
+    cy += 6;
+  });
+
+  // ── footer
+  var fh = 44;
+  var fg = ctx.createLinearGradient(0, cy, C_W, cy+fh);
+  fg.addColorStop(0,'#0a3d20'); fg.addColorStop(1,'#1a6b40');
+  ctx.fillStyle = fg;
+  ctx.fillRect(0, cy, C_W, fh);
+
+  ctx.font = '12px Cairo, sans-serif'; ctx.fillStyle='rgba(255,220,100,0.8)';
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  ctx.fillText('مركز خادم القرآن الكريم', C_W-20, cy+22);
+
+  ctx.font='16px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('⭐  ⭐  ⭐', C_W/2, cy+22);
+
+  ctx.font='11px Cairo, sans-serif'; ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('تقرير متابعة الحفظ', 20, cy+22);
+
+  return canvas;
+}
+
+function showImageModal(imgSrc, nm) {
+  var modal=document.createElement('div');
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;';
+  modal.innerHTML='<img src="'+imgSrc+'" style="max-width:100%;max-height:75vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.6);margin-bottom:16px;">'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">'
+    +'<button id="mc" style="padding:11px 30px;background:#d4af53;color:#0b1e14;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
+    +'<button id="ms" style="padding:11px 30px;background:#1c422c;color:#ebd084;border:1.5px solid #d4af53;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ الصورة</button>'
+    +'</div>';
+  document.body.appendChild(modal);
+  document.getElementById('mc').onclick=function(){modal.remove();};
+  document.getElementById('ms').onclick=function(){
+    var a=document.createElement('a');a.href=imgSrc;a.download='تقرير_'+(nm||'')+'_.png';a.click();
+  };
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.remove();});
 }
 
 async function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل'); return;}
-
-  var data = {
-    ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
-    mq: collectData('mur-questions', true), pm: collectData('past-mur', true),
-    sj: collectData('suraj-section', true), hd: collectData('hadith-section', true)
+  if(!nm){alert('يرجى إدخال اسم البطل');return;}
+  var data={
+    ns:collectData('new-surahs',false), ps:collectData('past-surahs',false),
+    mq:collectData('mur-questions',true), pm:collectData('past-mur',true),
+    sj:collectData('suraj-section',true), hd:collectData('hadith-section',true)
   };
-
-  var zone = document.getElementById('capture-zone');
-  zone.innerHTML = buildReportHTML(nm, data);
-
   try {
-    var canvas = await html2canvas(zone.firstElementChild, {scale:2, useCORS:true, backgroundColor:'#ffffff'});
+    var canvas = await drawReport(nm, data);
     var imgData = canvas.toDataURL('image/png');
-
-    localStorage.setItem('rep_img_' + nm, imgData);
-    localStorage.setItem('rep_' + nm, JSON.stringify(data));
-
-    if(navigator.share && navigator.canShare) {
-      try {
-        var blob = await (await fetch(imgData)).blob();
-        var file = new File([blob], 'تقرير_' + nm + '.png', {type:'image/png'});
-        if(navigator.canShare({files:[file]})) {
-          await navigator.share({files:[file], title:'تقرير ' + nm});
-          return;
-        }
-      } catch(e) {}
+    localStorage.setItem('rep_img_'+nm, imgData);
+    localStorage.setItem('rep_'+nm, JSON.stringify(data));
+    if(navigator.share && navigator.canShare){
+      try{
+        var blob=await (await fetch(imgData)).blob();
+        var file=new File([blob],'تقرير_'+nm+'.png',{type:'image/png'});
+        if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'تقرير '+nm});return;}
+      }catch(e){}
     }
-
-    showImageModal(imgData);
-
-  } catch(e) {
-    alert('حدث خطأ في إنشاء التقرير: ' + e.message);
-  }
+    showImageModal(imgData, nm);
+  } catch(e){alert('خطأ: '+e.message);}
 }
 
-function loadStudentData() {
-  var nm = document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل أولاً'); return;}
-  var imgData = localStorage.getItem('rep_img_' + nm);
-  if (!imgData) { alert('لا يوجد تقرير سابق لهذا البطل'); return; }
-  showImageModal(imgData);
+function loadStudentData(){
+  var nm=document.getElementById('inp-student').value.trim();
+  if(!nm){alert('يرجى إدخال اسم البطل أولاً');return;}
+  var img=localStorage.getItem('rep_img_'+nm);
+  if(!img){alert('لا يوجد تقرير سابق لهذا البطل');return;}
+  showImageModal(img, nm);
 }
 
 addSurah('new-surahs','ns',true,true);
