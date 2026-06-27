@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مركز خادم القرآن - متابعة الحفظ</title>
-<title>تحت إشراف الشيخ عبدالرحمن</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -130,91 +129,28 @@ select.inp{padding-left:28px;cursor:pointer;background-color:#fafcfa}
   display:none;z-index:999;white-space:nowrap;
 }
 
-/* =========================================================
-   REPORT CARD DESIGN
-   ========================================================= */
-.render-container {
-  position: absolute;
-  top: -9999px; left: 0;
-  width: 480px; 
-  z-index: -100;
-}
-
-.rep-card {
-  background-color: #0d2116; 
-  padding: 30px; 
-  position: relative; 
-  width: 100%; 
-  box-sizing: border-box;
-  font-family: 'Cairo', sans-serif;
-}
-
-.rep-border-outer {
-  position: absolute; inset: 12px;
-  border: 1px solid #1f422e; 
-  border-radius: 8px;
-  pointer-events: none;
-}
-.rep-border-inner {
-  position: absolute; inset: 16px;
-  border: 1px dashed rgba(212, 175, 83, 0.4); 
-  border-radius: 6px;
-  pointer-events: none;
-}
-
+/* ══ REPORT CARD DESIGN ══ */
+.render-container { position: absolute; top: -9999px; left: 0; width: 480px; z-index: -100; }
+.rep-card { background-color: #0d2116; padding: 30px; position: relative; width: 100%; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+.rep-border-outer { position: absolute; inset: 12px; border: 1px solid #1f422e; border-radius: 8px; pointer-events: none; }
+.rep-border-inner { position: absolute; inset: 16px; border: 1px dashed rgba(212, 175, 83, 0.4); border-radius: 6px; pointer-events: none; }
 .rep-header { text-align: center; margin-bottom: 24px; position: relative; z-index: 2; }
-.rep-bismillah {
-  color: #ebd084; font-family: 'Amiri', serif;
-  font-size: 20px; font-weight: bold; margin-bottom: 16px;
-}
-.rep-logo-circle {
-  width: 50px; height: 50px; margin: 0 auto 10px;
-  background: rgba(212, 175, 83, 0.1); border: 2px solid #d4af53;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;
-}
+.rep-bismillah { color: #ebd084; font-family: 'Amiri', serif; font-size: 20px; font-weight: bold; margin-bottom: 16px; }
+.rep-logo-circle { width: 50px; height: 50px; margin: 0 auto 10px; background: rgba(212, 175, 83, 0.1); border: 2px solid #d4af53; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 .rep-center-title { color: #ebd084; font-size: 18px; font-weight: 700; font-family: 'Amiri', serif; }
 .rep-sheikh-name { color: #ebd084; font-size: 14px; font-weight: bold; margin-top: 6px; }
-.rep-divider {
-  width: 80%; height: 1px; background: rgba(255,255,255,0.1);
-  margin: 16px auto;
-}
-
-.rep-student-box {
-  background-color: #1a3625; 
-  border: 1px solid #234731;
-  border-radius: 12px; padding: 20px; text-align: center;
-  margin-bottom: 24px; position: relative; z-index: 2;
-}
+.rep-divider { width: 80%; height: 1px; background: rgba(255,255,255,0.1); margin: 16px auto; }
+.rep-student-box { background-color: #1a3625; border: 1px solid #234731; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 24px; position: relative; z-index: 2; }
 .rep-st-name { color: #ffffff; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
 .rep-st-date { color: #7f9588; font-size: 12px; font-weight: 600; }
-
 .rep-section { margin-bottom: 20px; position: relative; z-index: 2; }
-.rep-sec-title {
-  color: #d4af53; font-size: 15px; font-weight: 700;
-  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-}
-.rep-sec-title i { font-size: 16px; }
-
-.rep-item {
-  display: flex; justify-content: space-between; align-items: center;
-  background-color: #153020; 
-  padding: 14px 16px; border-radius: 8px;
-  margin-bottom: 6px;
-  border: 1px solid rgba(255,255,255,0.03);
-}
+.rep-sec-title { color: #d4af53; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.rep-item { display: flex; justify-content: space-between; align-items: center; background-color: #153020; padding: 14px 16px; border-radius: 8px; margin-bottom: 6px; border: 1px solid rgba(255,255,255,0.03); }
 .rep-item-name { color: #ffffff; font-size: 14px; font-weight: 600; font-family: 'Cairo', sans-serif;}
 .rep-item-val { color: #d4af53; font-size: 13px; font-weight: 700; }
-
-.rep-rating-box {
-  background: linear-gradient(90deg, #153020, #1a3625);
-  border: 1px solid rgba(212, 175, 83, 0.3);
-  border-radius: 10px; padding: 14px; text-align: center;
-  margin-top: 24px; position: relative; z-index: 2;
-  display: flex; justify-content: center; align-items: center; gap: 10px;
-}
+.rep-rating-box { background: linear-gradient(90deg, #153020, #1a3625); border: 1px solid rgba(212, 175, 83, 0.3); border-radius: 10px; padding: 14px; text-align: center; margin-top: 24px; position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; gap: 10px; }
 .rep-rating-lbl { color: #ffffff; font-size: 15px; font-weight: 700; }
 .rep-rating-val { color: #d4af53; font-size: 16px; font-weight: 700; }
-
 .rep-footer { text-align: center; margin-top: 30px; position: relative; z-index: 2; }
 </style>
 </head>
@@ -234,9 +170,12 @@ select.inp{padding-left:28px;cursor:pointer;background-color:#fafcfa}
       <div class="sec-head-title"><i class="ti ti-user"></i>بيانات الطالب والتقييم</div>
     </div>
     <div class="sec-body">
-      <div class="frow">
-        <div class="flbl">اسم الطالب</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم الطالب...">
+      <div class="frow" style="display:flex; gap:8px;">
+        <div style="flex-grow:1">
+          <div class="flbl">اسم الطالب</div>
+          <input class="inp" id="inp-student" placeholder="أدخل اسم الطالب...">
+        </div>
+        <button onclick="loadStudentData()" class="add-btn" style="width:auto; margin-top:22px; padding:0 15px; border:1.5px solid var(--green-mid)">استرجاع</button>
       </div>
       <div class="frow">
         <div class="flbl">التقييم العام</div>
@@ -429,8 +368,6 @@ function collectQuestions(containerId){
 function createVisualSection(icon, title, items, isQ) {
   var html = '<div class="rep-section"><div class="rep-sec-title"><i class="' + icon + '"></i>' + title + '</div>';
   items.forEach(it => {
-    
-    // صف إضافي للتقييم وعدد الأخطاء
     var extraRow = '';
     if(it.rating || it.err) {
       extraRow = '<div style="width: 100%; padding-top: 6px; margin-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1); color: #ebd084; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between;">' +
@@ -438,7 +375,6 @@ function createVisualSection(icon, title, items, isQ) {
                  '<span>' + (it.err ? '<span style="color: #ffb3b3;">الأخطاء: ' + it.err + '</span>' : '') + '</span>' +
                  '</div>';
     }
-    
     if(!isQ) {
       var val = (it.type==='full' ? 'كاملةً' : (it.from&&it.to ? 'من آية ' + it.from + ' إلى ' + it.to : 'جزء'));
       html += '<div class="rep-item" style="flex-wrap: wrap;"><div style="display:flex; justify-content:space-between; width:100%; align-items:center;"><div class="rep-item-name">' + it.sr + '</div><div class="rep-item-val">' + val + '</div></div>' + extraRow + '</div>';
@@ -458,19 +394,20 @@ function showToast(msg){
 function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
   if(!nm){showToast('تحذير: أدخل اسم الطالب'); return;}
+  
+  // حفظ البيانات
+  localStorage.setItem('rep_' + nm, JSON.stringify({ rating: document.getElementById('inp-rating').value, ns: collectSurahs('new-surahs'), ps: collectSurahs('past-surahs'), mq: collectQuestions('mur-questions'), pm: collectQuestions('past-mur') }));
+
   showToast('⏳ جاري تجهيز الصورة...');
   
-  // إعداد بيانات الطالب والوقت
   var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   document.getElementById('rep-name').textContent = "الطالب: " + nm;
   document.getElementById('rep-date-val').textContent = new Date().toLocaleDateString('ar-EG', opts);
 
-  // إعداد التقييم العام
   var rating = document.getElementById('inp-rating').options[document.getElementById('inp-rating').selectedIndex].text;
   document.getElementById('rep-rating-val').textContent = rating;
   document.getElementById('rep-rating-container').style.display = 'flex';
 
-  // بناء الأقسام
   var ns=collectSurahs('new-surahs'), ps=collectSurahs('past-surahs');
   var mq=collectQuestions('mur-questions'), pm=collectQuestions('past-mur');
   
@@ -480,7 +417,6 @@ function generateAndShare(){
   if(mq.length) cont.innerHTML += createVisualSection('ti ti-pencil', 'أسئلة المذكرة', mq, true);
   if(pm.length) cont.innerHTML += createVisualSection('ti ti-history', 'ماضي المذكرة', pm, true);
 
-  // التقاط الصورة
   setTimeout(function() {
     html2canvas(document.getElementById('capture-zone'), {
       scale: 3, backgroundColor: '#0d2116', windowWidth: 480
@@ -500,11 +436,33 @@ function generateAndShare(){
   }, 200);
 }
 
+// دالة استرجاع البيانات
+function loadStudentData() {
+  var nm = document.getElementById('inp-student').value.trim();
+  var data = localStorage.getItem('rep_' + nm);
+  if (!data) { showToast('❌ لم يتم العثور على تقرير سابق لهذا الطالب'); return; }
+  
+  var obj = JSON.parse(data);
+  document.getElementById('inp-rating').value = obj.rating;
+  
+  document.getElementById('new-surahs').innerHTML = '';
+  document.getElementById('past-surahs').innerHTML = '';
+  document.getElementById('mur-questions').innerHTML = '';
+  document.getElementById('past-mur').innerHTML = '';
+  counters = {ns:0, ps:0, mq:0, pm:0};
+  
+  obj.ns.forEach(i => { addSurah('new-surahs','ns'); var idx=counters.ns; document.getElementById('sr-ns'+idx).value=i.sr; document.getElementById('sel-ns'+idx).value=i.type; if(i.type==='range'){document.getElementById('rng-ns'+idx).classList.remove('hidden'); document.getElementById('f-ns'+idx).value=i.from; document.getElementById('t-ns'+idx).value=i.to;} });
+  obj.ps.forEach(i => { addSurah('past-surahs','ps'); var idx=counters.ps; document.getElementById('sr-ps'+idx).value=i.sr; document.getElementById('sel-ps'+idx).value=i.type; if(i.type==='range'){document.getElementById('rng-ps'+idx).classList.remove('hidden'); document.getElementById('f-ps'+idx).value=i.from; document.getElementById('t-ps'+idx).value=i.to;} document.querySelectorAll('#row-ps'+idx+' .rating-sel')[0].value=i.rating; document.querySelectorAll('#row-ps'+idx+' .error-inp')[0].value=i.err; });
+  obj.mq.forEach(i => { addQuestion('mur-questions','mq'); var idx=counters.mq; document.getElementById('qf-mq'+idx).value=i.from; document.getElementById('qt-mq'+idx).value=i.to; });
+  obj.pm.forEach(i => { addQuestion('past-mur','pm'); var idx=counters.pm; document.getElementById('qf-pm'+idx).value=i.from; document.getElementById('qt-pm'+idx).value=i.to; document.querySelectorAll('#qrow-pm'+idx+' .rating-sel')[0].value=i.rating; document.querySelectorAll('#qrow-pm'+idx+' .error-inp')[0].value=i.err; });
+  
+  showToast('✅ تم استرجاع بيانات الطالب بنجاح');
+}
+
 document.addEventListener('click', e => {
   if(!e.target.closest('.ac-wrap')) document.querySelectorAll('.ac-drop').forEach(d => d.style.display='none');
 });
 
-// تهيئة مبدئية
 addSurah('new-surahs','ns'); addSurah('past-surahs','ps');
 addQuestion('mur-questions','mq'); addQuestion('past-mur','pm');
 </script>
