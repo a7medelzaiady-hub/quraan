@@ -190,8 +190,8 @@ function collectData(containerId,isQ){
 // ═══════════════════════════════════════════════
 //  CANVAS REPORT — Full-width RTL, Hijri date
 // ═══════════════════════════════════════════════
-var C_W = 680;
-var PAD = 24;
+var C_W = 900;   // wide canvas = no wasted space
+var PAD = 28;
 
 // Rounded rect path
 function rr(ctx,x,y,w,h,r){
@@ -240,253 +240,279 @@ var SEC_GRADS={
 };
 
 function calcH(data){
-  var h=260+56; // header+datebar
+  var h=210+42+18+18; // header+datebar+margins
   SECTIONS.forEach(function(sec){
     var items=(data[sec.key]||[]).filter(function(i){return i.sr||i.f;});
     if(!items.length)return;
-    h+=52; // section head
+    h+=46+10; // section header
     items.forEach(function(item){
       var extra=0;
-      if(item.rating||item.errors)extra+=32;
-      if(item.nextPlanSr||(item.nextPlanF&&item.nextPlanT))extra+=30;
-      h+=58+extra;
+      if(item.rating||(item.errors&&item.errors!=='0'&&item.errors!==''))extra+=36;
+      if(item.nextPlanSr||(item.nextPlanF&&item.nextPlanT))extra+=34;
+      h+=22+30+18+extra+10;
     });
     h+=10;
   });
-  h+=60;
-  return Math.max(h,500);
+  h+=58+20;
+  return Math.max(h,600);
 }
 
-// Draw pill/badge with text, returns drawn width
-function drawPill(ctx,text,rx,ry,bg,border,fg,fontSize){
-  ctx.font='bold '+fontSize+'px Cairo,sans-serif';
+// Draw pill badge, returns width used
+function drawPill(ctx,text,rx,ry,bg,border,fg,fs){
+  ctx.font='bold '+fs+'px Cairo,sans-serif';
   var tw=ctx.measureText(text).width;
-  var pw=tw+24,ph=fontSize+12;
+  var pw=tw+28,ph=fs+14;
   rr(ctx,rx-pw,ry,pw,ph,ph/2);
   ctx.fillStyle=bg;ctx.fill();
-  ctx.strokeStyle=border;ctx.lineWidth=1.2;ctx.stroke();
+  ctx.strokeStyle=border;ctx.lineWidth=1.5;ctx.stroke();
   ctx.fillStyle=fg;ctx.textAlign='right';ctx.textBaseline='middle';
-  ctx.fillText(text,rx-12,ry+ph/2);
-  return pw+8;
+  ctx.fillText(text,rx-14,ry+ph/2);
+  return pw+10;
+}
+
+// Linear gradient fill helper
+function lgFill(ctx,x,y,w,h,stops){
+  var g=ctx.createLinearGradient(x,y,x+w,y+h);
+  stops.forEach(function(s){g.addColorStop(s[0],s[1]);});
+  ctx.fillStyle=g;
 }
 
 async function drawReport(nm,data){
   var totalH=calcH(data);
+  var DPR=2; // fixed hi-res
   var canvas=document.createElement('canvas');
-  var dpr=window.devicePixelRatio||2;
-  canvas.width=C_W*dpr; canvas.height=totalH*dpr;
+  canvas.width=C_W*DPR; canvas.height=totalH*DPR;
   var ctx=canvas.getContext('2d');
-  ctx.scale(dpr,dpr);
+  ctx.scale(DPR,DPR);
 
-  // ── BG gradient
-  var bgG=ctx.createLinearGradient(0,0,0,totalH);
-  bgG.addColorStop(0,'#f0fdf4');bgG.addColorStop(1,'#f8fafc');
-  ctx.fillStyle=bgG; ctx.fillRect(0,0,C_W,totalH);
+  /* ══════════ BACKGROUND ══════════ */
+  // warm cream base
+  ctx.fillStyle='#fffdf7';
+  ctx.fillRect(0,0,C_W,totalH);
 
-  // subtle dot pattern
-  ctx.save();ctx.globalAlpha=0.035;
-  for(var dx=0;dx<C_W;dx+=28)for(var dy2=0;dy2<totalH;dy2+=28){
-    ctx.beginPath();ctx.arc(dx,dy2,2,0,Math.PI*2);ctx.fillStyle='#166534';ctx.fill();
+  // subtle diagonal stripe watermark
+  ctx.save();ctx.globalAlpha=0.018;ctx.strokeStyle='#14532d';ctx.lineWidth=1;
+  for(var si=-totalH;si<C_W+totalH;si+=32){
+    ctx.beginPath();ctx.moveTo(si,0);ctx.lineTo(si+totalH,totalH);ctx.stroke();
   }
   ctx.restore();
 
-  // ── HEADER full-width
-  var hdrH=185;
-  var hdrG=ctx.createLinearGradient(0,0,C_W,hdrH);
-  hdrG.addColorStop(0,'#052e16');hdrG.addColorStop(0.45,'#166534');hdrG.addColorStop(1,'#052e16');
-  ctx.fillStyle=hdrG; ctx.fillRect(0,0,C_W,hdrH);
+  /* ══════════ HEADER ══════════ */
+  var HDR=210;
+  // rich green gradient header
+  var hG=ctx.createLinearGradient(0,0,C_W,HDR);
+  hG.addColorStop(0,'#022c1a');hG.addColorStop(0.3,'#064e2f');
+  hG.addColorStop(0.6,'#0a6b40');hG.addColorStop(1,'#022c1a');
+  ctx.fillStyle=hG; ctx.fillRect(0,0,C_W,HDR);
 
-  // glowing circles decoration
+  // geometric ornament arcs
   ctx.save();
-  ctx.globalAlpha=0.12;
-  ctx.fillStyle='#fbbf24';
-  ctx.beginPath();ctx.arc(C_W-55,38,72,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(55,hdrH-20,55,0,Math.PI*2);ctx.fill();
-  ctx.globalAlpha=0.06;
-  ctx.beginPath();ctx.arc(C_W/2,hdrH+10,90,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=0.10; ctx.strokeStyle='#fcd34d'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(C_W-80,0,110,0,Math.PI*0.5);ctx.stroke();
+  ctx.beginPath();ctx.arc(80,HDR,90,Math.PI*1.5,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=0.07; ctx.fillStyle='#fbbf24';
+  ctx.beginPath();ctx.arc(C_W-60,30,80,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(60,HDR-20,60,0,Math.PI*2);ctx.fill();
   ctx.restore();
 
-  // mosque
-  ctx.font='54px serif';ctx.textAlign='center';ctx.textBaseline='top';
-  ctx.fillText('🕌',C_W/2,10);
+  // Islamic geometric top band
+  ctx.fillStyle='rgba(212,175,83,0.18)';
+  ctx.fillRect(0,0,C_W,6);
+  ctx.fillStyle='#d4af53';
+  ctx.fillRect(0,0,C_W,2.5);
 
-  // center name
+  // mosque emoji large
+  ctx.font='64px serif';ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('🕌',C_W/2,12);
+
+  // title with gold shimmer
   ctx.save();
-  ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=10;
-  ctx.font='bold 28px Cairo,sans-serif';
-  ctx.fillStyle='#fbbf24';ctx.textAlign='center';ctx.textBaseline='top';
-  ctx.fillText('مركز خادم القرآن الكريم',C_W/2,72);
+  ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=14;ctx.shadowOffsetY=2;
+  ctx.font='bold 34px Cairo,sans-serif';
+  ctx.fillStyle='#fcd34d';ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('مركز خادم القرآن الكريم',C_W/2,84);
   ctx.restore();
 
-  // supervisor
-  ctx.font='15px Cairo,sans-serif';ctx.fillStyle='rgba(252,211,77,.8)';
+  // gold underline
+  var ulw=420; var ulx=(C_W-ulw)/2;
+  var ulG=ctx.createLinearGradient(ulx,0,ulx+ulw,0);
+  ulG.addColorStop(0,'transparent');ulG.addColorStop(0.3,'#d4af53');
+  ulG.addColorStop(0.7,'#d4af53');ulG.addColorStop(1,'transparent');
+  ctx.strokeStyle=ulG;ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(ulx,126);ctx.lineTo(ulx+ulw,126);ctx.stroke();
+
+  // supervisor line
+  ctx.font='16px Cairo,sans-serif';ctx.fillStyle='rgba(253,224,100,.75)';
   ctx.textAlign='center';ctx.textBaseline='top';
-  ctx.fillText('تحت إشراف الشيخ عبدالرحمن',C_W/2,108);
+  ctx.fillText('تحت إشراف الشيخ عبدالرحمن',C_W/2,132);
 
-  // ── hero badge — full width
-  var by=128, bh=48;
-  var badgeG=ctx.createLinearGradient(PAD,by,C_W-PAD,by);
-  badgeG.addColorStop(0,'#b45309');badgeG.addColorStop(0.3,'#f59e0b');
-  badgeG.addColorStop(0.5,'#fcd34d');badgeG.addColorStop(0.7,'#f59e0b');badgeG.addColorStop(1,'#b45309');
+  /* ── hero badge ── */
+  var BY=156, BH=48;
+  var bdG=ctx.createLinearGradient(PAD,BY,C_W-PAD,BY+BH);
+  bdG.addColorStop(0,'#92400e');bdG.addColorStop(0.25,'#d97706');
+  bdG.addColorStop(0.5,'#fbbf24');bdG.addColorStop(0.75,'#d97706');bdG.addColorStop(1,'#92400e');
   ctx.save();
-  rr(ctx,PAD,by,C_W-PAD*2,bh,14);
-  ctx.fillStyle=badgeG;
-  ctx.shadowColor='rgba(251,191,36,.5)';ctx.shadowBlur=16;ctx.shadowOffsetY=4;
+  rr(ctx,PAD,BY,C_W-PAD*2,BH,15);
+  ctx.fillStyle=bdG;
+  ctx.shadowColor='rgba(251,191,36,0.55)';ctx.shadowBlur=20;ctx.shadowOffsetY=5;
   ctx.fill();
-  // border shimmer
-  ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;ctx.stroke();
   ctx.restore();
-  // stars
-  ctx.font='22px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('🏆',PAD+30,by+bh/2);
-  ctx.fillText('⭐',C_W-PAD-30,by+bh/2);
-  // name
-  ctx.font='bold 20px Cairo,sans-serif';ctx.fillStyle='#3b1500';
+
+  ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🏆',PAD+36,BY+BH/2);
+  ctx.fillText('⭐',C_W-PAD-36,BY+BH/2);
+  ctx.font='bold 22px Cairo,sans-serif';ctx.fillStyle='#1c0700';
   ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('بطلنا:  '+nm,C_W/2,by+bh/2);
+  ctx.fillText('بطلنا:  '+nm,C_W/2,BY+BH/2);
 
-  // ── Hijri date bar — full width
-  var dby=by+bh+8, dbh=38;
-  var dbG=ctx.createLinearGradient(0,dby,0,dby+dbh);
-  dbG.addColorStop(0,'#dcfce7');dbG.addColorStop(1,'#bbf7d0');
-  ctx.fillStyle=dbG;ctx.fillRect(0,dby,C_W,dbh);
-  // top/bottom borders
-  ctx.strokeStyle='#4ade80';ctx.lineWidth=1.5;ctx.setLineDash([]);
-  ctx.beginPath();ctx.moveTo(0,dby);ctx.lineTo(C_W,dby);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(0,dby+dbh);ctx.lineTo(C_W,dby+dbh);ctx.stroke();
+  /* ── Hijri date bar ── */
+  var DBY=BY+BH+10, DBH=42;
+  var dbBg=ctx.createLinearGradient(0,DBY,0,DBY+DBH);
+  dbBg.addColorStop(0,'#d1fae5');dbBg.addColorStop(1,'#a7f3d0');
+  ctx.fillStyle=dbBg;ctx.fillRect(0,DBY,C_W,DBH);
+  ctx.strokeStyle='#34d399';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(0,DBY);ctx.lineTo(C_W,DBY);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,DBY+DBH);ctx.lineTo(C_W,DBY+DBH);ctx.stroke();
 
-  var hd=hijriDate();
-  ctx.font='bold 14px Cairo,sans-serif';ctx.fillStyle='#14532d';
+  var hijri=hijriDate();
+  ctx.font='bold 16px Cairo,sans-serif';ctx.fillStyle='#065f46';
   ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('📅  '+hd,C_W/2,dby+dbh/2);
+  ctx.fillText('🗓  '+hijri,C_W/2,DBY+DBH/2);
 
-  // ── SECTIONS
-  var cy=dby+dbh+14;
+  /* ══════════ SECTIONS ══════════ */
+  var cy=DBY+DBH+18;
 
   SECTIONS.forEach(function(sec){
     var items=(data[sec.key]||[]).filter(function(i){return i.sr||i.f;});
     if(!items.length)return;
 
-    // section header — full width pill
-    var shH=42;
+    /* section header full-width */
+    var SHH=46;
     var gc=SEC_GRADS[sec.hBg];
     var shG=ctx.createLinearGradient(0,cy,C_W,cy);
     shG.addColorStop(0,gc[1]);shG.addColorStop(0.5,gc[0]);shG.addColorStop(1,gc[1]);
-    rr(ctx,PAD,cy,C_W-PAD*2,shH,12);
+    rr(ctx,PAD,cy,C_W-PAD*2,SHH,13);
     ctx.fillStyle=shG;ctx.fill();
-    // accent bar RIGHT side (RTL = right)
-    rr(ctx,C_W-PAD-8,cy,8,shH,4);
+    ctx.strokeStyle=sec.stripe;ctx.lineWidth=1.5;ctx.stroke();
+
+    // right thick accent bar
+    rr(ctx,C_W-PAD-10,cy,10,SHH,5);
     ctx.fillStyle=sec.stripe;ctx.fill();
-    // bottom border line
-    ctx.strokeStyle=sec.stripe;ctx.lineWidth=2;ctx.setLineDash([]);
-    ctx.beginPath();ctx.moveTo(PAD,cy+shH);ctx.lineTo(C_W-PAD,cy+shH);ctx.stroke();
 
-    // icon right-aligned
-    ctx.font='20px serif';ctx.textAlign='right';ctx.textBaseline='middle';
-    ctx.fillText(sec.icon,C_W-PAD-18,cy+shH/2);
+    // icon
+    ctx.font='22px serif';ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(sec.icon,C_W-PAD-20,cy+SHH/2);
     // label
-    ctx.font='bold 17px Cairo,sans-serif';ctx.fillStyle=sec.hFg;
+    ctx.font='bold 19px Cairo,sans-serif';ctx.fillStyle=sec.hFg;
     ctx.textAlign='right';ctx.textBaseline='middle';
-    ctx.fillText(sec.label,C_W-PAD-46,cy+shH/2);
+    ctx.fillText(sec.label,C_W-PAD-52,cy+SHH/2);
 
-    cy+=shH+8;
+    cy+=SHH+10;
 
     items.forEach(function(item){
       var hasMeta=!!(item.rating||(item.errors&&item.errors!=='0'&&item.errors!==''));
       var hasPlan=!!(item.nextPlanSr||(item.nextPlanF&&item.nextPlanT));
-      var itemH=20+26+(hasMeta?32:0)+(hasPlan?30:0)+16;
+      var IH=22+30+(hasMeta?36:0)+(hasPlan?34:0)+18;
 
-      // card shadow
+      // card white with shadow
       ctx.save();
-      ctx.shadowColor='rgba(0,0,0,0.10)';ctx.shadowBlur=12;ctx.shadowOffsetY=3;
-      rr(ctx,PAD,cy,C_W-PAD*2,itemH,12);
+      ctx.shadowColor='rgba(0,0,0,0.09)';ctx.shadowBlur=14;ctx.shadowOffsetY=4;
+      rr(ctx,PAD,cy,C_W-PAD*2,IH,14);
       ctx.fillStyle='#ffffff';ctx.fill();
       ctx.restore();
+
       // card border
-      rr(ctx,PAD,cy,C_W-PAD*2,itemH,12);
-      ctx.strokeStyle=sec.dot;ctx.lineWidth=1.5;ctx.stroke();
-      // right accent stripe
-      rr(ctx,C_W-PAD-6,cy,6,itemH,3);
+      rr(ctx,PAD,cy,C_W-PAD*2,IH,14);
+      ctx.strokeStyle=sec.dot;ctx.lineWidth=2;ctx.stroke();
+
+      // right stripe thick
+      rr(ctx,C_W-PAD-8,cy,8,IH,4);
       ctx.fillStyle=sec.stripe;ctx.fill();
 
-      var RX=C_W-PAD-16; // right edge for text
-      var LX=PAD+16;     // left edge for text
-      var ty=cy+14;
+      // inner left light tint strip
+      rr(ctx,PAD,cy,5,IH,3);
+      ctx.fillStyle=SEC_GRADS[sec.hBg][1];ctx.fill();
 
-      // ── main label — full width, right aligned
-      var mainLabel='';
+      var RX=C_W-PAD-20;
+      var ty2=cy+18;
+
+      /* main label */
+      var mainTxt='';
       if(item.sr){
-        mainLabel=item.sr+(item.type==='range'?'   (آية '+item.f+' – '+item.t+')':'   كاملة');
+        mainTxt=item.sr+(item.type==='range'?'  —  آية '+item.f+' إلى آية '+item.t:'  كاملة');
       } else {
         var isRq=(sec.key==='sj'||sec.key==='hd');
         var unit=isRq?'رقم':'سؤال';
-        mainLabel='من '+unit+' '+item.f+'   ←   إلى '+unit+' '+item.t;
+        mainTxt='من '+unit+' '+item.f+'   إلى '+unit+' '+item.t;
       }
-      ctx.font='bold 16px Cairo,sans-serif';ctx.fillStyle='#1e293b';
+      ctx.font='bold 18px Cairo,sans-serif';ctx.fillStyle='#0f172a';
       ctx.textAlign='right';ctx.textBaseline='top';
-      ctx.fillText(mainLabel,RX,ty);
-      ty+=26;
+      ctx.fillText(mainTxt,RX,ty2);
+      ty2+=32;
 
-      // ── badges row — right to left
+      /* badges */
       if(hasMeta){
         var bx2=RX;
         if(item.rating){
           var rc=ratingColor(item.rating);
-          var used=drawPill(ctx,item.rating,bx2,ty,rc.bg,rc.border,rc.fg,12);
-          bx2-=used;
+          bx2-=drawPill(ctx,item.rating,bx2,ty2,rc.bg,rc.border,rc.fg,13);
         }
         if(item.errors&&item.errors!=='0'&&item.errors!==''){
-          var etxt='❌  '+item.errors+' خطأ';
-          drawPill(ctx,etxt,bx2,ty,'#fee2e2','#fca5a5','#991b1b',12);
+          drawPill(ctx,'❌  '+item.errors+' خطأ',bx2,ty2,'#fee2e2','#fca5a5','#b91c1c',13);
         }
-        ty+=32;
+        ty2+=36;
       }
 
-      // ── next plan — full-width tinted row
+      /* next plan row */
       if(hasPlan){
-        var planH=26;
-        var planY=ty-2;
-        rr(ctx,PAD+8,planY,C_W-PAD*2-16,planH,8);
-        ctx.fillStyle='rgba(220,252,231,0.8)';ctx.fill();
-        ctx.strokeStyle='#86efac';ctx.lineWidth=1;ctx.stroke();
+        var PH=30, PY=ty2;
+        rr(ctx,PAD+10,PY,C_W-PAD*2-20,PH,10);
+        var planBg=ctx.createLinearGradient(PAD+10,PY,C_W-PAD-10,PY);
+        planBg.addColorStop(0,SEC_GRADS[sec.hBg][1]);
+        planBg.addColorStop(1,SEC_GRADS[sec.hBg][0]);
+        ctx.fillStyle=planBg;ctx.fill();
+        ctx.strokeStyle=sec.stripe;ctx.lineWidth=1;ctx.setLineDash([5,4]);ctx.stroke();
+        ctx.setLineDash([]);
 
         var nxt='';
         if(item.nextPlanSr){
-          nxt='🎯  القادم:  '+item.nextPlanSr+(item.nextPlanType==='range'?' (آية '+item.nextPlanF+'–'+item.nextPlanT+')':'  كاملة');
+          nxt='🎯  القادم:  '+item.nextPlanSr+(item.nextPlanType==='range'?' — آية '+item.nextPlanF+' إلى آية '+item.nextPlanT:'  كاملة');
         } else {
           var isRq2=(sec.key==='sj'||sec.key==='hd');
           var u2=isRq2?'رقم':'سؤال';
-          nxt='🎯  القادم:  من '+u2+' '+item.nextPlanF+'   ←   إلى '+u2+' '+item.nextPlanT;
+          nxt='🎯  القادم:  من '+u2+' '+item.nextPlanF+'  إلى  '+u2+' '+item.nextPlanT;
         }
-        ctx.font='bold 13px Cairo,sans-serif';ctx.fillStyle='#166534';
+        ctx.font='bold 14px Cairo,sans-serif';ctx.fillStyle=sec.hFg;
         ctx.textAlign='right';ctx.textBaseline='middle';
-        ctx.fillText(nxt,RX-4,planY+planH/2);
+        ctx.fillText(nxt,RX-4,PY+PH/2);
       }
 
-      cy+=itemH+8;
+      cy+=IH+10;
     });
-    cy+=8;
+    cy+=10;
   });
 
-  // ── FOOTER full-width
-  var fh=50;
-  var fG=ctx.createLinearGradient(0,cy,C_W,cy+fh);
-  fG.addColorStop(0,'#052e16');fG.addColorStop(0.5,'#166534');fG.addColorStop(1,'#052e16');
-  ctx.fillStyle=fG;ctx.fillRect(0,cy,C_W,fh);
-  // top shimmer line
-  ctx.strokeStyle='rgba(251,191,36,.4)';ctx.lineWidth=1.5;ctx.setLineDash([]);
+  /* ══════════ FOOTER ══════════ */
+  var FH=58;
+  var fG=ctx.createLinearGradient(0,cy,C_W,cy+FH);
+  fG.addColorStop(0,'#022c1a');fG.addColorStop(0.5,'#064e2f');fG.addColorStop(1,'#022c1a');
+  ctx.fillStyle=fG;ctx.fillRect(0,cy,C_W,FH);
+
+  // gold top line
+  ctx.strokeStyle='#d4af53';ctx.lineWidth=2;ctx.setLineDash([]);
   ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(C_W,cy);ctx.stroke();
 
-  ctx.font='bold 13px Cairo,sans-serif';ctx.fillStyle='rgba(252,211,77,.85)';
+  ctx.font='bold 15px Cairo,sans-serif';ctx.fillStyle='rgba(252,211,77,.9)';
   ctx.textAlign='right';ctx.textBaseline='middle';
-  ctx.fillText('مركز خادم القرآن الكريم',C_W-PAD,cy+fh/2);
+  ctx.fillText('مركز خادم القرآن الكريم',C_W-PAD,cy+FH/2);
 
-  ctx.font='20px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('⭐  ⭐  ⭐',C_W/2,cy+fh/2);
+  ctx.font='24px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('⭐  ⭐  ⭐',C_W/2,cy+FH/2);
 
-  ctx.font='12px Cairo,sans-serif';ctx.fillStyle='rgba(255,255,255,.4)';
+  ctx.font='13px Cairo,sans-serif';ctx.fillStyle='rgba(255,255,255,.45)';
   ctx.textAlign='left';ctx.textBaseline='middle';
-  ctx.fillText('تقرير متابعة الحفظ',PAD,cy+fh/2);
+  ctx.fillText('تقرير متابعة الحفظ',PAD,cy+FH/2);
 
   return canvas;
 }
