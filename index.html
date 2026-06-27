@@ -128,25 +128,24 @@ select.inp{padding-left:28px;cursor:pointer}
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-/* حقل "ما سيتم حفظه + التقييم" خاص بالسور الجديدة فقط */
+/* التقييم أعلى — يخص السورة/المذكرة اللي فوقه، ثم حقل "ما سيتم حفظه" تحته */
 function getExtraForNewSurah() {
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم السور الجديدة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم السورة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
             <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
         </div>
+        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">
     </div>`;
 }
 
-/* حقل "ما سيتم حفظه + التقييم" خاص بالمذكرة الجديدة فقط */
 function getExtraForNewMur() {
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم المذكرة الجديدة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم المذكرة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
             <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
         </div>
+        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">
     </div>`;
 }
 
@@ -208,7 +207,6 @@ function collectData(containerId, isQ) {
   return res;
 }
 
-/* بناء تقرير HTML مرئي */
 function buildReportHTML(nm, data) {
     var html = `<div class="rep-card">
         <div style="text-align:center; margin-bottom:15px;">
@@ -225,13 +223,13 @@ function buildReportHTML(nm, data) {
         data.ns.forEach(function(item) {
             var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
             html += `<div class="rep-item">${txt}`;
-            if(item.nextPlan || item.rating || item.errors) {
+            if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
-                if(item.nextPlan) html += `<span>القادم: ${item.nextPlan}</span>`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
                 if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
                 html += `</div>`;
             }
+            if(item.nextPlan) html += `<div style="font-size:11px; color:#8ab89a; margin-top:3px;">القادم: ${item.nextPlan}</div>`;
             html += `</div>`;
         });
         html += `</div>`;
@@ -250,13 +248,13 @@ function buildReportHTML(nm, data) {
         html += `<div class="rep-section"><div class="rep-sec-title">✏️ أسئلة المذكرة الجديدة</div>`;
         data.mq.forEach(function(item) {
             html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
-            if(item.nextPlan || item.rating || item.errors) {
+            if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
-                if(item.nextPlan) html += `<span>القادم: ${item.nextPlan}</span>`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
                 if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
                 html += `</div>`;
             }
+            if(item.nextPlan) html += `<div style="font-size:11px; color:#8ab89a; margin-top:3px;">القادم: ${item.nextPlan}</div>`;
             html += `</div>`;
         });
         html += `</div>`;
@@ -278,11 +276,11 @@ function buildReportHTML(nm, data) {
         html += `</div>`;
     }
 
-  
-    if(data.sj && data.sj.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">💡 الحديث</div>`;
-        data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+    if(data.hd && data.hd.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث</div>`;
+        data.hd.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}</div>`;
         });
         html += `</div>`;
     }
@@ -291,7 +289,6 @@ function buildReportHTML(nm, data) {
     return html;
 }
 
-/* عرض صورة في مودال */
 function showImageModal(imgSrc) {
     var modal = document.createElement('div');
     modal.id = 'img-modal';
@@ -329,11 +326,9 @@ async function generateAndShare(){
     var canvas = await html2canvas(zone.firstElementChild, {scale: 2, useCORS: true, backgroundColor: '#0d2116'});
     var imgData = canvas.toDataURL('image/png');
 
-    /* حفظ الصورة والبيانات للاسترجاع لاحقاً */
     localStorage.setItem('rep_img_' + nm, imgData);
     localStorage.setItem('rep_' + nm, JSON.stringify(data));
 
-    /* محاولة المشاركة الأصلية */
     if(navigator.share && navigator.canShare) {
       try {
         var blob = await (await fetch(imgData)).blob();
@@ -345,7 +340,6 @@ async function generateAndShare(){
       } catch(e) {}
     }
 
-    /* إذا لم تتوفر المشاركة، اعرض الصورة */
     showImageModal(imgData);
 
   } catch(e) {
