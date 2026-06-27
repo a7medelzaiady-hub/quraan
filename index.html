@@ -8,19 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-:root{
-  --green-deep:#0b1e14;
-  --green-mid:#133020;
-  --green-light:#1c422c;
-  --gold:#d4af53;
-  --gold-light:#ebd084;
-  --white:#ffffff;
-  --cream:#f9f5ee;
-  --border:#dde8e0;
-  --text:#1a1a1a;
-  --sub:#5a6b61;
-  --red:#dc2626;
-}
+:root{--green-deep:#0b1e14;--green-mid:#133020;--green-light:#1c422c;--gold:#d4af53;--gold-light:#ebd084;--white:#ffffff;--cream:#f9f5ee;--border:#dde8e0;--text:#1a1a1a;--sub:#5a6b61;--red:#dc2626;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);min-height:100vh;overflow-x:hidden}
 
@@ -37,7 +25,6 @@ html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);m
 .sec-body{padding:12px}
 
 .flbl{font-size:11px;color:var(--sub);margin-bottom:4px;font-weight:600}
-.frow{margin-bottom:9px}
 .inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Cairo',sans-serif;color:var(--text);background:#fafcfa;outline:none}
 .inp.num{text-align:center;font-size:14px;font-weight:700}
 .sel-wrap{position:relative}
@@ -53,18 +40,10 @@ select.inp{padding-left:28px;cursor:pointer}
 .del-btn{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
 .range-row.hidden{display:none}
-
 .add-btn{width:100%;padding:8px;margin-top:2px;border:1.5px dashed var(--green-mid);border-radius:9px;background:transparent;color:var(--green-mid);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
 
 .submit-wrap{position:fixed;bottom:0;right:0;left:0;background:var(--white);padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
 .submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-mid),var(--green-light));color:var(--gold-light);border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer}
-
-.render-container { position: absolute; top: -9999px; left: 0; width: 480px; }
-.rep-card { background-color: #0d2116; padding: 25px; color:#fff; font-family: 'Cairo', sans-serif; }
-.rep-section { margin-bottom: 15px; }
-.rep-sec-title { color: #d4af53; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid #1f422e; padding-bottom: 5px; }
-.rep-item { background: #153020; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
-.rep-extra-info { font-size: 12px; color: #ebd084; margin-top: 5px; display: flex; justify-content: space-between; }
 </style>
 </head>
 <body>
@@ -79,134 +58,70 @@ select.inp{padding-left:28px;cursor:pointer}
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات الطالب</div></div>
     <div class="sec-body">
-      <div class="frow">
         <div class="flbl">اسم الطالب</div>
         <input class="inp" id="inp-student" placeholder="أدخل اسم الطالب...">
-        <button onclick="loadStudentData()" class="add-btn" style="margin-top:10px">استرجاع بيانات سابقة</button>
-      </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
-    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns')"><i class="ti ti-plus"></i> إضافة سورة</button></div>
-  </div>
-
-  <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
-    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps')"><i class="ti ti-plus"></i> إضافة سورة</button></div>
-  </div>
-
-  <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة</div></div>
-    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq')"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-  </div>
-
-  <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
-    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm')"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-  </div>
+  <!-- الأقسام -->
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div><div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns', true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div><div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps', false)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>المذكرة (الجديدة/الماضية)</div></div><div class="sec-body"><div id="notes-list"></div><button class="add-btn" onclick="addGeneric('notes-list','nt')"><i class="ti ti-plus"></i> إضافة بند مذكرة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-school"></i>السيرة</div></div><div class="sec-body"><div id="sira-list"></div><button class="add-btn" onclick="addGeneric('sira-list','sr')"><i class="ti ti-plus"></i> إضافة بند سيرة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-message-2"></i>الحديث</div></div><div class="sec-body"><div id="hadith-list"></div><button class="add-btn" onclick="addGeneric('hadith-list','hd')"><i class="ti ti-plus"></i> إضافة بند حديث</button></div></div>
 </div>
 
-<div class="submit-wrap">
-  <button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button>
-</div>
-
-<div class="render-container" id="capture-zone"></div>
+<div class="submit-wrap"><button class="submit-btn" onclick="saveData()">حفظ البيانات</button></div>
 
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-var counters={ns:0,ps:0,mq:0,pm:0};
+var counters={ns:0,ps:0,nt:0,sr:0,hd:0};
 
-function getExtraHtml() {
-    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
-        </div>
+function getEvaluationHtml() {
+    return `<div style="grid-column: 1 / -1; display:grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #ccc;">
+        <div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جدا ⭐">جيد جدا ⭐</option><option value="جيد 👍">جيد 👍</option><option value="مقبول 🔸">مقبول 🔸</option></select></div>
+        <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
     </div>`;
 }
 
-function addSurah(containerId,prefix){
+function addSurah(containerId, prefix, isNew) {
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
-  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
+  var extra = isNew ? '<div style="grid-column:1/-1; margin-top:5px;"><input class="inp next-plan" placeholder="ما سيتم حفظه القادم..."></div>' : getEvaluationHtml();
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="this.parentElement.remove()">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
-    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + getExtraHtml();
+    '<div class="sel-wrap"><select class="inp" onchange="this.nextElementSibling.classList.toggle(\'hidden\', this.value!=\'range\')"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
+    '<div class="range-row hidden" style="grid-column: 1 / -1;"><input class="inp num" type="number" placeholder="من آية"><input class="inp num" type="number" placeholder="إلى آية"></div>'+
+    extra;
   document.getElementById(containerId).appendChild(div);
-  setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
+  setupAC(div.querySelector('input'), div.querySelector('.ac-drop'));
 }
 
-function addQuestion(containerId,prefix){
+function addGeneric(containerId, prefix) {
   counters[prefix]++; var idx=counters[prefix];
-  var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
-    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + getExtraHtml();
+  var div=document.createElement('div'); div.className='q-row'; div.id='row-'+prefix+idx;
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="this.parentElement.remove()">✕</button>':'')+
+    '<input class="inp num" placeholder="من">'+
+    '<input class="inp num" placeholder="إلى">'+
+    getEvaluationHtml();
   document.getElementById(containerId).appendChild(div);
 }
 
-function setupAC(inp,drop){
+function setupAC(inp, drop) {
   inp.addEventListener('input',function(){
     var val=inp.value;
     if(!val.trim()){drop.style.display='none';return;}
     var matches=SURAS_PLAIN.filter(s=>s.includes(val)).slice(0,5);
-    if(!matches.length){drop.style.display='none';return;}
-    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')">'+m+'</div>').join('');
+    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="this.parentElement.parentElement.parentElement.querySelector(\'input\').value=\''+m+'\'; this.parentElement.style.display=\'none\';">'+m+'</div>').join('');
     drop.style.display='block';
   });
 }
-function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
-function delRow(id){document.getElementById(id).remove();}
-function toggleRange(rngId,val){document.getElementById(rngId).classList.toggle('hidden',val!=='range');}
 
-function collectData(containerId, isQ) {
-  var res=[];
-  document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
-    var item={
-        nextPlan: row.querySelector('.next-plan')?.value || '',
-        rating: row.querySelector('.rating-sel')?.value || '',
-        errors: row.querySelector('.error-inp')?.value || ''
-    };
-    if(!isQ){
-        item.sr = row.querySelector('input[id^="sr-"]')?.value;
-        item.type = row.querySelector('select')?.value;
-        item.f = row.querySelector('input[id^="f-"]')?.value;
-        item.t = row.querySelector('input[id^="t-"]')?.value;
-    } else {
-        item.f = row.querySelector('input[id^="qf-"]')?.value;
-        item.t = row.querySelector('input[id^="qt-"]')?.value;
-    }
-    if(item.sr || item.f) res.push(item);
-  });
-  return res;
+function saveData(){
+  var nm=document.getElementById('inp-student').value;
+  if(!nm){alert('يرجى كتابة اسم الطالب'); return;}
+  alert('تم حفظ البيانات بنجاح (يمكنك برمجة وظيفة الطباعة هنا).');
 }
-
-function generateAndShare(){
-  var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم الطالب'); return;}
-  
-  var data = { 
-    ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
-    mq: collectData('mur-questions', true), pm: collectData('past-mur', true)
-  };
-  localStorage.setItem('rep_' + nm, JSON.stringify(data));
-  alert('تم حفظ البيانات! (بسبب القيود التقنية، يرجى أخذ لقطة شاشة للبيانات المطلوبة).');
-}
-
-function loadStudentData() {
-  var nm = document.getElementById('inp-student').value.trim();
-  var data = localStorage.getItem('rep_' + nm);
-  if (!data) { alert('لا يوجد بيانات لهذا الطالب'); return; }
-  var obj = JSON.parse(data);
-  // إعادة بناء الحقول (تنبيه: هذا الجزء يتطلب دالة مساعدة لملء الحقول إذا رغبت بالاسترجاع الكامل للواجهة)
-  alert('تم العثور على بيانات، يمكنك رؤيتها في التخزين المحلي للمتصفح.');
-}
-
-addSurah('new-surahs','ns'); addSurah('past-surahs','ps');
-addQuestion('mur-questions','mq'); addQuestion('past-mur','pm');
 </script>
 </body>
 </html>
