@@ -277,7 +277,7 @@ function buildReportHTML(nm, data) {
     }
 
     if(data.hd && data.hd.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث</div>`;
+        html += `<div class="rep-section"><div class="rep-sec-title">📿 الاذكار</div>`;
         data.hd.forEach(function(item) {
             var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
             html += `<div class="rep-item">${txt}</div>`;
