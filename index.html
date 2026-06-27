@@ -125,4 +125,248 @@ select.inp{padding-left:28px;cursor:pointer}
 <div class="render-container" id="capture-zone"></div>
 
 <script>
-var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرس
+var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
+
+/* حقل "ما سيتم حفظه + التقييم" خاص بالسور الجديدة فقط */
+function getExtraForNewSurah() {
+    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
+        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم السور الجديدة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+        </div>
+    </div>`;
+}
+
+/* حقل "ما سيتم حفظه + التقييم" خاص بالمذكرة الجديدة فقط */
+function getExtraForNewMur() {
+    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
+        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم المذكرة الجديدة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+        </div>
+    </div>`;
+}
+
+function addSurah(containerId,prefix,withExtra){
+  counters[prefix]++; var idx=counters[prefix];
+  var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
+  var extraHtml = withExtra ? getExtraForNewSurah() : '';
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
+    '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
+    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
+    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + extraHtml;
+  document.getElementById(containerId).appendChild(div);
+  setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
+}
+
+function addQuestion(containerId,prefix,withExtra){
+  counters[prefix]++; var idx=counters[prefix];
+  var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
+  var extraHtml = withExtra ? getExtraForNewMur() : '';
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
+    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
+    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + extraHtml;
+  document.getElementById(containerId).appendChild(div);
+}
+
+function setupAC(inp,drop){
+  inp.addEventListener('input',function(){
+    var val=inp.value;
+    if(!val.trim()){drop.style.display='none';return;}
+    var matches=SURAS_PLAIN.filter(s=>s.includes(val)).slice(0,5);
+    if(!matches.length){drop.style.display='none';return;}
+    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')">'+m+'</div>').join('');
+    drop.style.display='block';
+  });
+}
+function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
+function delRow(id){document.getElementById(id).remove();}
+function toggleRange(rngId,val){document.getElementById(rngId).classList.toggle('hidden',val!=='range');}
+
+function collectData(containerId, isQ) {
+  var res=[];
+  document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
+    var item={
+        nextPlan: row.querySelector('.next-plan')?.value || '',
+        rating: row.querySelector('.rating-sel')?.value || '',
+        errors: row.querySelector('.error-inp')?.value || ''
+    };
+    if(!isQ){
+        item.sr = row.querySelector('input[id^="sr-"]')?.value;
+        item.type = row.querySelector('select')?.value;
+        item.f = row.querySelector('input[id^="f-"]')?.value;
+        item.t = row.querySelector('input[id^="t-"]')?.value;
+    } else {
+        item.f = row.querySelector('input[id^="qf-"]')?.value;
+        item.t = row.querySelector('input[id^="qt-"]')?.value;
+    }
+    if(item.sr || item.f) res.push(item);
+  });
+  return res;
+}
+
+/* بناء تقرير HTML مرئي */
+function buildReportHTML(nm, data) {
+    var html = `<div class="rep-card">
+        <div style="text-align:center; margin-bottom:15px;">
+            <div style="font-size:28px;">🕌</div>
+            <div style="font-family:'Amiri',serif; font-size:20px; color:#d4af53;">مركز خادم القرآن الكريم</div>
+            <div style="font-size:12px; color:#ebd084;">تحت إشراف الشيخ عبدالرحمن</div>
+        </div>
+        <div style="text-align:center; margin-bottom:12px; background:#153020; padding:8px; border-radius:8px;">
+            <span style="color:#ebd084; font-weight:700;">البطل: </span><span style="color:#fff; font-weight:700;">${nm}</span>
+        </div>`;
+
+    if(data.ns.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📖 السور الجديدة</div>`;
+        data.ns.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}`;
+            if(item.nextPlan || item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.nextPlan) html += `<span>القادم: ${item.nextPlan}</span>`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
+        });
+        html += `</div>`;
+    }
+
+    if(data.ps.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📚 ماضي السور</div>`;
+        data.ps.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    if(data.mq.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">✏️ أسئلة المذكرة الجديدة</div>`;
+        data.mq.forEach(function(item) {
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            if(item.nextPlan || item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.nextPlan) html += `<span>القادم: ${item.nextPlan}</span>`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
+        });
+        html += `</div>`;
+    }
+
+    if(data.pm.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📋 ماضي المذكرة</div>`;
+        data.pm.forEach(function(item) {
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    if(data.sj && data.sj.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">💡 السراج</div>`;
+        data.sj.forEach(function(item) {
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    if(data.hd && data.hd.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث</div>`;
+        data.hd.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+/* عرض صورة في مودال */
+function showImageModal(imgSrc) {
+    var modal = document.createElement('div');
+    modal.id = 'img-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;overflow-y:auto;';
+    modal.innerHTML = '<img src="'+imgSrc+'" style="max-width:100%;max-height:78vh;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);margin-bottom:16px;">'
+        + '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">'
+        + '<button id="modal-close-btn" style="padding:10px 28px;background:#d4af53;color:#0b1e14;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
+        + '<button id="modal-save-btn" style="padding:10px 28px;background:#1c422c;color:#ebd084;border:1.5px solid #d4af53;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حفظ الصورة</button>'
+        + '</div>';
+    document.body.appendChild(modal);
+    document.getElementById('modal-close-btn').addEventListener('click', function(){ modal.remove(); });
+    document.getElementById('modal-save-btn').addEventListener('click', function(){
+        var a = document.createElement('a');
+        a.href = imgSrc;
+        a.download = 'تقرير_' + document.getElementById('inp-student').value.trim() + '.png';
+        a.click();
+    });
+    modal.addEventListener('click', function(e){ if(e.target === modal) modal.remove(); });
+}
+
+async function generateAndShare(){
+  var nm=document.getElementById('inp-student').value.trim();
+  if(!nm){alert('يرجى إدخال اسم البطل'); return;}
+
+  var data = {
+    ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
+    mq: collectData('mur-questions', true), pm: collectData('past-mur', true),
+    sj: collectData('suraj-section', true), hd: collectData('hadith-section', false)
+  };
+
+  var zone = document.getElementById('capture-zone');
+  zone.innerHTML = buildReportHTML(nm, data);
+
+  try {
+    var canvas = await html2canvas(zone.firstElementChild, {scale: 2, useCORS: true, backgroundColor: '#0d2116'});
+    var imgData = canvas.toDataURL('image/png');
+
+    /* حفظ الصورة والبيانات للاسترجاع لاحقاً */
+    localStorage.setItem('rep_img_' + nm, imgData);
+    localStorage.setItem('rep_' + nm, JSON.stringify(data));
+
+    /* محاولة المشاركة الأصلية */
+    if(navigator.share && navigator.canShare) {
+      try {
+        var blob = await (await fetch(imgData)).blob();
+        var file = new File([blob], 'تقرير_' + nm + '.png', {type: 'image/png'});
+        if(navigator.canShare({files: [file]})) {
+          await navigator.share({files: [file], title: 'تقرير ' + nm});
+          return;
+        }
+      } catch(e) {}
+    }
+
+    /* إذا لم تتوفر المشاركة، اعرض الصورة */
+    showImageModal(imgData);
+
+  } catch(e) {
+    alert('حدث خطأ في إنشاء التقرير: ' + e.message);
+  }
+}
+
+function loadStudentData() {
+  var nm = document.getElementById('inp-student').value.trim();
+  if(!nm){alert('يرجى إدخال اسم البطل أولاً'); return;}
+  var imgData = localStorage.getItem('rep_img_' + nm);
+  if (!imgData) { alert('لا يوجد تقرير سابق لهذا البطل'); return; }
+  showImageModal(imgData);
+}
+
+addSurah('new-surahs','ns',true);
+addSurah('past-surahs','ps',false);
+addQuestion('mur-questions','mq',true);
+addQuestion('past-mur','pm',false);
+addQuestion('suraj-section','sj',false);
+addSurah('hadith-section','hd',false);
+</script>
+</body>
+</html>
