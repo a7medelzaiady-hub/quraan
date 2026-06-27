@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مركز خادم القرآن - متابعة الحفظ</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700&family=Amiri:wght=400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -59,12 +59,164 @@ select.inp{padding-left:28px;cursor:pointer}
 .submit-wrap{position:fixed;bottom:0;right:0;left:0;background:var(--white);padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
 .submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-mid),var(--green-light));color:var(--gold-light);border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer}
 
-.render-container { position: absolute; top: -9999px; left: 0; width: 480px; }
-.rep-card { background-color: #0d2116; padding: 25px; color:#fff; font-family: 'Cairo', sans-serif; }
-.rep-section { margin-bottom: 15px; }
-.rep-sec-title { color: #d4af53; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid #1f422e; padding-bottom: 5px; }
-.rep-item { background: #153020; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
-.rep-extra-info { font-size: 12px; color: #ebd084; margin-top: 5px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+.render-container{position:absolute;top:-9999px;left:0;width:520px;}
+
+/* ===== REPORT CARD - Child-friendly Pro Design ===== */
+.rep-card{
+  width:520px;
+  background:#fff;
+  font-family:'Cairo',sans-serif;
+  overflow:hidden;
+  border-radius:0;
+}
+
+/* Top banner */
+.rep-banner{
+  background:linear-gradient(135deg,#0b4d2e 0%,#1a7a4a 60%,#0b4d2e 100%);
+  padding:22px 24px 18px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.rep-banner::before{
+  content:'';
+  position:absolute;
+  top:-30px;right:-30px;
+  width:130px;height:130px;
+  border-radius:50%;
+  background:rgba(212,175,83,.12);
+}
+.rep-banner::after{
+  content:'';
+  position:absolute;
+  bottom:-40px;left:-20px;
+  width:100px;height:100px;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.rep-mosque{font-size:38px;display:block;margin-bottom:6px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
+.rep-center-name{
+  font-family:'Amiri',serif;
+  font-size:20px;
+  color:#ffd97d;
+  font-weight:700;
+  letter-spacing:.5px;
+  text-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.rep-supervisor{
+  font-size:11px;
+  color:rgba(255,220,120,.75);
+  margin-top:3px;
+}
+
+/* Hero badge */
+.rep-hero-badge{
+  background:linear-gradient(135deg,#ffd700,#f5a623,#ffd700);
+  margin:0 24px;
+  margin-top:-1px;
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border-radius:0 0 16px 16px;
+  box-shadow:0 4px 12px rgba(245,166,35,.35);
+}
+.rep-hero-badge .star{font-size:18px}
+.rep-hero-name{font-size:16px;font-weight:900;color:#3d2600;letter-spacing:.3px}
+
+/* Date bar */
+.rep-date-bar{
+  background:#f0fdf4;
+  border-bottom:2px dashed #bbf7d0;
+  padding:7px 24px;
+  font-size:11px;
+  color:#166534;
+  font-weight:700;
+  text-align:center;
+}
+
+/* Body */
+.rep-body{padding:14px 18px 18px}
+
+/* Section */
+.rep-sec{margin-bottom:14px}
+.rep-sec-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  padding-bottom:5px;
+  border-bottom:2px solid;
+}
+.rep-sec-icon{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.rep-sec-label{font-size:13px;font-weight:800;letter-spacing:.2px}
+
+/* Color themes per section */
+.sec-new    .rep-sec-header{border-color:#86efac} .sec-new    .rep-sec-icon{background:#dcfce7} .sec-new    .rep-sec-label{color:#15803d}
+.sec-past   .rep-sec-header{border-color:#93c5fd} .sec-past   .rep-sec-icon{background:#dbeafe} .sec-past   .rep-sec-label{color:#1d4ed8}
+.sec-mur    .rep-sec-header{border-color:#fde68a} .sec-mur    .rep-sec-icon{background:#fef9c3} .sec-mur    .rep-sec-label{color:#92400e}
+.sec-pmur   .rep-sec-header{border-color:#c4b5fd} .sec-pmur   .rep-sec-icon{background:#ede9fe} .sec-pmur   .rep-sec-label{color:#6d28d9}
+.sec-suraj  .rep-sec-header{border-color:#fdba74} .sec-suraj  .rep-sec-icon{background:#ffedd5} .sec-suraj  .rep-sec-label{color:#c2410c}
+.sec-hadith .rep-sec-header{border-color:#6ee7b7} .sec-hadith .rep-sec-icon{background:#d1fae5} .sec-hadith .rep-sec-label{color:#065f46}
+
+/* Items */
+.rep-items{display:flex;flex-direction:column;gap:5px}
+.rep-item{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:10px;
+  padding:8px 11px;
+  position:relative;
+  overflow:hidden;
+}
+.rep-item::before{
+  content:'';
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:4px;
+  border-radius:0 10px 10px 0;
+}
+.sec-new    .rep-item::before{background:#22c55e}
+.sec-past   .rep-item::before{background:#3b82f6}
+.sec-mur    .rep-item::before{background:#f59e0b}
+.sec-pmur   .rep-item::before{background:#8b5cf6}
+.sec-suraj  .rep-item::before{background:#f97316}
+.sec-hadith .rep-item::before{background:#10b981}
+
+.rep-item-main{font-size:12.5px;font-weight:700;color:#1e293b}
+.rep-item-meta{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
+.rep-badge{
+  font-size:10.5px;font-weight:700;
+  padding:2px 8px;border-radius:20px;
+  display:inline-flex;align-items:center;gap:3px;
+}
+.badge-rating{background:#fef9c3;color:#92400e}
+.badge-error{background:#fee2e2;color:#991b1b}
+.rep-next{
+  margin-top:5px;
+  padding:5px 8px;
+  background:#f0fdf4;
+  border-radius:7px;
+  font-size:11px;
+  color:#15803d;
+  display:flex;align-items:center;gap:5px;
+  font-weight:700;
+}
+
+/* Footer */
+.rep-footer{
+  background:linear-gradient(135deg,#0b4d2e,#1a7a4a);
+  padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.rep-footer-text{font-size:10px;color:rgba(255,220,100,.8);font-weight:600}
+.rep-stars{font-size:14px;letter-spacing:2px}
+.rep-watermark{font-size:9px;color:rgba(255,255,255,.35)}
 </style>
 </head>
 <body>
@@ -109,12 +261,12 @@ select.inp{padding-left:28px;cursor:pointer}
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
-    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,false)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
+    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
-    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,false)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
+    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
   </div>
 </div>
 
@@ -150,14 +302,16 @@ function getExtraForNewSurah(includeNextPlan, label, prefix, idx) {
     </div>`;
 }
 
-function getExtraForNewMur(includeNextPlan, label) {
+function getExtraForQ(includeNextPlan, label, isRange) {
+    var pFrom = isRange ? 'من رقم' : 'من س';
+    var pTo   = isRange ? 'إلى رقم' : 'إلى س';
     var nextPlanHtml = '';
     if (includeNextPlan) {
         nextPlanHtml = `<div style="grid-column: 1 / -1; margin-top:8px; padding-top:8px; border-top:1px dashed #ccc;">
             <div class="flbl" style="color:#133020; font-size:12px;">ما سيتم حفظه القادم:</div>
             <div class="q-row" style="background:#fff; margin-bottom:0; box-shadow:none;">
-                <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="من س"></div>
-                <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="إلى س"></div>
+                <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="${pFrom}"></div>
+                <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="${pTo}"></div>
             </div>
         </div>`;
     }
@@ -173,7 +327,7 @@ function getExtraForNewMur(includeNextPlan, label) {
 function addSurah(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
-  var label = (prefix === 'ns') ? 'السورة' : (prefix === 'ps' ? 'الماضي' : 'القسم');
+  var label = (prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':'القسم');
   var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label, prefix, idx) : '';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
@@ -190,10 +344,11 @@ function addSurah(containerId,prefix,withExtra,includeNextPlan){
 function addQuestion(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  var label = (prefix === 'mq') ? 'المذكرة' : (prefix === 'pm' ? 'الماضي' : (prefix === 'sj' ? 'السراج' : 'الحديث'));
-  var extraHtml = withExtra ? getExtraForNewMur(includeNextPlan, label) : '';
-  var pFrom = (prefix === 'hd' || prefix === 'sj') ? 'من رقم' : 'من س';
-  var pTo = (prefix === 'hd' || prefix === 'sj') ? 'إلى رقم' : 'إلى س';
+  var isRange = (prefix==='hd' || prefix==='sj');
+  var label = (prefix==='mq')?'المذكرة':(prefix==='pm'?'الماضي':(prefix==='sj'?'السراج':'الحديث'));
+  var pFrom = isRange ? 'من رقم' : 'من س';
+  var pTo   = isRange ? 'إلى رقم' : 'إلى س';
+  var extraHtml = withExtra ? getExtraForQ(includeNextPlan, label, isRange) : '';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num main-qf" id="qf-'+prefix+idx+'" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num main-qt" id="qt-'+prefix+idx+'" type="number" placeholder="'+pTo+'"></div>' + extraHtml;
@@ -201,7 +356,7 @@ function addQuestion(containerId,prefix,withExtra,includeNextPlan){
 }
 
 function setupAC(inp,drop){
-  if(!inp || !drop) return;
+  if(!inp||!drop) return;
   inp.addEventListener('input',function(){
     var val=inp.value;
     if(!val.trim()){drop.style.display='none';return;}
@@ -213,7 +368,7 @@ function setupAC(inp,drop){
 }
 function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
 function delRow(id){document.getElementById(id).remove();}
-function toggleRange(rngId,val){var el = document.getElementById(rngId); if(el) el.classList.toggle('hidden',val!=='range');}
+function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range');}
 
 function collectData(containerId, isQ) {
   var res=[];
@@ -223,139 +378,150 @@ function collectData(containerId, isQ) {
         errors: row.querySelector('.error-inp')?.value || ''
     };
     if(!isQ){
-        item.sr = row.querySelector('.main-sr')?.value;
+        item.sr   = row.querySelector('.main-sr')?.value;
         item.type = row.querySelector('.main-sel')?.value;
-        item.f = row.querySelector('.main-f')?.value;
-        item.t = row.querySelector('.main-t')?.value;
-        
-        item.nextPlanSr = row.querySelector('.nxt-sr')?.value;
+        item.f    = row.querySelector('.main-f')?.value;
+        item.t    = row.querySelector('.main-t')?.value;
+        item.nextPlanSr   = row.querySelector('.nxt-sr')?.value;
         item.nextPlanType = row.querySelector('.nxt-sel')?.value;
-        item.nextPlanF = row.querySelector('.nxt-f')?.value;
-        item.nextPlanT = row.querySelector('.nxt-t')?.value;
+        item.nextPlanF    = row.querySelector('.nxt-f')?.value;
+        item.nextPlanT    = row.querySelector('.nxt-t')?.value;
     } else {
-        item.f = row.querySelector('.main-qf')?.value;
-        item.t = row.querySelector('.main-qt')?.value;
-        
+        item.f         = row.querySelector('.main-qf')?.value;
+        item.t         = row.querySelector('.main-qt')?.value;
         item.nextPlanF = row.querySelector('.nxt-qf')?.value;
         item.nextPlanT = row.querySelector('.nxt-qt')?.value;
     }
-    if(item.sr || item.f) res.push(item);
+    if(item.sr||item.f) res.push(item);
   });
   return res;
 }
 
 function buildReportHTML(nm, data) {
-    var html = `<div class="rep-card">
-        <div style="text-align:center; margin-bottom:15px;">
-            <div style="font-size:28px;">🕌</div>
-            <div style="font-family:'Amiri',serif; font-size:20px; color:#d4af53;">مركز خادم القرآن الكريم</div>
-            <div style="font-size:12px; color:#ebd084;">تحت إشراف الشيخ عبدالرحمن</div>
-        </div>
-        <div style="text-align:center; margin-bottom:12px; background:#153020; padding:8px; border-radius:8px;">
-            <span style="color:#ebd084; font-weight:700;">البطل: </span><span style="color:#fff; font-weight:700;">${nm}</span>
+    var today = new Date();
+    var days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+    var months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    var dateStr = days[today.getDay()] + '، ' + today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+
+    function itemHtml(secClass, mainText, item, useRaqam) {
+        var meta = '';
+        if(item.rating) meta += `<span class="rep-badge badge-rating">${item.rating}</span>`;
+        if(item.errors && item.errors != '0') meta += `<span class="rep-badge badge-error">❌ ${item.errors} خطأ</span>`;
+        var metaRow = meta ? `<div class="rep-item-meta">${meta}</div>` : '';
+        
+        var nextRow = '';
+        if(!useRaqam && item.nextPlanSr) {
+            var nxt = item.nextPlanSr + (item.nextPlanType==='range' ? ` (${item.nextPlanF}–${item.nextPlanT})` : ' كاملة');
+            nextRow = `<div class="rep-next">🎯 القادم: ${nxt}</div>`;
+        }
+        if(useRaqam && (item.nextPlanF || item.nextPlanT)) {
+            nextRow = `<div class="rep-next">🎯 القادم: من ${item.nextPlanF} إلى ${item.nextPlanT}</div>`;
+        }
+        
+        return `<div class="rep-item"><div class="rep-item-main">${mainText}</div>${metaRow}${nextRow}</div>`;
+    }
+
+    var sections = '';
+
+    if(data.ns && data.ns.length) {
+        var items = data.ns.map(function(item) {
+            var txt = item.sr + (item.type==='range' ? ` (آية ${item.f}–${item.t})` : ' كاملة');
+            return itemHtml('sec-new', txt, item, false);
+        }).join('');
+        sections += `<div class="rep-sec sec-new">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">📖</div>
+                <div class="rep-sec-label">السور الجديدة</div>
+            </div>
+            <div class="rep-items">${items}</div>
         </div>`;
-
-    if(data.ns.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📖 السور الجديدة</div>`;
-        data.ns.forEach(function(item) {
-            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
-            html += `<div class="rep-item">${txt}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            if(item.nextPlanSr) {
-                var nxtTxt = item.nextPlanSr + (item.nextPlanType==='range' ? ' ('+item.nextPlanF+' - '+item.nextPlanT+')' : ' كاملة');
-                html += `<div style="font-size:11px; color:#8ab89a; margin-top:5px; padding-top:4px; border-top:1px dashed #285438;">القادم: ${nxtTxt}</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
     }
 
-    if(data.ps.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📚 ماضي السور</div>`;
-        data.ps.forEach(function(item) {
-            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
-            html += `<div class="rep-item">${txt}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
+    if(data.ps && data.ps.length) {
+        var items = data.ps.map(function(item) {
+            var txt = item.sr + (item.type==='range' ? ` (آية ${item.f}–${item.t})` : ' كاملة');
+            return itemHtml('sec-past', txt, item, false);
+        }).join('');
+        sections += `<div class="rep-sec sec-past">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">📚</div>
+                <div class="rep-sec-label">ماضي السور</div>
+            </div>
+            <div class="rep-items">${items}</div>
+        </div>`;
     }
 
-    if(data.mq.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">✏️ أسئلة المذكرة الجديدة</div>`;
-        data.mq.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            if(item.nextPlanF || item.nextPlanT) {
-                html += `<div style="font-size:11px; color:#8ab89a; margin-top:5px; padding-top:4px; border-top:1px dashed #285438;">القادم: من س${item.nextPlanF} إلى س${item.nextPlanT}</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
+    if(data.mq && data.mq.length) {
+        var items = data.mq.map(function(item) {
+            return itemHtml('sec-mur', `من سؤال ${item.f} إلى سؤال ${item.t}`, item, true);
+        }).join('');
+        sections += `<div class="rep-sec sec-mur">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">✏️</div>
+                <div class="rep-sec-label">أسئلة المذكرة الجديدة</div>
+            </div>
+            <div class="rep-items">${items}</div>
+        </div>`;
     }
 
-    if(data.pm.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📋 ماضي المذكرة</div>`;
-        data.pm.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
+    if(data.pm && data.pm.length) {
+        var items = data.pm.map(function(item) {
+            return itemHtml('sec-pmur', `من سؤال ${item.f} إلى سؤال ${item.t}`, item, true);
+        }).join('');
+        sections += `<div class="rep-sec sec-pmur">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">📋</div>
+                <div class="rep-sec-label">ماضي المذكرة</div>
+            </div>
+            <div class="rep-items">${items}</div>
+        </div>`;
     }
 
     if(data.sj && data.sj.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">💡 السراج</div>`;
-        data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من رقم ${item.f} إلى رقم ${item.t}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
+        var items = data.sj.map(function(item) {
+            return itemHtml('sec-suraj', `من رقم ${item.f} إلى رقم ${item.t}`, item, true);
+        }).join('');
+        sections += `<div class="rep-sec sec-suraj">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">💡</div>
+                <div class="rep-sec-label">السراج</div>
+            </div>
+            <div class="rep-items">${items}</div>
+        </div>`;
     }
 
     if(data.hd && data.hd.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث والأذكار</div>`;
-        data.hd.forEach(function(item) {
-            html += `<div class="rep-item">من رقم ${item.f} إلى رقم ${item.t}`;
-            if(item.rating || item.errors) {
-                html += `<div class="rep-extra-info">`;
-                if(item.rating) html += `<span>${item.rating}</span>`;
-                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
-                html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
+        var items = data.hd.map(function(item) {
+            return itemHtml('sec-hadith', `من رقم ${item.f} إلى رقم ${item.t}`, item, true);
+        }).join('');
+        sections += `<div class="rep-sec sec-hadith">
+            <div class="rep-sec-header">
+                <div class="rep-sec-icon">📿</div>
+                <div class="rep-sec-label">الحديث والأذكار</div>
+            </div>
+            <div class="rep-items">${items}</div>
+        </div>`;
     }
 
-    html += `</div>`;
-    return html;
+    return `<div class="rep-card">
+        <div class="rep-banner">
+            <span class="rep-mosque">🕌</span>
+            <div class="rep-center-name">مركز خادم القرآن الكريم</div>
+            <div class="rep-supervisor">تحت إشراف الشيخ عبدالرحمن</div>
+        </div>
+        <div class="rep-hero-badge">
+            <span class="star">⭐</span>
+            <span class="rep-hero-name">بطلنا: ${nm}</span>
+            <span class="star">⭐</span>
+        </div>
+        <div class="rep-date-bar">📅 ${dateStr}</div>
+        <div class="rep-body">${sections}</div>
+        <div class="rep-footer">
+            <div class="rep-footer-text">مركز خادم القرآن الكريم</div>
+            <div class="rep-stars">⭐⭐⭐</div>
+            <div class="rep-watermark">تقرير متابعة الحفظ</div>
+        </div>
+    </div>`;
 }
 
 function showImageModal(imgSrc) {
@@ -392,7 +558,7 @@ async function generateAndShare(){
   zone.innerHTML = buildReportHTML(nm, data);
 
   try {
-    var canvas = await html2canvas(zone.firstElementChild, {scale: 2, useCORS: true, backgroundColor: '#0d2116'});
+    var canvas = await html2canvas(zone.firstElementChild, {scale:2, useCORS:true, backgroundColor:'#ffffff'});
     var imgData = canvas.toDataURL('image/png');
 
     localStorage.setItem('rep_img_' + nm, imgData);
@@ -401,9 +567,9 @@ async function generateAndShare(){
     if(navigator.share && navigator.canShare) {
       try {
         var blob = await (await fetch(imgData)).blob();
-        var file = new File([blob], 'تقرير_' + nm + '.png', {type: 'image/png'});
-        if(navigator.canShare({files: [file]})) {
-          await navigator.share({files: [file], title: 'تقرير ' + nm});
+        var file = new File([blob], 'تقرير_' + nm + '.png', {type:'image/png'});
+        if(navigator.canShare({files:[file]})) {
+          await navigator.share({files:[file], title:'تقرير ' + nm});
           return;
         }
       } catch(e) {}
@@ -428,8 +594,8 @@ addSurah('new-surahs','ns',true,true);
 addSurah('past-surahs','ps',true,false);
 addQuestion('mur-questions','mq',true,true);
 addQuestion('past-mur','pm',true,false);
-addQuestion('suraj-section','sj',true,false);
-addQuestion('hadith-section','hd',true,false);
+addQuestion('suraj-section','sj',true,true);
+addQuestion('hadith-section','hd',true,true);
 </script>
 </body>
 </html>
