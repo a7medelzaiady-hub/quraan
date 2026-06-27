@@ -64,7 +64,7 @@ select.inp{padding-left:28px;cursor:pointer}
 .rep-section { margin-bottom: 15px; }
 .rep-sec-title { color: #d4af53; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid #1f422e; padding-bottom: 5px; }
 .rep-item { background: #153020; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
-.rep-extra-info { font-size: 12px; color: #ebd084; margin-top: 5px; display: flex; justify-content: space-between; }
+.rep-extra-info { font-size: 12px; color: #ebd084; margin-top: 5px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
 </style>
 </head>
 <body>
@@ -82,29 +82,39 @@ select.inp{padding-left:28px;cursor:pointer}
       <div class="frow">
         <div class="flbl">اسم البطل</div>
         <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
-        <button onclick="loadStudentData()" class="add-btn" style="margin-top:10px">استرجاع بيانات سابقة</button>
+        <button onclick="loadStudentData()" class="add-btn" style="margin-top:10px"><i class="ti ti-photo"></i> استرجاع التقرير السابق</button>
       </div>
     </div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
-    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns')"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
-    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps')"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
 
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة</div></div>
-    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq')"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
+    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
-    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm')"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
+    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',false)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث</div></div>
+    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addSurah('hadith-section','hd',false)"><i class="ti ti-plus"></i> إضافة حديث</button></div>
   </div>
 </div>
 
@@ -115,98 +125,4 @@ select.inp{padding-left:28px;cursor:pointer}
 <div class="render-container" id="capture-zone"></div>
 
 <script>
-var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-var counters={ns:0,ps:0,mq:0,pm:0};
-
-function getExtraHtml() {
-    return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم..." style="margin-bottom:5px;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-            <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
-        </div>
-    </div>`;
-}
-
-function addSurah(containerId,prefix){
-  counters[prefix]++; var idx=counters[prefix];
-  var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
-  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
-    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + getExtraHtml();
-  document.getElementById(containerId).appendChild(div);
-  setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
-}
-
-function addQuestion(containerId,prefix){
-  counters[prefix]++; var idx=counters[prefix];
-  var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
-    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + getExtraHtml();
-  document.getElementById(containerId).appendChild(div);
-}
-
-function setupAC(inp,drop){
-  inp.addEventListener('input',function(){
-    var val=inp.value;
-    if(!val.trim()){drop.style.display='none';return;}
-    var matches=SURAS_PLAIN.filter(s=>s.includes(val)).slice(0,5);
-    if(!matches.length){drop.style.display='none';return;}
-    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')">'+m+'</div>').join('');
-    drop.style.display='block';
-  });
-}
-function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
-function delRow(id){document.getElementById(id).remove();}
-function toggleRange(rngId,val){document.getElementById(rngId).classList.toggle('hidden',val!=='range');}
-
-function collectData(containerId, isQ) {
-  var res=[];
-  document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
-    var item={
-        nextPlan: row.querySelector('.next-plan')?.value || '',
-        rating: row.querySelector('.rating-sel')?.value || '',
-        errors: row.querySelector('.error-inp')?.value || ''
-    };
-    if(!isQ){
-        item.sr = row.querySelector('input[id^="sr-"]')?.value;
-        item.type = row.querySelector('select')?.value;
-        item.f = row.querySelector('input[id^="f-"]')?.value;
-        item.t = row.querySelector('input[id^="t-"]')?.value;
-    } else {
-        item.f = row.querySelector('input[id^="qf-"]')?.value;
-        item.t = row.querySelector('input[id^="qt-"]')?.value;
-    }
-    if(item.sr || item.f) res.push(item);
-  });
-  return res;
-}
-
-function generateAndShare(){
-  var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل'); return;}
-  
-  var data = { 
-    ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
-    mq: collectData('mur-questions', true), pm: collectData('past-mur', true)
-  };
-  localStorage.setItem('rep_' + nm, JSON.stringify(data));
-  alert('تم حفظ البيانات! (بسبب القيود التقنية، يرجى أخذ لقطة شاشة للبيانات المطلوبة).');
-}
-
-function loadStudentData() {
-  var nm = document.getElementById('inp-student').value.trim();
-  var data = localStorage.getItem('rep_' + nm);
-  if (!data) { alert('لا يوجد بيانات لهذا البطل'); return; }
-  var obj = JSON.parse(data);
-  // إعادة بناء الحقول (تنبيه: هذا الجزء يتطلب دالة مساعدة لملء الحقول إذا رغبت بالاسترجاع الكامل للواجهة)
-  alert('تم العثور على بيانات، يمكنك رؤيتها في التخزين المحلي للمتصفح.');
-}
-
-addSurah('new-surahs','ns'); addSurah('past-surahs','ps');
-addQuestion('mur-questions','mq'); addQuestion('past-mur','pm');
-</script>
-</body>
-</html>
+var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرس
