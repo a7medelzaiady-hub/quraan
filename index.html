@@ -393,7 +393,7 @@ function showToast(msg){
 
 function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){showToast('تحذير: أدخل اسم الطالب'); return;}
+  if(!nm){showToast('تحذير: أدخل اسم البطل'); return;}
   
   // حفظ البيانات
   localStorage.setItem('rep_' + nm, JSON.stringify({ rating: document.getElementById('inp-rating').value, ns: collectSurahs('new-surahs'), ps: collectSurahs('past-surahs'), mq: collectQuestions('mur-questions'), pm: collectQuestions('past-mur') }));
@@ -401,7 +401,7 @@ function generateAndShare(){
   showToast('⏳ جاري تجهيز الصورة...');
   
   var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('rep-name').textContent = "الطالب: " + nm;
+  document.getElementById('rep-name').textContent = "البطل: " + nm;
   document.getElementById('rep-date-val').textContent = new Date().toLocaleDateString('ar-EG', opts);
 
   var rating = document.getElementById('inp-rating').options[document.getElementById('inp-rating').selectedIndex].text;
