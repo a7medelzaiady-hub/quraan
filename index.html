@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مركز خادم القرآن - متابعة الحفظ</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700&family=Amiri:wght=400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -89,32 +89,32 @@ select.inp{padding-left:28px;cursor:pointer}
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
-    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
-    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
-    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
-    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
   </div>
 
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
-    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',false)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
+    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,false)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
   </div>
 
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث</div></div>
-    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addSurah('hadith-section','hd',false)"><i class="ti ti-plus"></i> إضافة حديث</button></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
+    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addSurah('hadith-section','hd',true,false)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
   </div>
 </div>
 
@@ -128,31 +128,33 @@ select.inp{padding-left:28px;cursor:pointer}
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-/* التقييم أعلى — يخص السورة/المذكرة اللي فوقه، ثم حقل "ما سيتم حفظه" تحته */
-function getExtraForNewSurah() {
+function getExtraForNewSurah(includeNextPlan, label) {
+    var nextPlanHtml = includeNextPlan ? `<input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">` : '';
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم السورة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
             <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
         </div>
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">
+        ${nextPlanHtml}
     </div>`;
 }
 
-function getExtraForNewMur() {
+function getExtraForNewMur(includeNextPlan, label) {
+    var nextPlanHtml = includeNextPlan ? `<input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">` : '';
     return `<div style="grid-column: 1 / -1; margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:5px;">
-            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم المذكرة</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+            <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
             <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
         </div>
-        <input class="inp next-plan" placeholder="ما سيتم حفظه القادم...">
+        ${nextPlanHtml}
     </div>`;
 }
 
-function addSurah(containerId,prefix,withExtra){
+function addSurah(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
-  var extraHtml = withExtra ? getExtraForNewSurah() : '';
+  var label = (prefix === 'ns') ? 'السورة' : (prefix === 'ps' ? 'الماضي' : 'القسم');
+  var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label) : '';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
     '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
@@ -161,10 +163,11 @@ function addSurah(containerId,prefix,withExtra){
   setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
 }
 
-function addQuestion(containerId,prefix,withExtra){
+function addQuestion(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++; var idx=counters[prefix];
   var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
-  var extraHtml = withExtra ? getExtraForNewMur() : '';
+  var label = (prefix === 'mq') ? 'المذكرة' : (prefix === 'pm' ? 'الماضي' : 'السراج');
+  var extraHtml = withExtra ? getExtraForNewMur(includeNextPlan, label) : '';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
     '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + extraHtml;
@@ -239,7 +242,14 @@ function buildReportHTML(nm, data) {
         html += `<div class="rep-section"><div class="rep-sec-title">📚 ماضي السور</div>`;
         data.ps.forEach(function(item) {
             var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
-            html += `<div class="rep-item">${txt}</div>`;
+            html += `<div class="rep-item">${txt}`;
+            if(item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
         });
         html += `</div>`;
     }
@@ -263,7 +273,14 @@ function buildReportHTML(nm, data) {
     if(data.pm.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">📋 ماضي المذكرة</div>`;
         data.pm.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            if(item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
         });
         html += `</div>`;
     }
@@ -271,15 +288,30 @@ function buildReportHTML(nm, data) {
     if(data.sj && data.sj.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">💡 السراج</div>`;
         data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            if(item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
         });
         html += `</div>`;
     }
 
-    if(data.sj && data.sj.length) {
-        html += `<div class="rep-section"><div class="rep-sec-title">💡 الاذكار</div>`;
-        data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}</div>`;
+    if(data.hd && data.hd.length) {
+        html += `<div class="rep-section"><div class="rep-sec-title">📿 الحديث والأذكار</div>`;
+        data.hd.forEach(function(item) {
+            var txt = item.sr + (item.type==='range' ? ' ('+item.f+' - '+item.t+')' : ' كاملة');
+            html += `<div class="rep-item">${txt}`;
+            if(item.rating || item.errors) {
+                html += `<div class="rep-extra-info">`;
+                if(item.rating) html += `<span>${item.rating}</span>`;
+                if(item.errors) html += `<span>أخطاء: ${item.errors}</span>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
         });
         html += `</div>`;
     }
@@ -354,12 +386,12 @@ function loadStudentData() {
   showImageModal(imgData);
 }
 
-addSurah('new-surahs','ns',true);
-addSurah('past-surahs','ps',false);
-addQuestion('mur-questions','mq',true);
-addQuestion('past-mur','pm',false);
-addQuestion('suraj-section','sj',false);
-addSurah('hadith-section','hd',false);
+addSurah('new-surahs','ns',true,true);
+addSurah('past-surahs','ps',true,false);
+addQuestion('mur-questions','mq',true,true);
+addQuestion('past-mur','pm',true,false);
+addQuestion('suraj-section','sj',true,false);
+addSurah('hadith-section','hd',true,false);
 </script>
 </body>
 </html>
