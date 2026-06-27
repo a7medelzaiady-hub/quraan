@@ -42,14 +42,15 @@ html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);m
 .inp.num{text-align:center;font-size:14px;font-weight:700}
 .sel-wrap{position:relative}
 .sel-wrap::after{content:'▾';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--green-mid);font-size:12px;pointer-events:none}
-select.inp{padding-left:28px;cursor:pointer}
+select.inp{padding-left:28px;cursor:pointer;-webkit-appearance:none;appearance:none;}
 
 .ac-wrap{position:relative}
 .ac-drop{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:var(--white);border:1.5px solid var(--green-mid);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
 .ac-item{padding:9px 13px;font-size:13px;font-family:'Amiri',serif;cursor:pointer;border-bottom:.5px solid #eef4f0}
 
-.surah-row, .q-row{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
-.q-row{grid-template-columns:1fr 1fr}
+/* تحديث هيكل صفوف السور */
+.surah-row { display: grid; grid-template-columns: 100px 1fr; gap: 8px; margin-bottom: 8px; background: var(--cream); border-radius: 10px; padding: 9px; border: 1px solid var(--border); position: relative; }
+.q-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
 .del-btn{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:var(--white);border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
 .range-row.hidden{display:none}
@@ -155,10 +156,13 @@ function addSurah(containerId,prefix,withExtra,includeNextPlan){
   var div=document.createElement('div'); div.className='surah-row'; div.id='row-'+prefix+idx;
   var label = (prefix === 'ns') ? 'السورة' : (prefix === 'ps' ? 'الماضي' : 'القسم');
   var extraHtml = withExtra ? getExtraForNewSurah(includeNextPlan, label) : '';
+  
+  // ترتيب العناصر ليكون مطابقاً للصورة: سلكت في اليمين، واسم السورة في اليسار
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
-    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>' + extraHtml;
+    '<div class="sel-wrap"><select class="inp" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملة</option><option value="range">من/إلى</option></select></div>'+
+    '<div class="ac-wrap"><input class="inp" id="sr-'+prefix+idx+'" placeholder="اسم السورة...">'+
+    '<div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
+    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column: 1 / -1;"><div class="frow"><input class="inp num" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div><div class="frow"><input class="inp num" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div></div>' + extraHtml;
   document.getElementById(containerId).appendChild(div);
   setupAC(document.getElementById('sr-'+prefix+idx), document.getElementById('drop-'+prefix+idx));
 }
@@ -168,9 +172,11 @@ function addQuestion(containerId,prefix,withExtra,includeNextPlan){
   var div=document.createElement('div'); div.className='q-row'; div.id='qrow-'+prefix+idx;
   var label = (prefix === 'mq') ? 'المذكرة' : (prefix === 'pm' ? 'الماضي' : 'السراج');
   var extraHtml = withExtra ? getExtraForNewMur(includeNextPlan, label) : '';
+  
+  // خانات أرقام فقط للمذكرة
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
-    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من س"></div>'+
-    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى س"></div>' + extraHtml;
+    '<div class="frow"><input class="inp num" id="qf-'+prefix+idx+'" type="number" placeholder="من سؤال (رقم)"></div>'+
+    '<div class="frow"><input class="inp num" id="qt-'+prefix+idx+'" type="number" placeholder="إلى سؤال (رقم)"></div>' + extraHtml;
   document.getElementById(containerId).appendChild(div);
 }
 
@@ -257,7 +263,7 @@ function buildReportHTML(nm, data) {
     if(data.mq.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">✏️ أسئلة المذكرة الجديدة</div>`;
         data.mq.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            html += `<div class="rep-item">من سؤال ${item.f} إلى سؤال ${item.t}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
@@ -273,7 +279,7 @@ function buildReportHTML(nm, data) {
     if(data.pm.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">📋 ماضي المذكرة</div>`;
         data.pm.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            html += `<div class="rep-item">من سؤال ${item.f} إلى سؤال ${item.t}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
@@ -288,7 +294,7 @@ function buildReportHTML(nm, data) {
     if(data.sj && data.sj.length) {
         html += `<div class="rep-section"><div class="rep-sec-title">💡 السراج</div>`;
         data.sj.forEach(function(item) {
-            html += `<div class="rep-item">من س${item.f} إلى س${item.t}`;
+            html += `<div class="rep-item">من سؤال ${item.f} إلى سؤال ${item.t}`;
             if(item.rating || item.errors) {
                 html += `<div class="rep-extra-info">`;
                 if(item.rating) html += `<span>${item.rating}</span>`;
