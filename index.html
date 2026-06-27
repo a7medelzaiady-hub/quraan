@@ -164,16 +164,16 @@ select.inp{padding-left:28px;cursor:pointer;background-color:#fafcfa}
 </div>
 
 <div class="body">
-  <!-- بيانات الطالب والتقييم -->
+  <!-- بيانات البطل والتقييم -->
   <div class="section">
     <div class="sec-head">
-      <div class="sec-head-title"><i class="ti ti-user"></i>بيانات الطالب والتقييم</div>
+      <div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل والتقييم</div>
     </div>
     <div class="sec-body">
       <div class="frow" style="display:flex; gap:8px;">
         <div style="flex-grow:1">
           <div class="flbl">اسم البطل</div>
-          <input class="inp" id="inp-student" placeholder="أدخل اسم الطالب...">
+          <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
         </div>
         <button onclick="loadStudentData()" class="add-btn" style="width:auto; margin-top:22px; padding:0 15px; border:1.5px solid var(--green-mid)">استرجاع</button>
       </div>
@@ -440,7 +440,7 @@ function generateAndShare(){
 function loadStudentData() {
   var nm = document.getElementById('inp-student').value.trim();
   var data = localStorage.getItem('rep_' + nm);
-  if (!data) { showToast('❌ لم يتم العثور على تقرير سابق لهذا الطالب'); return; }
+  if (!data) { showToast('❌ لم يتم العثور على تقرير سابق لهذا البطل'); return; }
   
   var obj = JSON.parse(data);
   document.getElementById('inp-rating').value = obj.rating;
@@ -456,7 +456,7 @@ function loadStudentData() {
   obj.mq.forEach(i => { addQuestion('mur-questions','mq'); var idx=counters.mq; document.getElementById('qf-mq'+idx).value=i.from; document.getElementById('qt-mq'+idx).value=i.to; });
   obj.pm.forEach(i => { addQuestion('past-mur','pm'); var idx=counters.pm; document.getElementById('qf-pm'+idx).value=i.from; document.getElementById('qt-pm'+idx).value=i.to; document.querySelectorAll('#qrow-pm'+idx+' .rating-sel')[0].value=i.rating; document.querySelectorAll('#qrow-pm'+idx+' .error-inp')[0].value=i.err; });
   
-  showToast('✅ تم استرجاع بيانات الطالب بنجاح');
+  showToast('✅ تم استرجاع بيانات البطل بنجاح');
 }
 
 document.addEventListener('click', e => {
