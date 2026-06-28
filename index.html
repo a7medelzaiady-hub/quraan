@@ -3,801 +3,575 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن الكريم</title>
+<title>مركز خادم القرآن - متابعة الحفظ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
 :root{
-  --gd:#0b1e14;--gm:#133020;--gl:#1c422c;
-  --gold:#d4af53;--goldl:#ebd084;
+  --green-deep:#0b1e14;--green-mid:#133020;--green-light:#1c422c;
+  --gold:#d4af53;--gold-light:#ebd084;--white:#ffffff;
   --cream:#f9f5ee;--border:#dde8e0;--text:#1a1a1a;--sub:#5a6b61;--red:#dc2626;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);min-height:100vh;overflow-x:hidden}
-
-/* ── PAGE SYSTEM ── */
-.page{display:none;min-height:100vh}
-.page.active{display:block}
-
-/* ── HEADER (تعديل التنسيق لمنع التداخل) ── */
-.hdr {
-  background: linear-gradient(160deg, var(--gd), var(--gm));
-  padding: 16px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.hdr-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-.hdr-actions {
-  display: flex;
-  gap: 8px;
-}
-.hdr-center {
-  text-align: center;
-}
-.hdr-emblem{width:50px;height:50px;margin:0 auto 8px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
-.hdr-title{color:#fff;font-family:'Amiri',serif;font-size:20px;font-weight:700}
-.hdr-sub{color:var(--goldl);font-size:12px;font-weight:600;margin-top:4px}
-.hdr-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.hdr-btn.gold{background:rgba(212,175,83,.25);border-color:var(--gold);color:var(--goldl)}
-.hdr-btn.danger{background:rgba(220,38,38,.2);border-color:#fca5a5;color:#fca5a5}
-
-/* ── BODY ── */
-.body{padding:14px 14px 110px}
-
-/* ── SECTIONS ── */
-.sec{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.sh{background:var(--gm);padding:11px 14px;border-radius:14px 14px 0 0}
-.sh-t{color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
-.sh-t i{color:var(--goldl);font-size:16px}
-.sb{padding:12px}
+.hdr{background:linear-gradient(160deg,var(--green-deep),var(--green-mid));padding:20px 16px 24px;text-align:center}
+.hdr-emblem{width:56px;height:56px;margin:0 auto 10px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
+.hdr-title{color:#fff;font-family:'Amiri',serif;font-size:22px;font-weight:700}
+.hdr-subtitle{color:var(--gold-light);font-size:13px;font-weight:600;margin-top:6px}
+.body{padding:14px 14px 100px}
+.section{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sec-head{background:var(--green-mid);padding:11px 14px;border-radius:14px 14px 0 0}
+.sec-head-title{color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.sec-head-title i{color:var(--gold-light);font-size:16px}
+.sec-body{padding:12px}
 .flbl{font-size:11px;color:var(--sub);margin-bottom:4px;font-weight:600}
 .frow{margin-bottom:9px}
 .inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Cairo',sans-serif;color:var(--text);background:#fafcfa;outline:none}
 .inp.num{text-align:center;font-size:14px;font-weight:700}
-.sw{position:relative}
-.sw::after{content:'▾';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gm);font-size:12px;pointer-events:none}
+.sel-wrap{position:relative}
+.sel-wrap::after{content:'▾';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--green-mid);font-size:12px;pointer-events:none}
 select.inp{padding-left:28px;cursor:pointer}
-.aw{position:relative}
-.ad{display:none;position:absolute;top:calc(100%+4px);right:0;left:0;background:#fff;border:1.5px solid var(--gm);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
-.ai{padding:9px 13px;font-size:13px;font-family:'Amiri',serif;cursor:pointer;border-bottom:.5px solid #eef4f0}
-.sr,.qr{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
-.qr{grid-template-columns:1fr 1fr}
-.db{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#fff;border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.rr2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
-.rr2.hidden{display:none}
-.abtn{width:100%;padding:8px;margin-top:2px;border:1.5px dashed var(--gm);border-radius:9px;background:transparent;color:var(--gm);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
-
-/* ── BOTTOM BAR ── */
-.bot{position:fixed;bottom:0;right:0;left:0;background:#fff;padding:10px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200;display:flex;gap:8px}
-.bot-main{flex:1;padding:13px;background:linear-gradient(135deg,var(--gm),var(--gl));color:var(--goldl);border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
-.bot-sec{padding:13px 16px;background:#fff;border:2px solid var(--gm);color:var(--gm);border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:5px;white-space:nowrap}
-
-/* ── REPORTS PAGE ── */
-.rep-list{padding:14px 14px 100px}
-.rep-card-item{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;border:1px solid var(--border)}
-.rep-card-top{display:flex;gap:10px;padding:12px}
-.rep-thumb{width:72px;height:90px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#eee;border:1px solid var(--border)}
-.rep-thumb-ph{width:72px;height:90px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--gm),var(--gl));display:flex;align-items:center;justify-content:center;font-size:28px}
-.rep-info{flex:1;min-width:0}
-.rep-name{font-size:16px;font-weight:900;color:var(--gd);margin-bottom:4px}
-.rep-date{font-size:11px;color:var(--sub);margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.rep-hijri{font-size:10px;color:#888}
-.rep-badge-old{display:inline-flex;align-items:center;gap:4px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px}
-.rep-actions{display:flex;gap:6px;padding:0 12px 12px;flex-wrap:wrap}
-.ra{flex:1;padding:8px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;display:flex;align-items:center;justify-content:center;gap:4px;min-width:60px}
-.ra-view{background:#f0fdf4;color:#15803d;border:1.5px solid #86efac}
-.ra-edit{background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd}
-.ra-del{background:#fef2f2;color:#dc2626;border:1.5px solid #fca5a5}
-.rep-empty{text-align:center;padding:60px 20px;color:var(--sub)}
-.rep-empty-ico{font-size:50px;margin-bottom:12px}
-.rep-empty-txt{font-size:15px;font-weight:600}
-
-/* ── TOP NAV ── */
-.top-nav{display:flex;gap:8px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.tn{flex:1;padding:9px;border-radius:9px;border:2px solid var(--border);background:#fff;color:var(--gm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px}
-.tn.danger{border-color:#fca5a5;color:#dc2626}
-
-/* ── MODAL ── */
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;gap:14px}
-.modal-ov img{max-width:100%;max-height:72vh;border-radius:16px;box-shadow:0 0 60px rgba(52,211,153,.3)}
-.modal-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.mb{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:900;cursor:pointer;font-family:'Cairo',sans-serif;border:none}
-.mb-close{background:#d4af53;color:#030d08}
-.mb-save{background:#052e16;color:#34d399;border:2px solid #34d399 !important;border-style:solid}
-
-/* ── SPINNER ── */
-.spinner-ov{position:fixed;inset:0;background:rgba(3,13,8,.85);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
-.spinner{width:48px;height:48px;border:5px solid rgba(52,211,153,.2);border-top-color:#34d399;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.spinner-txt{color:#6ee7b7;font-size:14px;font-weight:700}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9997;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
-.toast.show{opacity:1}
-
-/* ── CONFIRM & ALERT DIALOG ── */
-.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9996;display:flex;align-items:center;justify-content:center;padding:20px}
-.conf-box{background:#fff;border-radius:18px;padding:24px;max-width:340px;width:100%;text-align:center}
-.conf-ico{font-size:40px;margin-bottom:10px}
-.conf-title{font-size:16px;font-weight:900;color:var(--gd);margin-bottom:8px}
-.conf-msg{font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.6}
-.conf-btns{display:flex;gap:10px}
-.conf-ok{flex:1;padding:11px;border:none;border-radius:10px;background:#dc2626;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
-.conf-cancel{flex:1;padding:11px;border:2px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
-.btn-alert-ok{background:var(--gm);color:var(--goldl);}
-
-/* ── EXPIRY ALERT ── */
-.exp-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
-.exp-ico{font-size:22px;flex-shrink:0}
-.exp-txt{font-size:12px;color:#78350f;font-weight:600;line-height:1.5}
-.exp-actions{display:flex;gap:6px;margin-top:8px}
-.exp-btn{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none}
-.exp-save{background:#d97706;color:#fff}
-.exp-del{background:#fff;color:#dc2626;border:1.5px solid #fca5a5 !important;border-style:solid}
+.ac-wrap{position:relative}
+.ac-drop{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:#fff;border:1.5px solid var(--green-mid);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
+.ac-item{padding:9px 13px;font-size:13px;font-family:'Amiri',serif;cursor:pointer;border-bottom:.5px solid #eef4f0}
+.surah-row,.q-row{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
+.q-row{grid-template-columns:1fr 1fr}
+.del-btn{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#fff;border:1.5px solid #fca5a5;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.range-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
+.range-row.hidden{display:none}
+.add-btn{width:100%;padding:8px;margin-top:2px;border:1.5px dashed var(--green-mid);border-radius:9px;background:transparent;color:var(--green-mid);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.submit-wrap{position:fixed;bottom:0;right:0;left:0;background:#fff;padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
+.submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-mid),var(--green-light));color:var(--gold-light);border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
-
-<div id="page-main" class="page active">
-  <div class="hdr">
-    <div class="hdr-top">
-      <div class="hdr-actions">
-        <button class="hdr-btn gold" onclick="goReports()"><i class="ti ti-report"></i> سجل التقارير</button>
-        <button class="hdr-btn danger" onclick="confirmClearForm()"><i class="ti ti-trash"></i> مسح</button>
-      </div>
-      <div></div> </div>
-    <div class="hdr-center">
-      <div class="hdr-emblem">🕌</div>
-      <div class="hdr-title">مركز خادم القرآن الكريم</div>
-      <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
-    </div>
-  </div>
-
-  <div class="body">
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-user"></i>بيانات البطل</div></div>
-      <div class="sb"><div class="frow">
+<div class="hdr">
+  <div class="hdr-emblem">🕌</div>
+  <div class="hdr-title">مركز خادم القرآن الكريم</div>
+  <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
+</div>
+<div class="body">
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل</div></div>
+    <div class="sec-body">
+      <div class="frow">
         <div class="flbl">اسم البطل</div>
         <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
-      </div></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-book"></i>السور الجديدة</div></div>
-      <div class="sb"><div id="new-surahs"></div><button class="abtn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-books"></i>ماضي السور</div></div>
-      <div class="sb"><div id="past-surahs"></div><button class="abtn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-pencil"></i>المذكرة الجديدة</div></div>
-      <div class="sb"><div id="mur-questions"></div><button class="abtn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
-      <div class="sb"><div id="past-mur"></div><button class="abtn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-bulb"></i>السراج</div></div>
-      <div class="sb"><div id="suraj-section"></div><button class="abtn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
-    </div>
-    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
-      <div class="sb"><div id="hadith-section"></div><button class="abtn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
-    </div>
-  </div>
-
-  <div class="bot">
-    <button class="bot-main" onclick="generateAndShare()">✨ إنشاء بطاقة البطل</button>
-    <button class="bot-sec" onclick="goReports()"><i class="ti ti-report"></i> السجل</button>
-  </div>
-</div>
-
-<div id="page-reports" class="page">
-  <div class="hdr" style="padding-bottom: 24px;">
-    <div class="hdr-top">
-      <div class="hdr-actions">
-        <button class="hdr-btn" onclick="goMain()"><i class="ti ti-arrow-right"></i> رجوع</button>
+        <button onclick="loadStudentData()" class="add-btn" style="margin-top:10px"><i class="ti ti-photo"></i> استرجاع التقرير السابق</button>
       </div>
     </div>
-    <div class="hdr-center">
-      <div class="hdr-emblem">📋</div>
-      <div class="hdr-title">سجل التقارير</div>
-      <div class="hdr-sub">جميع بطاقات الأبطال</div>
-    </div>
   </div>
-  <div class="top-nav">
-    <button class="tn danger" onclick="confirmDeleteAll()"><i class="ti ti-trash"></i> حذف الكل</button>
-    <button class="tn" onclick="exportAll()"><i class="ti ti-download"></i> تصدير الكل</button>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
+    <div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
-  <div class="rep-list" id="rep-list"></div>
-  <div class="bot" style="justify-content:center">
-    <button class="bot-main" onclick="goMain()" style="max-width:300px"><i class="ti ti-plus"></i> تقرير جديد</button>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
+    <div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
   </div>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
+    <div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+  </div>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
+    <div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+  </div>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
+    <div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
+  </div>
+  <div class="section">
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
+    <div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
+  </div>
+</div>
+<div class="submit-wrap">
+  <button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button>
 </div>
 
 <script>
-/* ══════════════════════════════════════
-   CUSTOM ALERT (بديل رسائل المتصفح)
-══════════════════════════════════════ */
-function customAlert(msg) {
-  var ov = document.createElement('div');
-  ov.className = 'conf-ov';
-  ov.innerHTML = '<div class="conf-box"><div class="conf-ico">⚠️</div><div class="conf-title">تنبيه</div><div class="conf-msg">'+msg+'</div><div class="conf-btns"><button class="conf-ok btn-alert-ok" id="ca-btn">حسناً</button></div></div>';
-  document.body.appendChild(ov);
-  ov.querySelector('#ca-btn').onclick = function(){ ov.remove(); };
-}
+var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-/* ══════════════════════════════════════
-   DATABASE — IndexedDB (no quota issues)
-══════════════════════════════════════ */
-var DB_NAME='QuranCenter',DB_VER=2,db=null;
-
-function openDB(){
-  return new Promise(function(res,rej){
-    var req=indexedDB.open(DB_NAME,DB_VER);
-    req.onupgradeneeded=function(e){
-      var d=e.target.result;
-      if(!d.objectStoreNames.contains('reports')){
-        var s=d.createObjectStore('reports',{keyPath:'id',autoIncrement:true});
-        s.createIndex('student','student',{unique:false});
-        s.createIndex('createdAt','createdAt',{unique:false});
-      }
-      if(!d.objectStoreNames.contains('draft')){
-        d.createObjectStore('draft',{keyPath:'key'});
-      }
-    };
-    req.onsuccess=function(e){db=e.target.result;res(db);};
-    req.onerror=function(e){rej(e);};
-  });
-}
-
-function dbOp(store,mode,fn){
-  return new Promise(function(res,rej){
-    var tx=db.transaction(store,mode);
-    var st=tx.objectStore(store);
-    var req=fn(st);
-    if(req){req.onsuccess=function(e){res(e.target.result);};req.onerror=function(e){rej(e);};}
-    else{tx.oncomplete=function(){res();};tx.onerror=function(e){rej(e);};}
-  });
-}
-
-function saveReport(nm,data,imgBlob){
-  return dbOp('reports','readwrite',function(s){
-    return s.add({student:nm,data:data,img:imgBlob,createdAt:Date.now(),hijri:getHijri()});
-  });
-}
-function getAllReports(){
-  return new Promise(function(res,rej){
-    var tx=db.transaction('reports','readonly');
-    var req=tx.objectStore('reports').getAll();
-    req.onsuccess=function(e){res(e.target.result);};
-    req.onerror=function(e){rej(e);};
-  });
-}
-function getReport(id){
-  return dbOp('reports','readonly',function(s){return s.get(id);});
-}
-function deleteReport(id){
-  return dbOp('reports','readwrite',function(s){return s.delete(id);});
-}
-function deleteAllReports(){
-  return dbOp('reports','readwrite',function(s){return s.clear();});
-}
-function updateReport(rec){
-  return dbOp('reports','readwrite',function(s){return s.put(rec);});
-}
-
-/* draft persistence */
-function saveDraft(){
-  if(!db)return;
-  var tx=db.transaction('draft','readwrite');
-  var st=tx.objectStore('draft');
-  st.put({key:'student',val:document.getElementById('inp-student').value});
-  st.put({key:'formData',val:collectAll()});
-}
-function loadDraft(){
-  if(!db)return;
-  var tx=db.transaction('draft','readonly');
-  tx.objectStore('draft').get('student').onsuccess=function(e){
-    if(e.target.result)document.getElementById('inp-student').value=e.target.result.val||'';
-  };
-  tx.objectStore('draft').get('formData').onsuccess=function(e){
-    if(e.target.result&&e.target.result.val)restoreForm(e.target.result.val);
-  };
-}
-function clearDraft(){
-  if(!db)return;
-  var tx=db.transaction('draft','readwrite');
-  tx.objectStore('draft').clear();
-}
-function collectAll(){
-  return{
-    student:document.getElementById('inp-student').value,
-    ns:collect('new-surahs',false),ps:collect('past-surahs',false),
-    mq:collect('mur-questions',true),pm:collect('past-mur',true),
-    sj:collect('suraj-section',true),hd:collect('hadith-section',true)
-  };
-}
-
-setInterval(saveDraft,10000);
-
-/* ══════════════════════════════════════
-   SURAH LIST & BUILDERS
-══════════════════════════════════════ */
-var SP=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-var CNT={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
-
-function extraSurah(nxt,lbl,pfx,idx){
-  var n='';
-  if(nxt){var nId=pfx+'n'+idx;
-    n=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc">
-      <div class="flbl" style="color:#133020">ما سيتم حفظه القادم:</div>
-      <div class="sr" style="background:#fff;margin-bottom:0">
-        <div class="aw"><input class="inp" id="sr-${nId}" placeholder="السورة..."><div class="ad" id="dp-${nId}"></div></div>
-        <div class="sw"><select class="inp" id="sl-${nId}" onchange="togR('rn-${nId}',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>
-        <div class="rr2 hidden" id="rn-${nId}" style="grid-column:1/-1"><div><input class="inp num" id="f-${nId}" type="number" placeholder="من"></div><div><input class="inp num" id="t-${nId}" type="number" placeholder="إلى"></div></div>
+function getExtraForNewSurah(includeNextPlan,label,prefix,idx){
+  var nextPlanHtml='';
+  if(includeNextPlan){var nId=prefix+'nxt'+idx;
+    nextPlanHtml=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc;">
+      <div class="flbl" style="color:#133020;font-size:12px;">ما سيتم حفظه القادم:</div>
+      <div class="surah-row" style="background:#fff;margin-bottom:0;">
+        <div class="ac-wrap"><input class="inp nxt-sr" id="sr-${nId}" placeholder="اسم السورة..."><div class="ac-drop" id="drop-${nId}"></div></div>
+        <div class="sel-wrap"><select class="inp nxt-sel" id="sel-${nId}" onchange="toggleRange('rng-${nId}',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>
+        <div class="range-row hidden" id="rng-${nId}" style="grid-column:1/-1;"><div class="frow"><input class="inp num nxt-f" id="f-${nId}" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num nxt-t" id="t-${nId}" type="number" placeholder="إلى آية"></div></div>
       </div></div>`;}
-  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px">
-      <div class="sw"><select class="inp rs"><option value="">تقييم ${lbl}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-      <input class="inp num ei" type="number" placeholder="عدد الأخطاء">
-    </div>${n}</div>`;
+  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
+      <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+      <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+    </div>${nextPlanHtml}</div>`;
 }
 
-function extraQ(nxt,lbl,isRng){
-  var pF=isRng?'من رقم':'من س',pT=isRng?'إلى رقم':'إلى س';
-  var n='';
-  if(nxt){n=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc">
-    <div class="flbl" style="color:#133020">ما سيتم حفظه القادم:</div>
-    <div class="qr" style="background:#fff;margin-bottom:0">
-      <div><input class="inp num nqf" type="number" placeholder="${pF}"></div>
-      <div><input class="inp num nqt" type="number" placeholder="${pT}"></div>
+function getExtraForQ(includeNextPlan,label,isRange){
+  var pFrom=isRange?'من رقم':'من س', pTo=isRange?'إلى رقم':'إلى س';
+  var nextPlanHtml='';
+  if(includeNextPlan){nextPlanHtml=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc;">
+    <div class="flbl" style="color:#133020;font-size:12px;">ما سيتم حفظه القادم:</div>
+    <div class="q-row" style="background:#fff;margin-bottom:0;">
+      <div class="frow"><input class="inp num nxt-qf" type="number" placeholder="${pFrom}"></div>
+      <div class="frow"><input class="inp num nxt-qt" type="number" placeholder="${pTo}"></div>
     </div></div>`;}
-  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px">
-      <div class="sw"><select class="inp rs"><option value="">تقييم ${lbl}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
-      <input class="inp num ei" type="number" placeholder="عدد الأخطاء">
-    </div>${n}</div>`;
+  return `<div style="grid-column:1/-1;margin-top:5px;padding-top:5px;border-top:1px dashed #ccc;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px;">
+      <div class="sel-wrap"><select class="inp rating-sel"><option value="">تقييم ${label}</option><option value="ممتاز 🌟">ممتاز 🌟</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>
+      <input class="inp num error-inp" type="number" placeholder="عدد الأخطاء">
+    </div>${nextPlanHtml}</div>`;
 }
 
-function addSurah(con,pfx,extra,nxt){
-  CNT[pfx]++;var i=CNT[pfx];
-  var d=document.createElement('div');d.className='sr';d.id='row-'+pfx+i;
-  var lbl=(pfx==='ns')?'السورة':(pfx==='ps'?'الماضي':'القسم');
-  d.innerHTML=(i>1?'<button class="db" onclick="del(\'row-'+pfx+i+'\')">✕</button>':'')+
-    '<div class="aw"><input class="inp msr" id="sr-'+pfx+i+'" placeholder="السورة..."><div class="ad" id="dp-'+pfx+i+'"></div></div>'+
-    '<div class="sw"><select class="inp msl" id="sl-'+pfx+i+'" onchange="togR(\'rn-'+pfx+i+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
-    '<div class="rr2 hidden" id="rn-'+pfx+i+'" style="grid-column:1/-1"><div><input class="inp num mf" id="f-'+pfx+i+'" type="number" placeholder="من"></div><div><input class="inp num mt" id="t-'+pfx+i+'" type="number" placeholder="إلى"></div></div>'+
-    (extra?extraSurah(nxt,lbl,pfx,i):'');
-  document.getElementById(con).appendChild(d);
-  ac(document.getElementById('sr-'+pfx+i),document.getElementById('dp-'+pfx+i));
-  if(nxt){var nId=pfx+'n'+i;ac(document.getElementById('sr-'+nId),document.getElementById('dp-'+nId));}
+function addSurah(containerId,prefix,withExtra,includeNextPlan){
+  counters[prefix]++;var idx=counters[prefix];
+  var div=document.createElement('div');div.className='surah-row';div.id='row-'+prefix+idx;
+  var label=(prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':'القسم');
+  var extraHtml=withExtra?getExtraForNewSurah(includeNextPlan,label,prefix,idx):'';
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
+    '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
+    '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+idx+'" onchange="toggleRange(\'rng-'+prefix+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
+    '<div class="range-row hidden" id="rng-'+prefix+idx+'" style="grid-column:1/-1;"><div class="frow"><input class="inp num main-f" id="f-'+prefix+idx+'" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" id="t-'+prefix+idx+'" type="number" placeholder="إلى آية"></div></div>'+extraHtml;
+  document.getElementById(containerId).appendChild(div);
+  setupAC(document.getElementById('sr-'+prefix+idx),document.getElementById('drop-'+prefix+idx));
+  if(includeNextPlan){var nId=prefix+'nxt'+idx;setupAC(document.getElementById('sr-'+nId),document.getElementById('drop-'+nId));}
 }
 
-function addQuestion(con,pfx,extra,nxt){
-  CNT[pfx]++;var i=CNT[pfx];
-  var d=document.createElement('div');d.className='qr';d.id='qrow-'+pfx+i;
-  var isRng=(pfx==='hd'||pfx==='sj');
-  var lbl=(pfx==='mq')?'المذكرة':(pfx==='pm'?'الماضي':(pfx==='sj'?'السراج':'الحديث'));
-  var pF=isRng?'من رقم':'من س',pT=isRng?'إلى رقم':'إلى س';
-  d.innerHTML=(i>1?'<button class="db" onclick="del(\'qrow-'+pfx+i+'\')">✕</button>':'')+
-    '<div><input class="inp num mqf" id="qf-'+pfx+i+'" type="number" placeholder="'+pF+'"></div>'+
-    '<div><input class="inp num mqt" id="qt-'+pfx+i+'" type="number" placeholder="'+pT+'"></div>'+
-    (extra?extraQ(nxt,lbl,isRng):'');
-  document.getElementById(con).appendChild(d);
+function addQuestion(containerId,prefix,withExtra,includeNextPlan){
+  counters[prefix]++;var idx=counters[prefix];
+  var div=document.createElement('div');div.className='q-row';div.id='qrow-'+prefix+idx;
+  var isRange=(prefix==='hd'||prefix==='sj');
+  var label=(prefix==='mq')?'المذكرة':(prefix==='pm'?'الماضي':(prefix==='sj'?'السراج':'الحديث'));
+  var pFrom=isRange?'من رقم':'من س', pTo=isRange?'إلى رقم':'إلى س';
+  var extraHtml=withExtra?getExtraForQ(includeNextPlan,label,isRange):'';
+  div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'qrow-'+prefix+idx+'\')">✕</button>':'')+
+    '<div class="frow"><input class="inp num main-qf" id="qf-'+prefix+idx+'" type="number" placeholder="'+pFrom+'"></div>'+
+    '<div class="frow"><input class="inp num main-qt" id="qt-'+prefix+idx+'" type="number" placeholder="'+pTo+'"></div>'+extraHtml;
+  document.getElementById(containerId).appendChild(div);
 }
 
-function ac(inp,drop){
+function setupAC(inp,drop){
   if(!inp||!drop)return;
   inp.addEventListener('input',function(){
-    var v=inp.value;if(!v.trim()){drop.style.display='none';return;}
-    var m=SP.filter(function(s){return s.includes(v);}).slice(0,5);
-    if(!m.length){drop.style.display='none';return;}
-    drop.innerHTML=m.map(function(x){return'<div class="ai" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+x+'\')">'+x+'</div>';}).join('');
+    var val=inp.value;
+    if(!val.trim()){drop.style.display='none';return;}
+    var matches=SURAS_PLAIN.filter(s=>s.includes(val)).slice(0,5);
+    if(!matches.length){drop.style.display='none';return;}
+    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')">'+m+'</div>').join('');
     drop.style.display='block';
   });
 }
-function pickAC(a,b,n){document.getElementById(a).value=n;document.getElementById(b).style.display='none';}
-function del(id){document.getElementById(id).remove();}
-function togR(id,v){var e=document.getElementById(id);if(e)e.classList.toggle('hidden',v!=='range');}
+function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
+function delRow(id){document.getElementById(id).remove();}
+function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range');}
 
-function collect(con,isQ){
+function collectData(containerId,isQ){
   var res=[];
-  document.querySelectorAll('#'+con+' > div').forEach(function(row){
-    var it={rating:row.querySelector('.rs')?.value||'',errors:row.querySelector('.ei')?.value||''};
+  document.querySelectorAll('#'+containerId+' > div').forEach(row=>{
+    var item={rating:row.querySelector('.rating-sel')?.value||'',errors:row.querySelector('.error-inp')?.value||''};
     if(!isQ){
-      it.sr=row.querySelector('.msr')?.value||'';
-      it.type=row.querySelector('.msl')?.value||'full';
-      it.f=row.querySelector('.mf')?.value||'';it.t=row.querySelector('.mt')?.value||'';
-      var nsr=row.querySelector('[id^="sr-"][id*="n"]');
-      var nsl=row.querySelector('[id^="sl-"][id*="n"]');
-      var nf=row.querySelector('[id^="f-"][id*="n"]');
-      var nt=row.querySelector('[id^="t-"][id*="n"]');
-      it.nsr=nsr?nsr.value:'';it.ntype=nsl?nsl.value:'full';
-      it.nf=nf?nf.value:'';it.nt=nt?nt.value:'';
+      item.sr=row.querySelector('.main-sr')?.value;item.type=row.querySelector('.main-sel')?.value;
+      item.f=row.querySelector('.main-f')?.value;item.t=row.querySelector('.main-t')?.value;
+      item.nextPlanSr=row.querySelector('.nxt-sr')?.value;item.nextPlanType=row.querySelector('.nxt-sel')?.value;
+      item.nextPlanF=row.querySelector('.nxt-f')?.value;item.nextPlanT=row.querySelector('.nxt-t')?.value;
     } else {
-      it.f=row.querySelector('.mqf')?.value||'';it.t=row.querySelector('.mqt')?.value||'';
-      it.nf=row.querySelector('.nqf')?.value||'';it.nt=row.querySelector('.nqt')?.value||'';
+      item.f=row.querySelector('.main-qf')?.value;item.t=row.querySelector('.main-qt')?.value;
+      item.nextPlanF=row.querySelector('.nxt-qf')?.value;item.nextPlanT=row.querySelector('.nxt-qt')?.value;
     }
-    if(it.sr||it.f)res.push(it);
+    if(item.sr||item.f)res.push(item);
   });
   return res;
 }
-function restoreForm(fd){}
 
-/* ══════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════ */
-function showPage(id){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-}
-function goMain(){showPage('page-main');}
-function goReports(){renderReports();showPage('page-reports');}
+// ═══════════════════════════════════════════════
+//  CANVAS REPORT — Full-width RTL, Hijri date
+// ═══════════════════════════════════════════════
+var C_W = 900;   // wide canvas = no wasted space
+var PAD = 28;
 
-/* ══════════════════════════════════════
-   UTILS
-══════════════════════════════════════ */
-function getHijri(){
-  try{return new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(new Date());}catch(e){return '';}
-}
-function fmtDate(ts){
-  var d=new Date(ts);
-  var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  var months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-  return days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
-}
-function isOlderThanMonth(ts){return Date.now()-ts>30*24*60*60*1000;}
-
-function showToast(msg,dur){
-  var t=document.createElement('div');t.className='toast';t.textContent=msg;
-  document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('show');});
-  setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},dur||2500);
+// Rounded rect path
+function rr(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
 }
 
-function showSpinner(msg){
-  var s=document.createElement('div');s.className='spinner-ov';s.id='spinner-ov';
-  s.innerHTML='<div class="spinner"></div><div class="spinner-txt">'+(msg||'جارٍ الإنشاء...')+'</div>';
-  document.body.appendChild(s);
-}
-function hideSpinner(){var s=document.getElementById('spinner-ov');if(s)s.remove();}
-
-function confirm2(ico,title,msg,okTxt,cb,okClass){
-  var ov=document.createElement('div');ov.className='conf-ov';
-  ov.innerHTML='<div class="conf-box"><div class="conf-ico">'+ico+'</div><div class="conf-title">'+title+'</div><div class="conf-msg">'+msg+'</div><div class="conf-btns"><button class="conf-ok'+(okClass?' '+okClass:'')+'" id="co">'+okTxt+'</button><button class="conf-cancel" id="cc">إلغاء</button></div></div>';
-  document.body.appendChild(ov);
-  ov.querySelector('#co').onclick=function(){ov.remove();cb();};
-  ov.querySelector('#cc').onclick=function(){ov.remove();};
+function ratingColor(r){
+  if(!r)return null;
+  if(r.includes('ممتاز'))return{bg:'#d1fae5',fg:'#065f46',border:'#6ee7b7'};
+  if(r.includes('جيد جداً'))return{bg:'#dbeafe',fg:'#1e40af',border:'#93c5fd'};
+  if(r.includes('جيد'))return{bg:'#fef9c3',fg:'#854d0e',border:'#fde68a'};
+  return{bg:'#fee2e2',fg:'#991b1b',border:'#fca5a5'};
 }
 
+// Hijri date using Intl
+function hijriDate(){
+  try{
+    var d=new Date();
+    var hd=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{
+      weekday:'long',year:'numeric',month:'long',day:'numeric'
+    }).format(d);
+    return hd;
+  }catch(e){return '';}
+}
 
-/* ══════════════════════════════════════
-   CANVAS CARD RENDERER (التعديل للرسم على الصورة المرفوعة)
-══════════════════════════════════════ */
-async function drawCard(nm, data){
-  var canvas = document.createElement('canvas');
-  var c = canvas.getContext('2d');
-  
-  var img = new Image();
-  // 📌 تنبيه هام: قم بكتابة اسم الصورة الفارغة (القالب المقسم) هنا!
-  // يجب أن تكون الصورة موجودة في نفس المجلد الذي به ملف الـ HTML
-  img.src = '27800.jpg'; 
-  
-  await new Promise(function(res){
-    img.onload = res;
-    img.onerror = function(){
-      // في حالة عدم العثور على الصورة، سيقوم برسم خلفية بيضاء كبديل مؤقت
-      res();
-    };
+var SECTIONS=[
+  {key:'ns',label:'السور الجديدة',   icon:'📖',stripe:'#16a34a',hBg:'linear1',hFg:'#14532d',dot:'#bbf7d0'},
+  {key:'ps',label:'ماضي السور',      icon:'📚',stripe:'#2563eb',hBg:'linear2',hFg:'#1e3a8a',dot:'#bfdbfe'},
+  {key:'mq',label:'المذكرة الجديدة',icon:'✏️',stripe:'#d97706',hBg:'linear3',hFg:'#78350f',dot:'#fde68a'},
+  {key:'pm',label:'ماضي المذكرة',   icon:'📋',stripe:'#7c3aed',hBg:'linear4',hFg:'#4c1d95',dot:'#ddd6fe'},
+  {key:'sj',label:'السراج',          icon:'💡',stripe:'#ea580c',hBg:'linear5',hFg:'#7c2d12',dot:'#fed7aa'},
+  {key:'hd',label:'الحديث والأذكار', icon:'📿',stripe:'#0d9488',hBg:'linear6',hFg:'#134e4a',dot:'#99f6e4'},
+];
+
+var SEC_GRADS={
+  linear1:['#f0fdf4','#dcfce7'],linear2:['#eff6ff','#dbeafe'],
+  linear3:['#fffbeb','#fef3c7'],linear4:['#f5f3ff','#ede9fe'],
+  linear5:['#fff7ed','#ffedd5'],linear6:['#f0fdfa','#ccfbf1']
+};
+
+function calcH(data){
+  var h=210+42+18+18; // header+datebar+margins
+  SECTIONS.forEach(function(sec){
+    var items=(data[sec.key]||[]).filter(function(i){return i.sr||i.f;});
+    if(!items.length)return;
+    h+=46+10; // section header
+    items.forEach(function(item){
+      var extra=0;
+      if(item.rating||(item.errors&&item.errors!=='0'&&item.errors!==''))extra+=36;
+      if(item.nextPlanSr||(item.nextPlanF&&item.nextPlanT))extra+=34;
+      h+=22+30+18+extra+10;
+    });
+    h+=10;
+  });
+  h+=58+20;
+  return Math.max(h,600);
+}
+
+// Draw pill badge, returns width used
+function drawPill(ctx,text,rx,ry,bg,border,fg,fs){
+  ctx.font='bold '+fs+'px Cairo,sans-serif';
+  var tw=ctx.measureText(text).width;
+  var pw=tw+28,ph=fs+14;
+  rr(ctx,rx-pw,ry,pw,ph,ph/2);
+  ctx.fillStyle=bg;ctx.fill();
+  ctx.strokeStyle=border;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle=fg;ctx.textAlign='right';ctx.textBaseline='middle';
+  ctx.fillText(text,rx-14,ry+ph/2);
+  return pw+10;
+}
+
+// Linear gradient fill helper
+function lgFill(ctx,x,y,w,h,stops){
+  var g=ctx.createLinearGradient(x,y,x+w,y+h);
+  stops.forEach(function(s){g.addColorStop(s[0],s[1]);});
+  ctx.fillStyle=g;
+}
+
+async function drawReport(nm,data){
+  var totalH=calcH(data);
+  var DPR=2; // fixed hi-res
+  var canvas=document.createElement('canvas');
+  canvas.width=C_W*DPR; canvas.height=totalH*DPR;
+  var ctx=canvas.getContext('2d');
+  ctx.scale(DPR,DPR);
+
+  /* ══════════ BACKGROUND ══════════ */
+  // warm cream base
+  ctx.fillStyle='#fffdf7';
+  ctx.fillRect(0,0,C_W,totalH);
+
+  // subtle diagonal stripe watermark
+  ctx.save();ctx.globalAlpha=0.018;ctx.strokeStyle='#14532d';ctx.lineWidth=1;
+  for(var si=-totalH;si<C_W+totalH;si+=32){
+    ctx.beginPath();ctx.moveTo(si,0);ctx.lineTo(si+totalH,totalH);ctx.stroke();
+  }
+  ctx.restore();
+
+  /* ══════════ HEADER ══════════ */
+  var HDR=210;
+  // rich green gradient header
+  var hG=ctx.createLinearGradient(0,0,C_W,HDR);
+  hG.addColorStop(0,'#022c1a');hG.addColorStop(0.3,'#064e2f');
+  hG.addColorStop(0.6,'#0a6b40');hG.addColorStop(1,'#022c1a');
+  ctx.fillStyle=hG; ctx.fillRect(0,0,C_W,HDR);
+
+  // geometric ornament arcs
+  ctx.save();
+  ctx.globalAlpha=0.10; ctx.strokeStyle='#fcd34d'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(C_W-80,0,110,0,Math.PI*0.5);ctx.stroke();
+  ctx.beginPath();ctx.arc(80,HDR,90,Math.PI*1.5,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=0.07; ctx.fillStyle='#fbbf24';
+  ctx.beginPath();ctx.arc(C_W-60,30,80,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(60,HDR-20,60,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+
+  // Islamic geometric top band
+  ctx.fillStyle='rgba(212,175,83,0.18)';
+  ctx.fillRect(0,0,C_W,6);
+  ctx.fillStyle='#d4af53';
+  ctx.fillRect(0,0,C_W,2.5);
+
+  // mosque emoji large
+  ctx.font='64px serif';ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('🕌',C_W/2,12);
+
+  // title with gold shimmer
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=14;ctx.shadowOffsetY=2;
+  ctx.font='bold 34px Cairo,sans-serif';
+  ctx.fillStyle='#fcd34d';ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('مركز خادم القرآن الكريم',C_W/2,84);
+  ctx.restore();
+
+  // gold underline
+  var ulw=420; var ulx=(C_W-ulw)/2;
+  var ulG=ctx.createLinearGradient(ulx,0,ulx+ulw,0);
+  ulG.addColorStop(0,'transparent');ulG.addColorStop(0.3,'#d4af53');
+  ulG.addColorStop(0.7,'#d4af53');ulG.addColorStop(1,'transparent');
+  ctx.strokeStyle=ulG;ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(ulx,126);ctx.lineTo(ulx+ulw,126);ctx.stroke();
+
+  // supervisor line
+  ctx.font='16px Cairo,sans-serif';ctx.fillStyle='rgba(253,224,100,.75)';
+  ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('تحت إشراف الشيخ عبدالرحمن',C_W/2,132);
+
+  /* ── hero badge ── */
+  var BY=156, BH=48;
+  var bdG=ctx.createLinearGradient(PAD,BY,C_W-PAD,BY+BH);
+  bdG.addColorStop(0,'#92400e');bdG.addColorStop(0.25,'#d97706');
+  bdG.addColorStop(0.5,'#fbbf24');bdG.addColorStop(0.75,'#d97706');bdG.addColorStop(1,'#92400e');
+  ctx.save();
+  rr(ctx,PAD,BY,C_W-PAD*2,BH,15);
+  ctx.fillStyle=bdG;
+  ctx.shadowColor='rgba(251,191,36,0.55)';ctx.shadowBlur=20;ctx.shadowOffsetY=5;
+  ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;ctx.stroke();
+  ctx.restore();
+
+  ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🏆',PAD+36,BY+BH/2);
+  ctx.fillText('⭐',C_W-PAD-36,BY+BH/2);
+  ctx.font='bold 22px Cairo,sans-serif';ctx.fillStyle='#1c0700';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('بطلنا:  '+nm,C_W/2,BY+BH/2);
+
+  /* ── Hijri date bar ── */
+  var DBY=BY+BH+10, DBH=42;
+  var dbBg=ctx.createLinearGradient(0,DBY,0,DBY+DBH);
+  dbBg.addColorStop(0,'#d1fae5');dbBg.addColorStop(1,'#a7f3d0');
+  ctx.fillStyle=dbBg;ctx.fillRect(0,DBY,C_W,DBH);
+  ctx.strokeStyle='#34d399';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(0,DBY);ctx.lineTo(C_W,DBY);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,DBY+DBH);ctx.lineTo(C_W,DBY+DBH);ctx.stroke();
+
+  var hijri=hijriDate();
+  ctx.font='bold 16px Cairo,sans-serif';ctx.fillStyle='#065f46';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🗓  '+hijri,C_W/2,DBY+DBH/2);
+
+  /* ══════════ SECTIONS ══════════ */
+  var cy=DBY+DBH+18;
+
+  SECTIONS.forEach(function(sec){
+    var items=(data[sec.key]||[]).filter(function(i){return i.sr||i.f;});
+    if(!items.length)return;
+
+    /* section header full-width */
+    var SHH=46;
+    var gc=SEC_GRADS[sec.hBg];
+    var shG=ctx.createLinearGradient(0,cy,C_W,cy);
+    shG.addColorStop(0,gc[1]);shG.addColorStop(0.5,gc[0]);shG.addColorStop(1,gc[1]);
+    rr(ctx,PAD,cy,C_W-PAD*2,SHH,13);
+    ctx.fillStyle=shG;ctx.fill();
+    ctx.strokeStyle=sec.stripe;ctx.lineWidth=1.5;ctx.stroke();
+
+    // right thick accent bar
+    rr(ctx,C_W-PAD-10,cy,10,SHH,5);
+    ctx.fillStyle=sec.stripe;ctx.fill();
+
+    // icon
+    ctx.font='22px serif';ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(sec.icon,C_W-PAD-20,cy+SHH/2);
+    // label
+    ctx.font='bold 19px Cairo,sans-serif';ctx.fillStyle=sec.hFg;
+    ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(sec.label,C_W-PAD-52,cy+SHH/2);
+
+    cy+=SHH+10;
+
+    items.forEach(function(item){
+      var hasMeta=!!(item.rating||(item.errors&&item.errors!=='0'&&item.errors!==''));
+      var hasPlan=!!(item.nextPlanSr||(item.nextPlanF&&item.nextPlanT));
+      var IH=22+30+(hasMeta?36:0)+(hasPlan?34:0)+18;
+
+      // card white with shadow
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.09)';ctx.shadowBlur=14;ctx.shadowOffsetY=4;
+      rr(ctx,PAD,cy,C_W-PAD*2,IH,14);
+      ctx.fillStyle='#ffffff';ctx.fill();
+      ctx.restore();
+
+      // card border
+      rr(ctx,PAD,cy,C_W-PAD*2,IH,14);
+      ctx.strokeStyle=sec.dot;ctx.lineWidth=2;ctx.stroke();
+
+      // right stripe thick
+      rr(ctx,C_W-PAD-8,cy,8,IH,4);
+      ctx.fillStyle=sec.stripe;ctx.fill();
+
+      // inner left light tint strip
+      rr(ctx,PAD,cy,5,IH,3);
+      ctx.fillStyle=SEC_GRADS[sec.hBg][1];ctx.fill();
+
+      var RX=C_W-PAD-20;
+      var ty2=cy+18;
+
+      /* main label */
+      var mainTxt='';
+      if(item.sr){
+        mainTxt=item.sr+(item.type==='range'?'  —  آية '+item.f+' إلى آية '+item.t:'  كاملة');
+      } else {
+        var isRq=(sec.key==='sj'||sec.key==='hd');
+        var unit=isRq?'رقم':'سؤال';
+        mainTxt='من '+unit+' '+item.f+'   إلى '+unit+' '+item.t;
+      }
+      ctx.font='bold 18px Cairo,sans-serif';ctx.fillStyle='#0f172a';
+      ctx.textAlign='right';ctx.textBaseline='top';
+      ctx.fillText(mainTxt,RX,ty2);
+      ty2+=32;
+
+      /* badges */
+      if(hasMeta){
+        var bx2=RX;
+        if(item.rating){
+          var rc=ratingColor(item.rating);
+          bx2-=drawPill(ctx,item.rating,bx2,ty2,rc.bg,rc.border,rc.fg,13);
+        }
+        if(item.errors&&item.errors!=='0'&&item.errors!==''){
+          drawPill(ctx,'❌  '+item.errors+' خطأ',bx2,ty2,'#fee2e2','#fca5a5','#b91c1c',13);
+        }
+        ty2+=36;
+      }
+
+      /* next plan row */
+      if(hasPlan){
+        var PH=30, PY=ty2;
+        rr(ctx,PAD+10,PY,C_W-PAD*2-20,PH,10);
+        var planBg=ctx.createLinearGradient(PAD+10,PY,C_W-PAD-10,PY);
+        planBg.addColorStop(0,SEC_GRADS[sec.hBg][1]);
+        planBg.addColorStop(1,SEC_GRADS[sec.hBg][0]);
+        ctx.fillStyle=planBg;ctx.fill();
+        ctx.strokeStyle=sec.stripe;ctx.lineWidth=1;ctx.setLineDash([5,4]);ctx.stroke();
+        ctx.setLineDash([]);
+
+        var nxt='';
+        if(item.nextPlanSr){
+          nxt='🎯  القادم:  '+item.nextPlanSr+(item.nextPlanType==='range'?' — آية '+item.nextPlanF+' إلى آية '+item.nextPlanT:'  كاملة');
+        } else {
+          var isRq2=(sec.key==='sj'||sec.key==='hd');
+          var u2=isRq2?'رقم':'سؤال';
+          nxt='🎯  القادم:  من '+u2+' '+item.nextPlanF+'  إلى  '+u2+' '+item.nextPlanT;
+        }
+        ctx.font='bold 14px Cairo,sans-serif';ctx.fillStyle=sec.hFg;
+        ctx.textAlign='right';ctx.textBaseline='middle';
+        ctx.fillText(nxt,RX-4,PY+PH/2);
+      }
+
+      cy+=IH+10;
+    });
+    cy+=10;
   });
 
-  // تحديد أبعاد اللوحة بناءً على الصورة (أو حجم افتراضي إذا لم يتم العثور عليها)
-  var W = img.width || 1200;
-  var H = img.height || 1600;
-  canvas.width = W;
-  canvas.height = H;
+  /* ══════════ FOOTER ══════════ */
+  var FH=58;
+  var fG=ctx.createLinearGradient(0,cy,C_W,cy+FH);
+  fG.addColorStop(0,'#022c1a');fG.addColorStop(0.5,'#064e2f');fG.addColorStop(1,'#022c1a');
+  ctx.fillStyle=fG;ctx.fillRect(0,cy,C_W,FH);
 
-  // رسم الصورة المرفوعة لتكون هي الخلفية
-  if(img.width) {
-    c.drawImage(img, 0, 0, W, H);
-  } else {
-    c.fillStyle = '#ffffff';
-    c.fillRect(0, 0, W, H);
-  }
+  // gold top line
+  ctx.strokeStyle='#d4af53';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(C_W,cy);ctx.stroke();
 
-  c.fillStyle = '#0b1e14'; // لون الخط
-  c.textAlign = 'center';
-  c.textBaseline = 'middle';
+  ctx.font='bold 15px Cairo,sans-serif';ctx.fillStyle='rgba(252,211,77,.9)';
+  ctx.textAlign='right';ctx.textBaseline='middle';
+  ctx.fillText('مركز خادم القرآن الكريم',C_W-PAD,cy+FH/2);
 
-  // 1. كتابة اسم البطل
-  // يمكنك تغيير هذه الأرقام (X, Y) لتتحكم في مكان طباعة الاسم على المربع
-  c.font = 'bold 50px Cairo';
-  c.fillText(nm, W / 2, 280); 
+  ctx.font='24px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('⭐  ⭐  ⭐',C_W/2,cy+FH/2);
 
-  // 2. التاريخ
-  c.font = 'bold 30px Cairo';
-  c.fillText(getHijri(), W / 2, 350);
-
-  // 3. خريطة لإحداثيات (أماكن) المربعات الستة
-  // X: يمين أو يسار, Y: أعلى أو أسفل
-  // قم بتغيير هذه الأرقام بناءً على أماكن المربعات في صورتك المرفوعة
-  var sectionsCoords = {
-    'ns': { x: W * 0.75, y: 550 }, // السور الجديدة (مثال: اليمين أعلى)
-    'ps': { x: W * 0.25, y: 550 }, // ماضي السور (مثال: اليسار أعلى)
-    'mq': { x: W * 0.75, y: 900 }, // المذكرة الجديدة (اليمين وسط)
-    'pm': { x: W * 0.25, y: 900 }, // ماضي المذكرة (اليسار وسط)
-    'sj': { x: W * 0.75, y: 1250 }, // السراج (اليمين أسفل)
-    'hd': { x: W * 0.25, y: 1250 }  // الحديث (اليسار أسفل)
-  };
-
-  // دالة صغيرة لكتابة محتوى القسم الواحد داخل إحداثياته
-  function drawSectionText(secKey, items) {
-    if(!items || !items.length) return;
-    
-    var startX = sectionsCoords[secKey].x;
-    var currentY = sectionsCoords[secKey].y;
-    c.font = 'bold 24px Cairo';
-    
-    items.forEach(function(it){
-      var txt = '';
-      if(it.sr) {
-         txt = it.sr + (it.type==='range' ? ' (من ' + it.f + ' إلى ' + it.t + ')' : ' كاملة');
-      } else if (it.f) {
-         txt = 'من ' + it.f + ' إلى ' + it.t;
-      }
-      
-      if(txt) {
-        c.fillStyle = '#133020';
-        c.fillText(txt, startX, currentY);
-        currentY += 40;
-        
-        if(it.rating) {
-            c.fillStyle = '#16a34a'; // لون التقييم
-            c.fillText('التقييم: ' + it.rating, startX, currentY); 
-            currentY += 35;
-        }
-        if(it.errors && it.errors !== '0') {
-            c.fillStyle = '#dc2626'; // لون الأخطاء
-            c.fillText('الأخطاء: ' + it.errors, startX, currentY); 
-            currentY += 35;
-        }
-        if(it.nsr || it.nf) {
-            c.fillStyle = '#d97706'; // لون القادم
-            var nxtTxt = it.nsr ? (it.nsr + (it.ntype==='range'?' (من '+it.nf+' لـ '+it.nt+')':' كاملة')) : ('من '+it.nf+' لـ '+it.nt);
-            c.fillText('القادم: ' + nxtTxt, startX, currentY);
-            currentY += 35;
-        }
-        currentY += 20; // مسافة بين كل سطر وسطر
-      }
-    });
-  }
-
-  // رسم كل الأقسام
-  drawSectionText('ns', data.ns);
-  drawSectionText('ps', data.ps);
-  drawSectionText('mq', data.mq);
-  drawSectionText('pm', data.pm);
-  drawSectionText('sj', data.sj);
-  drawSectionText('hd', data.hd);
+  ctx.font='13px Cairo,sans-serif';ctx.fillStyle='rgba(255,255,255,.45)';
+  ctx.textAlign='left';ctx.textBaseline='middle';
+  ctx.fillText('تقرير متابعة الحفظ',PAD,cy+FH/2);
 
   return canvas;
 }
 
-function canvasToBlob(canvas,q){
-  return new Promise(function(res){canvas.toBlob(function(b){res(b);},'image/jpeg',q||0.82);});
-}
-function blobToDataURL(blob){
-  return new Promise(function(res){var r=new FileReader();r.onload=function(e){res(e.target.result);};r.readAsDataURL(blob);});
-}
-
-/* ══════════════════════════════════════
-   MODAL
-══════════════════════════════════════ */
-function showModal(src,nm,onSave){
-  var m=document.createElement('div');m.className='modal-ov';
-  m.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:72vh;border-radius:16px;box-shadow:0 0 60px rgba(52,211,153,.3)">'
-    +'<div class="modal-btns">'
-    +'<button class="mb mb-close" id="mc">إغلاق</button>'
-    +'<button class="mb mb-save" id="ms">💾 حفظ بطاقة البطل</button>'
+function showImageModal(imgSrc, nm) {
+  var modal=document.createElement('div');
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;';
+  modal.innerHTML='<img src="'+imgSrc+'" style="max-width:100%;max-height:75vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.6);margin-bottom:16px;">'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">'
+    +'<button id="mc" style="padding:11px 30px;background:#d4af53;color:#0b1e14;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
+    +'<button id="ms" style="padding:11px 30px;background:#1c422c;color:#ebd084;border:1.5px solid #d4af53;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ الصورة</button>'
     +'</div>';
-  document.body.appendChild(m);
-  m.querySelector('#mc').onclick=function(){m.remove();};
-  m.querySelector('#ms').onclick=function(){
-    var a=document.createElement('a');a.href=src;a.download='بطاقة_البطل_'+(nm||'')+'.jpg';a.click();
-    if(onSave)onSave();
+  document.body.appendChild(modal);
+  document.getElementById('mc').onclick=function(){modal.remove();};
+  document.getElementById('ms').onclick=function(){
+    var a=document.createElement('a');a.href=imgSrc;a.download='تقرير_'+(nm||'')+'_.png';a.click();
   };
-  m.addEventListener('click',function(e){if(e.target===m)m.remove();});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.remove();});
 }
 
-/* ══════════════════════════════════════
-   GENERATE & SAVE
-══════════════════════════════════════ */
 async function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){customAlert('يرجى إدخال اسم البطل أولاً.');return;}
+  if(!nm){alert('يرجى إدخال اسم البطل');return;}
   var data={
-    ns:collect('new-surahs',false),ps:collect('past-surahs',false),
-    mq:collect('mur-questions',true),pm:collect('past-mur',true),
-    sj:collect('suraj-section',true),hd:collect('hadith-section',true)
+    ns:collectData('new-surahs',false), ps:collectData('past-surahs',false),
+    mq:collectData('mur-questions',true), pm:collectData('past-mur',true),
+    sj:collectData('suraj-section',true), hd:collectData('hadith-section',true)
   };
-  showSpinner('جارٍ إنشاء بطاقة البطل...');
-  try{
-    var canvas=await drawCard(nm,data);
-    var blob=await canvasToBlob(canvas,0.82);
-    var src=await blobToDataURL(blob);
-    hideSpinner();
-
-    /* save to IndexedDB */
-    await saveReport(nm,data,blob);
-    saveDraft();
-    showToast('✅ تم حفظ التقرير في السجل');
-
-    /* share or show modal */
-    if(navigator.share&&navigator.canShare){
+  try {
+    var canvas = await drawReport(nm, data);
+    var imgData = canvas.toDataURL('image/png');
+    localStorage.setItem('rep_img_'+nm, imgData);
+    localStorage.setItem('rep_'+nm, JSON.stringify(data));
+    if(navigator.share && navigator.canShare){
       try{
-        var file=new File([blob],'بطاقة_البطل_'+nm+'.jpg',{type:'image/jpeg'});
-        if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'بطاقة البطل — '+nm});return;}
+        var blob=await (await fetch(imgData)).blob();
+        var file=new File([blob],'تقرير_'+nm+'.png',{type:'image/png'});
+        if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'تقرير '+nm});return;}
       }catch(e){}
     }
-    showModal(src,nm);
-  }catch(e){hideSpinner();customAlert('حدث خطأ أثناء الإنشاء: '+e.message);}
+    showImageModal(imgData, nm);
+  } catch(e){alert('خطأ: '+e.message);}
 }
 
-/* ══════════════════════════════════════
-   REPORTS PAGE
-══════════════════════════════════════ */
-async function renderReports(){
-  var list=document.getElementById('rep-list');
-  list.innerHTML='<div style="text-align:center;padding:30px;color:#888">جارٍ التحميل...</div>';
-  var reps=await getAllReports();
-  if(!reps.length){
-    list.innerHTML='<div class="rep-empty"><div class="rep-empty-ico">📭</div><div class="rep-empty-txt">لا توجد تقارير محفوظة بعد</div></div>';
-    return;
-  }
-
-  var expiring=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
-  var html='';
-  if(expiring.length){
-    html+='<div class="exp-banner"><div class="exp-ico">⚠️</div><div style="flex:1"><div class="exp-txt">يوجد '+expiring.length+' تقرير مر عليه أكثر من شهر.<br>هل تريد حفظ نسخة قبل الحذف؟</div><div class="exp-actions"><button class="exp-btn exp-save" onclick="exportExpiring()">💾 حفظ نسخة</button><button class="exp-btn exp-del" onclick="deleteExpiring()">🗑 حذف القديمة</button></div></div></div>';
-  }
-
-  reps.slice().reverse().forEach(function(r){
-    var old=isOlderThanMonth(r.createdAt);
-    var thumbId='thumb-'+r.id;
-    html+='<div class="rep-card-item"><div class="rep-card-top">'
-      +'<div class="rep-thumb-ph" id="'+thumbId+'">🕌</div>'
-      +'<div class="rep-info">'
-        +'<div class="rep-name">'+r.student+'</div>'
-        +'<div class="rep-date"><span>📅</span>'+fmtDate(r.createdAt)+'</div>'
-        +(r.hijri?'<div class="rep-hijri">'+r.hijri+'</div>':'')
-        +(old?'<div class="rep-badge-old">⏳ مر عليه شهر</div>':'')
-      +'</div></div>'
-      +'<div class="rep-actions">'
-        +'<button class="ra ra-view" onclick="viewReport('+r.id+')">👁 عرض</button>'
-        +'<button class="ra ra-edit" onclick="editReport('+r.id+')">✏️ تعديل</button>'
-        +'<button class="ra ra-del" onclick="deleteRep('+r.id+')">🗑 حذف</button>'
-      +'</div></div>';
-  });
-  list.innerHTML=html;
-
-  reps.forEach(function(r){
-    if(r.img){
-      blobToDataURL(r.img).then(function(src){
-        var el=document.getElementById('thumb-'+r.id);
-        if(el){var img=document.createElement('img');img.className='rep-thumb';img.src=src;el.replaceWith(img);}
-      });
-    }
-  });
+function loadStudentData(){
+  var nm=document.getElementById('inp-student').value.trim();
+  if(!nm){alert('يرجى إدخال اسم البطل أولاً');return;}
+  var img=localStorage.getItem('rep_img_'+nm);
+  if(!img){alert('لا يوجد تقرير سابق لهذا البطل');return;}
+  showImageModal(img, nm);
 }
 
-async function viewReport(id){
-  var r=await getReport(id);
-  if(!r||!r.img){showToast('لا توجد صورة');return;}
-  var src=await blobToDataURL(r.img);
-  showModal(src,r.student);
-}
-
-async function editReport(id){
-  var r=await getReport(id);
-  if(!r){return;}
-  document.getElementById('inp-student').value=r.student;
-  showPage('page-main');
-  showToast('✏️ عدّل البيانات وأنشئ تقريراً جديداً');
-}
-
-async function deleteRep(id){
-  confirm2('🗑','حذف التقرير','هل أنت متأكد من حذف هذا التقرير؟ لا يمكن التراجع.','حذف',async function(){
-    await deleteReport(id);renderReports();showToast('تم الحذف');
-  });
-}
-
-function confirmDeleteAll(){
-  confirm2('⚠️','حذف جميع التقارير','سيتم حذف كل التقارير المحفوظة نهائياً.\nهل تريد المتابعة؟','حذف الكل',async function(){
-    await deleteAllReports();renderReports();showToast('تم حذف جميع التقارير');
-  });
-}
-
-async function exportAll(){
-  var reps=await getAllReports();
-  if(!reps.length){showToast('لا توجد تقارير');return;}
-  showToast('جارٍ تصدير '+reps.length+' تقرير...',4000);
-  for(var i=0;i<reps.length;i++){
-    var r=reps[i];
-    if(r.img){
-      var src=await blobToDataURL(r.img);
-      var a=document.createElement('a');a.href=src;
-      a.download='تقرير_'+r.student+'_'+i+'.jpg';a.click();
-      await new Promise(function(res){setTimeout(res,400);});
-    }
-  }
-}
-
-async function exportExpiring(){
-  var reps=await getAllReports();
-  var exp=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
-  for(var i=0;i<exp.length;i++){
-    var r=exp[i];
-    if(r.img){
-      var src=await blobToDataURL(r.img);
-      var a=document.createElement('a');a.href=src;a.download='تقرير_قديم_'+r.student+'.jpg';a.click();
-      await new Promise(function(res){setTimeout(res,400);});
-    }
-  }
-  showToast('تم تصدير '+exp.length+' تقرير قديم');
-}
-
-async function deleteExpiring(){
-  confirm2('🗑','حذف التقارير القديمة','سيتم حذف التقارير التي مر عليها أكثر من شهر.','حذف',async function(){
-    var reps=await getAllReports();
-    var exp=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
-    for(var i=0;i<exp.length;i++)await deleteReport(exp[i].id);
-    renderReports();showToast('تم حذف '+exp.length+' تقرير قديم');
-  });
-}
-
-/* ══════════════════════════════════════
-   CLEAR FORM
-══════════════════════════════════════ */
-function confirmClearForm(){
-  confirm2('🔄','مسح البيانات','سيتم مسح جميع البيانات المُدخلة لتسجيل بطل جديد.\nالتقارير المحفوظة لن تُمسح.','مسح وبدء جديد',function(){
-    clearForm();clearDraft();showToast('تم المسح — جاهز لبطل جديد 🌟');
-  });
-}
-
-function clearForm(){
-  document.getElementById('inp-student').value='';
-  ['new-surahs','past-surahs','mur-questions','past-mur','suraj-section','hadith-section'].forEach(function(id){
-    document.getElementById(id).innerHTML='';
-  });
-  CNT={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
-  addSurah('new-surahs','ns',true,true);
-  addSurah('past-surahs','ps',true,false);
-  addQuestion('mur-questions','mq',true,true);
-  addQuestion('past-mur','pm',true,false);
-  addQuestion('suraj-section','sj',true,true);
-  addQuestion('hadith-section','hd',true,true);
-}
-
-/* ══════════════════════════════════════
-   INIT
-══════════════════════════════════════ */
-openDB().then(function(){
-  loadDraft();
-  addSurah('new-surahs','ns',true,true);
-  addSurah('past-surahs','ps',true,false);
-  addQuestion('mur-questions','mq',true,true);
-  addQuestion('past-mur','pm',true,false);
-  addQuestion('suraj-section','sj',true,true);
-  addQuestion('hadith-section','hd',true,true);
-}).catch(function(){
-  addSurah('new-surahs','ns',true,true);
-  addSurah('past-surahs','ps',true,false);
-  addQuestion('mur-questions','mq',true,true);
-  addQuestion('past-mur','pm',true,false);
-  addQuestion('suraj-section','sj',true,true);
-  addQuestion('hadith-section','hd',true,true);
-});
+addSurah('new-surahs','ns',true,true);
+addSurah('past-surahs','ps',true,false);
+addQuestion('mur-questions','mq',true,true);
+addQuestion('past-mur','pm',true,false);
+addQuestion('suraj-section','sj',true,true);
+addQuestion('hadith-section','hd',true,true);
 </script>
 </body>
 </html>
+انت مصمم جرافيك خبره ٣٠ سنه عاوزك تصمملى صوره تقرير جذاب بخط كبير وواضح ومنسق غايه فى الاحترافيه يجمع بين الاحترافيه فى التصميم والجمال فى السكل ووضوح الخط والتنسيق ابدع فى التصميم
