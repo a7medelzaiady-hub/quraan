@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مذكرة السراج المنير للأطفال 🌟</title>
+<style>
+  /* ====== GLOBAL RTL FIX ====== */
+  html, body { direction: rtl; unicode-bidi: embed; }
+  * { direction: rtl; }
+  table { direction: rtl; }
+  .styled-table th, .styled-table td { text-align: right; }
+  .steps-list li { direction: rtl; }
+  .info-box { direction: rtl; }
+  .qa-card { direction: rtl; }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+  :root {
+    --green:  #2E7D55;
+    --green-light: #4CAF80;
+    --gold:   #F4A80A;
+    --sky:    #3AAFDA;
+    --rose:   #E8456A;
+    --cream:  #FDF8F0;
+    --sand:   #F5EDD8;
+    --ink:    #1A2433;
+    --soft:   #F0FAF5;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Tajawal', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.8; font-size: 17px; }
+
+  /* ====== COVER ====== */
+  .cover { min-height: 100vh; background: linear-gradient(145deg, #1B4F35 0%, #2E7D55 45%, #1a6b47 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 80%, rgba(244,168,10,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(58,175,218,0.12) 0%, transparent 50%); }
+  .cover-stars { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; font-size: 22px; }
+  .star { position: absolute; animation: twinkle 3s infinite alternate; }
+  @keyframes twinkle { from { opacity: 0.3; transform: scale(0.8); } to { opacity: 1; transform: scale(1.1); } }
+  .cover-badge { background: var(--gold); color: #1A2433; font-weight: 800; font-size: 14px; padding: 6px 20px; border-radius: 30px; margin-bottom: 28px; position: relative; z-index: 1; }
+  .cover-title { font-size: clamp(36px, 8vw, 68px); font-weight: 900; color: #fff; line-height: 1.2; position: relative; z-index: 1; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .cover-title span { color: var(--gold); }
+  .cover-subtitle { font-size: clamp(16px, 3vw, 22px); color: rgba(255,255,255,0.85); margin-top: 16px; position: relative; z-index: 1; max-width: 500px; }
+  .cover-emoji-row { font-size: 42px; margin: 30px 0; position: relative; z-index: 1; letter-spacing: 10px; }
+
+  /* ====== PAGE WRAPPER ====== */
+  .page-break { page-break-before: always; }
+
+  /* ====== LESSON HEADER ====== */
+  .lesson-header { background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%); color: #fff; padding: 50px 30px 40px; text-align: center; position: relative; overflow: hidden; }
+  .lesson-header::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px; background: var(--cream); clip-path: ellipse(55% 100% at 50% 100%); }
+  .lesson-number { display: inline-block; background: var(--gold); color: var(--ink); font-size: 13px; font-weight: 800; padding: 5px 18px; border-radius: 20px; margin-bottom: 12px; }
+  .lesson-title { font-size: clamp(24px, 5vw, 38px); font-weight: 900; margin-bottom: 8px; }
+  .lesson-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+
+  /* ====== SECTION HEADER ====== */
+  .section-heading { display: flex; align-items: center; gap: 14px; margin: 40px 20px 20px; padding-bottom: 12px; border-bottom: 3px solid currentColor; }
+  .section-heading.aqeeda { color: var(--green); } .section-heading.fiqh { color: var(--sky); } .section-heading.quran { color: var(--gold); border-bottom-color: var(--gold); } .section-heading.seerah { color: var(--rose); } .section-heading.misc { color: #9C27B0; }
+  .section-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .section-icon.aqeeda { background: #E8F5E9; } .section-icon.fiqh { background: #E3F2FD; } .section-icon.quran { background: #FFF8E1; } .section-icon.seerah { background: #FCE4EC; } .section-icon.misc { background: #F3E5F5; }
+  .section-heading h2 { font-size: 22px; font-weight: 800; } .section-heading p { font-size: 14px; opacity: 0.7; font-weight: 500; }
+
+  .content { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ====== QA CARD ====== */
+  .qa-card { background: #fff; border-radius: 20px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 3px 16px rgba(0,0,0,0.07); border-right: 5px solid var(--green); transition: transform 0.2s; }
+  .qa-card:hover { transform: translateY(-2px); }
+  .qa-card.fiqh-card { border-right-color: var(--sky); } .qa-card.quran-card { border-right-color: var(--gold); } .qa-card.seerah-card { border-right-color: var(--rose); } .qa-card.misc-card { border-right-color: #9C27B0; }
+  .qa-question { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .q-badge { background: var(--green); color: #fff; font-size: 12px; font-weight: 800; width: 34px; height: 24px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .qa-card.fiqh-card .q-badge { background: var(--sky); } .qa-card.quran-card .q-badge { background: var(--gold); color: var(--ink); } .qa-card.seerah-card .q-badge { background: var(--rose); } .qa-card.misc-card .q-badge { background: #9C27B0; }
+  .qa-answer { font-size: 16px; color: #3A4558; padding-right: 44px; line-height: 1.8; font-weight: 500; }
+
+  /* ====== STEPS LIST ====== */
+  .steps-list { list-style: none; padding: 0; margin: 8px 0 0; }
+  .steps-list li { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; border-bottom: 1px dashed #e8eaf0; font-size: 16px; }
+  .steps-list li:last-child { border-bottom: none; }
+  .step-num { background: var(--green-light); color: #fff; font-weight: 800; font-size: 13px; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  
+  /* ====== TABLES & PILLARS ====== */
+  .styled-table { width: 100%; border-collapse: collapse; border-radius: 14px; overflow: hidden; margin: 16px 0; font-size: 15px; }
+  .styled-table thead { background: var(--green); color: #fff; }
+  .styled-table thead.sky-head { background: var(--sky); } .styled-table thead.rose-head { background: var(--rose); }
+  .styled-table th, .styled-table td { padding: 13px 18px; border-bottom: 1px solid #eee; }
+  .styled-table tbody tr:nth-child(even) { background: #F5FAF7; }
+  .pillars-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+  .pillar-card { background: #fff; border-radius: 16px; padding: 14px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--green); }
+  .pillar-card.sky-top { border-top-color: var(--sky); } .pillar-card.gold-top { border-top-color: var(--gold); } .pillar-card.rose-top { border-top-color: var(--rose); }
+  .pillar-card .num { font-size: 24px; font-weight: 900; color: var(--green); display: block; }
+  .pillar-card .lbl { font-size: 14px; font-weight: 700; margin-top: 4px; }
+  
+  .wives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 14px 0; }
+  .wife-card { background: #fff; border-radius: 14px; padding: 12px 16px; border-right: 4px solid var(--rose); box-shadow: 0 2px 10px rgba(0,0,0,0.06); font-size: 15px; font-weight: bold; }
+  
+  .divider { border: none; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 36px 0; border-radius: 2px; }
+
+  /* ====== NAV BAR ====== */
+  .toc { background: var(--sand); padding: 40px 20px; text-align: center; }
+  .toc h2 { font-size: 24px; font-weight: 900; color: var(--green); margin-bottom: 24px; }
+  .toc-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 800px; margin: 0 auto; }
+  .toc-item { background: #fff; border-radius: 14px; padding: 14px 20px; min-width: 140px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 14px; transition: all 0.2s; border-top: 3px solid var(--green); }
+  .toc-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+  .toc-item .toc-emoji { display: block; font-size: 26px; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-stars">
+    <span class="star" style="top:10%;left:8%;animation-delay:0s">⭐</span>
+    <span class="star" style="top:15%;left:85%;animation-delay:0.5s">✨</span>
+    <span class="star" style="top:70%;left:5%;animation-delay:1s">⭐</span>
+    <span class="star" style="top:80%;left:90%;animation-delay:1.5s">✨</span>
+  </div>
+  <div class="cover-badge">📚 المذكرة الشاملة (جميع الأسئلة ١ - ١٤٨)</div>
+  <div class="cover-title">السراج المنير<br><span>لبراعم الخير</span> 🌙</div>
+  <div class="cover-subtitle">إعداد: أبو عبيد الله الدمياطي | عبد الرحمن آل عيطه</div>
+  <div class="cover-emoji-row">🕌 📖 🌟 ✨ 🤲</div>
+</div>
+
+<div class="toc">
+  <h2>📋 محتويات المذكرة</h2>
+  <div class="toc-grid">
+    <a href="#lesson1" class="toc-item"><span class="toc-emoji">1️⃣</span>العقيدة (١-٢٠)</a>
+    <a href="#lesson2" class="toc-item"><span class="toc-emoji">2️⃣</span>الآداب (٢١-٤٩)</a>
+    <a href="#lesson3" class="toc-item"><span class="toc-emoji">3️⃣</span>الصلاة والسيرة (٥٠-٨١)</a>
+    <a href="#lesson4" class="toc-item"><span class="toc-emoji">4️⃣</span>القرآن والغيبيات (٨٢-١١٤)</a>
+    <a href="#lesson5" class="toc-item"><span class="toc-emoji">5️⃣</span>الصحابة والمنوعات (١١٥-١٤٨)</a>
+  </div>
+</div>
+
+<div id="lesson1" class="page-break">
+  <div class="lesson-header">
+    <span class="lesson-number">الفصل الأول</span>
+    <span class="lesson-emoji">🌱</span>
+    <div class="lesson-title">العقيدة والإيمان (س١ - س٢٠)</div>
+  </div>
+  <div class="content">
+    <div class="section-heading aqeeda"><div class="section-icon aqeeda">🕌</div><div><h2>أسئلة العقيدة</h2></div></div>
+    
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١</span> أين الله ؟</div><div class="qa-answer">في السماء مستو على عرشه .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٢</span> لماذا خلقنا الله ؟</div><div class="qa-answer">لنعبد الله .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٣</span> من نبيك ؟</div><div class="qa-answer">هو محمد ابن عبد الله ﷺ.</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٤</span> ما هي مراتب الدين ؟</div><div class="qa-answer">١- الإسلام. ٢- الإيمان. ٣- الإحسان.</div></div>
+    
+    <div class="qa-card">
+      <div class="qa-question"><span class="q-badge">س٥-٩</span> ما هي أركان الإسلام الخمسة؟</div>
+      <div class="qa-answer">
+        <div class="pillars-row">
+          <div class="pillar-card"><span class="num">١</span><div class="lbl">الشهادتان</div></div>
+          <div class="pillar-card sky-top"><span class="num" style="color:var(--sky)">٢</span><div class="lbl">إقام الصلاة</div></div>
+          <div class="pillar-card gold-top"><span class="num" style="color:var(--gold)">٣</span><div class="lbl">إيتاء الزكاة</div></div>
+          <div class="pillar-card rose-top"><span class="num" style="color:var(--rose)">٤</span><div class="lbl">صوم رمضان</div></div>
+          <div class="pillar-card"><span class="num" style="color:#9C27B0">٥</span><div class="lbl">حج البيت</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-question"><span class="q-badge">س١٠-١٥</span> ما هي أركان الإيمان الستة؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num">١</span> الإيمان بالله.</li>
+          <li><span class="step-num">٢</span> الإيمان بملائكته.</li>
+          <li><span class="step-num">٣</span> الإيمان بكتبه.</li>
+          <li><span class="step-num">٤</span> الإيمان برسله.</li>
+          <li><span class="step-num">٥</span> الإيمان باليوم الآخر.</li>
+          <li><span class="step-num">٦</span> الإيمان بالقدر خيره وشره.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١٦</span> ما هي الأسئلة التي سوف تكون في القبر؟</div><div class="qa-answer">من ربك ومن نبيك وما دينك.</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١٧</span> من أول نبي يدخل الجنة ؟</div><div class="qa-answer">نبينا صلي الله عليه وسلم .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١٨</span> بماذا أمرنا الله عزوجل ؟</div><div class="qa-answer">بطاعته وبطاعة نبيه عليه الصلاة والسلام .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١٩</span> سورة من أركان الصلاة ؟</div><div class="qa-answer">الفاتحة.</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٢٠</span> كنز من كنوز الجنة ؟</div><div class="qa-answer">لا حول ولا قوة إلا بالله.</div></div>
+  </div>
+</div>
+
+<div id="lesson2" class="page-break">
+  <div class="lesson-header">
+    <span class="lesson-number">الفصل الثاني</span>
+    <span class="lesson-emoji">🌞</span>
+    <div class="lesson-title">الآداب والأذكار (س٢١ - س٤٩)</div>
+  </div>
+  <div class="content">
+    <div class="section-heading fiqh"><div class="section-icon fiqh">💧</div><div><h2>آداب الخلاء والطعام</h2></div></div>
+
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س٢١</span> ماذا تقول عند خلع الملابس ؟</div><div class="qa-answer">بسم الله .</div></div>
+    
+    <div class="qa-card fiqh-card">
+      <div class="qa-question"><span class="q-badge">س٢٢-٢٨</span> ما هي أحكام وآداب دخول الخلاء؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num">٢٢</span> <strong>عند الدخول أقول:</strong> بسم الله. اللهم إني أعوذ بك من الخبث والخبائث.</li>
+          <li><span class="step-num">٢٣</span> <strong>عند الخروج أقول:</strong> غفرانك.</li>
+          <li><span class="step-num">٢٤</span> <strong>عند الدخول:</strong> ندخل بالرجل اليسرى.</li>
+          <li><span class="step-num">٢٥</span> <strong>عند الخروج:</strong> نخرج بالرجل اليمنى.</li>
+          <li><span class="step-num">٢٦</span> <strong>أثناء قضاء الحاجة:</strong> لا نتكلم.</li>
+          <li><span class="step-num">٢٧</span> <strong>أغسل:</strong> باليد الشمال.</li>
+          <li><span class="step-num">٢٨</span> <strong>هل يجوز باليمنى؟</strong> لا، لأنه حرام.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card misc-card">
+      <div class="qa-question"><span class="q-badge">س٢٩-٣٢</span> ما هي آداب الشرب؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num">٢٩</span> أشرب <strong>باليمنى</strong>.</li>
+          <li><span class="step-num">٣٠</span> أشرب على <strong>ثلاث مرات</strong>.</li>
+          <li><span class="step-num">٣١</span> أشرب وأنا <strong>جالس</strong>.</li>
+          <li><span class="step-num">٣٢</span> أقول بعد الشراب: <strong>الحمد لله</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card misc-card">
+      <div class="qa-question"><span class="q-badge">س٣٣-٣٧</span> ما هي آداب الطعام؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num">٣٣</span> أقول عند الطعام: <strong>بسم الله</strong>.</li>
+          <li><span class="step-num">٣٤</span> آكل <strong>باليمنى</strong>.</li>
+          <li><span class="step-num">٣٥</span> قبل الأكل: <strong>أغسل يدي</strong>.</li>
+          <li><span class="step-num">٣٦</span> آكل من: <strong>أمامي فقط</strong>.</li>
+          <li><span class="step-num">٣٧</span> بعد الأكل أقول: <strong>الحمد لله</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٣٨</span> ما واجبي تجاه أبي وأمي ؟</div><div class="qa-answer">أسمع كلامهم .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٣٩</span> ما هي أول عبادة أفعلها ؟</div><div class="qa-answer">الصلاة .</div></div>
+    
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س٤٠</span> ماذا أقول عند النوم ؟</div><div class="qa-answer">أقول آية الكرسي: ﴿اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...﴾ [البقرة: ٢٥٥].</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س٤١</span> ما هو الدعاء الذي أقوله عند النوم ؟</div><div class="qa-answer">باسمك ربي وضعت جنبي وبك أرفعه...</div></div>
+
+    <div class="section-heading seerah"><div class="section-icon seerah">🐪</div><div><h2>الأنبياء والصحابة</h2></div></div>
+
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٢</span> من هو خال المؤمنين ؟</div><div class="qa-answer">معاوية رضي الله عنه .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٣</span> ما واجبي نحو أصحاب رسول الله ؟</div><div class="qa-answer">أحبهم .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٤</span> من هو سيد الشهداء ؟</div><div class="qa-answer">حمزة رضي الله عنه .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٥</span> من هو أبو الأنبياء ؟</div><div class="qa-answer">إبراهيم عليه السلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٦</span> من هو أبو البشر ؟</div><div class="qa-answer">آدم عليه السلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٧</span> من هو عدو المسلم ؟</div><div class="qa-answer">الشيطان .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٨</span> من أول زوجات النبي ﷺ ؟</div><div class="qa-answer">خديجة رضي الله عنها.</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٤٩</span> من ذو النورين ؟</div><div class="qa-answer">عثمان رضي الله عنه .</div></div>
+  </div>
+</div>
+
+<div id="lesson3" class="page-break">
+  <div class="lesson-header">
+    <span class="lesson-number">الفصل الثالث</span>
+    <span class="lesson-emoji">🕌</span>
+    <div class="lesson-title">الصلاة وقصص الأنبياء (س٥٠ - س٨١)</div>
+  </div>
+  <div class="content">
+    <div class="section-heading fiqh"><div class="section-icon fiqh">🙏</div><div><h2>الصلوات الخمس</h2></div></div>
+
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س٥٠</span> كم صلاة نصليها ؟</div><div class="qa-answer">خمس صلوات .</div></div>
+    
+    <div class="qa-card fiqh-card">
+      <div class="qa-question"><span class="q-badge">س٥١-٥٥</span> ما هي الصلوات الخمس وكم عدد ركعاتها؟</div>
+      <div class="qa-answer">
+        <table class="styled-table">
+          <thead class="sky-head"><tr><th>الترتيب</th><th>الصلاة</th><th>عدد الركعات</th></tr></thead>
+          <tbody>
+            <tr><td>أول صلاة (٥١)</td><td>الفجر</td><td>ركعتين</td></tr>
+            <tr><td>ثاني صلاة (٥٢)</td><td>الظهر</td><td>أربع ركعات</td></tr>
+            <tr><td>ثالث صلاة (٥٣)</td><td>العصر</td><td>أربع ركعات</td></tr>
+            <tr><td>رابع صلاة (٥٤)</td><td>المغرب</td><td>ثلاث ركعات</td></tr>
+            <tr><td>خامس صلاة (٥٥)</td><td>العشاء</td><td>أربع ركعات</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س٥٦</span> ماذا أقول بعد الصلاة ؟</div><div class="qa-answer">سبحان الله 33، الحمد لله 33، الله أكبر 33، ولا إله إلا الله وحده لا شريك له... مرة واحدة.</div></div>
+    
+    <div class="section-heading seerah"><div class="section-icon seerah">🌙</div><div><h2>السيرة والأنبياء</h2></div></div>
+
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٥٧</span> ما هي أحب البقاع إلي الله عزوجل ؟</div><div class="qa-answer">مكة .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٥٨</span> ما هي البلد التي هاجر إليها النبي ﷺ؟</div><div class="qa-answer">المدينة .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٥٩</span> أول شيء فعله الرسول ﷺ في المدينة ؟</div><div class="qa-answer">الإخاء بين المهاجرين والأنصار .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٦٠</span> من هم سبطي رسول الله ﷺ ؟</div><div class="qa-answer">الحسن والحسين رضي الله عنهما .</div></div>
+    
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٦١</span> ما جزاء من أطاع الله ورسوله ؟</div><div class="qa-answer">الجنة .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٦٢</span> ما جزاء من عصى الله ورسوله ؟</div><div class="qa-answer">النار .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٦٣</span> صفة لا تكون في المؤمن ؟</div><div class="qa-answer">الكذب .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٦٤</span> صفة تكون في المؤمن ؟</div><div class="qa-answer">الصدق .</div></div>
+    
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٦٥</span> من النبي الذي ابتلعه الحوت ؟</div><div class="qa-answer">يونس عليه السلام .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٦٦</span> ماذا نقول عند الاستيقاظ من النوم ؟</div><div class="qa-answer">الحمد لله الذي عافاني في جسدي ورد علي روحي وأذن لي بذكره .</div></div>
+
+    <div class="qa-card seerah-card">
+      <div class="qa-question"><span class="q-badge">س٦٧-٧٠</span> من هم الخلفاء الراشدون؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num" style="background:var(--rose)">١</span> أبو بكر الصديق رضي الله عنه.</li>
+          <li><span class="step-num" style="background:var(--rose)">٢</span> عمر بن الخطاب رضي الله عنه.</li>
+          <li><span class="step-num" style="background:var(--rose)">٣</span> عثمان بن عفان رضي الله عنه.</li>
+          <li><span class="step-num" style="background:var(--rose)">٤</span> علي بن أبي طالب رضي الله عنه.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧١</span> من الصحابيين الذين مع النبي ﷺ في قبره ؟</div><div class="qa-answer">أبو بكر، وعمر رضي الله عنهما .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٢</span> أول شهيد في الإسلام ؟</div><div class="qa-answer">ياسر رضي الله عنه .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٣</span> أول شهيدة في الإسلام ؟</div><div class="qa-answer">سمية رضي الله عنها .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٤</span> أول مؤذن ؟</div><div class="qa-answer">بلال رضي الله عنه .</div></div>
+    
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س٧٥</span> أول سورة نزلت علي النبي ﷺ ؟</div><div class="qa-answer">العلق .</div></div>
+    
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٦</span> ما هو الغار الذي كان يتعبد فيه النبي ﷺ ؟</div><div class="qa-answer">غار حراء .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٧</span> ما هو الغار الذي دخله النبي ﷺ في الهجرة ؟</div><div class="qa-answer">غار ثور .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٨</span> من النبي صاحب السفينة ؟</div><div class="qa-answer">نوح عليه السلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٧٩</span> من النبي الذي عاش ألف سنة إلا خمسين عام ؟</div><div class="qa-answer">نوح عليه السلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٨٠</span> من النبي صاحب الناقة ؟</div><div class="qa-answer">صالح عليه السلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٨١</span> من النبي الذي عبر البحر بعصاه ؟</div><div class="qa-answer">موسى عليه الصلاة والسلام .</div></div>
+  </div>
+</div>
+
+<div id="lesson4" class="page-break">
+  <div class="lesson-header">
+    <span class="lesson-number">الفصل الرابع</span>
+    <span class="lesson-emoji">📖</span>
+    <div class="lesson-title">آداب وسيرة وقرآن (س٨٢ - س١١٤)</div>
+  </div>
+  <div class="content">
+    <div class="section-heading misc"><div class="section-icon misc">🕌</div><div><h2>آداب وأذكار</h2></div></div>
+    
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٨٢</span> ماذا نقول عند دخول المسجد ؟</div><div class="qa-answer">بسم الله والصلاة والسلام علي رسول الله، اللهم افتح لي أبواب رحمتك .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٨٣</span> ماذا نقول عند الخروج من المسجد ؟</div><div class="qa-answer">بسم الله والصلاة والسلام علي رسول الله، اللهم إني أسألك من فضلك...</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٨٤</span> ماذا نقول عندما ندخل على أحد ؟</div><div class="qa-answer">السلام عليكم ورحمة الله وبركاته .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٨٥</span> ماذا أفعل إذا أذن الأذان ؟</div><div class="qa-answer">أقول خلف المؤذن كما يقول.</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س٨٦</span> ماذا تقول بعد الفراغ من الأذان ؟</div><div class="qa-answer">اللهم رب هذه الدعوة التامة والصلاة القائمة آت محمدا الوسيلة والفضيلة...</div></div>
+    
+    <div class="section-heading quran"><div class="section-icon quran">📖</div><div><h2>القرآن والسيرة</h2></div></div>
+    
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س٨٧</span> ما هي السورة التي لم تبدأ ببسم الله الرحمن الرحيم ؟</div><div class="qa-answer">سورة التوبة.</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٨٨</span> معجزه من معجزات النبي ﷺ ؟</div><div class="qa-answer">تفجرت المياه من تحت أصابعه الشريفة .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٨٩</span> متى ولد النبي ﷺ ؟</div><div class="qa-answer">يوم الاثنين .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٩٠</span> ما هو العام الذي ولد فيه النبي ﷺ ؟</div><div class="qa-answer">عام الفيل .</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س٩١</span> من الذي جمع القرآن ؟</div><div class="qa-answer">أبو بكر الصديق رضي الله عنه .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٩٢</span> من هو أمين سر رسول الله ﷺ ؟</div><div class="qa-answer">حذيفة رضي الله عنه .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س٩٣</span> متى كان فتح مكة ؟</div><div class="qa-answer">عام 8 هجرية .</div></div>
+    
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٩٤</span> ما جزاء الذي يوقع بين الناس ؟</div><div class="qa-answer">يعذب في قبره .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٩٥</span> اذكر صفة سيئة في اللسان ؟</div><div class="qa-answer">السب .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٩٦</span> ما هو أول طعام أهل الجنة ؟</div><div class="qa-answer">كبد الحوت .</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س٩٧</span> ما فضيلة المؤمنين في الجنة ؟</div><div class="qa-answer">يرون ربهم .</div></div>
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س٩٨</span> ماذا نفعل كي نصلي ؟</div><div class="qa-answer">نتوضأ .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س٩٩</span> من هو أمين السماء ؟</div><div class="qa-answer">جبريل عليه الصلاة والسلام .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١٠٠</span> من خازن النار ؟</div><div class="qa-answer">مالك عليه الصلاة والسلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٠١</span> من النبي الذي أراد إخوته التخلص منه ؟</div><div class="qa-answer">يوسف عليه الصلاة والسلام .</div></div>
+    
+    <div class="qa-card quran-card">
+      <div class="qa-question"><span class="q-badge">س١٠٢-١٠٤</span> معلومات عن القرآن وحبر الأمة:</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num" style="background:var(--gold)">١٠٢</span> كم عدد سور القرآن ؟ <strong>114 سورة</strong>.</li>
+          <li><span class="step-num" style="background:var(--gold)">١٠٣</span> كم عدد أجزاء القرآن ؟ <strong>30 جزء</strong>.</li>
+          <li><span class="step-num" style="background:var(--gold)">١٠٤</span> من هو حبر الأمة وترجمان القرآن ؟ <strong>عبد الله ابن عباس</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="lesson5" class="page-break">
+  <div class="lesson-header">
+    <span class="lesson-number">الفصل الخامس</span>
+    <span class="lesson-emoji">✨</span>
+    <div class="lesson-title">الصحابة ومنوعات دينية (س١١٥ - س١٤٨)</div>
+  </div>
+  <div class="content">
+    
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١١٥</span> كيف تزرع نخلة في الجنة ؟</div><div class="qa-answer">سبحان الله العظيم وبحمده .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١١٦</span> من الصحابي الذي أشار بحفر الخندق ؟</div><div class="qa-answer">سلمان الفارسي رضي الله عنه .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١١٧</span> ما هو أول شيء خلقه الله عزوجل ؟</div><div class="qa-answer">القلم .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١١٨</span> من هو الملك نافخ الصور؟</div><div class="qa-answer">إسرافيل عليه السلام .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١١٩</span> أول علامات الساعة الصغرى ؟</div><div class="qa-answer">بعثة النبي عليه الصلاة والسلام .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١٢٠</span> ماذا تعرف عن الملائكة ؟</div><div class="qa-answer">هم مخلوقين من نور .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١٢١</span> ماذا يفعل الملائكة ؟</div><div class="qa-answer">يسبحون الله عزوجل .</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س١٢٢</span> أطول آية في القرآن ؟</div><div class="qa-answer">آية الدين .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٢٣</span> أفضل ليلة في السنة ؟</div><div class="qa-answer">ليلة القدر .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٢٤</span> متى تكون ليلة القدر ؟</div><div class="qa-answer">في آخر رمضان .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٢٥</span> أفضل شهور السنة بعد رمضان ؟</div><div class="qa-answer">شهر الله المحرم .</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س١٢٦</span> سورة تعدل ثلث القرآن ؟</div><div class="qa-answer">سورة الإخلاص .</div></div>
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س١٢٧</span> متى فرضت الصلاة ؟</div><div class="qa-answer">في رحلة الإسراء والمعراج .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٢٨</span> أفضل ماء في الدنيا ؟</div><div class="qa-answer">ماء زمزم .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٢٩</span> أين يقع ماء زمزم ؟</div><div class="qa-answer">في مكة المكرمة .</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س١٣٠</span> اذكر صفة حذر منها القرآن ؟</div><div class="qa-answer">الصوت العالي .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٣١</span> ما هي أعياد المسلمين ؟</div><div class="qa-answer">عيد الفطر وعيد الأضحى فقط .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٣٢</span> هل للمسلمين أعياد غير الفطر والأضحى ؟</div><div class="qa-answer">لا يوجد .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٣٣</span> بماذا يحلف الإنسان ؟</div><div class="qa-answer">بالله عليك .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٣٤</span> من الحشرة التي تبسم سليمان عليه السلام منها ؟</div><div class="qa-answer">النملة .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٣٥</span> من هو النبي الذي كان يفهم كلام الطير والحيوانات ؟</div><div class="qa-answer">سليمان عليه الصلاة والسلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٣٦</span> من النبي الذي تكلم وهو صغير ؟</div><div class="qa-answer">عيسى عليه الصلاة والسلام .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٣٧</span> ما هي أول غزوات النبي ﷺ ؟</div><div class="qa-answer">غزوة بدر .</div></div>
+    <div class="qa-card seerah-card"><div class="qa-question"><span class="q-badge">س١٣٨</span> من الصحابي الذي غسلته الملائكة في الحرب ؟</div><div class="qa-answer">حنظلة رضي الله عنه .</div></div>
+    <div class="qa-card fiqh-card"><div class="qa-question"><span class="q-badge">س١٣٩</span> ما عقوبة من نام عن صلاة الفجر ؟</div><div class="qa-answer">يبول الشيطان في أذنه .</div></div>
+    <div class="qa-card quran-card"><div class="qa-question"><span class="q-badge">س١٤٠</span> ماهي سورة الملائكة ؟</div><div class="qa-answer">سورة فاطر .</div></div>
+    <div class="qa-card aqeeda-card"><div class="qa-question"><span class="q-badge">س١٤١</span> من صديقك في القبر ؟</div><div class="qa-answer">عملك في الدنيا .</div></div>
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٤٢</span> ما هو غذاء القلب ؟</div><div class="qa-answer">ذكر الله سبحانه وتعالى .</div></div>
+    
+    <div class="qa-card fiqh-card">
+      <div class="qa-question"><span class="q-badge">س١٤٣-١٤٤</span> ماذا تفعل يوم الجمعة وإذا صعد الإمام؟</div>
+      <div class="qa-answer">
+        <ul class="steps-list">
+          <li><span class="step-num" style="background:var(--sky)">١٤٣</span> <strong>يوم الجمعة:</strong> تذهب إلى المسجد مبكرا.</li>
+          <li><span class="step-num" style="background:var(--sky)">١٤٤</span> <strong>إذا صعد الإمام المنبر:</strong> أستمع له جيدا.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-card misc-card"><div class="qa-question"><span class="q-badge">س١٤٥</span> ماذا أفعل إذا دخلت على أحد؟</div><div class="qa-answer">أقول السلام عليكم.</div></div>
+    <div class="qa-card"><div class="qa-question"><span class="q-badge">س١٤٦</span> كيف أحب النبي ﷺ؟</div><div class="qa-answer">أن أفعل مثل النبي ﷺ.</div></div>
+    
+    <div class="qa-card seerah-card">
+      <div class="qa-question"><span class="q-badge">س١٤٧-١٤٨</span> معلومات عن العشرة المبشرين بالجنة والمزيد:</div>
+      <div class="qa-answer">
+        <p><strong>العشرة المبشرون بالجنة:</strong> أبو بكر، عمر، عثمان، علي، طلحة، الزبير، عبد الرحمن بن عوف، سعد بن أبي وقاص، سعيد بن زيد، أبو عبيدة بن الجراح.</p>
+        <hr style="margin:10px 0; border:0; border-top:1px dashed #ccc">
+        <p><strong>حق الكبير:</strong> احترامه. <strong>عند دخول المسجد:</strong> أصلي ركعتين تحية المسجد.</p>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#1B4F35,#2E7D55);border-radius:24px;padding:36px 30px;text-align:center;margin-top:40px;color:#fff;">
+      <div style="font-size:50px;margin-bottom:16px">🎉</div>
+      <h3 style="font-size:24px;font-weight:900;margin-bottom:10px">انتهى المستوى التمهيدي بفضل الله!</h3>
+      <p style="font-size:16px;opacity:0.9;max-width:480px;margin:0 auto 20px">ويليه الجزء الأول بإذن الله عز وجل. نسألكم الدعاء بظاهر الغيب.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
