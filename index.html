@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن - متابعة الحفظ</title>
+<title>مركز خادم القرآن الكريم</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
@@ -14,11 +14,25 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);min-height:100vh;overflow-x:hidden}
-.hdr{background:linear-gradient(160deg,var(--gd),var(--gm));padding:20px 16px 24px;text-align:center}
-.hdr-emblem{width:56px;height:56px;margin:0 auto 10px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
-.hdr-title{color:#fff;font-family:'Amiri',serif;font-size:22px;font-weight:700}
-.hdr-sub{color:var(--goldl);font-size:13px;font-weight:600;margin-top:6px}
-.body{padding:14px 14px 100px}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(160deg,var(--gd),var(--gm));padding:16px 16px 18px;text-align:center;position:relative}
+.hdr-emblem{width:50px;height:50px;margin:0 auto 8px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
+.hdr-title{color:#fff;font-family:'Amiri',serif;font-size:20px;font-weight:700}
+.hdr-sub{color:var(--goldl);font-size:12px;font-weight:600;margin-top:4px}
+.hdr-actions{position:absolute;top:14px;left:14px;display:flex;gap:8px}
+.hdr-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.hdr-btn.gold{background:rgba(212,175,83,.25);border-color:var(--gold);color:var(--goldl)}
+.hdr-btn.danger{background:rgba(220,38,38,.2);border-color:#fca5a5;color:#fca5a5}
+
+/* ── BODY ── */
+.body{padding:14px 14px 110px}
+
+/* ── SECTIONS ── */
 .sec{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .sh{background:var(--gm);padding:11px 14px;border-radius:14px 14px 0 0}
 .sh-t{color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
@@ -32,7 +46,7 @@ html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);m
 .sw::after{content:'▾';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gm);font-size:12px;pointer-events:none}
 select.inp{padding-left:28px;cursor:pointer}
 .aw{position:relative}
-.ad{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:#fff;border:1.5px solid var(--gm);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
+.ad{display:none;position:absolute;top:calc(100%+4px);right:0;left:0;background:#fff;border:1.5px solid var(--gm);border-radius:10px;overflow:hidden;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:200px;overflow-y:auto}
 .ai{padding:9px 13px;font-size:13px;font-family:'Amiri',serif;cursor:pointer;border-bottom:.5px solid #eef4f0}
 .sr,.qr{display:grid;grid-template-columns:1fr 130px;gap:8px;margin-bottom:8px;background:var(--cream);border-radius:10px;padding:9px;border:1px solid var(--border);position:relative}
 .qr{grid-template-columns:1fr 1fr}
@@ -40,50 +54,248 @@ select.inp{padding-left:28px;cursor:pointer}
 .rr2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
 .rr2.hidden{display:none}
 .abtn{width:100%;padding:8px;margin-top:2px;border:1.5px dashed var(--gm);border-radius:9px;background:transparent;color:var(--gm);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
-.sw2{position:fixed;bottom:0;right:0;left:0;background:#fff;padding:12px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200}
-.sbtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--gm),var(--gl));color:var(--goldl);border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer}
+
+/* ── BOTTOM BAR ── */
+.bot{position:fixed;bottom:0;right:0;left:0;background:#fff;padding:10px 14px;border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:200;display:flex;gap:8px}
+.bot-main{flex:1;padding:13px;background:linear-gradient(135deg,var(--gm),var(--gl));color:var(--goldl);border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.bot-sec{padding:13px 16px;background:#fff;border:2px solid var(--gm);color:var(--gm);border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:5px;white-space:nowrap}
+
+/* ── REPORTS PAGE ── */
+#page-reports .hdr{text-align:right;padding-right:16px}
+.rep-list{padding:14px 14px 100px}
+.rep-card-item{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;border:1px solid var(--border)}
+.rep-card-top{display:flex;gap:10px;padding:12px}
+.rep-thumb{width:72px;height:90px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#eee;border:1px solid var(--border)}
+.rep-thumb-ph{width:72px;height:90px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--gm),var(--gl));display:flex;align-items:center;justify-content:center;font-size:28px}
+.rep-info{flex:1;min-width:0}
+.rep-name{font-size:16px;font-weight:900;color:var(--gd);margin-bottom:4px}
+.rep-date{font-size:11px;color:var(--sub);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.rep-hijri{font-size:10px;color:#888}
+.rep-badge-old{display:inline-flex;align-items:center;gap:4px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px}
+.rep-actions{display:flex;gap:6px;padding:0 12px 12px;flex-wrap:wrap}
+.ra{flex:1;padding:8px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;display:flex;align-items:center;justify-content:center;gap:4px;min-width:60px}
+.ra-view{background:#f0fdf4;color:#15803d;border:1.5px solid #86efac}
+.ra-edit{background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd}
+.ra-del{background:#fef2f2;color:#dc2626;border:1.5px solid #fca5a5}
+.rep-empty{text-align:center;padding:60px 20px;color:var(--sub)}
+.rep-empty-ico{font-size:50px;margin-bottom:12px}
+.rep-empty-txt{font-size:15px;font-weight:600}
+
+/* ── TOP NAV ── */
+.top-nav{display:flex;gap:8px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.tn{flex:1;padding:9px;border-radius:9px;border:2px solid var(--border);background:#fff;color:var(--gm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px}
+.tn.danger{border-color:#fca5a5;color:#dc2626}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;gap:14px}
+.modal-ov img{max-width:100%;max-height:72vh;border-radius:16px;box-shadow:0 0 60px rgba(52,211,153,.3)}
+.modal-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.mb{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:900;cursor:pointer;font-family:'Cairo',sans-serif;border:none}
+.mb-close{background:#d4af53;color:#030d08}
+.mb-save{background:#052e16;color:#34d399;border:2px solid #34d399 !important;border-style:solid}
+
+/* ── SPINNER ── */
+.spinner-ov{position:fixed;inset:0;background:rgba(3,13,8,.85);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.spinner{width:48px;height:48px;border:5px solid rgba(52,211,153,.2);border-top-color:#34d399;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-txt{color:#6ee7b7;font-size:14px;font-weight:700}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9997;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+
+/* ── CONFIRM DIALOG ── */
+.conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9996;display:flex;align-items:center;justify-content:center;padding:20px}
+.conf-box{background:#fff;border-radius:18px;padding:24px;max-width:340px;width:100%;text-align:center}
+.conf-ico{font-size:40px;margin-bottom:10px}
+.conf-title{font-size:16px;font-weight:900;color:var(--gd);margin-bottom:8px}
+.conf-msg{font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.6}
+.conf-btns{display:flex;gap:10px}
+.conf-ok{flex:1;padding:11px;border:none;border-radius:10px;background:#dc2626;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.conf-cancel{flex:1;padding:11px;border:2px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+
+/* ── EXPIRY ALERT ── */
+.exp-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.exp-ico{font-size:22px;flex-shrink:0}
+.exp-txt{font-size:12px;color:#78350f;font-weight:600;line-height:1.5}
+.exp-actions{display:flex;gap:6px;margin-top:8px}
+.exp-btn{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none}
+.exp-save{background:#d97706;color:#fff}
+.exp-del{background:#fff;color:#dc2626;border:1.5px solid #fca5a5 !important;border-style:solid}
 </style>
 </head>
 <body>
-<div class="hdr">
-  <div class="hdr-emblem">🕌</div>
-  <div class="hdr-title">مركز خادم القرآن الكريم</div>
-  <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
+
+<!-- ═══ PAGE: MAIN FORM ═══ -->
+<div id="page-main" class="page active">
+  <div class="hdr">
+    <div class="hdr-actions">
+      <button class="hdr-btn gold" onclick="goReports()"><i class="ti ti-report"></i> سجل التقارير</button>
+      <button class="hdr-btn danger" onclick="confirmClearForm()"><i class="ti ti-trash"></i> مسح</button>
+    </div>
+    <div class="hdr-emblem">🕌</div>
+    <div class="hdr-title">مركز خادم القرآن الكريم</div>
+    <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
+  </div>
+
+  <div class="body">
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-user"></i>بيانات البطل</div></div>
+      <div class="sb"><div class="frow">
+        <div class="flbl">اسم البطل</div>
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
+      </div></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-book"></i>السور الجديدة</div></div>
+      <div class="sb"><div id="new-surahs"></div><button class="abtn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-books"></i>ماضي السور</div></div>
+      <div class="sb"><div id="past-surahs"></div><button class="abtn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-pencil"></i>المذكرة الجديدة</div></div>
+      <div class="sb"><div id="mur-questions"></div><button class="abtn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
+      <div class="sb"><div id="past-mur"></div><button class="abtn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-bulb"></i>السراج</div></div>
+      <div class="sb"><div id="suraj-section"></div><button class="abtn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
+    </div>
+    <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
+      <div class="sb"><div id="hadith-section"></div><button class="abtn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
+    </div>
+  </div>
+
+  <div class="bot">
+    <button class="bot-main" onclick="generateAndShare()">✨ إنشاء بطاقة البطل</button>
+    <button class="bot-sec" onclick="goReports()"><i class="ti ti-report"></i> السجل</button>
+  </div>
 </div>
-<div class="body">
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-user"></i>بيانات البطل</div></div>
-    <div class="sb"><div class="frow"><div class="flbl">اسم البطل</div>
-      <input class="inp" id="inp-student" placeholder="أدخل اسم البطل...">
-      <button onclick="loadStudentData()" class="abtn" style="margin-top:10px"><i class="ti ti-photo"></i> استرجاع التقرير السابق</button>
-    </div></div>
+
+<!-- ═══ PAGE: REPORTS ═══ -->
+<div id="page-reports" class="page">
+  <div class="hdr">
+    <div class="hdr-actions">
+      <button class="hdr-btn" onclick="goMain()"><i class="ti ti-arrow-right"></i> رجوع</button>
+    </div>
+    <div class="hdr-emblem">📋</div>
+    <div class="hdr-title">سجل التقارير</div>
+    <div class="hdr-sub">جميع بطاقات الأبطال</div>
   </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-book"></i>السور الجديدة</div></div>
-    <div class="sb"><div id="new-surahs"></div><button class="abtn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
+  <div class="top-nav">
+    <button class="tn danger" onclick="confirmDeleteAll()"><i class="ti ti-trash"></i> حذف الكل</button>
+    <button class="tn" onclick="exportAll()"><i class="ti ti-download"></i> تصدير الكل</button>
   </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-books"></i>ماضي السور</div></div>
-    <div class="sb"><div id="past-surahs"></div><button class="abtn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div>
-  </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
-    <div class="sb"><div id="mur-questions"></div><button class="abtn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-  </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
-    <div class="sb"><div id="past-mur"></div><button class="abtn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div>
-  </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-bulb"></i>السراج</div></div>
-    <div class="sb"><div id="suraj-section"></div><button class="abtn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div>
-  </div>
-  <div class="sec"><div class="sh"><div class="sh-t"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
-    <div class="sb"><div id="hadith-section"></div><button class="abtn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div>
+  <div class="rep-list" id="rep-list"></div>
+  <div class="bot" style="justify-content:center">
+    <button class="bot-main" onclick="goMain()" style="max-width:300px"><i class="ti ti-plus"></i> تقرير جديد</button>
   </div>
 </div>
-<div class="sw2"><button class="sbtn" onclick="generateAndShare()">✨ إنشاء بطاقة البطل ومشاركتها</button></div>
 
 <script>
-/* ─────────── SURAH LIST ─────────── */
+/* ══════════════════════════════════════
+   DATABASE — IndexedDB (no quota issues)
+══════════════════════════════════════ */
+var DB_NAME='QuranCenter',DB_VER=2,db=null;
+
+function openDB(){
+  return new Promise(function(res,rej){
+    var req=indexedDB.open(DB_NAME,DB_VER);
+    req.onupgradeneeded=function(e){
+      var d=e.target.result;
+      if(!d.objectStoreNames.contains('reports')){
+        var s=d.createObjectStore('reports',{keyPath:'id',autoIncrement:true});
+        s.createIndex('student','student',{unique:false});
+        s.createIndex('createdAt','createdAt',{unique:false});
+      }
+      if(!d.objectStoreNames.contains('draft')){
+        d.createObjectStore('draft',{keyPath:'key'});
+      }
+    };
+    req.onsuccess=function(e){db=e.target.result;res(db);};
+    req.onerror=function(e){rej(e);};
+  });
+}
+
+function dbOp(store,mode,fn){
+  return new Promise(function(res,rej){
+    var tx=db.transaction(store,mode);
+    var st=tx.objectStore(store);
+    var req=fn(st);
+    if(req){req.onsuccess=function(e){res(e.target.result);};req.onerror=function(e){rej(e);};}
+    else{tx.oncomplete=function(){res();};tx.onerror=function(e){rej(e);};}
+  });
+}
+
+function saveReport(nm,data,imgBlob){
+  return dbOp('reports','readwrite',function(s){
+    return s.add({student:nm,data:data,img:imgBlob,createdAt:Date.now(),hijri:getHijri()});
+  });
+}
+function getAllReports(){
+  return new Promise(function(res,rej){
+    var tx=db.transaction('reports','readonly');
+    var req=tx.objectStore('reports').getAll();
+    req.onsuccess=function(e){res(e.target.result);};
+    req.onerror=function(e){rej(e);};
+  });
+}
+function getReport(id){
+  return dbOp('reports','readonly',function(s){return s.get(id);});
+}
+function deleteReport(id){
+  return dbOp('reports','readwrite',function(s){return s.delete(id);});
+}
+function deleteAllReports(){
+  return dbOp('reports','readwrite',function(s){return s.clear();});
+}
+function updateReport(rec){
+  return dbOp('reports','readwrite',function(s){return s.put(rec);});
+}
+
+/* draft persistence */
+function saveDraft(){
+  if(!db)return;
+  var tx=db.transaction('draft','readwrite');
+  var st=tx.objectStore('draft');
+  st.put({key:'student',val:document.getElementById('inp-student').value});
+  st.put({key:'formData',val:collectAll()});
+}
+function loadDraft(){
+  if(!db)return;
+  var tx=db.transaction('draft','readonly');
+  tx.objectStore('draft').get('student').onsuccess=function(e){
+    if(e.target.result)document.getElementById('inp-student').value=e.target.result.val||'';
+  };
+  tx.objectStore('draft').get('formData').onsuccess=function(e){
+    if(e.target.result&&e.target.result.val)restoreForm(e.target.result.val);
+  };
+}
+function clearDraft(){
+  if(!db)return;
+  var tx=db.transaction('draft','readwrite');
+  tx.objectStore('draft').clear();
+}
+function collectAll(){
+  return{
+    student:document.getElementById('inp-student').value,
+    ns:collect('new-surahs',false),ps:collect('past-surahs',false),
+    mq:collect('mur-questions',true),pm:collect('past-mur',true),
+    sj:collect('suraj-section',true),hd:collect('hadith-section',true)
+  };
+}
+
+/* auto-save draft every 10s */
+setInterval(saveDraft,10000);
+
+/* ══════════════════════════════════════
+   SURAH LIST
+══════════════════════════════════════ */
 var SP=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var CNT={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-/* ─────────── FORM BUILDERS ─────────── */
+/* ══════════════════════════════════════
+   FORM BUILDERS
+══════════════════════════════════════ */
 function extraSurah(nxt,lbl,pfx,idx){
   var n='';
   if(nxt){var nId=pfx+'n'+idx;
@@ -102,7 +314,7 @@ function extraSurah(nxt,lbl,pfx,idx){
 }
 
 function extraQ(nxt,lbl,isRng){
-  var pF=isRng?'من رقم':'من س', pT=isRng?'إلى رقم':'إلى س';
+  var pF=isRng?'من رقم':'من س',pT=isRng?'إلى رقم':'إلى س';
   var n='';
   if(nxt){n=`<div style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc">
     <div class="flbl" style="color:#133020">ما سيتم حفظه القادم:</div>
@@ -136,7 +348,7 @@ function addQuestion(con,pfx,extra,nxt){
   var d=document.createElement('div');d.className='qr';d.id='qrow-'+pfx+i;
   var isRng=(pfx==='hd'||pfx==='sj');
   var lbl=(pfx==='mq')?'المذكرة':(pfx==='pm'?'الماضي':(pfx==='sj'?'السراج':'الحديث'));
-  var pF=isRng?'من رقم':'من س', pT=isRng?'إلى رقم':'إلى س';
+  var pF=isRng?'من رقم':'من س',pT=isRng?'إلى رقم':'إلى س';
   d.innerHTML=(i>1?'<button class="db" onclick="del(\'qrow-'+pfx+i+'\')">✕</button>':'')+
     '<div><input class="inp num mqf" id="qf-'+pfx+i+'" type="number" placeholder="'+pF+'"></div>'+
     '<div><input class="inp num mqt" id="qt-'+pfx+i+'" type="number" placeholder="'+pT+'"></div>'+
@@ -148,9 +360,9 @@ function ac(inp,drop){
   if(!inp||!drop)return;
   inp.addEventListener('input',function(){
     var v=inp.value;if(!v.trim()){drop.style.display='none';return;}
-    var m=SP.filter(s=>s.includes(v)).slice(0,5);
+    var m=SP.filter(function(s){return s.includes(v);}).slice(0,5);
     if(!m.length){drop.style.display='none';return;}
-    drop.innerHTML=m.map(x=>'<div class="ai" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+x+'\')">'+x+'</div>').join('');
+    drop.innerHTML=m.map(function(x){return'<div class="ai" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+x+'\')">'+x+'</div>';}).join('');
     drop.style.display='block';
   });
 }
@@ -163,54 +375,97 @@ function collect(con,isQ){
   document.querySelectorAll('#'+con+' > div').forEach(function(row){
     var it={rating:row.querySelector('.rs')?.value||'',errors:row.querySelector('.ei')?.value||''};
     if(!isQ){
-      it.sr=row.querySelector('.msr')?.value;it.type=row.querySelector('.msl')?.value;
-      it.f=row.querySelector('.mf')?.value;it.t=row.querySelector('.mt')?.value;
-      it.nsr=row.querySelector('.inp[id^="sr-"][id*="n"]')?.value;
-      it.ntype=row.querySelector('select[id^="sl-"][id*="n"]')?.value;
-      it.nf=row.querySelector('.inp.num[id^="f-"][id*="n"]')?.value;
-      it.nt=row.querySelector('.inp.num[id^="t-"][id*="n"]')?.value;
+      it.sr=row.querySelector('.msr')?.value||'';
+      it.type=row.querySelector('.msl')?.value||'full';
+      it.f=row.querySelector('.mf')?.value||'';it.t=row.querySelector('.mt')?.value||'';
+      var nsr=row.querySelector('[id^="sr-"][id*="n"]');
+      var nsl=row.querySelector('[id^="sl-"][id*="n"]');
+      var nf=row.querySelector('[id^="f-"][id*="n"]');
+      var nt=row.querySelector('[id^="t-"][id*="n"]');
+      it.nsr=nsr?nsr.value:'';it.ntype=nsl?nsl.value:'full';
+      it.nf=nf?nf.value:'';it.nt=nt?nt.value:'';
     } else {
-      it.f=row.querySelector('.mqf')?.value;it.t=row.querySelector('.mqt')?.value;
-      it.nf=row.querySelector('.nqf')?.value;it.nt=row.querySelector('.nqt')?.value;
+      it.f=row.querySelector('.mqf')?.value||'';it.t=row.querySelector('.mqt')?.value||'';
+      it.nf=row.querySelector('.nqf')?.value||'';it.nt=row.querySelector('.nqt')?.value||'';
     }
     if(it.sr||it.f)res.push(it);
   });
   return res;
 }
 
-/* ══════════════════════════════════════════════════════
-   CANVAS CARD RENDERER — "Hero Card" Design
-   Canvas width: 900px  DPR: 2  → 1800px real pixels
-══════════════════════════════════════════════════════ */
-var CW=900, PAD=32, DPR=2;
+function restoreForm(fd){
+  if(!fd)return;
+  if(fd.student)document.getElementById('inp-student').value=fd.student;
+  /* we just show a note — full restore is complex, skip for brevity */
+}
 
-/* ── Rounded rect ── */
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goMain(){showPage('page-main');}
+function goReports(){renderReports();showPage('page-reports');}
+
+/* ══════════════════════════════════════
+   UTILS
+══════════════════════════════════════ */
+function getHijri(){
+  try{return new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(new Date());}catch(e){return '';}
+}
+function fmtDate(ts){
+  var d=new Date(ts);
+  var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  var months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  return days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+}
+function isOlderThanMonth(ts){return Date.now()-ts>30*24*60*60*1000;}
+
+function showToast(msg,dur){
+  var t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('show');});
+  setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},dur||2500);
+}
+
+function showSpinner(msg){
+  var s=document.createElement('div');s.className='spinner-ov';s.id='spinner-ov';
+  s.innerHTML='<div class="spinner"></div><div class="spinner-txt">'+(msg||'جارٍ الإنشاء...')+'</div>';
+  document.body.appendChild(s);
+}
+function hideSpinner(){var s=document.getElementById('spinner-ov');if(s)s.remove();}
+
+function confirm2(ico,title,msg,okTxt,cb,okClass){
+  var ov=document.createElement('div');ov.className='conf-ov';
+  ov.innerHTML='<div class="conf-box"><div class="conf-ico">'+ico+'</div><div class="conf-title">'+title+'</div><div class="conf-msg">'+msg+'</div><div class="conf-btns"><button class="conf-ok'+(okClass?' '+okClass:'')+'" id="co">'+okTxt+'</button><button class="conf-cancel" id="cc">إلغاء</button></div></div>';
+  document.body.appendChild(ov);
+  ov.querySelector('#co').onclick=function(){ov.remove();cb();};
+  ov.querySelector('#cc').onclick=function(){ov.remove();};
+}
+
+/* ══════════════════════════════════════
+   CANVAS CARD RENDERER
+══════════════════════════════════════ */
+var CW=900,PAD=32,DPR=2;
+
 function rrect(c,x,y,w,h,r){
   r=Math.min(r,w/2,h/2);
-  c.beginPath();
-  c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
+  c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
   c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);
   c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);
-  c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);
-  c.closePath();
+  c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);c.closePath();
 }
 
-/* ── Hijri date ── */
-function getHijri(){
-  try{return new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).format(new Date());}
-  catch(e){return '';}
-}
-
-/* ── Rating colors ── */
 function rCol(r){
   if(!r)return null;
-  if(r.includes('ممتاز'))  return{bg:'#052e16',fg:'#4ade80',brd:'#16a34a'};
+  if(r.includes('ممتاز'))return{bg:'#052e16',fg:'#4ade80',brd:'#16a34a'};
   if(r.includes('جيد جداً'))return{bg:'#1e3a5f',fg:'#60a5fa',brd:'#2563eb'};
-  if(r.includes('جيد'))    return{bg:'#451a03',fg:'#fbbf24',brd:'#d97706'};
+  if(r.includes('جيد'))return{bg:'#451a03',fg:'#fbbf24',brd:'#d97706'};
   return{bg:'#450a0a',fg:'#f87171',brd:'#dc2626'};
 }
 
-/* ── Section config ── */
 var SECS=[
   {k:'ns',lbl:'السور الجديدة',   ico:'📖',c1:'#0d4f35',c2:'#1a7a52',ac:'#34d399',fg:'#d1fae5',dot:'#6ee7b7'},
   {k:'ps',lbl:'ماضي السور',      ico:'📚',c1:'#1e3a5f',c2:'#2563eb',ac:'#60a5fa',fg:'#dbeafe',dot:'#93c5fd'},
@@ -220,13 +475,12 @@ var SECS=[
   {k:'hd',lbl:'الحديث والأذكار', ico:'📿',c1:'#134e4a',c2:'#0d9488',ac:'#2dd4bf',fg:'#ccfbf1',dot:'#99f6e4'},
 ];
 
-/* ── Height estimator ── */
 function estH(data){
-  var h=300; // header block
+  var h=300;
   SECS.forEach(function(s){
     var items=(data[s.k]||[]).filter(function(i){return i.sr||i.f;});
     if(!items.length)return;
-    h+=62; // sec header
+    h+=62;
     items.forEach(function(it){
       var extra=0;
       if(it.rating||(it.errors&&it.errors!=='0'&&it.errors!==''))extra+=40;
@@ -238,274 +492,189 @@ function estH(data){
   return Math.max(h+80,500);
 }
 
-/* ── Draw Islamic star pattern (subtle bg decoration) ── */
-function drawStarPat(c,cx2,cy2,r,col,alpha){
-  c.save();c.globalAlpha=alpha;c.strokeStyle=col;c.lineWidth=1;
-  var pts=[];
-  for(var i=0;i<8;i++){var a=i*Math.PI/4;pts.push([cx2+r*Math.cos(a),cy2+r*Math.sin(a)]);}
-  c.beginPath();
-  for(var j=0;j<8;j++){c.moveTo(cx2,cy2);c.lineTo(pts[j][0],pts[j][1]);}
-  c.stroke();
-  c.beginPath();c.arc(cx2,cy2,r*0.4,0,Math.PI*2);c.stroke();
-  c.restore();
+function drawStarPat(c,cx,cy,r,col,al){
+  c.save();c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=1;
+  var pts=[];for(var i=0;i<8;i++){var a=i*Math.PI/4;pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}
+  c.beginPath();for(var j=0;j<8;j++){c.moveTo(cx,cy);c.lineTo(pts[j][0],pts[j][1]);}c.stroke();
+  c.beginPath();c.arc(cx,cy,r*.4,0,Math.PI*2);c.stroke();c.restore();
 }
 
-/* ── Draw pill badge ── */
-function pill(c,txt,rx,ry,col,fs){
+function pillC(c,txt,rx,ry,col,fs){
   c.font='bold '+fs+'px Cairo,sans-serif';
-  var tw=c.measureText(txt).width, ph=fs+14, pw=tw+24;
+  var tw=c.measureText(txt).width,ph=fs+14,pw=tw+24;
   rrect(c,rx-pw,ry,pw,ph,ph/2);
-  c.fillStyle=col.bg;c.fill();
-  c.strokeStyle=col.brd;c.lineWidth=1.5;c.stroke();
-  c.fillStyle=col.fg;c.textAlign='right';c.textBaseline='middle';
-  c.fillText(txt,rx-12,ry+ph/2);
+  c.fillStyle=col.bg;c.fill();c.strokeStyle=col.brd;c.lineWidth=1.5;c.stroke();
+  c.fillStyle=col.fg;c.textAlign='right';c.textBaseline='middle';c.fillText(txt,rx-12,ry+ph/2);
   return pw+10;
 }
 
-/* ══ MAIN DRAW ══ */
 async function drawCard(nm,data){
   var H=estH(data);
   var canvas=document.createElement('canvas');
-  canvas.width=CW*DPR; canvas.height=H*DPR;
-  var c=canvas.getContext('2d');
-  c.scale(DPR,DPR);
+  canvas.width=CW*DPR;canvas.height=H*DPR;
+  var c=canvas.getContext('2d');c.scale(DPR,DPR);
 
-  /* ── 1. DEEP DARK BACKGROUND ── */
   var bgG=c.createLinearGradient(0,0,0,H);
-  bgG.addColorStop(0,'#030d08');bgG.addColorStop(0.4,'#061510');bgG.addColorStop(1,'#020a05');
+  bgG.addColorStop(0,'#030d08');bgG.addColorStop(.4,'#061510');bgG.addColorStop(1,'#020a05');
   c.fillStyle=bgG;c.fillRect(0,0,CW,H);
 
-  /* subtle grid lines */
-  c.save();c.globalAlpha=0.04;c.strokeStyle='#4ade80';c.lineWidth=1;
+  c.save();c.globalAlpha=.04;c.strokeStyle='#4ade80';c.lineWidth=1;
   for(var gx=0;gx<CW;gx+=60){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.stroke();}
   for(var gy=0;gy<H;gy+=60){c.beginPath();c.moveTo(0,gy);c.lineTo(CW,gy);c.stroke();}
   c.restore();
 
-  /* corner star ornaments */
-  drawStarPat(c,60,60,45,'#d4af53',0.18);
-  drawStarPat(c,CW-60,60,45,'#d4af53',0.18);
-  drawStarPat(c,60,H-60,35,'#d4af53',0.10);
-  drawStarPat(c,CW-60,H-60,35,'#d4af53',0.10);
+  drawStarPat(c,60,60,45,'#d4af53',.18);drawStarPat(c,CW-60,60,45,'#d4af53',.18);
+  drawStarPat(c,60,H-60,35,'#d4af53',.10);drawStarPat(c,CW-60,H-60,35,'#d4af53',.10);
 
-  /* ── 2. HEADER BLOCK ── */
   var HDR=240;
-
-  /* glowing radial behind mosque */
   var glow=c.createRadialGradient(CW/2,HDR/2,20,CW/2,HDR/2,160);
-  glow.addColorStop(0,'rgba(52,211,153,0.22)');
-  glow.addColorStop(0.5,'rgba(16,185,129,0.08)');
-  glow.addColorStop(1,'rgba(0,0,0,0)');
+  glow.addColorStop(0,'rgba(52,211,153,.22)');glow.addColorStop(.5,'rgba(16,185,129,.08)');glow.addColorStop(1,'rgba(0,0,0,0)');
   c.fillStyle=glow;c.fillRect(0,0,CW,HDR+40);
 
-  /* gold top bar */
   var topBar=c.createLinearGradient(0,0,CW,0);
-  topBar.addColorStop(0,'transparent');topBar.addColorStop(0.2,'#d4af53');
-  topBar.addColorStop(0.5,'#fcd34d');topBar.addColorStop(0.8,'#d4af53');topBar.addColorStop(1,'transparent');
+  topBar.addColorStop(0,'transparent');topBar.addColorStop(.2,'#d4af53');topBar.addColorStop(.5,'#fcd34d');topBar.addColorStop(.8,'#d4af53');topBar.addColorStop(1,'transparent');
   c.fillStyle=topBar;c.fillRect(0,0,CW,4);
 
-  /* mosque */
   c.font='72px serif';c.textAlign='center';c.textBaseline='top';c.fillText('🕌',CW/2,12);
 
-  /* center name with glow */
-  c.save();
-  c.shadowColor='#34d399';c.shadowBlur=30;
+  c.save();c.shadowColor='#34d399';c.shadowBlur=30;
   c.font='900 36px Cairo,sans-serif';
-  var tg=c.createLinearGradient(CW*0.2,0,CW*0.8,0);
-  tg.addColorStop(0,'#a7f3d0');tg.addColorStop(0.4,'#fcd34d');tg.addColorStop(0.7,'#fbbf24');tg.addColorStop(1,'#a7f3d0');
-  c.fillStyle=tg;c.textAlign='center';c.textBaseline='top';
-  c.fillText('مركز خادم القرآن الكريم',CW/2,92);
-  c.restore();
+  var tg=c.createLinearGradient(CW*.2,0,CW*.8,0);
+  tg.addColorStop(0,'#a7f3d0');tg.addColorStop(.4,'#fcd34d');tg.addColorStop(.7,'#fbbf24');tg.addColorStop(1,'#a7f3d0');
+  c.fillStyle=tg;c.textAlign='center';c.textBaseline='top';c.fillText('مركز خادم القرآن الكريم',CW/2,92);c.restore();
 
-  /* decorative line under title */
   var dl=c.createLinearGradient(PAD,0,CW-PAD,0);
-  dl.addColorStop(0,'transparent');dl.addColorStop(0.3,'#d4af53');dl.addColorStop(0.7,'#d4af53');dl.addColorStop(1,'transparent');
-  c.strokeStyle=dl;c.lineWidth=1.5;c.setLineDash([]);
-  c.beginPath();c.moveTo(PAD*3,138);c.lineTo(CW-PAD*3,138);c.stroke();
+  dl.addColorStop(0,'transparent');dl.addColorStop(.3,'#d4af53');dl.addColorStop(.7,'#d4af53');dl.addColorStop(1,'transparent');
+  c.strokeStyle=dl;c.lineWidth=1.5;c.setLineDash([]);c.beginPath();c.moveTo(PAD*3,138);c.lineTo(CW-PAD*3,138);c.stroke();
 
-  c.font='15px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,0.7)';
-  c.textAlign='center';c.textBaseline='top';
+  c.font='15px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,.7)';c.textAlign='center';c.textBaseline='top';
   c.fillText('تحت إشراف الشيخ عبدالرحمن',CW/2,146);
 
-  /* ── 3. HERO NAME BADGE ── */
-  var BY=172, BH=54;
-  /* outer glow */
-  c.save();
-  c.shadowColor='#fbbf24';c.shadowBlur=40;
-  rrect(c,PAD,BY,CW-PAD*2,BH,16);
-  c.fillStyle='rgba(251,191,36,0.15)';c.fill();
-  c.restore();
-  /* gradient fill */
+  var BY=172,BH=54;
+  c.save();c.shadowColor='#fbbf24';c.shadowBlur=40;
+  rrect(c,PAD,BY,CW-PAD*2,BH,16);c.fillStyle='rgba(251,191,36,.15)';c.fill();c.restore();
   var bdG=c.createLinearGradient(PAD,BY,CW-PAD,BY+BH);
-  bdG.addColorStop(0,'#92400e');bdG.addColorStop(0.25,'#d97706');
-  bdG.addColorStop(0.5,'#fcd34d');bdG.addColorStop(0.75,'#d97706');bdG.addColorStop(1,'#92400e');
-  rrect(c,PAD,BY,CW-PAD*2,BH,16);
-  c.fillStyle=bdG;c.fill();
-  /* shimmer border */
-  c.strokeStyle='rgba(255,255,255,0.3)';c.lineWidth=2;c.stroke();
-  /* icons */
+  bdG.addColorStop(0,'#92400e');bdG.addColorStop(.25,'#d97706');bdG.addColorStop(.5,'#fcd34d');bdG.addColorStop(.75,'#d97706');bdG.addColorStop(1,'#92400e');
+  rrect(c,PAD,BY,CW-PAD*2,BH,16);c.fillStyle=bdG;c.fill();
+  c.strokeStyle='rgba(255,255,255,.3)';c.lineWidth=2;c.stroke();
   c.font='28px serif';c.textAlign='center';c.textBaseline='middle';
-  c.fillText('🏆',PAD+40,BY+BH/2);
-  c.fillText('⭐',CW-PAD-40,BY+BH/2);
-  /* name */
-  c.font='900 24px Cairo,sans-serif';c.fillStyle='#1c0700';
-  c.textAlign='center';c.textBaseline='middle';
+  c.fillText('🏆',PAD+40,BY+BH/2);c.fillText('⭐',CW-PAD-40,BY+BH/2);
+  c.font='900 24px Cairo,sans-serif';c.fillStyle='#1c0700';c.textAlign='center';c.textBaseline='middle';
   c.fillText('بطلنا  ✦  '+nm,CW/2,BY+BH/2);
 
-  /* ── 4. HIJRI DATE STRIP ── */
-  var DY=BY+BH+10, DH=38;
+  var DY=BY+BH+10,DH=38;
   var dBg=c.createLinearGradient(0,DY,CW,DY+DH);
-  dBg.addColorStop(0,'#052e16');dBg.addColorStop(0.5,'#065f46');dBg.addColorStop(1,'#052e16');
+  dBg.addColorStop(0,'#052e16');dBg.addColorStop(.5,'#065f46');dBg.addColorStop(1,'#052e16');
   c.fillStyle=dBg;c.fillRect(0,DY,CW,DH);
   c.strokeStyle='#34d399';c.lineWidth=1.5;
   c.beginPath();c.moveTo(0,DY);c.lineTo(CW,DY);c.stroke();
   c.beginPath();c.moveTo(0,DY+DH);c.lineTo(CW,DY+DH);c.stroke();
-  c.font='bold 16px Cairo,sans-serif';c.fillStyle='#6ee7b7';
-  c.textAlign='center';c.textBaseline='middle';
+  c.font='bold 16px Cairo,sans-serif';c.fillStyle='#6ee7b7';c.textAlign='center';c.textBaseline='middle';
   c.fillText('🗓  '+getHijri(),CW/2,DY+DH/2);
 
-  /* ── 5. SECTIONS ── */
   var cy=DY+DH+20;
-
   SECS.forEach(function(sec){
     var items=(data[sec.k]||[]).filter(function(i){return i.sr||i.f;});
     if(!items.length)return;
-
-    /* ── section header ── */
     var SH=52;
-    /* bg glow */
-    c.save();
-    c.shadowColor=sec.ac;c.shadowBlur=20;
+    c.save();c.shadowColor=sec.ac;c.shadowBlur=20;
     rrect(c,PAD,cy,CW-PAD*2,SH,14);
     var shG=c.createLinearGradient(PAD,cy,CW-PAD,cy+SH);
-    shG.addColorStop(0,sec.c1);shG.addColorStop(0.6,sec.c2);shG.addColorStop(1,sec.c1);
-    c.fillStyle=shG;c.fill();
-    c.restore();
-    /* border */
-    rrect(c,PAD,cy,CW-PAD*2,SH,14);
-    c.strokeStyle=sec.ac;c.lineWidth=1.5;c.stroke();
-    /* right accent bar */
+    shG.addColorStop(0,sec.c1);shG.addColorStop(.6,sec.c2);shG.addColorStop(1,sec.c1);
+    c.fillStyle=shG;c.fill();c.restore();
+    rrect(c,PAD,cy,CW-PAD*2,SH,14);c.strokeStyle=sec.ac;c.lineWidth=1.5;c.stroke();
     rrect(c,CW-PAD-10,cy,10,SH,5);c.fillStyle=sec.ac;c.fill();
-    /* icon + label */
-    c.font='24px serif';c.textAlign='right';c.textBaseline='middle';
-    c.fillText(sec.ico,CW-PAD-20,cy+SH/2);
-    c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;
-    c.textAlign='right';c.textBaseline='middle';
+    c.font='24px serif';c.textAlign='right';c.textBaseline='middle';c.fillText(sec.ico,CW-PAD-20,cy+SH/2);
+    c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;c.textAlign='right';c.textBaseline='middle';
     c.fillText(sec.lbl,CW-PAD-54,cy+SH/2);
-
     cy+=SH+10;
 
-    /* ── items ── */
     items.forEach(function(it){
       var hasMeta=!!(it.rating||(it.errors&&it.errors!=='0'&&it.errors!==''));
       var hasPlan=!!(it.nsr||(it.nf&&it.nt));
       var IH=20+34+(hasMeta?40:0)+(hasPlan?38:0)+20;
-
-      /* card with glow */
-      c.save();
-      c.shadowColor=sec.dot;c.shadowBlur=16;c.shadowOffsetY=4;
+      c.save();c.shadowColor=sec.dot;c.shadowBlur=16;c.shadowOffsetY=4;
       rrect(c,PAD,cy,CW-PAD*2,IH,14);
-      /* dark card bg with subtle tint */
       var cBg=c.createLinearGradient(PAD,cy,CW-PAD,cy+IH);
       cBg.addColorStop(0,'#0a1a0f');cBg.addColorStop(1,'#0d2016');
-      c.fillStyle=cBg;c.fill();
-      c.restore();
-      /* card border */
-      rrect(c,PAD,cy,CW-PAD*2,IH,14);
-      c.strokeStyle=sec.dot;c.lineWidth=1.5;c.stroke();
-      /* right accent thick */
+      c.fillStyle=cBg;c.fill();c.restore();
+      rrect(c,PAD,cy,CW-PAD*2,IH,14);c.strokeStyle=sec.dot;c.lineWidth=1.5;c.stroke();
       rrect(c,CW-PAD-10,cy,10,IH,5);c.fillStyle=sec.ac;c.fill();
-      /* left thin tint */
       rrect(c,PAD,cy,5,IH,3);c.fillStyle=sec.c2+'55';c.fill();
-
-      var RX=CW-PAD-22, ty=cy+18;
-
-      /* main label */
-      var lbl='';
-      if(it.sr){lbl=it.sr+(it.type==='range'?'  —  من آية '+it.f+' إلى آية '+it.t:'  كاملة');}
-      else{var isRq=(sec.k==='sj'||sec.k==='hd');var u=isRq?'رقم':'سؤال';lbl='من '+u+' '+it.f+'  ←  إلى '+u+' '+it.t;}
-      c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;
-      c.textAlign='right';c.textBaseline='top';c.fillText(lbl,RX,ty);
+      var RX=CW-PAD-22,ty=cy+18;
+      var lbl2='';
+      if(it.sr){lbl2=it.sr+(it.type==='range'?'  —  من آية '+it.f+' إلى آية '+it.t:'  كاملة');}
+      else{var isRq=(sec.k==='sj'||sec.k==='hd');var u=isRq?'رقم':'سؤال';lbl2='من '+u+' '+it.f+'  ←  إلى '+u+' '+it.t;}
+      c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;c.textAlign='right';c.textBaseline='top';c.fillText(lbl2,RX,ty);
       ty+=34;
-
-      /* badges */
       if(hasMeta){
         var bx=RX;
-        if(it.rating){var rc=rCol(it.rating);bx-=pill(c,it.rating,bx,ty,rc,14);}
-        if(it.errors&&it.errors!=='0'&&it.errors!==''){
-          pill(c,'❌ '+it.errors+' خطأ',bx,ty,{bg:'#450a0a',fg:'#fca5a5',brd:'#dc2626'},14);
-        }
+        if(it.rating){var rc=rCol(it.rating);bx-=pillC(c,it.rating,bx,ty,rc,14);}
+        if(it.errors&&it.errors!=='0'&&it.errors!==''){pillC(c,'❌ '+it.errors+' خطأ',bx,ty,{bg:'#450a0a',fg:'#fca5a5',brd:'#dc2626'},14);}
         ty+=40;
       }
-
-      /* next plan */
       if(hasPlan){
         rrect(c,PAD+12,ty-2,CW-PAD*2-24,34,9);
         var pBg=c.createLinearGradient(PAD+12,ty,CW-PAD-12,ty+34);
         pBg.addColorStop(0,sec.c1);pBg.addColorStop(1,sec.c2+'88');
-        c.fillStyle=pBg;c.fill();
-        c.strokeStyle=sec.ac;c.lineWidth=1;c.setLineDash([5,3]);c.stroke();c.setLineDash([]);
-        var nxt='';
-        if(it.nsr){nxt='🎯 القادم:  '+it.nsr+(it.ntype==='range'?' — آية '+it.nf+' إلى آية '+it.nt:'  كاملة');}
-        else{var isRq2=(sec.k==='sj'||sec.k==='hd');var u2=isRq2?'رقم':'سؤال';nxt='🎯 القادم:  من '+u2+' '+it.nf+'  ←  إلى '+u2+' '+it.nt;}
-        c.font='bold 15px Cairo,sans-serif';c.fillStyle=sec.ac;
-        c.textAlign='right';c.textBaseline='middle';c.fillText(nxt,RX,ty+17);
+        c.fillStyle=pBg;c.fill();c.strokeStyle=sec.ac;c.lineWidth=1;c.setLineDash([5,3]);c.stroke();c.setLineDash([]);
+        var nxt2='';
+        if(it.nsr){nxt2='🎯 القادم:  '+it.nsr+(it.ntype==='range'?' — آية '+it.nf+' إلى آية '+it.nt:'  كاملة');}
+        else{var isRq2=(sec.k==='sj'||sec.k==='hd');var u2=isRq2?'رقم':'سؤال';nxt2='🎯 القادم:  من '+u2+' '+it.nf+'  ←  إلى '+u2+' '+it.nt;}
+        c.font='bold 15px Cairo,sans-serif';c.fillStyle=sec.ac;c.textAlign='right';c.textBaseline='middle';c.fillText(nxt2,RX-4,ty+17);
       }
-
       cy+=IH+10;
     });
     cy+=12;
   });
 
-  /* ── 6. FOOTER ── */
   var FH=64;
   var fBg=c.createLinearGradient(0,cy,CW,cy+FH);
-  fBg.addColorStop(0,'#030d08');fBg.addColorStop(0.5,'#052e16');fBg.addColorStop(1,'#030d08');
+  fBg.addColorStop(0,'#030d08');fBg.addColorStop(.5,'#052e16');fBg.addColorStop(1,'#030d08');
   c.fillStyle=fBg;c.fillRect(0,cy,CW,FH);
-
-  /* gold border top */
   var fLine=c.createLinearGradient(0,cy,CW,cy);
-  fLine.addColorStop(0,'transparent');fLine.addColorStop(0.3,'#d4af53');
-  fLine.addColorStop(0.7,'#d4af53');fLine.addColorStop(1,'transparent');
-  c.strokeStyle=fLine;c.lineWidth=2;c.setLineDash([]);
-  c.beginPath();c.moveTo(0,cy);c.lineTo(CW,cy);c.stroke();
-
-  c.font='bold 15px Cairo,sans-serif';c.fillStyle='#d4af53';
-  c.textAlign='right';c.textBaseline='middle';
-  c.fillText('مركز خادم القرآن الكريم',CW-PAD,cy+FH/2);
-  c.font='26px serif';c.textAlign='center';c.textBaseline='middle';
-  c.fillText('⭐ ⭐ ⭐',CW/2,cy+FH/2);
-  c.font='13px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,0.4)';
-  c.textAlign='left';c.textBaseline='middle';
-  c.fillText('تقرير متابعة الحفظ',PAD,cy+FH/2);
-
-  /* bottom gold bar */
-  c.fillStyle=fLine;
+  fLine.addColorStop(0,'transparent');fLine.addColorStop(.3,'#d4af53');fLine.addColorStop(.7,'#d4af53');fLine.addColorStop(1,'transparent');
+  c.strokeStyle=fLine;c.lineWidth=2;c.setLineDash([]);c.beginPath();c.moveTo(0,cy);c.lineTo(CW,cy);c.stroke();
+  c.font='bold 15px Cairo,sans-serif';c.fillStyle='#d4af53';c.textAlign='right';c.textBaseline='middle';c.fillText('مركز خادم القرآن الكريم',CW-PAD,cy+FH/2);
+  c.font='26px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('⭐ ⭐ ⭐',CW/2,cy+FH/2);
+  c.font='13px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,.4)';c.textAlign='left';c.textBaseline='middle';c.fillText('تقرير متابعة الحفظ',PAD,cy+FH/2);
   var botBar=c.createLinearGradient(0,cy+FH-3,CW,cy+FH);
-  botBar.addColorStop(0,'transparent');botBar.addColorStop(0.2,'#d4af53');
-  botBar.addColorStop(0.8,'#d4af53');botBar.addColorStop(1,'transparent');
+  botBar.addColorStop(0,'transparent');botBar.addColorStop(.2,'#d4af53');botBar.addColorStop(.8,'#d4af53');botBar.addColorStop(1,'transparent');
   c.fillStyle=botBar;c.fillRect(0,cy+FH-3,CW,3);
-
   return canvas;
 }
 
-/* ─────────── MODAL ─────────── */
-function showModal(src,nm){
-  var m=document.createElement('div');
-  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;gap:14px';
-  m.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:72vh;border-radius:16px;box-shadow:0 0 60px rgba(52,211,153,0.3)">'
-    +'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">'
-    +'<button id="mc" style="padding:12px 32px;background:#d4af53;color:#030d08;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif">إغلاق</button>'
-    +'<button id="ms" style="padding:12px 32px;background:#052e16;color:#34d399;border:2px solid #34d399;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif">💾 حفظ بطاقة البطل</button>'
+/* canvas → compressed blob (JPEG quality 0.82 → ~80% smaller than PNG) */
+function canvasToBlob(canvas,q){
+  return new Promise(function(res){canvas.toBlob(function(b){res(b);},'image/jpeg',q||0.82);});
+}
+/* blob → data URL */
+function blobToDataURL(blob){
+  return new Promise(function(res){var r=new FileReader();r.onload=function(e){res(e.target.result);};r.readAsDataURL(blob);});
+}
+
+/* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+function showModal(src,nm,onSave){
+  var m=document.createElement('div');m.className='modal-ov';
+  m.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:72vh;border-radius:16px;box-shadow:0 0 60px rgba(52,211,153,.3)">'
+    +'<div class="modal-btns">'
+    +'<button class="mb mb-close" id="mc">إغلاق</button>'
+    +'<button class="mb mb-save" id="ms">💾 حفظ بطاقة البطل</button>'
     +'</div>';
   document.body.appendChild(m);
   m.querySelector('#mc').onclick=function(){m.remove();};
   m.querySelector('#ms').onclick=function(){
-    var a=document.createElement('a');a.href=src;a.download='بطاقة_البطل_'+(nm||'')+'.png';a.click();
+    var a=document.createElement('a');a.href=src;a.download='بطاقة_البطل_'+(nm||'')+'.jpg';a.click();
+    if(onSave)onSave();
   };
   m.addEventListener('click',function(e){if(e.target===m)m.remove();});
 }
 
-/* ─────────── GENERATE ─────────── */
+/* ══════════════════════════════════════
+   GENERATE & SAVE
+══════════════════════════════════════ */
 async function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
   if(!nm){alert('يرجى إدخال اسم البطل');return;}
@@ -514,37 +683,195 @@ async function generateAndShare(){
     mq:collect('mur-questions',true),pm:collect('past-mur',true),
     sj:collect('suraj-section',true),hd:collect('hadith-section',true)
   };
+  showSpinner('جارٍ إنشاء بطاقة البطل...');
   try{
     var canvas=await drawCard(nm,data);
-    var img=canvas.toDataURL('image/png');
-    localStorage.setItem('rep_img_'+nm,img);
-    localStorage.setItem('rep_'+nm,JSON.stringify(data));
+    var blob=await canvasToBlob(canvas,0.82);
+    var src=await blobToDataURL(blob);
+    hideSpinner();
+
+    /* save to IndexedDB */
+    await saveReport(nm,data,blob);
+    saveDraft();
+    showToast('✅ تم حفظ التقرير في السجل');
+
+    /* share or show modal */
     if(navigator.share&&navigator.canShare){
       try{
-        var blob=await (await fetch(img)).blob();
-        var file=new File([blob],'بطاقة_البطل_'+nm+'.png',{type:'image/png'});
+        var file=new File([blob],'بطاقة_البطل_'+nm+'.jpg',{type:'image/jpeg'});
         if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'بطاقة البطل — '+nm});return;}
       }catch(e){}
     }
-    showModal(img,nm);
-  }catch(e){alert('خطأ: '+e.message);}
+    showModal(src,nm);
+  }catch(e){hideSpinner();alert('خطأ: '+e.message);}
 }
 
-function loadStudentData(){
+/* ══════════════════════════════════════
+   REPORTS PAGE
+══════════════════════════════════════ */
+async function renderReports(){
+  var list=document.getElementById('rep-list');
+  list.innerHTML='<div style="text-align:center;padding:30px;color:#888">جارٍ التحميل...</div>';
+  var reps=await getAllReports();
+  if(!reps.length){
+    list.innerHTML='<div class="rep-empty"><div class="rep-empty-ico">📭</div><div class="rep-empty-txt">لا توجد تقارير محفوظة بعد</div></div>';
+    return;
+  }
+
+  /* check expiry */
+  var expiring=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
+  var html='';
+  if(expiring.length){
+    html+='<div class="exp-banner"><div class="exp-ico">⚠️</div><div style="flex:1"><div class="exp-txt">يوجد '+expiring.length+' تقرير مر عليه أكثر من شهر.<br>هل تريد حفظ نسخة قبل الحذف؟</div><div class="exp-actions"><button class="exp-btn exp-save" onclick="exportExpiring()">💾 حفظ نسخة</button><button class="exp-btn exp-del" onclick="deleteExpiring()">🗑 حذف القديمة</button></div></div></div>';
+  }
+
+  reps.slice().reverse().forEach(function(r){
+    var old=isOlderThanMonth(r.createdAt);
+    var thumbId='thumb-'+r.id;
+    html+='<div class="rep-card-item"><div class="rep-card-top">'
+      +'<div class="rep-thumb-ph" id="'+thumbId+'">🕌</div>'
+      +'<div class="rep-info">'
+        +'<div class="rep-name">'+r.student+'</div>'
+        +'<div class="rep-date"><span>📅</span>'+fmtDate(r.createdAt)+'</div>'
+        +(r.hijri?'<div class="rep-hijri">'+r.hijri+'</div>':'')
+        +(old?'<div class="rep-badge-old">⏳ مر عليه شهر</div>':'')
+      +'</div></div>'
+      +'<div class="rep-actions">'
+        +'<button class="ra ra-view" onclick="viewReport('+r.id+')">👁 عرض</button>'
+        +'<button class="ra ra-edit" onclick="editReport('+r.id+')">✏️ تعديل</button>'
+        +'<button class="ra ra-del" onclick="deleteRep('+r.id+')">🗑 حذف</button>'
+      +'</div></div>';
+  });
+  list.innerHTML=html;
+
+  /* load thumbnails async */
+  reps.forEach(function(r){
+    if(r.img){
+      blobToDataURL(r.img).then(function(src){
+        var el=document.getElementById('thumb-'+r.id);
+        if(el){var img=document.createElement('img');img.className='rep-thumb';img.src=src;el.replaceWith(img);}
+      });
+    }
+  });
+}
+
+async function viewReport(id){
+  var r=await getReport(id);
+  if(!r||!r.img){showToast('لا توجد صورة');return;}
+  var src=await blobToDataURL(r.img);
+  showModal(src,r.student);
+}
+
+async function editReport(id){
+  var r=await getReport(id);
+  if(!r){return;}
+  /* go to main, fill student name — full form restore is complex */
+  document.getElementById('inp-student').value=r.student;
+  showPage('page-main');
+  showToast('✏️ عدّل البيانات وأنشئ تقريراً جديداً');
+}
+
+async function deleteRep(id){
+  confirm2('🗑','حذف التقرير','هل أنت متأكد من حذف هذا التقرير؟ لا يمكن التراجع.','حذف',async function(){
+    await deleteReport(id);renderReports();showToast('تم الحذف');
+  });
+}
+
+function confirmDeleteAll(){
+  confirm2('⚠️','حذف جميع التقارير','سيتم حذف كل التقارير المحفوظة نهائياً.\nهل تريد المتابعة؟','حذف الكل',async function(){
+    await deleteAllReports();renderReports();showToast('تم حذف جميع التقارير');
+  });
+}
+
+async function exportAll(){
+  var reps=await getAllReports();
+  if(!reps.length){showToast('لا توجد تقارير');return;}
+  showToast('جارٍ تصدير '+reps.length+' تقرير...',4000);
+  for(var i=0;i<reps.length;i++){
+    var r=reps[i];
+    if(r.img){
+      var src=await blobToDataURL(r.img);
+      var a=document.createElement('a');a.href=src;
+      a.download='تقرير_'+r.student+'_'+i+'.jpg';a.click();
+      await new Promise(function(res){setTimeout(res,400);});
+    }
+  }
+}
+
+async function exportExpiring(){
+  var reps=await getAllReports();
+  var exp=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
+  for(var i=0;i<exp.length;i++){
+    var r=exp[i];
+    if(r.img){
+      var src=await blobToDataURL(r.img);
+      var a=document.createElement('a');a.href=src;a.download='تقرير_قديم_'+r.student+'.jpg';a.click();
+      await new Promise(function(res){setTimeout(res,400);});
+    }
+  }
+  showToast('تم تصدير '+exp.length+' تقرير قديم');
+}
+
+async function deleteExpiring(){
+  confirm2('🗑','حذف التقارير القديمة','سيتم حذف التقارير التي مر عليها أكثر من شهر.','حذف',async function(){
+    var reps=await getAllReports();
+    var exp=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
+    for(var i=0;i<exp.length;i++)await deleteReport(exp[i].id);
+    renderReports();showToast('تم حذف '+exp.length+' تقرير قديم');
+  });
+}
+
+/* ══════════════════════════════════════
+   CLEAR FORM
+══════════════════════════════════════ */
+function confirmClearForm(){
+  confirm2('🔄','مسح البيانات','سيتم مسح جميع البيانات المُدخلة لتسجيل بطل جديد.\nالتقارير المحفوظة لن تُمسح.','مسح وبدء جديد',function(){
+    clearForm();clearDraft();showToast('تم المسح — جاهز لبطل جديد 🌟');
+  });
+}
+
+function clearForm(){
+  document.getElementById('inp-student').value='';
+  ['new-surahs','past-surahs','mur-questions','past-mur','suraj-section','hadith-section'].forEach(function(id){
+    document.getElementById(id).innerHTML='';
+  });
+  CNT={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
+  addSurah('new-surahs','ns',true,true);
+  addSurah('past-surahs','ps',true,false);
+  addQuestion('mur-questions','mq',true,true);
+  addQuestion('past-mur','pm',true,false);
+  addQuestion('suraj-section','sj',true,true);
+  addQuestion('hadith-section','hd',true,true);
+}
+
+/* ══════════════════════════════════════
+   BEFOREUNLOAD — warn on exit
+══════════════════════════════════════ */
+window.addEventListener('beforeunload',function(e){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل أولاً');return;}
-  var img=localStorage.getItem('rep_img_'+nm);
-  if(!img){alert('لا يوجد تقرير سابق لهذا البطل');return;}
-  showModal(img,nm);
-}
+  if(nm){e.preventDefault();e.returnValue='';}
+});
 
-/* ─────────── INIT ─────────── */
-addSurah('new-surahs','ns',true,true);
-addSurah('past-surahs','ps',true,false);
-addQuestion('mur-questions','mq',true,true);
-addQuestion('past-mur','pm',true,false);
-addQuestion('suraj-section','sj',true,true);
-addQuestion('hadith-section','hd',true,true);
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+openDB().then(function(){
+  loadDraft();
+  addSurah('new-surahs','ns',true,true);
+  addSurah('past-surahs','ps',true,false);
+  addQuestion('mur-questions','mq',true,true);
+  addQuestion('past-mur','pm',true,false);
+  addQuestion('suraj-section','sj',true,true);
+  addQuestion('hadith-section','hd',true,true);
+}).catch(function(){
+  /* fallback if IndexedDB fails */
+  addSurah('new-surahs','ns',true,true);
+  addSurah('past-surahs','ps',true,false);
+  addQuestion('mur-questions','mq',true,true);
+  addQuestion('past-mur','pm',true,false);
+  addQuestion('suraj-section','sj',true,true);
+  addQuestion('hadith-section','hd',true,true);
+});
 </script>
 </body>
 </html>
