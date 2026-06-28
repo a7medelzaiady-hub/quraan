@@ -435,31 +435,59 @@ function showImageModal(imgSrc, nm) {
   };
 }
 
-async function generateAndShare(){
-  var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل');return;}
-  var data={
-    ns:collectData('new-surahs',false), ps:collectData('past-surahs',false),
-    mq:collectData('mur-questions',true), pm:collectData('past-mur',true),
-    sj:collectData('suraj-section',true), hd:collectData('hadith-section',true)
-  };
+// أضف هذه الدالة في قسم الـ Script
+async function shareFile(dataUrl, fileName) {
   try {
+    // 1. تحويل DataURL إلى Blob
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
+    
+    // 2. إنشاء ملف من الـ Blob
+    const file = new File([blob], fileName, { type: 'image/jpeg' });
+
+    // 3. التحقق مما إذا كان الجهاز يدعم المشاركة
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: 'تقرير متابعة الحفظ',
+        text: 'إليك تقرير حفظ القرآن الكريم'
+      });
+    } else {
+      // في حال عدم دعم المشاركة المباشرة (مثل بعض أجهزة الكمبيوتر)، نفتح الصورة للتحميل
+      showImageModal(dataUrl, 'تقرير');
+    }
+  } catch (err) {
+    console.error('فشل في المشاركة:', err);
+    showImageModal(dataUrl, 'تقرير'); // عرض الصورة في حال فشل الشير
+  }
+}
+
+// تعديل دالة generateAndShare لتقوم بالمشاركة مباشرة
+async function generateAndShare() {
+  var nm = document.getElementById('inp-student').value.trim();
+  if (!nm) { alert('يرجى إدخال اسم البطل'); return; }
+  
+  var data = {
+    ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
+    mq: collectData('mur-questions', true), pm: collectData('past-mur', true),
+    sj: collectData('suraj-section', true), hd: collectData('hadith-section', true)
+  };
+
+  try {
+    // رسم التقرير
     var canvas = await drawReport(nm, data);
     
-    // التعديل هنا: استخدام صيغة JPEG مع ضغط لتقليل الحجم جداً وتجنب امتلاء الذاكرة
-    var imgData = canvas.toDataURL('image/jpeg', 0.6); 
+    // تحويل الكانفاس لصورة
+    var imgData = canvas.toDataURL('image/jpeg', 0.7); 
     
-    try {
-      localStorage.setItem('rep_img_'+nm, imgData);
-      localStorage.setItem('rep_'+nm, JSON.stringify(data));
-    } catch(storageError) {
-      // إذا امتلأت الذاكرة تماماً، سنتجاهل الخطأ ونعرض الصورة للمشاركة على أي حال
-      console.warn("الذاكرة المحلية ممتلئة، يتم عرض التقرير دون حفظ نسخة احتياطية.");
-    }
+    // استدعاء دالة المشاركة فوراً بدلاً من الـ Modal
+    await shareFile(imgData, 'report_' + nm + '.jpg');
     
-    showImageModal(imgData, nm);
-  } catch(e){alert('خطأ: '+e.message);}
+  } catch (e) {
+    alert('حدث خطأ أثناء الإنشاء: ' + e.message);
+  }
 }
+
 
 // تهيئة مبدئية للصفوف
 addSurah('new-surahs','ns',true,true);
