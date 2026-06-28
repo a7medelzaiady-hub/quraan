@@ -19,12 +19,30 @@ html,body{direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);m
 .page{display:none;min-height:100vh}
 .page.active{display:block}
 
-/* ── HEADER ── */
-.hdr{background:linear-gradient(160deg,var(--gd),var(--gm));padding:16px 16px 18px;text-align:center;position:relative}
+/* ── HEADER (تعديل التنسيق لمنع التداخل) ── */
+.hdr {
+  background: linear-gradient(160deg, var(--gd), var(--gm));
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hdr-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.hdr-actions {
+  display: flex;
+  gap: 8px;
+}
+.hdr-center {
+  text-align: center;
+}
 .hdr-emblem{width:50px;height:50px;margin:0 auto 8px;background:rgba(212,175,83,.15);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
 .hdr-title{color:#fff;font-family:'Amiri',serif;font-size:20px;font-weight:700}
 .hdr-sub{color:var(--goldl);font-size:12px;font-weight:600;margin-top:4px}
-.hdr-actions{position:absolute;top:14px;left:14px;display:flex;gap:8px}
 .hdr-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .hdr-btn.gold{background:rgba(212,175,83,.25);border-color:var(--gold);color:var(--goldl)}
 .hdr-btn.danger{background:rgba(220,38,38,.2);border-color:#fca5a5;color:#fca5a5}
@@ -61,7 +79,6 @@ select.inp{padding-left:28px;cursor:pointer}
 .bot-sec{padding:13px 16px;background:#fff;border:2px solid var(--gm);color:var(--gm);border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:5px;white-space:nowrap}
 
 /* ── REPORTS PAGE ── */
-#page-reports .hdr{text-align:right;padding-right:16px}
 .rep-list{padding:14px 14px 100px}
 .rep-card-item{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;border:1px solid var(--border)}
 .rep-card-top{display:flex;gap:10px;padding:12px}
@@ -104,7 +121,7 @@ select.inp{padding-left:28px;cursor:pointer}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9997;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 
-/* ── CONFIRM DIALOG ── */
+/* ── CONFIRM & ALERT DIALOG ── */
 .conf-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9996;display:flex;align-items:center;justify-content:center;padding:20px}
 .conf-box{background:#fff;border-radius:18px;padding:24px;max-width:340px;width:100%;text-align:center}
 .conf-ico{font-size:40px;margin-bottom:10px}
@@ -113,6 +130,7 @@ select.inp{padding-left:28px;cursor:pointer}
 .conf-btns{display:flex;gap:10px}
 .conf-ok{flex:1;padding:11px;border:none;border-radius:10px;background:#dc2626;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
 .conf-cancel{flex:1;padding:11px;border:2px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.btn-alert-ok{background:var(--gm);color:var(--goldl);}
 
 /* ── EXPIRY ALERT ── */
 .exp-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1.5px solid #f59e0b;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
@@ -126,16 +144,19 @@ select.inp{padding-left:28px;cursor:pointer}
 </head>
 <body>
 
-<!-- ═══ PAGE: MAIN FORM ═══ -->
 <div id="page-main" class="page active">
   <div class="hdr">
-    <div class="hdr-actions">
-      <button class="hdr-btn gold" onclick="goReports()"><i class="ti ti-report"></i> سجل التقارير</button>
-      <button class="hdr-btn danger" onclick="confirmClearForm()"><i class="ti ti-trash"></i> مسح</button>
+    <div class="hdr-top">
+      <div class="hdr-actions">
+        <button class="hdr-btn gold" onclick="goReports()"><i class="ti ti-report"></i> سجل التقارير</button>
+        <button class="hdr-btn danger" onclick="confirmClearForm()"><i class="ti ti-trash"></i> مسح</button>
+      </div>
+      <div></div> </div>
+    <div class="hdr-center">
+      <div class="hdr-emblem">🕌</div>
+      <div class="hdr-title">مركز خادم القرآن الكريم</div>
+      <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
     </div>
-    <div class="hdr-emblem">🕌</div>
-    <div class="hdr-title">مركز خادم القرآن الكريم</div>
-    <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
   </div>
 
   <div class="body">
@@ -171,15 +192,18 @@ select.inp{padding-left:28px;cursor:pointer}
   </div>
 </div>
 
-<!-- ═══ PAGE: REPORTS ═══ -->
 <div id="page-reports" class="page">
-  <div class="hdr">
-    <div class="hdr-actions">
-      <button class="hdr-btn" onclick="goMain()"><i class="ti ti-arrow-right"></i> رجوع</button>
+  <div class="hdr" style="padding-bottom: 24px;">
+    <div class="hdr-top">
+      <div class="hdr-actions">
+        <button class="hdr-btn" onclick="goMain()"><i class="ti ti-arrow-right"></i> رجوع</button>
+      </div>
     </div>
-    <div class="hdr-emblem">📋</div>
-    <div class="hdr-title">سجل التقارير</div>
-    <div class="hdr-sub">جميع بطاقات الأبطال</div>
+    <div class="hdr-center">
+      <div class="hdr-emblem">📋</div>
+      <div class="hdr-title">سجل التقارير</div>
+      <div class="hdr-sub">جميع بطاقات الأبطال</div>
+    </div>
   </div>
   <div class="top-nav">
     <button class="tn danger" onclick="confirmDeleteAll()"><i class="ti ti-trash"></i> حذف الكل</button>
@@ -192,6 +216,17 @@ select.inp{padding-left:28px;cursor:pointer}
 </div>
 
 <script>
+/* ══════════════════════════════════════
+   CUSTOM ALERT (بديل رسائل المتصفح)
+══════════════════════════════════════ */
+function customAlert(msg) {
+  var ov = document.createElement('div');
+  ov.className = 'conf-ov';
+  ov.innerHTML = '<div class="conf-box"><div class="conf-ico">⚠️</div><div class="conf-title">تنبيه</div><div class="conf-msg">'+msg+'</div><div class="conf-btns"><button class="conf-ok btn-alert-ok" id="ca-btn">حسناً</button></div></div>';
+  document.body.appendChild(ov);
+  ov.querySelector('#ca-btn').onclick = function(){ ov.remove(); };
+}
+
 /* ══════════════════════════════════════
    DATABASE — IndexedDB (no quota issues)
 ══════════════════════════════════════ */
@@ -284,18 +319,14 @@ function collectAll(){
   };
 }
 
-/* auto-save draft every 10s */
 setInterval(saveDraft,10000);
 
 /* ══════════════════════════════════════
-   SURAH LIST
+   SURAH LIST & BUILDERS
 ══════════════════════════════════════ */
 var SP=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var CNT={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
-/* ══════════════════════════════════════
-   FORM BUILDERS
-══════════════════════════════════════ */
 function extraSurah(nxt,lbl,pfx,idx){
   var n='';
   if(nxt){var nId=pfx+'n'+idx;
@@ -392,12 +423,7 @@ function collect(con,isQ){
   });
   return res;
 }
-
-function restoreForm(fd){
-  if(!fd)return;
-  if(fd.student)document.getElementById('inp-student').value=fd.student;
-  /* we just show a note — full restore is complex, skip for brevity */
-}
+function restoreForm(fd){}
 
 /* ══════════════════════════════════════
    NAVIGATION
@@ -445,210 +471,122 @@ function confirm2(ico,title,msg,okTxt,cb,okClass){
   ov.querySelector('#cc').onclick=function(){ov.remove();};
 }
 
+
 /* ══════════════════════════════════════
-   CANVAS CARD RENDERER
+   CANVAS CARD RENDERER (التعديل للرسم على الصورة المرفوعة)
 ══════════════════════════════════════ */
-var CW=900,PAD=32,DPR=2;
-
-function rrect(c,x,y,w,h,r){
-  r=Math.min(r,w/2,h/2);
-  c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
-  c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);
-  c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);
-  c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);c.closePath();
-}
-
-function rCol(r){
-  if(!r)return null;
-  if(r.includes('ممتاز'))return{bg:'#052e16',fg:'#4ade80',brd:'#16a34a'};
-  if(r.includes('جيد جداً'))return{bg:'#1e3a5f',fg:'#60a5fa',brd:'#2563eb'};
-  if(r.includes('جيد'))return{bg:'#451a03',fg:'#fbbf24',brd:'#d97706'};
-  return{bg:'#450a0a',fg:'#f87171',brd:'#dc2626'};
-}
-
-var SECS=[
-  {k:'ns',lbl:'السور الجديدة',   ico:'📖',c1:'#0d4f35',c2:'#1a7a52',ac:'#34d399',fg:'#d1fae5',dot:'#6ee7b7'},
-  {k:'ps',lbl:'ماضي السور',      ico:'📚',c1:'#1e3a5f',c2:'#2563eb',ac:'#60a5fa',fg:'#dbeafe',dot:'#93c5fd'},
-  {k:'mq',lbl:'المذكرة الجديدة',ico:'✏️',c1:'#78350f',c2:'#d97706',ac:'#fbbf24',fg:'#fef3c7',dot:'#fde68a'},
-  {k:'pm',lbl:'ماضي المذكرة',   ico:'📋',c1:'#4c1d95',c2:'#7c3aed',ac:'#a78bfa',fg:'#ede9fe',dot:'#c4b5fd'},
-  {k:'sj',lbl:'السراج',          ico:'💡',c1:'#7c2d12',c2:'#ea580c',ac:'#fb923c',fg:'#ffedd5',dot:'#fed7aa'},
-  {k:'hd',lbl:'الحديث والأذكار', ico:'📿',c1:'#134e4a',c2:'#0d9488',ac:'#2dd4bf',fg:'#ccfbf1',dot:'#99f6e4'},
-];
-
-function estH(data){
-  var h=300;
-  SECS.forEach(function(s){
-    var items=(data[s.k]||[]).filter(function(i){return i.sr||i.f;});
-    if(!items.length)return;
-    h+=62;
-    items.forEach(function(it){
-      var extra=0;
-      if(it.rating||(it.errors&&it.errors!=='0'&&it.errors!==''))extra+=40;
-      if(it.nsr||(it.nf&&it.nt))extra+=38;
-      h+=24+32+extra+20;
-    });
-    h+=16;
-  });
-  return Math.max(h+80,500);
-}
-
-function drawStarPat(c,cx,cy,r,col,al){
-  c.save();c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=1;
-  var pts=[];for(var i=0;i<8;i++){var a=i*Math.PI/4;pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}
-  c.beginPath();for(var j=0;j<8;j++){c.moveTo(cx,cy);c.lineTo(pts[j][0],pts[j][1]);}c.stroke();
-  c.beginPath();c.arc(cx,cy,r*.4,0,Math.PI*2);c.stroke();c.restore();
-}
-
-function pillC(c,txt,rx,ry,col,fs){
-  c.font='bold '+fs+'px Cairo,sans-serif';
-  var tw=c.measureText(txt).width,ph=fs+14,pw=tw+24;
-  rrect(c,rx-pw,ry,pw,ph,ph/2);
-  c.fillStyle=col.bg;c.fill();c.strokeStyle=col.brd;c.lineWidth=1.5;c.stroke();
-  c.fillStyle=col.fg;c.textAlign='right';c.textBaseline='middle';c.fillText(txt,rx-12,ry+ph/2);
-  return pw+10;
-}
-
-async function drawCard(nm,data){
-  var H=estH(data);
-  var canvas=document.createElement('canvas');
-  canvas.width=CW*DPR;canvas.height=H*DPR;
-  var c=canvas.getContext('2d');c.scale(DPR,DPR);
-
-  var bgG=c.createLinearGradient(0,0,0,H);
-  bgG.addColorStop(0,'#030d08');bgG.addColorStop(.4,'#061510');bgG.addColorStop(1,'#020a05');
-  c.fillStyle=bgG;c.fillRect(0,0,CW,H);
-
-  c.save();c.globalAlpha=.04;c.strokeStyle='#4ade80';c.lineWidth=1;
-  for(var gx=0;gx<CW;gx+=60){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.stroke();}
-  for(var gy=0;gy<H;gy+=60){c.beginPath();c.moveTo(0,gy);c.lineTo(CW,gy);c.stroke();}
-  c.restore();
-
-  drawStarPat(c,60,60,45,'#d4af53',.18);drawStarPat(c,CW-60,60,45,'#d4af53',.18);
-  drawStarPat(c,60,H-60,35,'#d4af53',.10);drawStarPat(c,CW-60,H-60,35,'#d4af53',.10);
-
-  var HDR=240;
-  var glow=c.createRadialGradient(CW/2,HDR/2,20,CW/2,HDR/2,160);
-  glow.addColorStop(0,'rgba(52,211,153,.22)');glow.addColorStop(.5,'rgba(16,185,129,.08)');glow.addColorStop(1,'rgba(0,0,0,0)');
-  c.fillStyle=glow;c.fillRect(0,0,CW,HDR+40);
-
-  var topBar=c.createLinearGradient(0,0,CW,0);
-  topBar.addColorStop(0,'transparent');topBar.addColorStop(.2,'#d4af53');topBar.addColorStop(.5,'#fcd34d');topBar.addColorStop(.8,'#d4af53');topBar.addColorStop(1,'transparent');
-  c.fillStyle=topBar;c.fillRect(0,0,CW,4);
-
-  c.font='72px serif';c.textAlign='center';c.textBaseline='top';c.fillText('🕌',CW/2,12);
-
-  c.save();c.shadowColor='#34d399';c.shadowBlur=30;
-  c.font='900 36px Cairo,sans-serif';
-  var tg=c.createLinearGradient(CW*.2,0,CW*.8,0);
-  tg.addColorStop(0,'#a7f3d0');tg.addColorStop(.4,'#fcd34d');tg.addColorStop(.7,'#fbbf24');tg.addColorStop(1,'#a7f3d0');
-  c.fillStyle=tg;c.textAlign='center';c.textBaseline='top';c.fillText('مركز خادم القرآن الكريم',CW/2,92);c.restore();
-
-  var dl=c.createLinearGradient(PAD,0,CW-PAD,0);
-  dl.addColorStop(0,'transparent');dl.addColorStop(.3,'#d4af53');dl.addColorStop(.7,'#d4af53');dl.addColorStop(1,'transparent');
-  c.strokeStyle=dl;c.lineWidth=1.5;c.setLineDash([]);c.beginPath();c.moveTo(PAD*3,138);c.lineTo(CW-PAD*3,138);c.stroke();
-
-  c.font='15px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,.7)';c.textAlign='center';c.textBaseline='top';
-  c.fillText('تحت إشراف الشيخ عبدالرحمن',CW/2,146);
-
-  var BY=172,BH=54;
-  c.save();c.shadowColor='#fbbf24';c.shadowBlur=40;
-  rrect(c,PAD,BY,CW-PAD*2,BH,16);c.fillStyle='rgba(251,191,36,.15)';c.fill();c.restore();
-  var bdG=c.createLinearGradient(PAD,BY,CW-PAD,BY+BH);
-  bdG.addColorStop(0,'#92400e');bdG.addColorStop(.25,'#d97706');bdG.addColorStop(.5,'#fcd34d');bdG.addColorStop(.75,'#d97706');bdG.addColorStop(1,'#92400e');
-  rrect(c,PAD,BY,CW-PAD*2,BH,16);c.fillStyle=bdG;c.fill();
-  c.strokeStyle='rgba(255,255,255,.3)';c.lineWidth=2;c.stroke();
-  c.font='28px serif';c.textAlign='center';c.textBaseline='middle';
-  c.fillText('🏆',PAD+40,BY+BH/2);c.fillText('⭐',CW-PAD-40,BY+BH/2);
-  c.font='900 24px Cairo,sans-serif';c.fillStyle='#1c0700';c.textAlign='center';c.textBaseline='middle';
-  c.fillText('بطلنا  ✦  '+nm,CW/2,BY+BH/2);
-
-  var DY=BY+BH+10,DH=38;
-  var dBg=c.createLinearGradient(0,DY,CW,DY+DH);
-  dBg.addColorStop(0,'#052e16');dBg.addColorStop(.5,'#065f46');dBg.addColorStop(1,'#052e16');
-  c.fillStyle=dBg;c.fillRect(0,DY,CW,DH);
-  c.strokeStyle='#34d399';c.lineWidth=1.5;
-  c.beginPath();c.moveTo(0,DY);c.lineTo(CW,DY);c.stroke();
-  c.beginPath();c.moveTo(0,DY+DH);c.lineTo(CW,DY+DH);c.stroke();
-  c.font='bold 16px Cairo,sans-serif';c.fillStyle='#6ee7b7';c.textAlign='center';c.textBaseline='middle';
-  c.fillText('🗓  '+getHijri(),CW/2,DY+DH/2);
-
-  var cy=DY+DH+20;
-  SECS.forEach(function(sec){
-    var items=(data[sec.k]||[]).filter(function(i){return i.sr||i.f;});
-    if(!items.length)return;
-    var SH=52;
-    c.save();c.shadowColor=sec.ac;c.shadowBlur=20;
-    rrect(c,PAD,cy,CW-PAD*2,SH,14);
-    var shG=c.createLinearGradient(PAD,cy,CW-PAD,cy+SH);
-    shG.addColorStop(0,sec.c1);shG.addColorStop(.6,sec.c2);shG.addColorStop(1,sec.c1);
-    c.fillStyle=shG;c.fill();c.restore();
-    rrect(c,PAD,cy,CW-PAD*2,SH,14);c.strokeStyle=sec.ac;c.lineWidth=1.5;c.stroke();
-    rrect(c,CW-PAD-10,cy,10,SH,5);c.fillStyle=sec.ac;c.fill();
-    c.font='24px serif';c.textAlign='right';c.textBaseline='middle';c.fillText(sec.ico,CW-PAD-20,cy+SH/2);
-    c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;c.textAlign='right';c.textBaseline='middle';
-    c.fillText(sec.lbl,CW-PAD-54,cy+SH/2);
-    cy+=SH+10;
-
-    items.forEach(function(it){
-      var hasMeta=!!(it.rating||(it.errors&&it.errors!=='0'&&it.errors!==''));
-      var hasPlan=!!(it.nsr||(it.nf&&it.nt));
-      var IH=20+34+(hasMeta?40:0)+(hasPlan?38:0)+20;
-      c.save();c.shadowColor=sec.dot;c.shadowBlur=16;c.shadowOffsetY=4;
-      rrect(c,PAD,cy,CW-PAD*2,IH,14);
-      var cBg=c.createLinearGradient(PAD,cy,CW-PAD,cy+IH);
-      cBg.addColorStop(0,'#0a1a0f');cBg.addColorStop(1,'#0d2016');
-      c.fillStyle=cBg;c.fill();c.restore();
-      rrect(c,PAD,cy,CW-PAD*2,IH,14);c.strokeStyle=sec.dot;c.lineWidth=1.5;c.stroke();
-      rrect(c,CW-PAD-10,cy,10,IH,5);c.fillStyle=sec.ac;c.fill();
-      rrect(c,PAD,cy,5,IH,3);c.fillStyle=sec.c2+'55';c.fill();
-      var RX=CW-PAD-22,ty=cy+18;
-      var lbl2='';
-      if(it.sr){lbl2=it.sr+(it.type==='range'?'  —  من آية '+it.f+' إلى آية '+it.t:'  كاملة');}
-      else{var isRq=(sec.k==='sj'||sec.k==='hd');var u=isRq?'رقم':'سؤال';lbl2='من '+u+' '+it.f+'  ←  إلى '+u+' '+it.t;}
-      c.font='bold 20px Cairo,sans-serif';c.fillStyle=sec.fg;c.textAlign='right';c.textBaseline='top';c.fillText(lbl2,RX,ty);
-      ty+=34;
-      if(hasMeta){
-        var bx=RX;
-        if(it.rating){var rc=rCol(it.rating);bx-=pillC(c,it.rating,bx,ty,rc,14);}
-        if(it.errors&&it.errors!=='0'&&it.errors!==''){pillC(c,'❌ '+it.errors+' خطأ',bx,ty,{bg:'#450a0a',fg:'#fca5a5',brd:'#dc2626'},14);}
-        ty+=40;
-      }
-      if(hasPlan){
-        rrect(c,PAD+12,ty-2,CW-PAD*2-24,34,9);
-        var pBg=c.createLinearGradient(PAD+12,ty,CW-PAD-12,ty+34);
-        pBg.addColorStop(0,sec.c1);pBg.addColorStop(1,sec.c2+'88');
-        c.fillStyle=pBg;c.fill();c.strokeStyle=sec.ac;c.lineWidth=1;c.setLineDash([5,3]);c.stroke();c.setLineDash([]);
-        var nxt2='';
-        if(it.nsr){nxt2='🎯 القادم:  '+it.nsr+(it.ntype==='range'?' — آية '+it.nf+' إلى آية '+it.nt:'  كاملة');}
-        else{var isRq2=(sec.k==='sj'||sec.k==='hd');var u2=isRq2?'رقم':'سؤال';nxt2='🎯 القادم:  من '+u2+' '+it.nf+'  ←  إلى '+u2+' '+it.nt;}
-        c.font='bold 15px Cairo,sans-serif';c.fillStyle=sec.ac;c.textAlign='right';c.textBaseline='middle';c.fillText(nxt2,RX-4,ty+17);
-      }
-      cy+=IH+10;
-    });
-    cy+=12;
+async function drawCard(nm, data){
+  var canvas = document.createElement('canvas');
+  var c = canvas.getContext('2d');
+  
+  var img = new Image();
+  // 📌 تنبيه هام: قم بكتابة اسم الصورة الفارغة (القالب المقسم) هنا!
+  // يجب أن تكون الصورة موجودة في نفس المجلد الذي به ملف الـ HTML
+  img.src = '27800.jpg'; 
+  
+  await new Promise(function(res){
+    img.onload = res;
+    img.onerror = function(){
+      // في حالة عدم العثور على الصورة، سيقوم برسم خلفية بيضاء كبديل مؤقت
+      res();
+    };
   });
 
-  var FH=64;
-  var fBg=c.createLinearGradient(0,cy,CW,cy+FH);
-  fBg.addColorStop(0,'#030d08');fBg.addColorStop(.5,'#052e16');fBg.addColorStop(1,'#030d08');
-  c.fillStyle=fBg;c.fillRect(0,cy,CW,FH);
-  var fLine=c.createLinearGradient(0,cy,CW,cy);
-  fLine.addColorStop(0,'transparent');fLine.addColorStop(.3,'#d4af53');fLine.addColorStop(.7,'#d4af53');fLine.addColorStop(1,'transparent');
-  c.strokeStyle=fLine;c.lineWidth=2;c.setLineDash([]);c.beginPath();c.moveTo(0,cy);c.lineTo(CW,cy);c.stroke();
-  c.font='bold 15px Cairo,sans-serif';c.fillStyle='#d4af53';c.textAlign='right';c.textBaseline='middle';c.fillText('مركز خادم القرآن الكريم',CW-PAD,cy+FH/2);
-  c.font='26px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('⭐ ⭐ ⭐',CW/2,cy+FH/2);
-  c.font='13px Cairo,sans-serif';c.fillStyle='rgba(167,243,208,.4)';c.textAlign='left';c.textBaseline='middle';c.fillText('تقرير متابعة الحفظ',PAD,cy+FH/2);
-  var botBar=c.createLinearGradient(0,cy+FH-3,CW,cy+FH);
-  botBar.addColorStop(0,'transparent');botBar.addColorStop(.2,'#d4af53');botBar.addColorStop(.8,'#d4af53');botBar.addColorStop(1,'transparent');
-  c.fillStyle=botBar;c.fillRect(0,cy+FH-3,CW,3);
+  // تحديد أبعاد اللوحة بناءً على الصورة (أو حجم افتراضي إذا لم يتم العثور عليها)
+  var W = img.width || 1200;
+  var H = img.height || 1600;
+  canvas.width = W;
+  canvas.height = H;
+
+  // رسم الصورة المرفوعة لتكون هي الخلفية
+  if(img.width) {
+    c.drawImage(img, 0, 0, W, H);
+  } else {
+    c.fillStyle = '#ffffff';
+    c.fillRect(0, 0, W, H);
+  }
+
+  c.fillStyle = '#0b1e14'; // لون الخط
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+
+  // 1. كتابة اسم البطل
+  // يمكنك تغيير هذه الأرقام (X, Y) لتتحكم في مكان طباعة الاسم على المربع
+  c.font = 'bold 50px Cairo';
+  c.fillText(nm, W / 2, 280); 
+
+  // 2. التاريخ
+  c.font = 'bold 30px Cairo';
+  c.fillText(getHijri(), W / 2, 350);
+
+  // 3. خريطة لإحداثيات (أماكن) المربعات الستة
+  // X: يمين أو يسار, Y: أعلى أو أسفل
+  // قم بتغيير هذه الأرقام بناءً على أماكن المربعات في صورتك المرفوعة
+  var sectionsCoords = {
+    'ns': { x: W * 0.75, y: 550 }, // السور الجديدة (مثال: اليمين أعلى)
+    'ps': { x: W * 0.25, y: 550 }, // ماضي السور (مثال: اليسار أعلى)
+    'mq': { x: W * 0.75, y: 900 }, // المذكرة الجديدة (اليمين وسط)
+    'pm': { x: W * 0.25, y: 900 }, // ماضي المذكرة (اليسار وسط)
+    'sj': { x: W * 0.75, y: 1250 }, // السراج (اليمين أسفل)
+    'hd': { x: W * 0.25, y: 1250 }  // الحديث (اليسار أسفل)
+  };
+
+  // دالة صغيرة لكتابة محتوى القسم الواحد داخل إحداثياته
+  function drawSectionText(secKey, items) {
+    if(!items || !items.length) return;
+    
+    var startX = sectionsCoords[secKey].x;
+    var currentY = sectionsCoords[secKey].y;
+    c.font = 'bold 24px Cairo';
+    
+    items.forEach(function(it){
+      var txt = '';
+      if(it.sr) {
+         txt = it.sr + (it.type==='range' ? ' (من ' + it.f + ' إلى ' + it.t + ')' : ' كاملة');
+      } else if (it.f) {
+         txt = 'من ' + it.f + ' إلى ' + it.t;
+      }
+      
+      if(txt) {
+        c.fillStyle = '#133020';
+        c.fillText(txt, startX, currentY);
+        currentY += 40;
+        
+        if(it.rating) {
+            c.fillStyle = '#16a34a'; // لون التقييم
+            c.fillText('التقييم: ' + it.rating, startX, currentY); 
+            currentY += 35;
+        }
+        if(it.errors && it.errors !== '0') {
+            c.fillStyle = '#dc2626'; // لون الأخطاء
+            c.fillText('الأخطاء: ' + it.errors, startX, currentY); 
+            currentY += 35;
+        }
+        if(it.nsr || it.nf) {
+            c.fillStyle = '#d97706'; // لون القادم
+            var nxtTxt = it.nsr ? (it.nsr + (it.ntype==='range'?' (من '+it.nf+' لـ '+it.nt+')':' كاملة')) : ('من '+it.nf+' لـ '+it.nt);
+            c.fillText('القادم: ' + nxtTxt, startX, currentY);
+            currentY += 35;
+        }
+        currentY += 20; // مسافة بين كل سطر وسطر
+      }
+    });
+  }
+
+  // رسم كل الأقسام
+  drawSectionText('ns', data.ns);
+  drawSectionText('ps', data.ps);
+  drawSectionText('mq', data.mq);
+  drawSectionText('pm', data.pm);
+  drawSectionText('sj', data.sj);
+  drawSectionText('hd', data.hd);
+
   return canvas;
 }
 
-/* canvas → compressed blob (JPEG quality 0.82 → ~80% smaller than PNG) */
 function canvasToBlob(canvas,q){
   return new Promise(function(res){canvas.toBlob(function(b){res(b);},'image/jpeg',q||0.82);});
 }
-/* blob → data URL */
 function blobToDataURL(blob){
   return new Promise(function(res){var r=new FileReader();r.onload=function(e){res(e.target.result);};r.readAsDataURL(blob);});
 }
@@ -677,7 +615,7 @@ function showModal(src,nm,onSave){
 ══════════════════════════════════════ */
 async function generateAndShare(){
   var nm=document.getElementById('inp-student').value.trim();
-  if(!nm){alert('يرجى إدخال اسم البطل');return;}
+  if(!nm){customAlert('يرجى إدخال اسم البطل أولاً.');return;}
   var data={
     ns:collect('new-surahs',false),ps:collect('past-surahs',false),
     mq:collect('mur-questions',true),pm:collect('past-mur',true),
@@ -703,7 +641,7 @@ async function generateAndShare(){
       }catch(e){}
     }
     showModal(src,nm);
-  }catch(e){hideSpinner();alert('خطأ: '+e.message);}
+  }catch(e){hideSpinner();customAlert('حدث خطأ أثناء الإنشاء: '+e.message);}
 }
 
 /* ══════════════════════════════════════
@@ -718,7 +656,6 @@ async function renderReports(){
     return;
   }
 
-  /* check expiry */
   var expiring=reps.filter(function(r){return isOlderThanMonth(r.createdAt);});
   var html='';
   if(expiring.length){
@@ -744,7 +681,6 @@ async function renderReports(){
   });
   list.innerHTML=html;
 
-  /* load thumbnails async */
   reps.forEach(function(r){
     if(r.img){
       blobToDataURL(r.img).then(function(src){
@@ -765,7 +701,6 @@ async function viewReport(id){
 async function editReport(id){
   var r=await getReport(id);
   if(!r){return;}
-  /* go to main, fill student name — full form restore is complex */
   document.getElementById('inp-student').value=r.student;
   showPage('page-main');
   showToast('✏️ عدّل البيانات وأنشئ تقريراً جديداً');
@@ -845,14 +780,6 @@ function clearForm(){
 }
 
 /* ══════════════════════════════════════
-   BEFOREUNLOAD — warn on exit
-══════════════════════════════════════ */
-window.addEventListener('beforeunload',function(e){
-  var nm=document.getElementById('inp-student').value.trim();
-  if(nm){e.preventDefault();e.returnValue='';}
-});
-
-/* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
 openDB().then(function(){
@@ -864,7 +791,6 @@ openDB().then(function(){
   addQuestion('suraj-section','sj',true,true);
   addQuestion('hadith-section','hd',true,true);
 }).catch(function(){
-  /* fallback if IndexedDB fails */
   addSurah('new-surahs','ns',true,true);
   addSurah('past-surahs','ps',true,false);
   addQuestion('mur-questions','mq',true,true);
