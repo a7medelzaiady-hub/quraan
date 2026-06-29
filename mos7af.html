@@ -89,7 +89,7 @@
             min-height: 600px;
             position: relative;
             overflow: hidden;
-            padding-bottom: 40px; /* لحماية رقم الصفحة من تداخل النص */
+            padding-bottom: 40px;
         }
         .page-right-side {
             background: linear-gradient(135deg, #f7f2e8 0%, #f0e8d4 40%, #ebe0c8 100%);
@@ -101,7 +101,6 @@
             border-right: 1px solid rgba(0,0,0,0.05);
             border-radius: 4px 0 0 4px;
         }
-        /* خط وسط الكتاب */
         .page-right-side::after {
             content: '';
             position: absolute;
@@ -160,7 +159,6 @@
             content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 20px;
             background: linear-gradient(to left, rgba(0,0,0,0.04), transparent);
         }
-        /* ظل متحرك أثناء التقليب */
         .flip-shadow {
             position: absolute; top: 0; width: 60px; height: 100%;
             z-index: 99; pointer-events: none; opacity: 0;
@@ -296,31 +294,25 @@
 
         /* === تجاوب الشاشات (التعديلات الجوهرية للموبايل) === */
         @media (max-width: 900px) {
-            /* تعديل وضع عرض الكتاب ليكدس الصفحات رأسياً */
             .book-spread { flex-direction: column; }
             .page-side { width: 100%; min-height: auto; height: auto; padding-bottom: 50px; }
             .page-right-side { border-left: none; border-radius: 12px 12px 0 0; border-bottom: 1px solid rgba(201,168,76,0.3); }
             .page-left-side { border-right: none; border-radius: 0 0 12px 12px; }
-            /* إخفاء تأثير الطية الجانبية في الموبايل */
             .page-right-side::after, .page-left-side::before { display: none; }
             
-            /* تعديل النصوص وتنسيقها للموبايل */
             .quran-text { font-size: 1.4rem; padding: 20px 20px 0 20px; line-height: 2.4; }
             .surah-header { font-size: 1.5rem; }
             .bismillah { font-size: 1.3rem; }
             
-            /* إخفاء المؤثرات التي تعطل الموبايل */
             .flip-page, .flip-shadow { display: none !important; }
             .sidebar-panel { width: 100%; max-width: 340px; }
         }
 
         @media (max-width: 640px) {
-            /* القائمة العلوية */
             .nav-container { flex-direction: column; gap: 12px; }
             .tabs-container { width: 100%; display: flex; }
             .tabs-container .tab-btn { flex: 1; text-align: center; padding: 10px 5px; font-size: 0.95rem; }
             
-            /* النصوص والأزرار */
             .quran-text { font-size: 1.25rem; line-height: 2.2; padding: 15px 15px 0 15px; }
             .hadith-text { font-size: 1.15rem; line-height: 2.1; }
             .nav-btn { width: 42px; height: 42px; font-size: 1rem; }
@@ -329,7 +321,6 @@
             .page-number-right { left: 15px; }
             .page-number-left { right: 15px; }
             
-            /* تقليل المسافات للأحاديث */
             .hadith-card .p-8, .hadith-card-left .p-8 { padding: 1.25rem !important; }
         }
 
@@ -612,7 +603,7 @@
     }
 
     function playFlipSound() {
-        if (!soundEnabled || window.innerWidth <= 900) return; // تعطيل الصوت في الموبايل أو لو تم كتمه
+        if (!soundEnabled || window.innerWidth <= 900) return;
         try {
             const ctx = getAudioCtx();
             if (ctx.state === 'suspended') ctx.resume();
@@ -669,7 +660,15 @@
             const response = await fetch('https://api.alquran.cloud/v1/quran/quran-uthmani');
             if (!response.ok) throw new Error('فشل التحميل');
             const result = await response.json();
-            allAyahs = result.data.ayahs;
+            
+            // تصحيح: استخراج الآيات من مصفوفة السور نظراً لهيكلة الـ API
+            allAyahs = [];
+            result.data.surahs.forEach(surah => {
+                surah.ayahs.forEach(ayah => {
+                    ayah.surah = { number: surah.number, name: surah.name }; // دمج معلومات السورة
+                    allAyahs.push(ayah);
+                });
+            });
 
             allAyahs.forEach(ayah => {
                 const p = ayah.page;
@@ -715,7 +714,7 @@
             html += `<div class="surah-header">
                 سورة ${surahInfo ? surahInfo.name : firstAyah.surah.name}
                 <div class="text-sm mt-1" style="color: #8a7a60; font-family: Amiri, serif;">
-                    ${surahInfo ? surahInfo.type : ''} · ${ayahs.length} آية
+                    ${surahInfo ? surahInfo.type : ''} · ${surahInfo ? surahInfo.ayas : ''} آية
                 </div>
             </div>`;
             if (firstAyah.surah.number !== 9 && firstAyah.surah.number !== 1) {
@@ -771,7 +770,6 @@
         const newLeftPage = currentRightPage + 3;
 
         if (isMobile) {
-            // التبديل المباشر للموبايل بدون حركات 3D لضمان أداء سلس
             currentRightPage = newRightPage > 604 ? 603 : newRightPage;
             renderPage('right', currentRightPage);
             renderPage('left', currentRightPage + 1 <= 604 ? currentRightPage + 1 : 0);
@@ -795,13 +793,13 @@
         const frontContent = document.getElementById('right-content').innerHTML;
         flipEl.querySelector('#flip-front-content').innerHTML = frontContent;
 
+        spread.appendChild(flipEl);
+
         if (newLeftPage <= 604) {
-            renderPageContent('flip-back-content', newLeftPage);
+            renderPageContent('flip-back-content', newLeftPage, flipEl);
         } else {
             flipEl.querySelector('#flip-back-content').innerHTML = '<div class="flex items-center justify-center h-full" style="color:#8a7a60;font-family:Amiri,serif;">نهاية المصحف الشريف</div>';
         }
-
-        spread.appendChild(flipEl);
 
         if (newRightPage <= 604) {
             renderPage('right', newRightPage);
@@ -856,10 +854,10 @@
             <div class="flip-back"><div class="quran-text" id="flip-back-content"></div></div>
         `;
 
-        if (newRightPage >= 1) renderPageContent('flip-front-content', newRightPage);
-        if (newLeftPage >= 1) renderPageContent('flip-back-content', newLeftPage);
-
         spread.appendChild(flipEl);
+
+        if (newRightPage >= 1) renderPageContent('flip-front-content', newRightPage, flipEl);
+        if (newLeftPage >= 1) renderPageContent('flip-back-content', newLeftPage, flipEl);
 
         renderPage('right', currentRightPage);
         renderPage('left', currentRightPage + 1 > 604 ? 0 : currentRightPage + 1);
@@ -877,8 +875,8 @@
         }, 950);
     }
 
-    function renderPageContent(elementId, pageNum) {
-        const container = document.getElementById(elementId);
+    function renderPageContent(elementId, pageNum, parentEl) {
+        const container = parentEl.querySelector('#' + elementId);
         if (!container || pageNum < 1 || pageNum > 604) return;
 
         const ayahs = quranPages[pageNum];
@@ -1140,14 +1138,15 @@
             </div>
         `;
 
-        document.getElementById('hflip-front').innerHTML = document.getElementById('hadith-right-content').innerHTML;
+        spread.appendChild(flipEl);
+
+        // تصحيح: استخدام flipEl للبحث عن العناصر بعد إنشائها
+        flipEl.querySelector('#hflip-front').innerHTML = document.getElementById('hadith-right-content').innerHTML;
 
         const newLeftIdx = (currentHadithPage + 3) * perPage;
         const rightIndices = [];
         for (let i = newLeftIdx; i < Math.min(newLeftIdx + perPage, hadiths.length); i++) rightIndices.push(i);
-        renderHadithPage(document.getElementById('hflip-back'), hadiths, rightIndices);
-
-        spread.appendChild(flipEl);
+        renderHadithPage(flipEl.querySelector('#hflip-back'), hadiths, rightIndices);
 
         currentHadithPage += 2;
         renderHadithPages();
@@ -1193,19 +1192,21 @@
                 <div class="p-8" id="hflip-back"></div>
             </div>
         `;
+        
+        spread.appendChild(flipEl);
 
         const newRightPage = currentHadithPage - 2;
         const newLeftPage = currentHadithPage - 1;
 
+        // تصحيح: استخدام flipEl للبحث عن العناصر
         const rightIndices = [];
         for (let i = newRightPage * perPage; i < Math.min(newRightPage * perPage + perPage, hadiths.length); i++) rightIndices.push(i);
-        renderHadithPage(document.getElementById('hflip-front'), hadiths, rightIndices);
+        renderHadithPage(flipEl.querySelector('#hflip-front'), hadiths, rightIndices);
 
         const leftIndices = [];
         for (let i = newLeftPage * perPage; i < Math.min(newLeftPage * perPage + perPage, hadiths.length); i++) leftIndices.push(i);
-        renderHadithPage(document.getElementById('hflip-back'), hadiths, leftIndices);
+        renderHadithPage(flipEl.querySelector('#hflip-back'), hadiths, leftIndices);
 
-        spread.appendChild(flipEl);
         currentHadithPage = newRightPage;
         renderHadithPages();
 
