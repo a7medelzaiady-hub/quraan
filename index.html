@@ -5,199 +5,330 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مركز خادم القرآن الكريم</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- الأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* الألوان الأساسية المستوحاة من التصميم */
         :root {
-            --dark-green: #0a4d3c;
+            --primary: #014235; /* أخضر ملكي داكن */
+            --primary-light: #026b56;
             --gold: #d4af37;
-            --light-gold: #fdfaf2;
-            --bg-color: #f5f1e6; 
-            --text-dark: #2c3e50;
+            --gold-light: #f5e3a9;
+            --bg: #f9f6f0;
+            --text: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
-            background-image: repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.02) 0px, rgba(212, 175, 55, 0.02) 2px, transparent 2px, transparent 10px);
+            background-color: var(--bg);
+            /* زخرفة إسلامية خفيفة في الخلفية */
+            background-image: radial-gradient(var(--gold) 0.5px, transparent 0.5px), radial-gradient(var(--gold) 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-attachment: fixed;
+            overflow-x: hidden;
         }
 
-        /* رأس الصفحة الهيدر */
-        header {
-            background-color: var(--dark-green);
-            color: white;
-            text-align: center;
-            padding: 45px 10px 25px; /* تقليل البادينج الجانبي قليلاً للموبايل */
-            border-bottom: 6px solid var(--gold);
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 10px 25px rgba(10, 77, 60, 0.2);
+        /* شاشة الدخول الافتتاحية (لتشغيل الصوت) */
+        #welcome-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), #00221a);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        #welcome-screen h1 {
+            color: var(--gold);
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
             margin-bottom: 30px;
-            overflow: hidden;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-family: 'Amiri', serif;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .start-btn:hover { transform: scale(1.05); }
+
+        /* الهيدر */
+        header {
+            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+            color: var(--white);
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom: 8px solid var(--gold);
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 15px 35px rgba(1, 66, 53, 0.2);
+            position: relative;
+            margin-bottom: 50px;
         }
 
         header h1 {
             font-family: 'Amiri', serif;
-            /* استخدام حجم خط ديناميكي يتكيف مع الشاشة ويمنع النزول لسطر جديد */
-            font-size: clamp(1.6rem, 6.5vw, 3.2rem); 
-            white-space: nowrap; /* هذا السطر يضمن بقاء الكلمات بجانب بعضها تماماً */
+            font-size: clamp(2rem, 6vw, 4rem);
             margin: 0;
-            color: var(--gold);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            color: var(--gold-light);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
         header p {
-            font-size: clamp(1rem, 4vw, 1.3rem);
-            margin: 8px 0 0 0;
-            color: #e2ece9;
-            font-weight: 500;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
         }
 
-        /* لافتة الترحيب (المخطوطة الذهبية) */
+        /* شريط الترحيب */
         .welcome-banner {
-            background: linear-gradient(135deg, #f3e1ad, #d4af37);
-            color: var(--dark-green);
-            width: 85%;
-            max-width: 480px;
-            margin: -45px auto 35px;
-            padding: 12px 20px;
-            border-radius: 50px;
+            background: linear-gradient(135deg, var(--gold), #b5952f);
+            color: var(--white);
+            width: 90%;
+            max-width: 500px;
+            margin: -70px auto 40px;
+            padding: 15px 20px;
+            border-radius: 30px;
             text-align: center;
             font-family: 'Amiri', serif;
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             position: relative;
             z-index: 10;
-            border: 3px solid white;
+            border: 4px solid var(--white);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        /* حاوية الكروت متوافقة مع الشاشات والموبايل */
+        /* شبكة الكروت */
         .cards-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 1100px;
+            margin: 0 auto 50px;
         }
 
-        /* تصميم الكارت المطور */
+        /* تصميم الكارت */
         .card {
-            background-color: white;
-            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             overflow: hidden;
-            border: 2px solid rgba(214, 175, 55, 0.5);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: all 0.4s ease;
+            position: relative;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(10, 77, 60, 0.15);
+            box-shadow: 0 20px 40px rgba(1, 66, 53, 0.15);
             border-color: var(--gold);
         }
 
         .card-header {
-            background-color: var(--dark-green);
-            color: white;
-            padding: 18px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px;
             text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
-            border-bottom: 4px solid var(--gold);
+            border-bottom: 3px solid var(--gold);
         }
+        
+        .card-header i { margin-left: 10px; color: var(--gold); }
 
         .card-body {
-            background-color: var(--light-gold);
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .card-body p {
-            margin: 0 0 10px 0;
             font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--dark-green);
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 15px;
         }
 
         .stars {
-            color: #ffb13b;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 25px;
         }
 
         .card-actions {
             display: flex;
-            gap: 12px;
-            width: 100%;
-            margin-top: auto;
+            gap: 15px;
+            padding: 0 20px 20px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px 10px;
+            padding: 12px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 6px;
-            transition: background 0.2s, transform 0.1s;
+            gap: 8px;
         }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
+        .btn:active { transform: scale(0.95); }
 
         .btn-enter {
-            background-color: var(--dark-green);
-            color: white;
-            box-shadow: 0 4px 10px rgba(10, 77, 60, 0.2);
+            background: var(--primary);
+            color: var(--white);
         }
-
-        .btn-enter:hover {
-            background-color: #0e6650;
-        }
+        .btn-enter:hover { background: var(--primary-light); }
 
         .btn-share {
-            background-color: white;
-            color: var(--text-dark);
-            border: 2px solid #ddd;
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid #e0dcd3;
+        }
+        .btn-share:hover { background: #e0dcd3; }
+
+        /* نافذة الباسورد */
+        #password-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
 
-        .btn-share:hover {
-            background-color: #f1f2f6;
-            border-color: #bbb;
+        #password-modal.active {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .btn-share::before {
-            content: "🔗";
-            font-size: 0.9rem;
+        .modal-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            border: 3px solid var(--gold);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        #password-modal.active .modal-content { transform: scale(1); }
+
+        .modal-content h3 {
+            color: var(--primary);
+            margin-top: 0;
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 5px;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .error-msg {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: none;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
         }
 
     </style>
 </head>
 <body>
 
+    <!-- الصوتيات -->
+    <!-- آية: ورتل القرآن ترتيلا (مشاري العفاسي) -->
+    <audio id="quranAudio" src="https://everyayah.com/data/Alafasy_128kbps/073004.mp3" preload="auto"></audio>
+    <!-- صوت الضغط على الأزرار (صوت ناعم وأنيق) -->
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
 
+    <!-- شاشة البداية لتشغيل الصوتيات -->
+    <div id="welcome-screen">
+        <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
+        <button class="start-btn" onclick="startWebsite()">بسم الله نبدأ</button>
+    </div>
+
+    <!-- نافذة كلمة المرور -->
+    <div id="password-modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-lock"></i> منطقة محمية</h3>
+            <p>الرجاء إدخال كلمة المرور للوصول لصفحة المتابعة</p>
+            <div id="error-msg" class="error-msg">❌ غير مصرح بالدخول</div>
+            <input type="password" id="pass-input" placeholder="****" maxlength="4">
+            <div class="modal-buttons">
+                <button class="btn btn-enter" onclick="checkPassword()">دخول</button>
+                <button class="btn btn-share" onclick="closeModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحتوى الأساسي -->
     <header>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
         <p>تحت إشراف الشيخ عبدالرحمن</p>
@@ -209,109 +340,166 @@
 
     <main class="cards-container">
         
-        <div class="card" data-href="السراج المنير.html">
-            <div class="card-header">📖 السراج المنير</div>
+        <div class="card" onclick="navigate('السراج المنير.html', this, event)">
+            <div class="card-header"><i class="fas fa-book-open"></i> السراج المنير</div>
             <div class="card-body">
                 <p>أسئلة وأجوبة</p>
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <div class="card-actions">
-                    <button class="btn btn-enter">🎯 دخول</button>
-                    <button class="btn btn-share" data-title="السراج المنير" data-url="السراج المنير.html">مشاركة</button>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-enter"><i class="fas fa-sign-in-alt"></i> دخول</button>
+                <button class="btn btn-share" onclick="sharePage('السراج المنير', 'السراج المنير.html', event)"><i class="fas fa-share-nodes"></i> مشاركة</button>
             </div>
         </div>
 
-        <div class="card" data-href="الاسئله المفيده للحياه السعيده.html">
-            <div class="card-header">🌿 الحياة السعيدة</div>
+        <div class="card" onclick="navigate('الاسئله المفيده للحياه السعيده.html', this, event)">
+            <div class="card-header"><i class="fas fa-leaf"></i> الحياة السعيدة</div>
             <div class="card-body">
                 <p>قصص وعبر مفيدة</p>
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <div class="card-actions">
-                    <button class="btn btn-enter">🎯 دخول</button>
-                    <button class="btn btn-share" data-title="الحياة السعيدة" data-url="الاسئله المفيده للحياه السعيده.html">مشاركة</button>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-enter"><i class="fas fa-sign-in-alt"></i> دخول</button>
+                <button class="btn btn-share" onclick="sharePage('الحياة السعيدة', 'الاسئله المفيده للحياه السعيده.html', event)"><i class="fas fa-share-nodes"></i> مشاركة</button>
             </div>
         </div>
 
-        <div class="card" data-href="index1.html">
-            <div class="card-header">📝 التقييم والمتابعة</div>
+        <div class="card" onclick="openProtectedPage('index1.html', event)">
+            <div class="card-header"><i class="fas fa-chart-line"></i> التقييم والمتابعة</div>
             <div class="card-body">
-                <p>متابعة الإنجاز اليومي</p>
-                <div class="stars">⭐⭐⭐⭐★</div>
-                <div class="card-actions">
-                    <button class="btn btn-enter">🎯 دخول</button>
-                    <button class="btn btn-share" data-title="التقييم والمتابعة" data-url="index1.html">مشاركة</button>
+                <p>متابعة الإنجاز اليومي (مغلق)</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
                 </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-enter"><i class="fas fa-lock"></i> دخول</button>
+                <button class="btn btn-share" onclick="sharePage('التقييم والمتابعة', 'index1.html', event)"><i class="fas fa-share-nodes"></i> مشاركة</button>
             </div>
         </div>
 
-        <div class="card" data-href="   part2.html">
-            <div class="card-header">🌿 الحياة السعيدة الجزء الثانى</div>
+        <div class="card" onclick="navigate('part2.html', this, event)">
+            <div class="card-header"><i class="fas fa-seedling"></i> الحياة السعيدة (ج2)</div>
             <div class="card-body">
                 <p>قصص وعبر مفيدة</p>
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <div class="card-actions">
-                    <button class="btn btn-enter">🎯 دخول</button>
-                    <button class="btn btn-share" data-title="الحياة السعيدة" data-url="الاسئله المفيده للحياه السعيده.html">مشاركة</button>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-enter"><i class="fas fa-sign-in-alt"></i> دخول</button>
+                <button class="btn btn-share" onclick="sharePage('الحياة السعيدة الجزء الثاني', 'part2.html', event)"><i class="fas fa-share-nodes"></i> مشاركة</button>
             </div>
         </div>
 
     </main>
 
     <script>
-        const sound = document.getElementById('clickSound');
-        const cards = document.querySelectorAll('.card');
+        const clickSound = document.getElementById('clickSound');
+        const quranAudio = document.getElementById('quranAudio');
+        let targetProtectedUrl = '';
 
-        cards.forEach(card => {
-            card.addEventListener('click', function(event) {
-                if (event.target.closest('.btn-share')) return;
+        // دالة تشغيل صوت النقرة
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+        }
 
-                const targetUrl = this.getAttribute('data-href');
-                if (!targetUrl || targetUrl === '#') return;
+        // إزالة شاشة الترحيب وتشغيل القرآن
+        function startWebsite() {
+            playClick();
+            quranAudio.play().catch(()=>{});
+            const screen = document.getElementById('welcome-screen');
+            screen.style.opacity = '0';
+            setTimeout(() => {
+                screen.style.visibility = 'hidden';
+            }, 800);
+        }
 
-                sound.currentTime = 0;
-                sound.play();
+        // التوجيه للصفحات العادية
+        function navigate(url, element, event) {
+            // منع الانتقال إذا كان الضغط على زر المشاركة
+            if (event.target.closest('.btn-share')) return;
+            
+            playClick();
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
 
+        // فتح نافذة الباسورد
+        function openProtectedPage(url, event) {
+            if (event.target.closest('.btn-share')) return;
+            
+            playClick();
+            targetProtectedUrl = url;
+            document.getElementById('password-modal').classList.add('active');
+            document.getElementById('pass-input').value = '';
+            document.getElementById('error-msg').style.display = 'none';
+            document.getElementById('pass-input').focus();
+        }
+
+        // إغلاق نافذة الباسورد
+        function closeModal() {
+            playClick();
+            document.getElementById('password-modal').classList.remove('active');
+        }
+
+        // التحقق من كلمة المرور
+        function checkPassword() {
+            playClick();
+            const pass = document.getElementById('pass-input').value;
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (pass === '7222') {
+                errorMsg.style.display = 'none';
                 setTimeout(() => {
-                    window.location.href = targetUrl;
+                    window.location.href = targetProtectedUrl;
                 }, 300);
-            });
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('pass-input').value = '';
+                // تفعيل أنيميشن الاهتزاز
+                errorMsg.style.animation = 'none';
+                setTimeout(() => errorMsg.style.animation = 'shake 0.4s', 10);
+            }
+        }
+
+        // السماح بالضغط على Enter للتحقق من الباسورد
+        document.getElementById('pass-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
         });
 
-        const shareButtons = document.querySelectorAll('.btn-share');
-        shareButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.stopPropagation(); 
+        // دالة المشاركة
+        function sharePage(title, url, event) {
+            event.stopPropagation(); // منع تفعيل الضغط على الكارت
+            playClick();
 
-                sound.currentTime = 0;
-                sound.play();
+            if (url === '#' || url === '') {
+                alert('هذه الصفحة غير متوفرة للمشاركة حالياً.');
+                return;
+            }
 
-                const title = this.getAttribute('data-title');
-                const pageUrl = this.getAttribute('data-url');
-                
-                if (pageUrl === '#') {
-                    alert('هذه الصفحة غير متوفرة للمشاركة حالياً.');
-                    return;
-                }
+            const fullUrl = new URL(url, window.location.href).href;
 
-                const fullUrl = new URL(pageUrl, window.location.href).href;
-
-                if (navigator.share) {
-                    navigator.share({
-                        title: title,
-                        text: `شاهد صفحة ${title} بموقع مركز خادم القرآن الكريم ✨:`,
-                        url: fullUrl
-                    }).catch(err => console.log('تم إلغاء المشاركة'));
-                } else {
-                    navigator.clipboard.writeText(fullUrl).then(() => {
-                        alert(`📋 تم نسخ رابط صفحة [${title}] بنجاح!\nيمكنك الآن لصقه وإرساله لأي شخص على الواتساب أو الماسنجر.`);
-                    }).catch(err => {
-                        alert(`رابط الصفحة هو: ${fullUrl}`);
-                    });
-                }
-            });
-        });
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `شاهد صفحة ${title} بموقع مركز خادم القرآن الكريم ✨:`,
+                    url: fullUrl
+                }).catch(err => console.log('تم إلغاء المشاركة'));
+            } else {
+                navigator.clipboard.writeText(fullUrl).then(() => {
+                    alert(`📋 تم نسخ رابط صفحة [${title}] بنجاح!\nيمكنك الآن لصقه وإرساله لأي شخص.`);
+                });
+            }
+        }
     </script>
 
 </body>
