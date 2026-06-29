@@ -156,20 +156,24 @@
         }
 
         .ticker-text {
-            position: absolute;
-            white-space: nowrap;
-            color: var(--dark-emerald);
-            font-weight: 700;
-            font-size: 1.1rem;
-            animation: scrollText 30s linear infinite;
+    position: absolute;
+    white-space: nowrap;
+    color: var(--dark-emerald);
+    font-weight: 700;
+    font-size: 1.1rem;
+    animation: scrollText 90s linear infinite;
         }
 
         .ticker-text span { margin: 0 40px; }
 
         @keyframes scrollText {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-150%); }
-        }
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 
         /* شبكة الكروت */
         .cards-container {
@@ -424,6 +428,13 @@
                 <span>الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
                 <span>الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
                 <span>تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
+                
+    <!-- تكرار -->
+    <span>الصلاة نور يضيء دربك...</span>
+    <span>الصوم مدرسة لتهذيب النفس...</span>
+    <span>الصدقة تطفئ غضب الرب...</span>
+    <span>تلاوة القرآن تجلي هموم القلب...</span>
+
             </div>
         </div>
     </div>
