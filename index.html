@@ -12,16 +12,15 @@
 
     <style>
         :root {
-            /* الألوان الجديدة المبهجة (الفستقي والأخضر الزاهي) */
-            --primary: #1e8449; /* أخضر زاهي ومفرح */
-            --primary-light: #2ecc71;
-            --pistachio: #e9f7ef; /* لون فستقي فاتح مريح للعين */
-            --pistachio-dark: #abebc6; /* فستقي أغمق للظلال */
-            --gold: #f39c12; /* أصفر ذهبي مفرح */
-            --bg: #fdfefe;
-            --text: #2c3e50;
+            /* ألوان واقعية وفخمة جداً */
+            --dark-emerald: #0b2e21; /* أخضر داكن جداً كلون كسوة المصحف */
+            --emerald-light: #164d39;
+            --gold-metallic: #b8934a; /* ذهبي معدني واقعي */
+            --gold-light: #e8d399;
+            --paper-bg: #f4f0e6; /* لون ورق عاجي / رخام فاتح */
             --white: #ffffff;
-            --danger: #e74c3c;
+            --text-dark: #1a1a1a;
+            --danger: #b9322b;
         }
 
         * {
@@ -33,10 +32,12 @@
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg);
-            /* نقوش خفيفة جداً تزيد من البهجة */
-            background-image: radial-gradient(rgba(46, 204, 113, 0.1) 2px, transparent 2px);
-            background-size: 30px 30px;
+            background-color: var(--paper-bg);
+            /* تأثير ملمس الورق/الرخام الخفيف في الخلفية */
+            background-image: 
+                radial-gradient(rgba(184, 147, 74, 0.05) 2px, transparent 2px),
+                linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+            background-size: 20px 20px, 100% 100%;
             background-attachment: fixed;
             overflow-x: hidden;
             padding-bottom: 60px;
@@ -46,7 +47,7 @@
         #welcome-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #117a65, var(--primary));
+            background: linear-gradient(135deg, var(--dark-emerald), #05140e);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -56,70 +57,76 @@
         }
 
         #welcome-screen h1 {
-            color: var(--white);
+            color: var(--gold-metallic);
             font-family: 'Amiri', serif;
             font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             text-align: center;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
-        /* زر البداية 3D */
+        /* زر البداية - تصميم واقعي ملموس */
         .start-btn {
-            background: var(--gold);
-            color: #fff;
-            border: none;
+            background: linear-gradient(to bottom, #d4af37, var(--gold-metallic));
+            color: var(--dark-emerald);
+            border: 1px solid #8f6e2e;
             padding: 15px 50px;
             font-size: 1.6rem;
             font-family: 'Amiri', serif;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 0 #d68910, 0 15px 25px rgba(243, 156, 18, 0.4);
-            transition: all 0.15s ease;
+            box-shadow: 
+                inset 0 2px 0 rgba(255,255,255,0.4), /* لمعة علوية */
+                0 6px 0 #8f6e2e, /* سمك الزر */
+                0 10px 20px rgba(0,0,0,0.4); /* الظل */
+            transition: all 0.1s ease;
         }
         .start-btn:active {
-            transform: translateY(8px);
-            box-shadow: 0 0 0 #d68910, 0 5px 10px rgba(243, 156, 18, 0.4);
+            transform: translateY(6px);
+            box-shadow: 
+                inset 0 1px 0 rgba(255,255,255,0.2), 
+                0 0 0 #8f6e2e, 
+                0 2px 5px rgba(0,0,0,0.4);
         }
 
         /* الهيدر */
         header {
-            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
             color: var(--white);
             text-align: center;
-            padding: 50px 20px 65px;
-            border-bottom: 8px solid var(--pistachio-dark);
-            border-radius: 0 0 40px 40px;
-            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+            padding: 50px 20px 60px;
+            border-bottom: 6px solid var(--gold-metallic);
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             margin-bottom: 40px;
+            position: relative;
         }
 
         header h1 {
             font-family: 'Amiri', serif;
             font-size: clamp(2rem, 5vw, 3.5rem);
             margin: 0;
-            color: #fff;
-            text-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            color: var(--gold-light);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         header p {
             font-size: 1.2rem;
             margin-top: 10px;
-            color: var(--pistachio);
-            font-weight: 600;
+            color: #d1d8d5;
         }
 
-        /* شريط النصائح - تم تعديل الحركة لتكون من اليمين لليسار ببطء */
+        /* شريط النصائح */
         .ticker-container {
             width: 90%;
             max-width: 950px;
-            margin: -80px auto 45px;
-            background: var(--white);
-            border: 3px solid var(--pistachio-dark);
+            margin: -70px auto 45px;
+            background: linear-gradient(to bottom, #ffffff, #fcfbf8);
+            border: 1px solid #e0d9c8;
             border-radius: 50px;
-            box-shadow: 0 8px 0 var(--pistachio-dark);
-            padding: 12px 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08), inset 0 -2px 0 #e0d9c8;
+            padding: 10px 15px;
             position: relative;
             z-index: 10;
             display: flex;
@@ -127,7 +134,7 @@
         }
 
         .ticker-label {
-            background: var(--gold);
+            background: linear-gradient(to bottom, var(--gold-metallic), #9e7b3a);
             color: #fff;
             padding: 6px 16px;
             border-radius: 20px;
@@ -135,7 +142,7 @@
             font-weight: bold;
             white-space: nowrap;
             margin-left: 15px;
-            box-shadow: 0 4px 0 #d68910;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.2);
             z-index: 2;
         }
 
@@ -151,86 +158,80 @@
         .ticker-text {
             position: absolute;
             white-space: nowrap;
-            color: var(--primary);
+            color: var(--dark-emerald);
             font-weight: 700;
             font-size: 1.1rem;
-            /* تبدأ الحركة من خارج الشاشة يميناً وتنتهي خارجها يساراً */
             animation: scrollText 30s linear infinite;
         }
 
-        .ticker-text span {
-            margin: 0 40px;
-        }
+        .ticker-text span { margin: 0 40px; }
 
         @keyframes scrollText {
             0% { transform: translateX(100vw); }
-            100% { transform: translateX(-150%); } /* يضمن خروج النص بالكامل من جهة اليسار */
+            100% { transform: translateX(-150%); }
         }
 
         /* شبكة الكروت */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
+            gap: 25px;
             padding: 10px 20px;
             max-width: 1050px;
             margin: 0 auto;
         }
 
-        /* تصميم كارت 3D مفرح (اللون الفستقي) */
+        /* تصميم الكارت الواقعي (ملمس الورق المقوى) */
         .card {
-            background: linear-gradient(145deg, #ffffff, var(--pistachio));
-            border-radius: 25px;
-            padding: 30px 20px 20px;
-            border: 2px solid var(--pistachio-dark);
-            /* تأثير 3D بواسطة الظلال السفلية */
-            box-shadow: 0 10px 0 var(--pistachio-dark), 0 15px 20px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #ffffff, #fdfbf7);
+            border: 1px solid #e5dfd3;
+            border-radius: 16px;
+            padding: 25px 20px 20px;
+            box-shadow: 
+                0 8px 15px rgba(0,0,0,0.05), 
+                0 3px 6px rgba(0,0,0,0.04),
+                inset 0 -3px 0 rgba(0,0,0,0.02); /* حافة سفلية واقعية */
             text-align: center;
             transition: all 0.15s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            cursor: pointer;
         }
 
-        /* تأثير الضغط على الكارت بالكامل (يهبط للأسفل) */
-        .card:active {
-            transform: translateY(10px);
-            box-shadow: 0 0 0 var(--pistachio-dark), 0 5px 10px rgba(0,0,0,0.05);
-        }
-
+        /* الأيقونة داخل دائرة مذهبة */
         .card-icon-wrap {
-            width: 65px;
-            height: 65px;
-            background: var(--primary-light);
-            color: var(--white);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to bottom, #fdfdfc, #f4eee1);
+            color: var(--dark-emerald);
+            border: 2px solid var(--gold-metallic);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto 15px;
-            font-size: 1.8rem;
-            box-shadow: 0 5px 0 var(--primary), 0 8px 15px rgba(46, 204, 113, 0.4);
+            font-size: 1.6rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
         }
 
         .card h3 {
             margin: 0 0 8px 0;
-            color: var(--primary);
+            color: var(--dark-emerald);
             font-size: 1.4rem;
             font-weight: 800;
         }
 
         .card p {
-            color: #555;
+            color: #666;
             font-size: 1rem;
             margin: 0 0 15px 0;
             font-weight: 600;
         }
 
         .stars {
-            color: var(--gold);
-            font-size: 1rem;
+            color: var(--gold-metallic);
+            font-size: 0.9rem;
             margin-bottom: 20px;
         }
 
@@ -239,12 +240,12 @@
             gap: 12px;
         }
 
-        /* أزرار 3D داخل الكروت */
+        /* الأزرار الواقعية 3D */
         .btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-family: 'Cairo', sans-serif;
             font-size: 1rem;
             font-weight: bold;
@@ -256,46 +257,57 @@
             gap: 6px;
         }
 
+        /* زر الدخول (أخضر ملكي) */
         .btn-enter {
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: 0 5px 0 #145a32;
+            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
+            border: 1px solid #072017;
+            color: var(--gold-light);
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+            box-shadow: 
+                inset 0 1px 0 rgba(255,255,255,0.2), 
+                0 4px 0 #072017, 
+                0 5px 10px rgba(0,0,0,0.2);
         }
         .btn-enter:active {
-            transform: translateY(5px);
-            box-shadow: 0 0 0 transparent;
+            transform: translateY(4px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 #072017, 0 1px 2px rgba(0,0,0,0.2);
         }
 
+        /* زر المشاركة (أبيض/عاجي) */
         .btn-share {
-            background: #fff;
-            color: var(--text);
-            border: 2px solid #bdc3c7;
-            box-shadow: 0 5px 0 #bdc3c7;
+            background: linear-gradient(to bottom, #ffffff, #eceadd);
+            border: 1px solid #c2bbae;
+            color: var(--text-dark);
+            box-shadow: 
+                inset 0 1px 0 #fff, 
+                0 4px 0 #c2bbae, 
+                0 5px 10px rgba(0,0,0,0.1);
         }
         .btn-share:active {
-            transform: translateY(5px);
-            box-shadow: 0 0 0 transparent;
+            transform: translateY(4px);
+            box-shadow: inset 0 1px 0 #fff, 0 0 0 #c2bbae, 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* الكارت المحمي */
+        /* الكارت المحمي (التقييم والمتابعة) */
         .card-locked {
-            background: linear-gradient(145deg, #ffffff, #f2f4f4);
-            border-color: #d5dbdb;
-            box-shadow: 0 10px 0 #d5dbdb, 0 15px 20px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #fafafa, #eeeeee);
+            border-color: #cccccc;
         }
-        .card-locked .card-icon-wrap { background: #95a5a6; box-shadow: 0 5px 0 #7f8c8d; }
+        .card-locked .card-icon-wrap { border-color: #999; color: #777; background: #e0e0e0; }
         .card-locked h3 { color: #555; }
-        .card-locked .btn-enter { background: #7f8c8d; box-shadow: 0 5px 0 #616a6b; }
-        .card-locked:active {
-            box-shadow: 0 0 0 #d5dbdb, 0 5px 10px rgba(0,0,0,0.05);
+        .card-locked .btn-enter {
+            background: linear-gradient(to bottom, #7f8c8d, #636e72);
+            border-color: #2d3436;
+            color: #ddd;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 0 #2d3436, 0 5px 10px rgba(0,0,0,0.2);
         }
 
-        /* نافذة الباسورد 3D */
+        /* نافذة الباسورد */
         #password-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -308,36 +320,38 @@
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-content {
-            background: var(--white);
+            background: linear-gradient(to bottom, #ffffff, var(--paper-bg));
             padding: 35px 30px;
-            border-radius: 25px;
+            border-radius: 15px;
             text-align: center;
             width: 90%;
-            max-width: 380px;
-            box-shadow: 0 10px 0 var(--primary), 0 20px 40px rgba(0,0,0,0.3);
-            border: 3px solid var(--pistachio-dark);
+            max-width: 360px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border: 2px solid var(--gold-metallic);
             transform: scale(0.8);
             transition: transform 0.3s ease;
         }
 
         #password-modal.active .modal-content { transform: scale(1); }
 
-        .modal-content h3 { color: var(--primary); margin: 0 0 10px; font-size: 1.6rem; font-weight: 800;}
+        .modal-content h3 { color: var(--dark-emerald); margin: 0 0 10px; font-size: 1.6rem; font-weight: 800;}
+        
         .modal-content input {
             width: 100%;
             padding: 15px;
             font-size: 1.8rem;
             text-align: center;
-            border: 3px solid var(--pistachio-dark);
-            border-radius: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
             margin: 20px 0;
             font-family: 'Cairo', sans-serif;
-            letter-spacing: 10px;
-            background: var(--pistachio);
-            color: var(--primary);
+            letter-spacing: 12px;
+            background: #fff;
+            color: var(--dark-emerald);
             font-weight: bold;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
-        .modal-content input:focus { outline: none; border-color: var(--primary); }
+        .modal-content input:focus { outline: none; border-color: var(--gold-metallic); }
 
         .modal-buttons { display: flex; gap: 12px; }
 
@@ -346,9 +360,10 @@
             font-weight: 700;
             margin-bottom: 15px;
             display: none;
-            background: #fadbd8;
+            background: #fdf0ef;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: 1px solid #f5c6c4;
             animation: shake 0.4s;
         }
 
@@ -364,9 +379,8 @@
 <body>
 
     <!-- الصوتيات -->
-    <!-- مقطع الشيخ الحصري لسورة المزمل الآية 4 -->
+    <!-- مقطع الشيخ الحصري (تم ضبطه ليبدأ من ورتل تماماً) -->
     <audio id="quranAudio" src="https://everyayah.com/data/Husary_128kbps/073004.mp3" preload="auto"></audio>
-    <!-- الأصوات التفاعلية -->
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
     <audio id="successSound" src="https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D8%B4%D9%8A%D8%AE%D9%86%D8%A7+%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85" preload="auto"></audio>
@@ -381,7 +395,7 @@
     <div id="password-modal">
         <div class="modal-content">
             <h3><i class="fas fa-lock"></i> منطقة محمية</h3>
-            <p style="color:#555; font-size:0.95rem; font-weight: bold;">أدخل رمز المرور لفتح المتابعة</p>
+            <p id="modal-desc" style="color:#555; font-size:0.95rem; font-weight: bold;">أدخل رمز المرور لفتح المتابعة</p>
             
             <div id="error-msg" class="error-msg">❌ الرمز غير صحيح!</div>
             
@@ -401,7 +415,7 @@
         <p>تحت إشراف الشيخ عبدالرحمن</p>
     </header>
 
-    <!-- شريط النصائح (الآن يسير ببطء من اليمين لليسار) -->
+    <!-- شريط النصائح -->
     <div class="ticker-container">
         <div class="ticker-label">💡 قطوف إسلامية</div>
         <div class="ticker-wrap">
@@ -417,15 +431,11 @@
     <main class="cards-container">
         
         <!-- الكارت 1 -->
-        <div class="card" onclick="navigate('السراج المنير.html', event)">
-            <div>
-                <div class="card-icon-wrap"><i class="fas fa-book-open"></i></div>
-                <h3>السراج المنير</h3>
-                <p>أسئلة وأجوبة هامة ومفيدة</p>
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-icon-wrap"><i class="fas fa-book-open"></i></div>
+            <h3>السراج المنير</h3>
+            <p>أسئلة وأجوبة هامة ومفيدة</p>
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('السراج المنير.html', event)">دخول</button>
                 <button class="btn btn-share" onclick="sharePage('السراج المنير', 'السراج المنير.html', false, event)"><i class="fas fa-share-nodes"></i></button>
@@ -433,15 +443,11 @@
         </div>
 
         <!-- الكارت 2 -->
-        <div class="card" onclick="navigate('الاسئله المفيده للحياه السعيده.html', event)">
-            <div>
-                <div class="card-icon-wrap"><i class="fas fa-heart"></i></div>
-                <h3>الحياة السعيدة</h3>
-                <p>مجموعة قصص وعبر مفيدة</p>
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-icon-wrap"><i class="fas fa-heart"></i></div>
+            <h3>الحياة السعيدة</h3>
+            <p>مجموعة قصص وعبر مفيدة</p>
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('الاسئله المفيده للحياه السعيده.html', event)">دخول</button>
                 <button class="btn btn-share" onclick="sharePage('الحياة السعيدة', 'الاسئله المفيده للحياه السعيده.html', false, event)"><i class="fas fa-share-nodes"></i></button>
@@ -449,15 +455,11 @@
         </div>
 
         <!-- الكارت 3 (محمي) -->
-        <div class="card card-locked" onclick="openProtectedPage('index1.html', event)">
-            <div>
-                <div class="card-icon-wrap"><i class="fas fa-user-check"></i></div>
-                <h3>التقييم والمتابعة</h3>
-                <p>متابعة الإنجاز اليومي بدقة</p>
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
-                </div>
-            </div>
+        <div class="card card-locked">
+            <div class="card-icon-wrap"><i class="fas fa-user-check"></i></div>
+            <h3>التقييم والمتابعة</h3>
+            <p>متابعة الإنجاز اليومي بدقة</p>
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="openProtectedPage('index1.html', event)"><i class="fas fa-lock"></i> دخول</button>
                 <button class="btn btn-share" onclick="sharePage('التقييم والمتابعة', 'index1.html', true, event)"><i class="fas fa-share-nodes"></i></button>
@@ -465,15 +467,11 @@
         </div>
 
         <!-- الكارت 4 -->
-        <div class="card" onclick="navigate('part2.html', event)">
-            <div>
-                <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
-                <h3>الحياة السعيدة (ج2)</h3>
-                <p>تكملة رائعة للقصص والعبر</p>
-                <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
+        <div class="card">
+            <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
+            <h3>الحياة السعيدة (ج2)</h3>
+            <p>تكملة رائعة للقصص والعبر</p>
+            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('part2.html', event)">دخول</button>
                 <button class="btn btn-share" onclick="sharePage('الحياة السعيدة الجزء الثاني', 'part2.html', false, event)"><i class="fas fa-share-nodes"></i></button>
@@ -494,12 +492,12 @@
             clickSound.play().catch(()=>{});
         }
 
-        // إزالة غلاف الشاشة وبدء الآية بصوت الشيخ الحصري
+        // إزالة غلاف الشاشة وبدء الآية بصوت الشيخ الحصري من كلمة "ورتل"
         function startWebsite() {
             playClick();
             
-            // قراءة الشيخ الحصري بطيئة نسبياً، الكلمة تبدأ عند 4.5 ثانية تقريباً
-            quranAudio.currentTime = 4.5; 
+            // تم ضبط التوقيت إلى 3.4 ثانية لالتقاط حرف الواو من "ورتل" بدقة للشيخ الحصري
+            quranAudio.currentTime = 3.4; 
             quranAudio.play().catch(()=>{});
             
             const screen = document.getElementById('welcome-screen');
@@ -508,20 +506,18 @@
         }
 
         function navigate(url, event) {
-            // منع الانتقال إذا ضغط المستخدم على زر المشاركة أو الدخول (لمنع التداخل)
-            if (event.target.closest('.btn')) return;
-            
             playClick();
             setTimeout(() => { window.location.href = url; }, 300);
         }
 
         function openProtectedPage(url, event) {
-            if (event.target.closest('.btn-share')) return;
-            
             playClick();
             targetProtectedUrl = url;
             document.getElementById('password-modal').classList.add('active');
-            document.getElementById('input-area').style.opacity = '1';
+            
+            // إعادة العناصر لوضعها الطبيعي
+            document.getElementById('input-area').style.display = 'block';
+            document.getElementById('modal-desc').style.display = 'block';
             document.getElementById('pass-input').value = '';
             document.getElementById('error-msg').style.display = 'none';
             document.getElementById('pass-input').focus();
@@ -532,22 +528,28 @@
             document.getElementById('password-modal').classList.remove('active');
         }
 
-        // فحص الباسورد
+        // فحص الباسورد - استجابة صوتية خالصة عند النجاح
         function checkPassword() {
             const pass = document.getElementById('pass-input').value;
             const errorMsg = document.getElementById('error-msg');
             const inputArea = document.getElementById('input-area');
+            const modalDesc = document.getElementById('modal-desc');
             
             if (pass === '7222') {
                 errorMsg.style.display = 'none';
-                inputArea.style.opacity = '0';
                 
+                // إخفاء كافة النصوص وحقول الإدخال تماماً
+                inputArea.style.display = 'none';
+                modalDesc.style.display = 'none';
+                
+                // تشغيل الصوت فقط دون أي رسالة نصية
                 successSound.currentTime = 0;
                 successSound.play().catch(()=>{});
 
+                // الانتظار حتى انتهاء الصوت ثم التوجيه
                 setTimeout(() => {
                     window.location.href = targetProtectedUrl;
-                }, 2200);
+                }, 2500);
 
             } else {
                 errorSound.currentTime = 0;
@@ -566,7 +568,7 @@
         });
 
         function sharePage(title, url, isProtected, event) {
-            if(event) event.stopPropagation();
+            event.stopPropagation();
 
             if (isProtected) {
                 errorSound.currentTime = 0;
