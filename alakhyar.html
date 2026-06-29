@@ -3,311 +3,334 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تحفة الأخيار | للإمام ابن باز رحمه الله</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+<title>تحفة الأخيار كامل - للأطفال والكبار</title>
 <style>
-:root{
-  --bg: #f7fafc;
-  --card: #ffffff;
-  --primary: #0e7490; 
-  --primary-dark: #155e75;
-  --accent: #d97706; 
-  --text: #1f2937;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --shadow: 0 6px 24px rgba(15, 118, 128, 0.08);
-  --radius: 18px;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Amiri:wght@400;700&display=swap');
+  
+  :root {
+    --kid-bg: #fffde7;
+    --kid-border: #ffd54f;
+    --adult-bg: #f1f8e9;
+    --header-grad: linear-gradient(90deg, #ffca28, #ffa726);
+  }
+  body {
+    background: linear-gradient(135deg, #fff8e1 0%, #e8f5e9 100%);
+    margin: 0;
+    padding: 20px;
+    font-family: 'Cairo', sans-serif;
+  }
+  .book {
+    max-width: 950px;
+    margin: auto;
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  h1 {
+    color: #2e7d32;
+    font-size: 36px;
+    margin: 0;
+  }
+  .subtitle {
+    color: #555;
+    font-size: 16px;
+    margin-top: 5px;
+  }
 
-*{box-sizing:border-box; margin:0; padding:0}
-body{
-  font-family: "Cairo", sans-serif;
-  background: var(--bg);
-  background-image: radial-gradient(#0e7490 0.5px, transparent 0.5px), radial-gradient(#0e7490 0.5px, #f7fafc 0.5px);
-  background-size: 20px 20px;
-  background-position: 0 0, 10px 10px;
-  color: var(--text);
-  line-height: 2;
-}
+  .hadith-card {
+    background: #fff;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 2px solid var(--kid-border);
+  }
+  .hadith-header {
+    background: var(--header-grad);
+    color: #5d4037;
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-.container{max-width: 1200px; margin: 0 auto; padding: 24px}
+  .kids-part {
+    background: var(--kid-bg);
+    padding: 20px;
+    border-bottom: 2px dashed var(--kid-border);
+  }
+  .kids-title {
+    color: #e65100;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .kids-text {
+    font-size: 21px;
+    line-height: 2.1;
+    color: #424242;
+  }
+  .kids-text b { color: #d84315; }
 
-/* هيدر */
-.hero{
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: #fff;
-  padding: 56px 32px;
-  border-radius: 28px;
-  box-shadow: var(--shadow);
-  text-align: center;
-  margin-bottom: 32px;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before{
-  content: "﷽";
-  position: absolute;
-  font-size: 200px;
-  opacity: .07;
-  top: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: 800;
-}
-.hero h1{font-size: clamp(30px, 5vw, 44px); font-weight: 800; margin-bottom: 10px}
-.hero p{font-size: 18px; opacity: .95}
-
-/* تنقل */
-.nav{
-  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px;
-}
-.nav a{
-  background: var(--card);
-  color: var(--primary-dark);
-  padding: 12px 22px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 700;
-  border: 2px solid var(--border);
-  transition: all .25s;
-  box-shadow: var(--shadow);
-  display: flex; align-items: center; gap: 8px;
-}
-.nav a:hover{
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  transform: translateY(-3px);
-}
-
-/* شبكة الكروت */
-.grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 22px;
-}
-
-/* كارت */
-.card{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: var(--shadow);
-  transition: all .3s;
-}
-.card:hover{
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(14, 116, 144, 0.18);
-  border-color: var(--primary);
-}
-.card-head{
-  display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
-}
-.icon{
-  width: 56px; height: 56px; border-radius: 16px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #fff; display: grid; place-items: center; font-size: 24px; flex-shrink: 0;
-}
-.card-title{font-size: 20px; font-weight: 800; margin: 0}
-.badge{
-  background: var(--accent); color: #fff; font-size: 12px; padding: 5px 12px; border-radius: 999px; font-weight: 700; margin-right: auto;
-}
-.sanad{color: var(--muted); font-size: 14px; margin-bottom: 10px; font-weight: 600}
-.matn{
-  background: #f9fafb;
-  padding: 16px 18px;
-  border-radius: 14px;
-  border-right: 5px solid var(--accent);
-  font-size: 17px;
-}
-
-/* فصل */
-.section-title{
-  grid-column: 1/-1;
-  background: linear-gradient(90deg, var(--primary), transparent);
-  color: #fff;
-  padding: 16px 20px;
-  border-radius: 14px;
-  font-weight: 800;
-  font-size: 22px;
-  display: flex; align-items: center; gap: 12px;
-  margin: 20px 0 10px;
-}
-
-/* تنبيه */
-.note{
-  grid-column: 1/-1;
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  color: #78350f;
-  padding: 18px;
-  border-radius: 16px;
-  display: flex; gap: 12px; align-items: start;
-  font-weight: 600;
-}
-
-footer{
-  text-align: center;
-  color: var(--muted);
-  padding: 40px 0 20px;
-  font-weight: 600;
-}
+  .adults-part {
+    padding: 20px;
+    background: var(--adult-bg);
+  }
+  .adults-title {
+    color: #1b5e20;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .adults-text {
+    font-family: 'Amiri', serif;
+    font-size: 20px;
+    line-height: 2;
+    color: #212121;
+    text-align: justify;
+  }
+  .ref {
+    font-size: 13px;
+    color: #666;
+    text-align: left;
+    direction: ltr;
+    margin-top: 8px;
+  }
+  .icon { font-size: 26px; }
+  
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #777;
+    font-size: 14px;
+  }
 </style>
 </head>
 <body>
-<div class="container">
-
-  <header class="hero">
-    <h1><i class="fa-solid fa-bookmark"></i> تحفة الأخيار</h1>
-    <p>ببيان جملة نافعة مما ورد في الكتاب والسنة من الأدعية والأذكار<br>اختصار: سماحة الشيخ عبد العزيز بن باز رحمه الله</p>
+<div class="book">
+  <header>
+    <h1>📘 كتاب تحفة الأخيار</h1>
+    <p class="subtitle">اختصار كتاب العلامة عبدالعزيز بن باز رحمه الله | نسخة واحدة: شرح للأطفال + النص الكامل للكبار</p>
   </header>
 
-  <nav class="nav">
-    <a href="#sabah"><i class="fa-solid fa-sun"></i> أذكار الصباح</a>
-    <a href="#masaa"><i class="fa-solid fa-moon"></i> أذكار المساء</a>
-    <a href="#nawm"><i class="fa-solid fa-bed"></i> أذكار النوم</a>
-    <a href="#taam"><i class="fa-solid fa-utensils"></i> أذكار الطعام</a>
-    <a href="#adab"><i class="fa-solid fa-people-arrows"></i> الآداب</a>
-  </nav>
-
-  <div class="grid">
-
-    
-
-    <h2 id="sabah" class="section-title"><i class="fa-solid fa-sun"></i> باب أذكار الصباح والمساء</h2>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-star"></i></div>
-        <h3 class="card-title">سيد الاستغفار</h3>
-        <span class="badge">3</span>
+  <!-- فصل أذكار الصباح والمساء -->
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🌅</span> 1- ذكر الصباح والمساء</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        اللي يقول 100 مرة الصبح و 100 مرة بالليل: <b>سبحان الله وبحمده</b> ⭐ 
+        هيكون ليه ثواب كبير أوي يوم القيامة. ومحدش هياخد ثواب أكتر منه غير اللي قال زيه أو أكتر.
       </div>
-      <div class="sanad">عن شداد بن أوس رضي الله عنه، عن النبي ﷺ قال:</div>
-      <div class="matn">«سيد الاستغفار: اللهم أنت ربي، لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي، وأبوء لك بذنبي، فاغفر لي فإنه لا يغفر الذنوب إلا أنت» رواه البخاري.</div>
     </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-shield"></i></div>
-        <h3 class="card-title">المعوذات ثلاث مرات</h3>
-        <span class="badge">4</span>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        1ـ عن أبي هريرة رضي الله عنه عن النبي ﷺ قال: «من قال حين يصبح وحين يمسي: سبحان الله وبحمده مائة مرة لم يأت أحد يوم القيامة بأفضل مما جاء به إلا أحد قال مثل ما قال أو زاد عليه».
       </div>
-      <div class="sanad">عن عبد الله بن خبيب قال: قال رسول الله ﷺ:</div>
-      <div class="matn">«قل: قل هو الله أحد والمعوذتين حين تمسي وحين تصبح ثلاث مرات تكفيك من كل شيء».</div>
+      <div class="ref">تحفة الأخيار ص2</div>
     </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-clock"></i></div>
-        <h3 class="card-title">ذكر الصباح والمساء</h3>
-        <span class="badge">5</span>
-      </div>
-      <div class="sanad">عن أبي هريرة رضي الله عنه:</div>
-      <div class="matn">«إذا أصبح أحدكم فليقل: اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور، وإذا أمسى فليقل اللهم بك أمسينا وبك أصبحنا وبك نحيا وبك نموت وإليك المصير».</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-hand-holding-droplet"></i></div>
-        <h3 class="card-title">دعاء أبي بكر الصديق</h3>
-        <span class="badge">6</span>
-      </div>
-      <div class="sanad">قال أبو بكر: يا رسول الله مرني بكلمات أقولهن إذا أصبحت وإذا أمسيت</div>
-      <div class="matn">قال: «قل: اللهم فاطر السموات والأرض، عالم الغيب والشهادة رب كل شيء ومليكه، أشهد أن لا إله إلا أنت، أعوذ بك من شر نفسي وشر الشيطان وشركه وأن أقترف على نفسي سوءا أو أجره إلى مسلم».</div>
-    </div>
-
-    <h2 id="nawm" class="section-title"><i class="fa-solid fa-bed"></i> فصل: أذكار النوم واليقظة</h2>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-moon"></i></div>
-        <h3 class="card-title">دعاء النوم</h3>
-        <span class="badge">20</span>
-      </div>
-      <div class="sanad">عن حذيفة رضي الله عنه قال:</div>
-      <div class="matn">«كان رسول الله ﷺ إذا أخذ مضجعه من الليل وضع يده تحت خده ثم يقول: اللهم باسمك أموت وأحيا، وإذا استيقظ قال: الحمد لله الذي أحيانا بعدما أماتنا وإليه النشور».</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-hand"></i></div>
-        <h3 class="card-title">وضع اليد اليمنى</h3>
-        <span class="badge">25</span>
-      </div>
-      <div class="sanad">عن حفصة أم المؤمنين رضي الله عنها:</div>
-      <div class="matn">«أن النبي ﷺ كان إذا أراد أن يرقد وضع يده اليمنى تحت خده الأيمن ثم يقول: اللهم قني عذابك يوم تبعث عبادك، ثلاث مرات».</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-book-quran"></i></div>
-        <h3 class="card-title">آية الكرسي والمعوذات</h3>
-        <span class="badge">22</span>
-      </div>
-      <div class="sanad">عن عائشة رضي الله عنها:</div>
-      <div class="matn">«كان إذا أوى إلى فراشه كل ليلة جمع كفيه ثم نفث فيهما فقرأ: قل هو الله أحد، قل أعوذ برب الفلق، قل أعوذ برب الناس، ثم يمسح بهما ما استطاع من جسده يبدأ بهما على رأسه ووجهه وما أقبل من جسده، يفعل ذلك ثلاث مرات».</div>
-    </div>
-
-    <h2 id="taam" class="section-title"><i class="fa-solid fa-utensils"></i> فصل: أذكار الطعام والشراب</h2>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-bowl-food"></i></div>
-        <h3 class="card-title">التسمية عند الأكل</h3>
-        <span class="badge">28</span>
-      </div>
-      <div class="sanad">عن عمر بن أبي سلمة رضي الله عنهما قال: قال لي رسول الله ﷺ:</div>
-      <div class="matn">«يا غلام سم الله وكل بيمينك وكل مما يليك».</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-heart"></i></div>
-        <h3 class="card-title">دعاء بعد الطعام</h3>
-        <span class="badge">30</span>
-      </div>
-      <div class="sanad">عن معاذ بن أنس رضي الله عنه قال: قال رسول الله ﷺ:</div>
-      <div class="matn">«من أكل طعاما فقال: الحمد لله الذي أطعمني هذا ورزقنيه من غير حول مني ولا قوة، غفر له ما تقدم من ذنبه».</div>
-    </div>
-
-    <h2 id="adab" class="section-title"><i class="fa-solid fa-people-arrows"></i> فصل: آداب المسلم</h2>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-handshake"></i></div>
-        <h3 class="card-title">إفشاء السلام</h3>
-        <span class="badge">38</span>
-      </div>
-      <div class="sanad">عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ:</div>
-      <div class="matn">«لا تدخلون الجنة حتى تؤمنوا ولا تؤمنوا حتى تحابوا، أولا أدلكم على شيء إذا فعلتموه تحاببتم؟ أفشوا السلام بينكم».</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-list-check"></i></div>
-        <h3 class="card-title">حقوق المسلم</h3>
-        <span class="badge">40</span>
-      </div>
-      <div class="sanad">عن أبي هريرة رضي الله عنه عن النبي ﷺ قال:</div>
-      <div class="matn">«حق المسلم على المسلم ست: إذا لقيته فسلم عليه، وإذا دعاك فأجبه، وإذا استنصحك فانصحه...»</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="icon"><i class="fa-solid fa-user-check"></i></div>
-        <h3 class="card-title">آداب العطاس</h3>
-        <span class="badge">43</span>
-      </div>
-      <div class="sanad">عن أبي هريرة رضي الله عنه قال:</div>
-      <div class="matn">«إذا عطس أحدكم فليقل الحمد لله وليقل له أخوه أو صاحبه يرحمك الله، فإذا قال له يرحمك الله فليقل يهديكم الله ويصلح بالكم».</div>
-    </div>
-
   </div>
 
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🌙</span> 2- دعاء المساء</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        بالليل نقول: <b>الملك لله، والحمد لله</b> 😌 مفيش إله إلا الله وحده. 
+        يارب اديني خير الليلة دي، واحفظني من شرها وشر اللي هيحصل بعدها.
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        2ـ وعن ابن مسعود رضي الله عنه قال: «كان نبي الله ﷺ إذا أمسى قال: أمسينا وأمسى الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير، رب أسألك خير ما في هذه الليلة، وخير ما بعدها، وأعوذ بك من شر ما في هذه الليلة وشر ما بعدها، رب أعوذ بك من الكسل وسوء الكبر، رب أعوذ بك من عذاب في النار، وعذاب في القبر».
+      </div>
+      <div class="ref">تحفة الأخيار ص2</div>
+    </div>
+  </div>
 
+  <!-- فصل أذكار النوم -->
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">😴</span> 21- المعوذات قبل النوم</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        قبل النوم اعمل كده 🙌: اجمع كفوفك وانفث فيها، واقرأ: الإخلاص، الفلق، الناس. 
+        بعدين امسح على وشك وجسمك 3 مرات. ربنا هيحفظك وانت نايم ✨
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        21ـ عن عائشة رضي الله عنها أن النبي ﷺ: «كان إذا أوى إلى فراشه كل ليلة جمع كفيه ثم نفث فيهما فقرأ فيهما: قل هو الله أحد، قل أعوذ برب الفلق، قل أعوذ برب الناس، ثم يمسح بهما ما استطاع من جسده يبدأ بهما على رأسه ووجهه، وما أقبل من جسده يفعل ذلك ثلاث مرات».
+      </div>
+      <div class="ref">تحفة الأخيار ص13</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🛡️</span> 22- آية الكرسي</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        لو قرأت <b>آية الكرسي</b> قبل ما تنام 😴 ربنا هيبعتلك ملك يحرسك لحد الصبح، والشيطان مش هيقدر يجي جنبك.
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        22ـ عن أبي هريرة رضي الله عنه: «أنه أتاه آت يحثو من الصدقة وكان قد جعله النبي ﷺ عليه ليلة بعد ليلة. فقال: دعني أعلمك كلمات ينفعك الله بها. إذا أويت إلى فراشك فاقرأ آية الكرسي {الله لا إله إلا هو الحي القيوم}».
+      </div>
+      <div class="ref">تحفة الأخيار ص13</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🛏️</span> 25- دعاء النبي ﷺ عند النوم</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        النبي ﷺ كان ينام على جنبه اليمين ويحط ايده تحت خده ويقول 3 مرات: 
+        <b>اللهم قني عذابك يوم تبعث عبادك</b> 🤲
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        25ـ عن حفصة أم المؤمنين رضي الله عنها «أن النبي ﷺ كان إذا أراد أن يرقد وضع يده اليمنى تحت خده الأيمن ثم يقول: » اللهم قني عذابك يوم تبعث عبادك«، »ثلاث مرات« .
+      </div>
+      <div class="ref">تحفة الأخيار ص15</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🛏️</span> 26- نفض الفراش</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        قبل ما تنام نفض سريرك بطرف هدومك 🛏️ وقول <b>بسم الله</b> 
+        عشان ممكن يكون فيه حاجة صغيرة انت مش شايفها.
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        26ـ عن أبي هريرة رضي الله عنه أن رسول الله ﷺ قال: «إذا أوى أحدكم إلى فراشه، فليأخذ داخلة إزاره، فليَنفض بها فراشه، وليسم الله فإنه لا يعلم ما خلفه بعده على فراشه».
+      </div>
+      <div class="ref">تحفة الأخيار ص15</div>
+    </div>
+  </div>
+
+  <!-- فصل الآداب -->
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🤝</span> 38- إفشاء السلام</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        عايزين ندخل الجنة؟ لازم نحب بعض ❤️ 
+        طب نحب بعض إزاي؟ النبي ﷺ قال: <b>سلموا على بعض كتير</b> كل ما تشوف صاحبك قول: السلام عليكم 😊
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        38ـ عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: «لا تدخلون الجنة حتى تؤمنوا، ولا تؤمنوا حتى تحابوا، أولا أدلكم على شيء إذا فعلتموه تحاببتم؟ أفشوا السلام بينكم».
+      </div>
+      <div class="ref">تحفة الأخيار ص21</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🫂</span> 39- حقوق المسلم</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        المسلم ليه حقوق على المسلم: 
+        1️⃣ ترد السلام 2️⃣ تزور المريض 🤒 3️⃣ تروح العزومة 🎉 
+        4️⃣ تمشي في الجنازة 🖤
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        39ـ عن أبي هريرة رضي الله عنه أن النبي ﷺ قال: «حق المسلم على أخيه: رد السلام، وعيادة المريض، وإجابة الدعوة، وعيادة المريض، واتباع الجنائز».
+      </div>
+      <div class="ref">تحفة الأخيار ص21</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🫂</span> 40- ست حقوق</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        افتكر الستة دول: 
+        سلم 👋، روح العزومة، انصح لو طلب، شمّت العاطس 🤧، زور المريض، امشي في الجنازة 🖤
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        40ـ وعنه رضي الله عنه عن النبي ﷺ أنه قال: «حق المسلم على المسلم ست: إذا لقيته فسلم عليه، وإذا دعاك فأجبه، وإذا استنصحك فانصحه، وإذا عطس فحمد الله فشمته، وإذا مرض فعده، وإذا مات فاتبعه».
+      </div>
+      <div class="ref">تحفة الأخيار ص21</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">🤧</span> 43- آداب العطاس</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        لو عطست قول: <b>الحمد لله</b> 🙏 
+        صاحبك يقولك: <b>يرحمك الله</b> 
+        وانت ترد عليه: <b>يهديكم الله ويصلح بالكم</b> 😄
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        43ـ وعن أبي هريرة رضي الله عنه أنه قال: «إذا عطس أحدكم فليقل الحمد لله وليقل له أخوه أو صاحبه يرحمك الله، فإذا قال له يرحمك الله فليقل يهديكم الله ويصلح بالكم».
+      </div>
+      <div class="ref">تحفة الأخيار ص23</div>
+    </div>
+  </div>
+
+  <div class="hadith-card">
+    <div class="hadith-header"><span class="icon">📖</span> تنبيه</div>
+    <div class="kids-part">
+      <div class="kids-title"><span class="icon">👶</span> للأطفال</div>
+      <div class="kids-text">
+        ده كتاب مختصر عشان نحفظه بسهولة 📝 
+        لكن الكتاب الأصلي بتاع الشيخ ابن باز رحمه الله كبير وفيه حاجات أكتر.
+      </div>
+    </div>
+    <div class="adults-part">
+      <div class="adults-title"><span class="icon">🧑</span> للكبار - النص كامل</div>
+      <div class="adults-text">
+        هذا الاختصار لكي يسهل على الطالب حفظه، وإلا فالأصل هو أصل الكتاب للعلامة ابن باز رحمه الله تعالى، وينصح باقتناء الكتاب نفسه.
+      </div>
+      <div class="ref">تحفة الأخيار ص23</div>
+    </div>
+  </div>
+
+  <footer>
+    تم التنسيق للأطفال بالشرح المبسط والإيموجي، وللكبار بالنص الأصلي كاملاً بدون حذف.
+  </footer>
 </div>
 </body>
 </html>
