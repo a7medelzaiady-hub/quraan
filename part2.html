@@ -2,47 +2,1278 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>السراج المنير - الجزء الثاني</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>مذكرة مركز خادم القرآن الكريم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-  :root { --green: #2E7D55; --gold: #F4A80A; --ink: #1A2433; --cream: #FDF8F0; }
-  body { font-family: 'Tajawal', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.8; padding: 20px; }
-  .lesson-header { background: var(--green); color: #fff; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 20px; }
-  .qa-card { background: #fff; border-radius: 15px; padding: 20px; margin-bottom: 15px; border-right: 5px solid var(--green); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-  .q-badge { background: var(--gold); color: #fff; padding: 2px 10px; border-radius: 10px; font-weight: bold; }
-  h2 { color: var(--green); border-bottom: 2px solid var(--gold); padding-bottom: 5px; }
+:root {
+  --green-deep: #022c1a;
+  --green-mid: #064e3b;
+  --green-light: #059669;
+  --gold: #d4af37;
+  --gold-light: #fef08a;
+  --gold-pale: #fffbeb;
+  --white: #ffffff;
+  --cream: #fdfbf7;
+  --border: #e5e7eb;
+  --text: #111827;
+  --sub: #4b5563;
+  --red: #dc2626;
+  --blue: #1d4ed8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
+
+/* ═══ الهيدر الرئيسي ═══ */
+.main-header {
+  background: linear-gradient(160deg, var(--green-deep) 0%, #024d2a 50%, var(--green-mid) 100%);
+  padding: 40px 16px 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.main-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(212,175,55,0.04) 30px, rgba(212,175,55,0.04) 31px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(212,175,55,0.04) 30px, rgba(212,175,55,0.04) 31px);
+}
+.main-header::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 0; right: 0; height: 40px;
+  background: var(--cream);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hdr-emblem {
+  width: 80px; height: 80px; margin: 0 auto 16px;
+  background: rgba(212,175,55,0.15);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  box-shadow: 0 0 30px rgba(212,175,55,0.25), inset 0 0 20px rgba(212,175,55,0.05);
+  position: relative; z-index: 1;
+}
+.hdr-title {
+  color: var(--gold-light);
+  font-family: 'Amiri', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  position: relative; z-index: 1;
+  margin-bottom: 8px;
+}
+.hdr-sub {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px; font-weight: 600;
+  position: relative; z-index: 1;
+  margin-bottom: 16px;
+}
+.hdr-badge {
+  display: inline-block;
+  background: rgba(212,175,55,0.2);
+  border: 1px solid rgba(212,175,55,0.5);
+  color: var(--gold-light);
+  font-size: 13px; font-weight: 700;
+  padding: 6px 18px; border-radius: 20px;
+  position: relative; z-index: 1;
+}
+
+/* ═══ التبويبات ═══ */
+.tabs-wrap {
+  background: var(--white);
+  border-bottom: 3px solid var(--gold);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.tabs-scroll {
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  padding: 0 8px;
+  gap: 4px;
+}
+.tabs-scroll::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 14px 20px;
+  background: none; border: none;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--sub);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  color: var(--green-mid);
+  border-bottom-color: var(--green-mid);
+}
+.tab-btn:hover { color: var(--green-mid); }
+
+/* ═══ المحتوى الرئيسي ═══ */
+.body { padding: 24px 14px 60px; max-width: 860px; margin: 0 auto; }
+.lesson-page { display: none; }
+.lesson-page.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ═══ بطاقة القسم ═══ */
+.section-card {
+  background: var(--white);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.section-head {
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-head.aqeeda { background: linear-gradient(135deg, #064e3b, #022c1a); }
+.section-head.fiqh   { background: linear-gradient(135deg, #1e3a8a, #1e40af); }
+.section-head.quran  { background: linear-gradient(135deg, #92400e, #78350f); }
+.section-head.seerah { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+.section-head.fawaid { background: linear-gradient(135deg, #065f46, #047857); }
+.section-icon { font-size: 24px; }
+.section-title { color: var(--gold-light); font-size: 18px; font-weight: 900; font-family: 'Amiri', serif; }
+.section-body { padding: 0; }
+
+/* ═══ بطاقة السؤال/الجواب ═══ */
+.qa-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  position: relative;
+}
+.qa-item:last-child { border-bottom: none; }
+.qa-item:hover { background: #fafffe; }
+.q-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; height: 26px;
+  background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+  color: white; font-size: 12px; font-weight: 900;
+  border-radius: 13px; padding: 0 10px;
+  margin-bottom: 8px;
+}
+.q-num.fiqh-num { background: linear-gradient(135deg, #1e3a8a, #3b82f6); }
+.q-num.quran-num { background: linear-gradient(135deg, #92400e, #d97706); }
+.q-num.seerah-num { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.q-num.fawaid-num { background: linear-gradient(135deg, #065f46, #10b981); }
+.q-text {
+  color: var(--red);
+  font-size: 15px; font-weight: 700;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.a-text {
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.85;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border-right: 4px solid var(--green-light);
+}
+.a-text.fiqh-ans { border-right-color: #3b82f6; }
+.a-text.quran-ans { border-right-color: #d97706; }
+.a-text.seerah-ans { border-right-color: #a78bfa; }
+.a-text.fawaid-ans { border-right-color: #10b981; }
+.a-list {
+  margin: 0; padding: 0; list-style: none;
+}
+.a-list li {
+  padding: 6px 0;
+  border-bottom: 1px dashed #e5e7eb;
+  font-size: 14.5px; line-height: 1.7; color: var(--text);
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.a-list li:last-child { border-bottom: none; }
+.a-list li::before {
+  content: '◆';
+  color: var(--green-light);
+  font-size: 10px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.a-list li.fiqh-li::before { color: #3b82f6; }
+.a-list li.quran-li::before { color: #d97706; }
+.a-list li.seerah-li::before { color: #a78bfa; }
+.a-list li.fawaid-li::before { color: #10b981; }
+
+/* تمييز النصوص القرآنية */
+.ayah {
+  font-family: 'Amiri', serif;
+  font-size: 18px;
+  color: var(--green-mid);
+  background: rgba(5,150,105,0.06);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+  margin: 6px 0;
+  line-height: 2;
+}
+
+/* ═══ ترويسة الدرس ═══ */
+.lesson-header {
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.lesson-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 21px);
+}
+.lesson-num {
+  font-family: 'Amiri', serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--gold-light);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  position: relative;
+}
+.lesson-meta {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  margin-top: 4px;
+  position: relative;
+}
+
+/* ═══ شريط الفصل الذهبي ═══ */
+.gold-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 16px 0 4px;
+  padding: 0 4px;
+}
+.gold-divider::before, .gold-divider::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.gold-divider span {
+  color: var(--gold);
+  font-size: 18px;
+}
+
+/* ═══ فوتر ═══ */
+footer {
+  background: var(--green-deep);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  border-top: 3px solid var(--gold);
+}
+footer span { color: var(--gold-light); font-weight: 700; }
+
+/* ═══ سكرول للأعلى ═══ */
+.scroll-top {
+  position: fixed; bottom: 20px; left: 20px;
+  width: 44px; height: 44px;
+  background: var(--green-mid);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold-light);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0; transition: opacity 0.3s;
+  z-index: 99;
+}
+.scroll-top.show { opacity: 1; }
+
+@media(max-width:480px){
+  .tab-btn { padding: 12px 14px; font-size: 13px; }
+  .q-text { font-size: 14px; }
+  .a-text, .a-list li { font-size: 13.5px; }
+}
 </style>
 </head>
 <body>
 
-<div class="lesson-header">
-  <h1>الدروس العلمية (الدرس ٥ - ٨)</h1>
-  <p>مذكرة السراج المنير - الجزء الثاني</p>
-</div>
+<!-- الهيدر الرئيسي -->
+<header class="main-header">
+  <div class="hdr-emblem">🕌</div>
+  <div class="hdr-title">مركز خادم القرآن الكريم</div>
+  <div class="hdr-sub">تحت إشراف الشيخ عبدالرحمن</div>
+  <div class="hdr-badge">📚 مذكرة الدروس — الجزء الثاني</div>
+</header>
 
-<!-- مثال لتنسيق الأسئلة بناءً على المحتوى المقدم[span_1](start_span)[span_1](end_span) -->
-<div class="section">
-  <h2>أولاً: العقيدة</h2>
-  <div class="qa-card">
-    <div class="qa-question"><span class="q-badge">س٥٨</span> ما هي الأسئلة التي يُسألها العبد في قبره ؟</div>
-    <div class="qa-answer">من ربك؟ وما دينك؟ وماذا تقول في الرجل الذي بعث فيك؟[span_2](start_span)[span_2](end_span)</div>
-  </div>
-  <div class="qa-card">
-    <div class="qa-question"><span class="q-badge">س٥٩</span> ما هى أقسام التوحيد ؟</div>
-    <div class="qa-answer">توحيد الألوهية، توحيد الربوبية، وتوحيد الأسماء والصفات.[span_3](start_span)[span_3](end_span)</div>
-  </div>
-</div>
-
-<div class="section">
-  <h2>ثانياً: الفقه</h2>
-  <div class="qa-card">
-    <div class="qa-question"><span class="q-badge">س٦٢</span> ماهي أثقل صلاتين على المنافقين ؟</div>
-    <div class="qa-answer">صلاة الفجر وصلاة العشاء.[span_4](start_span)[span_4](end_span)</div>
+<!-- التبويبات -->
+<div class="tabs-wrap">
+  <div class="tabs-scroll">
+    <button class="tab-btn active" onclick="showLesson(0,this)">الدرس الخامس</button>
+    <button class="tab-btn" onclick="showLesson(1,this)">الدرس السادس</button>
+    <button class="tab-btn" onclick="showLesson(2,this)">الدرس السابع</button>
+    <button class="tab-btn" onclick="showLesson(3,this)">الدرس الثامن</button>
   </div>
 </div>
 
-<!-- يمكن إضافة باقي الأسئلة بنفس التنسيق المذكور أعلاه بناءً على المصدر[span_5](start_span)[span_5](end_span) -->
+<main class="body">
 
+<!-- ═══════════════════════════════════════ -->
+<!--           الدرس الخامس                 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="lesson-page active" id="lesson-0">
+
+  <div class="lesson-header">
+    <div class="lesson-num">الدرس الخامس</div>
+    <div class="lesson-meta">العقيدة · الفقه · علم القرآن · السيرة · الفوائد</div>
+  </div>
+
+  <!-- أولاً: العقيدة -->
+  <div class="section-card">
+    <div class="section-head aqeeda">
+      <span class="section-icon">🌿</span>
+      <span class="section-title">أولاً: العقيدة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num">س٥٨</div>
+        <div class="q-text">ما هي الأسئلة التي سوف يُسألها العبد في قبره ؟</div>
+        <div class="a-text">من ربك وما دينك وماذا تقول في الرجل الذي بعث فيك ؟<br><br>
+          فالنفس المؤمنة تقول ربي الله وديني الإسلام وهذا الرجل هو النبي محمد صلى الله عليه وسلم. وأما الكافر والنفس الخبيثة فيقول هاه لا أدري سمعت الناس يقولون كذا وكذا.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٥٩</div>
+        <div class="q-text">ما هى أقسام التوحيد وما معنى كل قسم؟</div>
+        <div class="a-text">
+          <ul class="a-list">
+            <li><strong>١- توحيد الألوهية:</strong> وهو إفراد الله عز و جل بالعبادة</li>
+            <li><strong>٢- توحيد الربوبية:</strong> وهو لا خالق ولا رازق ولا مدبر لهذا الكون إلا الله</li>
+            <li><strong>٣- توحيد الأسماء والصفات:</strong> نثبت لله أسمائه الحسنى وصفاته العلى كما جاءت في القرآن وجاءت عن النبي صلى الله عليه وسلم</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٦٠</div>
+        <div class="q-text">ما معنى لا إله إلا الله ؟</div>
+        <div class="a-text">لا معبودَ حقٌّ إلا الله، أي لا يستحق العبادة إلا الله وحده.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٦١</div>
+        <div class="q-text">ما هى شروط لا إله إلا الله التي على العبد أن يحققها؟</div>
+        <div class="a-text">
+          <ul class="a-list">
+            <li><strong>الأول:</strong> العلم بمعناها عاملاً بمقتضاها فلا يأتي بأي ناقض من نواقض الإسلام</li>
+            <li><strong>الثاني:</strong> اليقين وهو كمال العلم المنافي للشك لها</li>
+            <li><strong>الثالث:</strong> الإخلاص المنافي للشرك</li>
+            <li><strong>الرابع:</strong> الصدق المانع من النفاق</li>
+            <li><strong>الخامس:</strong> المحبة لهذه الكلمة بخلاف المنافقون</li>
+            <li><strong>السادس:</strong> الانقياد بأداء حقوقها وهى الأعمال الواجبة إخلاصاً لله وطلباً لمرضاته</li>
+            <li><strong>السابع:</strong> القبول المنافي للرد وذلك بالانقياد لأوامر الله وترك ما نهى عنه</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ثانياً: الفقه -->
+  <div class="section-card">
+    <div class="section-head fiqh">
+      <span class="section-icon">📋</span>
+      <span class="section-title">ثانياً: الفقه</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٢</div>
+        <div class="q-text">ماهى أثقل صلاتين على المنافقين ؟</div>
+        <div class="a-text fiqh-ans">صلاة الفجر وصلاة العشاء.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٣</div>
+        <div class="q-text">ماهى مبطلات الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">الآكل والشراب</li>
+            <li class="fiqh-li">الالتفات بالجسد عن تجاه القبلة</li>
+            <li class="fiqh-li">خروج ريح أثناء الصلاة</li>
+            <li class="fiqh-li">الضحك بصوت وقهقهة أثناء الصلاة</li>
+            <li class="fiqh-li">ترك ركن من أركان الصلاة</li>
+            <li class="fiqh-li">ترك واجب من واجبات الصلاة عامداً</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٤</div>
+        <div class="q-text">ماهى أركان الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li"><strong>الركن الأول:</strong> القيام في صلاة الفريضة</li>
+            <li class="fiqh-li"><strong>الركن الثاني:</strong> تكبيرة الإحرام في أولها</li>
+            <li class="fiqh-li"><strong>الركن الثالث:</strong> قراءة الفاتحة</li>
+            <li class="fiqh-li"><strong>الركن الرابع:</strong> الركوع في كل ركعة</li>
+            <li class="fiqh-li"><strong>الركن الخامس:</strong> الرفع من الركوع</li>
+            <li class="fiqh-li"><strong>الركن السادس:</strong> الاعتدال واقفاً</li>
+            <li class="fiqh-li"><strong>الركن السابع:</strong> السجود</li>
+            <li class="fiqh-li"><strong>الركن الثامن:</strong> الرفع من السجود والجلوس بين السجدتين</li>
+            <li class="fiqh-li"><strong>الركن التاسع:</strong> الطمأنينة في كل الأفعال المذكورة، وهي السكون</li>
+            <li class="fiqh-li"><strong>الركن العاشر:</strong> التشهد الأخير</li>
+            <li class="fiqh-li"><strong>الحادي عشر:</strong> جلسة التشهد الأخير</li>
+            <li class="fiqh-li"><strong>الركن الثاني عشر:</strong> الصلاة على النبي صلى الله عليه وسلم في التشهد الأخير</li>
+            <li class="fiqh-li"><strong>الركن الثالث عشر:</strong> التسليم</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٥</div>
+        <div class="q-text">ماهى واجبات الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li"><strong>الأول:</strong> جميع التكبيرات التي في الصلاة غير تكبيرة الإحرام واجبة</li>
+            <li class="fiqh-li"><strong>الثاني:</strong> التسميع: أى قول سمع الله لمن حمده، وهذا للإمام في الجماعة والمنفرد</li>
+            <li class="fiqh-li"><strong>الثالث:</strong> التحميد؛ أي قول: ربنا و لك الحمد</li>
+            <li class="fiqh-li"><strong>الرابع:</strong> قول سبحان ربى العظيم في الركوع مرة واحدة</li>
+            <li class="fiqh-li"><strong>الخامس:</strong> قول سبحان ربي الأعلى في السجود مرة واحدة</li>
+            <li class="fiqh-li"><strong>السادس:</strong> قول: "رب اغفر لي"، بين السجدتين، مرة واحدة</li>
+            <li class="fiqh-li"><strong>السابع:</strong> التشهد الأول ويقول فيه مثل التشهد الأخير</li>
+            <li class="fiqh-li"><strong>الثامن:</strong> الجلوس للتشهد الأول</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٦</div>
+        <div class="q-text">ماهى سنن الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <strong>أ- سنن الأقوال، وهي كثيرة، منها:</strong>
+          <ul class="a-list" style="margin-top:8px;">
+            <li class="fiqh-li">الاستفتاح: سبحانك اللهم وبحمدك وتبارك اسمك وتعالى جدك ولا إله غيرك</li>
+            <li class="fiqh-li">التعوذ: أعوذ بالله من الشيطان الرجيم</li>
+            <li class="fiqh-li">البسملة: بسم الله الرحمن الرحيم قبل قراءة القرآن</li>
+            <li class="fiqh-li">التأمين: قول آمين بعد الفاتحة</li>
+            <li class="fiqh-li">القراءة: أقرأ بعد الفاتحة بما تيسر من القرآن</li>
+          </ul>
+          <strong style="display:block;margin-top:10px;">ب- سنن الأفعال:</strong>
+          <ul class="a-list" style="margin-top:8px;">
+            <li class="fiqh-li">رفع اليدين: عند تكبيرة الإحرام؛ وعند الهوى إلى الركوع؛ وعند الرفع منه</li>
+            <li class="fiqh-li">وضع اليد اليمنى على اليسرى ووضعهما على صدره في حال القيام</li>
+            <li class="fiqh-li">النظر إلى موضع سجوده</li>
+            <li class="fiqh-li">وضع اليدين على الركبتين في الركوع</li>
+            <li class="fiqh-li">مجافاة بطنه عن فخذيه، وفخذيه عن ساقيه في السجود</li>
+            <li class="fiqh-li">مد ظهره في الركوع معتدلاً</li>
+            <li class="fiqh-li">جعل رأسه في مستوى الظهر فلا يخفضه ولا يرفعه</li>
+            <li class="fiqh-li">تمكين جبهته وأنفه وبقية الأعضاء من موضع السجود</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٧</div>
+        <div class="q-text">ماذا تفعل إذا نسيت واجباً من واجبات الصلاة ناسياً؟</div>
+        <div class="a-text fiqh-ans">تسجد سجود سهو بعد التشهد الأخير.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٨</div>
+        <div class="q-text">إذا وقفت بعد الركعة الثانية وتذكرت أنى لم أتى بالتشهد الأوسط فماذا على أن أفعل؟</div>
+        <div class="a-text fiqh-ans">أمضي في صلاتي ولا أجلس لأنني قد أتيت ركناً ولا يجوز أن تعود من الركن إلى الواجب. فإذا جلست بعدما وقفت للركعة بطلت صلاتك ولاكن عليك أن تكمل الصلاة ولا تعود للتشهد الأوسط، وبعد الصلاة تسجد سجدتين سهو.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٦٩</div>
+        <div class="q-text">ما هى مكروهات الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">الالتفات بوجهه وصدره إلا أن يكون ذلك لحاجة</li>
+            <li class="fiqh-li">رفع بصره إلى السماء</li>
+            <li class="fiqh-li">تغميض عينيه بغير حاجة</li>
+            <li class="fiqh-li">إقعاؤه في الجلوس: وهو أن يفرش قدميه ويجعل مقعدته وسط قدمه، ويجلس عليها</li>
+            <li class="fiqh-li">أن يستند إلى جدار ونحوه حال القيام إلا من حاجة</li>
+            <li class="fiqh-li">افتراش ذراعيه حال السجود</li>
+            <li class="fiqh-li">التخصر: وهو وضع اليد على الخاصرة: أي وضع يده في وسطه</li>
+            <li class="fiqh-li">فرقعة أصابعه وتشبيكها</li>
+            <li class="fiqh-li">أن يصلي وبين يديه عبث بمسح لحيته وكف ثوبه وتنظيف أنفه ونحو ذلك</li>
+            <li class="fiqh-li">الصلاة في مكان فيه تصاوير</li>
+            <li class="fiqh-li">أن يدخل في الصلاة وهو مشوش الفكر بسبب وجود شيء يضايقه</li>
+            <li class="fiqh-li">أن يخص جبهته بما يسجد عليه</li>
+            <li class="fiqh-li">مسح جبهته وأنفه مما علق بهما من أثر السجود</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٧٠</div>
+        <div class="q-text">ما هى أذكار الصلاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">تقول سبحان الله ثلاث وثلاثين مرة، والحمد لله ثلاث وثلاثين مرة، والله أكبر ثلاث وثلاثين مرة، وتمام المائة أن تقول لا إله إلا الله وحده لا شريك له له الملك وله الحمد وهو على كل شئ قدير</li>
+            <li class="fiqh-li">تقرأ سورة الإخلاص والفلق والناس مرة واحدة إلا في الفجر والمغرب يقولها ثلاث مرات</li>
+            <li class="fiqh-li">لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شئ قدير</li>
+            <li class="fiqh-li">تزيد في الفجر والمغرب: لا إله إلا الله وحده لا شريك له، له الملك وله الحمد يحي ويمت وهو على كل شئ قدير عشر مرات</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ثالثاً: علم القرآن -->
+  <div class="section-card">
+    <div class="section-head quran">
+      <span class="section-icon">📖</span>
+      <span class="section-title">ثالثاً: علم القرآن</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س٧١</div>
+        <div class="q-text">ماهى السور التي فيها قصة موسى عليه السلام ؟</div>
+        <div class="a-text quran-ans">الأعراف ـ طه ـ الشعراء ـ النمل ـ القصص.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س٧٢</div>
+        <div class="q-text">ماهى السورة التي جمعت علم المواريث ؟</div>
+        <div class="a-text quran-ans">سورة النساء.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س٧٣</div>
+        <div class="q-text">ماهى السور التي تبدأ بـ الم والر؟</div>
+        <div class="a-text quran-ans">البقرة ـ آل عمران ـ يونس ـ هود ـ يوسف ـ الرعد ـ إبراهيم ـ الحجر ـ العنكبوت ـ الروم ـ لقمان ـ السجدة.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- رابعاً: السيرة -->
+  <div class="section-card">
+    <div class="section-head seerah">
+      <span class="section-icon">🌙</span>
+      <span class="section-title">رابعاً: السيرة والقصص</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٧٤</div>
+        <div class="q-text">من هو سيد الشهداء ؟</div>
+        <div class="a-text seerah-ans">حمزة بن عبد المطلب رضي الله عنه عم النبي صلى الله عليه وسلم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٧٥</div>
+        <div class="q-text">من هو خال المؤمنين ؟</div>
+        <div class="a-text seerah-ans">معاوية رضي الله عنه.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٧٦</div>
+        <div class="q-text">من هو أمين الوحي؟</div>
+        <div class="a-text seerah-ans">جبريل عليه السلام.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- خامساً: الفوائد العامة -->
+  <div class="section-card">
+    <div class="section-head fawaid">
+      <span class="section-icon">💡</span>
+      <span class="section-title">خامساً: الفوائد العامة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س٧٧</div>
+        <div class="q-text">ماهى الوصية التي أوصى بها القرآن كثير بعد قوله تعالى: ﴿وَاعْبُدُواْ اللَّهَ وَلاَ تُشْرِكُواْ بِهِ شَيْئاً﴾ [النساء:٣٦] ؟</div>
+        <div class="a-text fawaid-ans">بر الوالدين، قال ابن مسعود رضي الله: بروا آباءكم تبركم أبناؤكم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س٧٨</div>
+        <div class="q-text">ماهى أحب البقاع إلى الله وما أبغضها ؟</div>
+        <div class="a-text fawaid-ans">أحب البقاع إلى الله المساجد، وأبغضها الأسواق لما فيها من حلف كاذب وغش وغير ذلك.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end lesson-0 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--           الدرس السادس                 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="lesson-page" id="lesson-1">
+
+  <div class="lesson-header">
+    <div class="lesson-num">الدرس السادس</div>
+    <div class="lesson-meta">العقيدة · الفقه · علم القرآن · السيرة · الفوائد</div>
+  </div>
+
+  <!-- العقيدة -->
+  <div class="section-card">
+    <div class="section-head aqeeda">
+      <span class="section-icon">🌿</span>
+      <span class="section-title">أولاً: العقيدة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num">س٧٩</div>
+        <div class="q-text">ما معنى أشهد أن محمداً رسول الله ؟</div>
+        <div class="a-text">تصديقه فيما أخبر وطاعته فيما أمر واجتناب ما نهى عنه وزجر وألا يعبد الله إلا بما شرع.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٨٠</div>
+        <div class="q-text">ماعقوبة من يخالف النبي صلى الله عليه وسلم ؟</div>
+        <div class="a-text">متوعد بعذاب الله عزوجل ولا يشرب من حوض النبي صلى الله عليه وسلم يوم القيامة.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٨١</div>
+        <div class="q-text">فإذا قيل لك بما عرفت ربك ؟</div>
+        <div class="a-text">فقل بآياته ومخلوقاته.<br><br>
+          ومن آياته: الليل والنهار، والشمس والقمر.<br>
+          ومن مخلوقاته السموات السبع والأراضين السبع وما فيهن وما بينهما.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٨٢</div>
+        <div class="q-text">ماذا تقول في القران ؟</div>
+        <div class="a-text">كلام الله غير مخلوق منه بدا وإليه يعود.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٨٣</div>
+        <div class="q-text">ما معنى العبادة ؟</div>
+        <div class="a-text">هي اسم جامع لكل ما يحبه الله ويرضاه من الأقوال والأفعال الظاهرة والباطنة.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفقه -->
+  <div class="section-card">
+    <div class="section-head fiqh">
+      <span class="section-icon">📋</span>
+      <span class="section-title">ثانياً: الفقه</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٤</div>
+        <div class="q-text">ما هي أنواع الزكاة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li"><strong>١- زكاة الزرع والثمار:</strong> وهى في ما يخرج من الأرض يوزن ويخزن ومقدارها العشر إذا سقته السماء ونصف العشر إذا سقى بالآلات</li>
+            <li class="fiqh-li"><strong>٢- الذهب والفضة:</strong> بشرط مرور عليها سنة وكان وزنها 85 جرام فما فوق من الذهب، و595 جرام فضة ومقدارها ربع العشر</li>
+            <li class="fiqh-li"><strong>٣- زكاة المعادن:</strong> ومقدارها ربع العشر</li>
+            <li class="fiqh-li"><strong>٤- الركاز:</strong> وهو دفن الجاهلية ومقدارها الخمس</li>
+            <li class="fiqh-li"><strong>٥- زكاة الإبل:</strong> إذا بلغت خمسة والبقر إذا بلغت 30 والغنم والماعز إذا بلغت 40 وسنفرد لها سؤال خاص بها</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٥</div>
+        <div class="q-text">ما هو أفضل الشهور بعد رمضان ؟</div>
+        <div class="a-text fiqh-ans">شهر الله المحرم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٦</div>
+        <div class="q-text">لماذا نصوم يوم عاشوراء ومعه التاسع من محرم ؟</div>
+        <div class="a-text fiqh-ans">ذلك اليوم الذي نجي الله عزوجل موسى عليه السلام من فرعون.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٧</div>
+        <div class="q-text">ما هي مبطلات الصيام ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">الأكل والشراب عامداً</li>
+            <li class="fiqh-li">القيء عامداً</li>
+            <li class="fiqh-li">إدخال أدوية إلى الجوف، أو ما يتغذى عليها الجسد وغير ذلك من المفطرات</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٨</div>
+        <div class="q-text">ماهى مبطلات أجر الصيام ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">الغيبة والنميمة</li>
+            <li class="fiqh-li">التكلم بالكلام الفاحش كالسباب ونحوه</li>
+            <li class="fiqh-li">مشاهدة المحرمات مثل الأفلام والمسلسلات</li>
+            <li class="fiqh-li">وسماع المحرم كالغناء ونحوه</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٨٩</div>
+        <div class="q-text">هل يشترط الطهارة للصيام ؟</div>
+        <div class="a-text fiqh-ans">لا يشترط.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س٩٠</div>
+        <div class="q-text">ما جزاء من أفطر يوماً في رمضان بدون عذر ؟</div>
+        <div class="a-text fiqh-ans">يستغفر الله وعليه قضاء يوم بعد رمضان فقد فعل كبيرة من الكبائر.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- علم القرآن -->
+  <div class="section-card">
+    <div class="section-head quran">
+      <span class="section-icon">📖</span>
+      <span class="section-title">ثالثاً: علم القرآن</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س٩١</div>
+        <div class="q-text">ماهى السور التي فيها سجدة في القرآن ؟</div>
+        <div class="a-text quran-ans">الأعراف ـ الرعد ـ النحل ـ الإسراء ـ مريم ـ الفرقان ـ الحج ـ النمل ـ السجدة ـ ص ـ النجم ـ الانشقاق ـ العلق.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- السيرة -->
+  <div class="section-card">
+    <div class="section-head seerah">
+      <span class="section-icon">🌙</span>
+      <span class="section-title">رابعاً: السيرة والقصص</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٩٢</div>
+        <div class="q-text">من هو النبي الذي تفجرت المياه من تحت أصابعه ؟</div>
+        <div class="a-text seerah-ans">محمد صلى الله عليه وسلم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٩٣</div>
+        <div class="q-text">من هو النبي الذي أكل من الشاة المسمومة فنطقت وقالت له لا تأكل منى ؟</div>
+        <div class="a-text seerah-ans">محمد صلى الله عليه وسلم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س٩٤</div>
+        <div class="q-text">من هو النبي الذي تكلم في المهد ؟</div>
+        <div class="a-text seerah-ans">عيسى عليه السلام.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفوائد العامة -->
+  <div class="section-card">
+    <div class="section-head fawaid">
+      <span class="section-icon">💡</span>
+      <span class="section-title">خامساً: الفوائد العامة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س٩٥</div>
+        <div class="q-text">كيف ترقى نفسك ؟</div>
+        <div class="a-text fawaid-ans">
+          <ul class="a-list">
+            <li class="fawaid-li">تجمع كفيك ؛ثم تقرأ سورة الإخلاص ثلاث؛ ثم تنفث فيهما؛ ثم تمسح جسدك بهما</li>
+            <li class="fawaid-li">تجمع كفيك ثم تقرأ سورة الفلق ثلاث؛ ثم تنفث فيهما؛ ثم تمسح جسدك بهما</li>
+            <li class="fawaid-li">ثم تجمع كفيك ثم تقرأ سورة الناس ثلاث؛ ثم تنفث فيهما؛ ثم تمسح جسدك بهما</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end lesson-1 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--           الدرس السابع                 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="lesson-page" id="lesson-2">
+
+  <div class="lesson-header">
+    <div class="lesson-num">الدرس السابع</div>
+    <div class="lesson-meta">العقيدة · الفقه · علم القرآن · السيرة · الفوائد</div>
+  </div>
+
+  <!-- العقيدة -->
+  <div class="section-card">
+    <div class="section-head aqeeda">
+      <span class="section-icon">🌿</span>
+      <span class="section-title">أولاً: العقيدة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num">س٩٦</div>
+        <div class="q-text">من هو نافخ الصور ؟</div>
+        <div class="a-text">إسرافيل عليه السلام.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٩٧</div>
+        <div class="q-text">ما هي الكبائر؟</div>
+        <div class="a-text">قيل: هي كل ذنب ترتب عليه حد، وقيل: هي كل ذنب أُتبع بلعنة أو غضب أو نار أو أي عقوبة.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٩٨</div>
+        <div class="q-text">كيف يمر الناس على الصراط ؟</div>
+        <div class="a-text">كل واحد حسب عمله فمن سيمر كالريح، ومن سيمر كالبرق ومن سيمر كالخيل ومن سيمر يعدو أي يجري، ومنهم من يمر ماشياً ومن يحبوا. وقال ابن القيم وسرعة العبد في الطاعات يكون على قدرها سرعة المرور على الصراط.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س٩٩</div>
+        <div class="q-text">ماذا تعرف عن الصراط ؟</div>
+        <div class="a-text">هو أدق من الشعرة وأحد من السيف يُنصب على جهنم يمر عليه الناس على جنابته كلاليب تتخطف الناس إلى جهنم لا ينجو منها إلا من كان عمله صالحاً في الدنيا.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠٠</div>
+        <div class="q-text">عرف الشرك الذي بسببه يكفر العبد ويدخل النار ؟</div>
+        <div class="a-text">الشرك: دعوة غيره معه أى عبادة غير الله مع الله كمن يذبح لغير الله ويدعو ويستغيث بغير الله ويطوف لغير الله ويسأل الحاجات من الأموات ممن يسمونهم الأولياء إلى غير ذلك.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠١</div>
+        <div class="q-text">ماحكم من يعلق الخرزة الزرقاء وخمسة وخميسه وغير ذلك لدفع الحسد ؟</div>
+        <div class="a-text">إن قال هي تدفع بنفسها فهذا شرك أكبر وان قال هي سبب في دفع الحسد فيها شرك أصغر وفى كل الأحوال شرك.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠٢</div>
+        <div class="q-text">ما معنى النفاق؟</div>
+        <div class="a-text">إظهار خلاف ما داخله.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠٣</div>
+        <div class="q-text">ما أقسام النفاق ؟</div>
+        <div class="a-text">
+          <ul class="a-list">
+            <li><strong>الأول: نفاق عقدي</strong> وهو أن يعتقد الشخص بحل ما حرمه الله بداخله ولا يظهر ذلك</li>
+            <li><strong>الثاني: نفاق عملي</strong> وهو من يفعل خصلة من خصال النفاق كما اخبر النبى صلى الله عليه وسلم أربع من كان فيه خصلة منهما كان فيه خصلة من خصال النفاق حتى يدعها: إذا حدث كذب وإذا اؤتمن خان وإذا عاهد غدر وإذا خاصم فجر</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠٤</div>
+        <div class="q-text">ما هو الشرك الأصغر؟</div>
+        <div class="a-text">الرياء: وهو أن يفعل الرجل العبادة من أجل أن يتكلم الناس عنه. والحلف بغير الله كمن يقل والنبي وشبكة العشرة وحياة بابا وماما ورحمة جدي فكل ذلك حرام.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١٠٥</div>
+        <div class="q-text">ما كفارة من حلف بغير الله ؟</div>
+        <div class="a-text">أن يقول أشهد أن لا إله إلا الله واشهد أن محمداً رسول الله صلى الله عليه وسلم.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفقه -->
+  <div class="section-card">
+    <div class="section-head fiqh">
+      <span class="section-icon">📋</span>
+      <span class="section-title">ثانياً: الفقه</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٠٦</div>
+        <div class="q-text">ما هي أفضل ليالي السنة ؟</div>
+        <div class="a-text fiqh-ans">العشر الأواخر من رمضان.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٠٧</div>
+        <div class="q-text">ماهى الليلة التي هي أفضل من ألف شهر ؟</div>
+        <div class="a-text fiqh-ans">ليلة القدر.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٠٨</div>
+        <div class="q-text">كيف تصلى الجنازة ؟</div>
+        <div class="a-text fiqh-ans">
+          تكبر أربع تكبيرات:
+          <ul class="a-list" style="margin-top:8px;">
+            <li class="fiqh-li">تقرأ في الأولى الفاتحة</li>
+            <li class="fiqh-li">تقول في الثانية: اللهم صلى على محمد إلى أخر التشهد</li>
+            <li class="fiqh-li">وفى الثالثة: الدعاء للميت</li>
+            <li class="fiqh-li">وفى الرابعة الدعاء للمسلمين</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٠٩</div>
+        <div class="q-text">هل ما يحدث اليوم من وضع الميت في بناء مغلق عليه على سطح الأرض هل هذا دفن ؟</div>
+        <div class="a-text fiqh-ans">لا. ليس بدفن للميت بل هذا رمى فالدفن الصحيح لابد أن يكون في الأرض لا على سطح الأرض. فأما الدفن أن يكون: بالشق وهو الحفر في وسط القبر، أو اللحد وهو حفر بميلان في جانب القبر فلابد أن يكون القبر في بطن الأرض.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١١٠</div>
+        <div class="q-text">ما هى بدع الجنائز التي يحرم فعلها ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">ترك دفن الميت والوقوف عند القبر لأخذ العزاء</li>
+            <li class="fiqh-li">ما يفعله بعض الناس وان قل بما يسمونه من تلقين الميت بأسئلة القبر</li>
+            <li class="fiqh-li">نعي الجاهلية وهو ذكر أقارب الميت وأبنائه وعائلته عند النداء عليه. والصحيح الاقتصار على اسمه ومكان الجنازة وموعدها فقط</li>
+            <li class="fiqh-li">الجلوس لأخذ العزاء في السرادقات أو أمام البيت ووضع الكراسي وإحضار المقرئين وتعليق الأنوار</li>
+            <li class="fiqh-li">صنع الطعام للناس بعد الجنازة</li>
+            <li class="fiqh-li">تشغيل القرآن في البيت من أجل الحزن أو ما يقولونه على روح الميت</li>
+            <li class="fiqh-li">زيارة الميت كل خميس وإعداد ما يوزعونه في المقابر على الناس</li>
+            <li class="fiqh-li">ما يسمونه بالخميس والأربعين وهو الجلوس أمام البيت وإحضار المقرئين كل خميس وبعد أربعين يوم</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- علم القرآن -->
+  <div class="section-card">
+    <div class="section-head quran">
+      <span class="section-icon">📖</span>
+      <span class="section-title">ثالثاً: علم القرآن</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س١١١</div>
+        <div class="q-text">ما هى بعض أسماء النار أعاذنا الله منها ومن حررها ؟</div>
+        <div class="a-text quran-ans">السعير ـ الحطمة ـ جهنم ـ سقر ـ لظى ـ الجحيم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س١١٢</div>
+        <div class="q-text">ما هى بعض أسماء يوم القيامة ؟</div>
+        <div class="a-text quran-ans">الساعة ـ الطامة الكبرى ـ الصاخة ـ القارعة ـ الغاشية ـ اليوم الأخر ـ يوم البعث والحساب.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- السيرة -->
+  <div class="section-card">
+    <div class="section-head seerah">
+      <span class="section-icon">🌙</span>
+      <span class="section-title">رابعاً: السيرة والقصص</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س١١٣</div>
+        <div class="q-text">من هو النبي أخو النبي ؟</div>
+        <div class="a-text seerah-ans">هارون عليه السلام.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س١١٤</div>
+        <div class="q-text">من النبي الذي اتهم إخوته الذئب بأكله، وهو لم يأكله ؟</div>
+        <div class="a-text seerah-ans">يوسف عليه السلام.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفوائد العامة -->
+  <div class="section-card">
+    <div class="section-head fawaid">
+      <span class="section-icon">💡</span>
+      <span class="section-title">خامساً: الفوائد العامة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١١٥</div>
+        <div class="q-text">ما هو الذكر الذي هو كنز من كنوز الجنة ؟</div>
+        <div class="a-text fawaid-ans">لاحول ولا قوة إلا بالله العظيم.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١١٦</div>
+        <div class="q-text">اذكر الكبائر؟</div>
+        <div class="a-text fawaid-ans">
+          <ul class="a-list">
+            <li class="fawaid-li">١- الإشراك بالله &nbsp; ٢- قتل النفس &nbsp; ٣- السحر &nbsp; ٤- ترك الصلاة</li>
+            <li class="fawaid-li">٥- منع الزكاة &nbsp; ٦- إفطار يوم في رمضان بدون عذر</li>
+            <li class="fawaid-li">٧- ترك الحج مع القدرة عليه &nbsp; ٨- عقوق الوالدين</li>
+            <li class="fawaid-li">٩- هجران الأقارب &nbsp; ١٠- الزنا</li>
+            <li class="fawaid-li">١١- الكذب على الله ورسوله &nbsp; ١٢- الفرار من الزحف &nbsp; ١٣- الكبر</li>
+            <li class="fawaid-li">١٤- شهادة الزور &nbsp; ١٥- شرب الخمر &nbsp; ١٦- القمار &nbsp; ١٧- قذف المحصنات</li>
+            <li class="fawaid-li">١٨- الغلول من الغنيمة &nbsp; ١٩- السرقة &nbsp; ٢٠- قطع الطريق</li>
+            <li class="fawaid-li">٢١- اليمين الغموس &nbsp; ٢٢- الظلم &nbsp; ٢٦- المكس &nbsp; ٢٧- أكل الحرام</li>
+            <li class="fawaid-li">٢٨- قتل الإنسان نفسه &nbsp; ٢٩- الكذب &nbsp; ٣٠- القاضي السوء &nbsp; ٣١- الرشوة</li>
+            <li class="fawaid-li">٣٢- تشبه النساء بالرجال وتشبه الرجال بالنساء</li>
+            <li class="fawaid-li">٣٣- عدم التنزه من البول &nbsp; ٣٤- الرياء &nbsp; ٣٥- كتمان العلم الشرعي</li>
+            <li class="fawaid-li">٣٦- الخيانة &nbsp; ٣٧- المنان &nbsp; ٣٨- التكذيب بالقدر</li>
+            <li class="fawaid-li">٣٩- التصنت &nbsp; ٤٠- النمام &nbsp; ٤١- اللعان &nbsp; ٤٢- الغدر</li>
+            <li class="fawaid-li">٤٣- تصديق الكاهن والمنجم &nbsp; ٤٤- التصوير &nbsp; ٤٥- اللطم والنياحة</li>
+            <li class="fawaid-li">٤٦- البغي &nbsp; ٤٧- أذى الجار &nbsp; ٤٨- أذى المسلمين</li>
+            <li class="fawaid-li">٤٩- إطالة الثياب إلى أسفل الكعب &nbsp; ٥٠- لبس الحرير والذهب للرجال</li>
+            <li class="fawaid-li">٥١- الأمن من مكر الله &nbsp; ٥٢- نقص الوزن والمكيال &nbsp; ٥٣- ترك الجماعة</li>
+            <li class="fawaid-li">٥٤- من تطلع على عورات المسلمين &nbsp; ٥٥- سب احد أصحاب رسول الله صلى الله عليه وسلم</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end lesson-2 -->
+
+
+<!-- ═══════════════════════════════════════ -->
+<!--           الدرس الثامن                 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="lesson-page" id="lesson-3">
+
+  <div class="lesson-header">
+    <div class="lesson-num">الدرس الثامن</div>
+    <div class="lesson-meta">العقيدة · الفقه · علم القرآن · السيرة · الفوائد</div>
+  </div>
+
+  <!-- العقيدة -->
+  <div class="section-card">
+    <div class="section-head aqeeda">
+      <span class="section-icon">🌿</span>
+      <span class="section-title">أولاً: العقيدة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num">س١١٧</div>
+        <div class="q-text">ما هى أصول أهل السنة ؟</div>
+        <div class="a-text">
+          <ul class="a-list">
+            <li>١- الإيمان بالله</li>
+            <li>٢- الإيمان بالملائكة</li>
+            <li>٣- الإيمان بكتبه</li>
+            <li>٤- الإيمان برسله</li>
+            <li>٥- الإيمان باليوم الآخر</li>
+            <li>٦- الإيمان بالقدر خيره وشره</li>
+            <li>٧- الترضي على أصحاب رسول وذكرهم بكل خير وعدم الانتقاص منهم</li>
+            <li>٨- الاجتماع حول جماعة المسلمين وحاكمهم وعدم الخروج عليه</li>
+            <li>٩- تجنب والتحذير من كل من يحدث في دين الله ما ليس فيه، ويمشي وراء علقه</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١١٨</div>
+        <div class="q-text">ماذا تعرف عن الميزان ؟</div>
+        <div class="a-text">هو ميزان حقيقي له كفتان قيل يوزن فيه العبد وقيل يوزن فيه أعمال العبد ولا تعارض بين القولين.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num">س١١٩</div>
+        <div class="q-text">ماذا تعرف عن الملائكة ؟</div>
+        <div class="a-text">
+          <ul class="a-list">
+            <li>هم مخلوقين من نور</li>
+            <li>لا يأكلون ولا يشربون ولا يتغوطون</li>
+            <li>يفعلون ما يأمرهم به الله عزوجل</li>
+            <li>يسبحون الليل والنهار لا يلمون من ذلك</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفقه -->
+  <div class="section-card">
+    <div class="section-head fiqh">
+      <span class="section-icon">📋</span>
+      <span class="section-title">ثانياً: الفقه</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٢٠</div>
+        <div class="q-text">ما حكم الغناء ؟</div>
+        <div class="a-text fiqh-ans">
+          حرام والدليل قوله تعالى: ﴿وَمِنَ النَّاسِ مَن يَشْتَرِي لَهْوَ الْحَدِيثِ لِيُضِلَّ عَن سَبِيلِ اللَّهِ﴾ [لقمان:٦]، قال ابن مسعود رضي الله: والله هو الغناء.<br><br>
+          وقال تعالى: ﴿وَمَن يَعْشُ عَن ذِكْرِ الرَّحْمَنِ نُقَيِّضْ لَهُ شَيْطَاناً﴾ [الزخرف:٣٦].<br><br>
+          وقال صلى الله عليه وسلم: (سيأتي على أمتي زمان يستحلون فيه المعازف).
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٢١</div>
+        <div class="q-text">ما هو حجاب المرأة المسلمة ؟</div>
+        <div class="a-text fiqh-ans">
+          <ul class="a-list">
+            <li class="fiqh-li">ملابس واسعة لاتصف ولا تشف</li>
+            <li class="fiqh-li">لا تلفت النظر خالية من الزينة كالتطريز وغيره</li>
+            <li class="fiqh-li">ترتديه المرأة مسدولاً عليها من رأسها حتى أصابع قدميها مثل: الإسدال والملحفة لاكما يظن كثيرا من النساء أنها إذا ارتدت عليها العباءة الواسعة ووضعت ما يسمونه بالطرحة على رأسها فهذا هو الحجاب فهذا خطا كبير فقد ظهر كتفيها وتحددت ذراعيها</li>
+            <li class="fiqh-li">أن تكون الألوان الداكنة مثل الأسود والبني والكحلي</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fiqh-num">س١٢٢</div>
+        <div class="q-text">ما حكم خروج المرأة متعطرة من بيتها ؟</div>
+        <div class="a-text fiqh-ans">يحرم ذلك لقوله صلى الله عليه وسلم أيما امرأة خرجت من بيتها متعطرة فمرت على قوم فشموا ريحها فهي زانية.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- علم القرآن -->
+  <div class="section-card">
+    <div class="section-head quran">
+      <span class="section-icon">📖</span>
+      <span class="section-title">ثالثاً: علم القرآن</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س١٢٣</div>
+        <div class="q-text">ماهى السور التي تبدأ حم ؟</div>
+        <div class="a-text quran-ans">غافر ـ فصلت ـ الشورى ـ الزخرف ـ الجاثية ـ الأحقاف.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س١٢٤</div>
+        <div class="q-text">ماذا تفيد عسى في القران ؟</div>
+        <div class="a-text quran-ans">تفيد التحقيق أي أن الأمر الذي يأتي بعد عسى محقق وقوعه فعلاً.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num quran-num">س١٢٥</div>
+        <div class="q-text">ماذا تفعل إذا سمعت في أية يأيها الناس أو يأيها الذين امنوا؟</div>
+        <div class="a-text quran-ans">أنصت إليها جيداً فقد قال العلماء: أي نداء يأتي في القرآن إما أمر من الله عزوجل عن شئ أو نهى من الله عزوجل عن شيء.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- السيرة -->
+  <div class="section-card">
+    <div class="section-head seerah">
+      <span class="section-icon">🌙</span>
+      <span class="section-title">رابعاً: السيرة والقصص</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س١٢٦</div>
+        <div class="q-text">بماذا لقب عمر رضي الله عنه ؟</div>
+        <div class="a-text seerah-ans">فاروق الأمة.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num seerah-num">س١٢٧</div>
+        <div class="q-text">ما كنية أمير المؤمنين عمر رضي الله عنه ؟</div>
+        <div class="a-text seerah-ans">أبى حفص.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- الفوائد العامة -->
+  <div class="section-card">
+    <div class="section-head fawaid">
+      <span class="section-icon">💡</span>
+      <span class="section-title">خامساً: الفوائد العامة</span>
+    </div>
+    <div class="section-body">
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١٢٨</div>
+        <div class="q-text">اذكر خصلة حذر منها النبي صلى الله عليه وسلم ونفى أن تكون في المؤمن أبداً؟</div>
+        <div class="a-text fawaid-ans">الكذب فقال صلى الله عليه وسلم لا يكون المؤمن كذاباً.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١٢٩</div>
+        <div class="q-text">ماذا كان خلق النبي صلى الله عليه وسلم ؟</div>
+        <div class="a-text fawaid-ans">كان خلقه القرآن كما أخبرت بذلك عائشة رضي الله عنها.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١٣٠</div>
+        <div class="q-text">من هم السبعة الذين يظلهم الله في ظله؟</div>
+        <div class="a-text fawaid-ans">
+          <ul class="a-list">
+            <li class="fawaid-li">١- إمام عادل</li>
+            <li class="fawaid-li">٢- شاب نشأ في عبادة الله</li>
+            <li class="fawaid-li">٣- رجل قلبه معلق بالمساجد</li>
+            <li class="fawaid-li">٤- اثنان تحابا في الله واجتمعا عليه وتفرقا عليه</li>
+            <li class="fawaid-li">٥- ورجل دعته امرأة ذات منصب وجمال فقال أنى أخاف الله رب العالمين</li>
+            <li class="fawaid-li">٦- ورجل تصدق بصدقة فأخفاها حتى لا تعلم شماله ما تنفق يمينه</li>
+            <li class="fawaid-li">٧- وذكر الله خالياً ففاضت عيناه</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="q-num fawaid-num">س١٣١</div>
+        <div class="q-text">ماهى الأمور التي إذا فعلناها تحاببنا ؟</div>
+        <div class="a-text fawaid-ans">إفشاء السلام وإطعام الطعام كما اخبر النبي صلى الله عليه وسلم.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ختام المذكرة -->
+  <div style="text-align:center; padding: 24px 16px; background: linear-gradient(135deg, #fffbeb, #fef9c3); border-radius: 16px; border: 2px solid var(--gold); margin-top: 8px;">
+    <div style="font-size: 28px; margin-bottom: 8px;">🌟</div>
+    <div style="font-family:'Amiri',serif; font-size: 20px; color: var(--green-deep); font-weight: 700; margin-bottom: 6px;">انتهى الجزء الثاني بحمد الله تعالى</div>
+    <div style="color: var(--sub); font-size: 14px; margin-bottom: 10px;">ويليه الجزء الثالث إن شاء الله تعالى</div>
+    <div style="color: var(--green-mid); font-size: 15px; font-weight: 700;">نسألكم الدعاء بظاهر الغيب 🤲</div>
+  </div>
+
+</div><!-- end lesson-3 -->
+
+</main>
+
+<footer>
+  <span>مركز خادم القرآن الكريم</span> | مذكرة الدروس - الجزء الثاني<br>
+  <small style="margin-top:6px;display:block;">تحت إشراف الشيخ عبدالرحمن</small>
+</footer>
+
+<button class="scroll-top" id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function showLesson(idx, btn) {
+  document.querySelectorAll('.lesson-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('lesson-' + idx).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', function() {
+  var btn = document.getElementById('scrollBtn');
+  if (window.scrollY > 300) btn.classList.add('show');
+  else btn.classList.remove('show');
+});
+</script>
 </body>
 </html>
