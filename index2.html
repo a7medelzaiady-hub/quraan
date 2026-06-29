@@ -2,238 +2,142 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>واجهة تطبيق فخمة</title>
-    <!-- استدعاء خط 'Cairo' الأنيق من جوجل -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبتي الجميلة 🌟</title>
     
+    <!-- استدعاء خط عربي جميل ومناسب من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+
     <style>
         /* إعدادات عامة */
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
-            /* إخفاء مربع النقر الافتراضي في الموبايل لتبدو كأزرار تطبيق حقيقية */
-            -webkit-tap-highlight-color: transparent; 
+            background-color: #f0f8ff; /* لون خلفية سماوي فاتح مريح للعين */
+            background-image: radial-gradient(#fff 20%, transparent 20%), radial-gradient(#fff 20%, transparent 20%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
         }
 
-        body {
-            background-color: #0a0c10; /* خلفية داكنة جداً */
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        /* حاوية التطبيق (محاكاة أبعاد الموبايل) */
-        .app-container {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* عنوان الصفحة */
-        .header {
+        /* تنسيق رأس الصفحة (العنوان) */
+        header {
             text-align: center;
-            margin-bottom: 10px;
+            padding: 30px 10px;
+            background-color: #ff9ff3;
+            color: white;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 10px 20px rgba(255, 159, 243, 0.3);
+            margin-bottom: 40px;
         }
 
-        .header h1 {
-            font-size: 26px;
-            font-weight: 800;
-            /* نص بتدرج ذهبي فخم */
-            background: linear-gradient(45deg, #C5A059, #F3E5AB, #C5A059); 
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .header p {
-            color: #8a8d93;
-            font-size: 14px;
-            font-weight: 600;
+        /* حاوية الكروت (لجعلها متوافقة مع الموبايل) */
+        .cards-container {
+            display: grid;
+            /* هذا السطر يجعل الكروت تتكيف مع حجم الشاشة تلقائياً */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* شبكة الكروت (الأزرار) */
-        .cards-grid {
+        /* تنسيق الكارت نفسه */
+        .card {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-        }
-
-        /* تصميم الكارت / الزر */
-        .luxury-card {
-            background: linear-gradient(145deg, #15181d 0%, #0d0f12 100%);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            border-radius: 20px;
-            padding: 18px 20px;
-            display: flex;
             align-items: center;
-            gap: 18px;
-            cursor: pointer;
-            text-align: right;
-            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            text-align: center;
+            text-decoration: none; /* إزالة الخط تحت الروابط */
+            padding: 40px 20px;
+            border-radius: 30px; /* حواف دائرية كبيرة */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; /* تأثير حركي ناعم */
             position: relative;
             overflow: hidden;
-            outline: none;
-            .luxury-card{
-    text-decoration:none;
-    color:inherit;
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-.card-content{
-    flex:1;
-}
+            border: 4px solid white;
         }
 
-        /* تأثير اللمعان الداخلي (يظهر عند التمرير) */
-        .luxury-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.08), transparent);
-            transition: all 0.5s ease;
+        /* تأثير عند مرور الماوس أو اللمس (القفز لأعلى) */
+        .card:hover, .card:active {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
-        /* تأثير النقر (اللمس) المخصص للموبايل */
-        .luxury-card:active {
-            transform: scale(0.95); /* تصغير مرن عند اللمس */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
-            border-color: rgba(197, 160, 89, 0.6);
-            background: linear-gradient(145deg, #1a1e24 0%, #101216 100%);
+        /* أيقونات الكروت */
+        .card .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
         }
 
-        /* تأثير التمرير (للشاشات الكبيرة إن وجدت) */
-        @media (hover: hover) {
-            .luxury-card:hover {
-                transform: translateY(-3px);
-                border-color: rgba(197, 160, 89, 0.5);
-                box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15);
-            }
-            .luxury-card:hover::before {
-                left: 200%;
-            }
+        /* نصوص الكروت */
+        .card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            color: #2d3436;
         }
 
-        /* تصميم الأيقونة داخل الكارت */
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(197, 160, 89, 0.02) 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 22px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        .card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #636e72;
         }
 
-        /* نصوص الزر */
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex-grow: 1;
-        }
+        /* ألوان مختلفة لكل كارت */
+        .card-1 { background-color: #ffeaa7; } /* أصفر */
+        .card-2 { background-color: #81ecec; } /* أزرق فاتح */
+        .card-3 { background-color: #fab1a0; } /* برتقالي/وردي فاتح */
+        .card-4 { background-color: #55efc4; } /* أخضر فاتح */
 
-        .card-content h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 0.3px;
-        }
-
-        .card-content p {
-            font-size: 12px;
-            color: #8a8d93;
-            font-weight: 600;
-            line-height: 1.5;
-        }
-
-        /* السهم الجانبي */
-        .card-arrow {
-            color: rgba(197, 160, 89, 0.4);
-            font-size: 18px;
-            transition: 0.3s ease;
-        }
-
-        .luxury-card:active .card-arrow {
-            transform: translateX(-5px); /* تحريك السهم عند النقر */
-            color: #C5A059;
-        }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- الترويسة -->
-        <header class="header">
-            <h1>القائمة الرئيسية</h1>
-            <p>مرحباً بك، اختر الخدمة التي تريدها</p>
-        </header>
+    <header>
+        <h1>🎈 مكتبتي الممتعة 🎈</h1>
+    </header>
 
-        <!-- الأزرار (الكروت) -->
-        <div class="cards-grid">
-            
-            <!-- الكارت الأول -->
+    <main class="cards-container">
+        
+        <!-- الكارت الأول: السراج المنير -->
+        <!-- تأكد أن اسم الملف في href يطابق اسم الملف في GitHub تماماً -->
+        <a href="السراج المنير.html" class="card card-1">
+            <div class="icon">📖</div>
+            <h2>السراج المنير</h2>
+            <p>هيا نقرأ ونتعلم معاً</p>
+        </a>
 
-         <a href="الاسئله المفيده للحياه السعيده.html" class="luxury-card">
-    <div class="card-icon">👑</div>
+        <!-- الكارت الثاني: الحياة السعيدة -->
+        <!-- استبدل اسم الملف هنا بالاسم الكامل للملف المقطوع في الصورة -->
+        <a href="اسم_الملف_الكامل_للحياة_السعيدة.html" class="card card-2">
+            <div class="icon">🌈</div>
+            <h2>الحياة السعيدة</h2>
+            <p>قصص ونصائح جميلة</p>
+        </a>
 
-    <div class="card-content">
-        <h3>الخدمات المميزة</h3>
-        <p>الوصول إلى باقة كبار الشخصيات</p>
-    </div>
+        <!-- الكارت الثالث: صفحة 2 -->
+        <a href="index2.html" class="card card-3">
+            <div class="icon">🚀</div>
+            <h2>مغامرات جديدة</h2>
+            <p>اضغط هنا لاكتشاف المزيد</p>
+        </a>
 
-    <div class="card-arrow">❯</div>
-</a>
+        <!-- كارت رابع إضافي (يمكنك حذفه أو تعديله) -->
+        <a href="#" class="card card-4">
+            <div class="icon">🎨</div>
+            <h2>ركن الألوان</h2>
+            <p>ألعاب وتلوين</p>
+        </a>
 
-            <!-- الكارت الثاني -->
-            <button class="luxury-card">
-                <div class="card-icon">💳</div>
-                <div class="card-content">
-                    <h3>الرصيد والمحفظة</h3>
-                    <p>إدارة أموالك وعمليات الدفع</p>
-                </div>
-                <div class="card-arrow">❯</div>
-            </button>
-
-            <!-- الكارت الثالث -->
-            <button class="luxury-card">
-                <div class="card-icon">📈</div>
-                <div class="card-content">
-                    <h3>الإحصائيات</h3>
-                    <p>متابعة الأداء والتقارير الشاملة</p>
-                </div>
-                <div class="card-arrow">❯</div>
-            </button>
-
-            <!-- الكارت الرابع -->
-            <button class="luxury-card">
-                <div class="card-icon">⚙️</div>
-                <div class="card-content">
-                    <h3>الإعدادات</h3>
-                    <p>تخصيص الحساب والأمان</p>
-                </div>
-                <div class="card-arrow">❯</div>
-            </button>
-
-        </div>
-    </div>
+    </main>
 
 </body>
 </html>
