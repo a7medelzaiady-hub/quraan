@@ -3,598 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز خادم القرآن الكريم</title>
-    
-    <!-- الخطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- الأيقونات -->
+    <title>مركز خادم القرآن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* ألوان واقعية وفخمة جداً */
-            --dark-emerald: #0b2e21; /* أخضر داكن جداً كلون كسوة المصحف */
-            --emerald-light: #164d39;
-            --gold-metallic: #b8934a; /* ذهبي معدني واقعي */
-            --gold-light: #e8d399;
-            --paper-bg: #f4f0e6; /* لون ورق عاجي / رخام فاتح */
-            --white: #ffffff;
-            --text-dark: #1a1a1a;
-            --danger: #b9322b;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d50bb;
+            --bright-green: #32ff7e;
+            --glass: rgba(255, 255, 255, 0.2);
         }
 
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--paper-bg);
-            /* تأثير ملمس الورق/الرخام الخفيف في الخلفية */
-            background-image: 
-                radial-gradient(rgba(184, 147, 74, 0.05) 2px, transparent 2px),
-                linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
-            background-size: 20px 20px, 100% 100%;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             background-attachment: fixed;
+            font-family: 'Tajawal', sans-serif;
             overflow-x: hidden;
-            padding-bottom: 60px;
+            color: white;
         }
 
-        /* شاشة الدخول الافتتاحية */
-        #welcome-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--dark-emerald), #05140e);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s;
-        }
-
-        #welcome-screen h1 {
-            color: var(--gold-metallic);
-            font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 50px;
-            text-align: center;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        /* زر البداية - تصميم واقعي ملموس */
-        .start-btn {
-            background: linear-gradient(to bottom, #d4af37, var(--gold-metallic));
-            color: var(--dark-emerald);
-            border: 1px solid #8f6e2e;
-            padding: 15px 50px;
-            font-size: 1.6rem;
-            font-family: 'Amiri', serif;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 
-                inset 0 2px 0 rgba(255,255,255,0.4), /* لمعة علوية */
-                0 6px 0 #8f6e2e, /* سمك الزر */
-                0 10px 20px rgba(0,0,0,0.4); /* الظل */
-            transition: all 0.1s ease;
-        }
-        .start-btn:active {
-            transform: translateY(6px);
-            box-shadow: 
-                inset 0 1px 0 rgba(255,255,255,0.2), 
-                0 0 0 #8f6e2e, 
-                0 2px 5px rgba(0,0,0,0.4);
-        }
-
-        /* الهيدر */
-        header {
-            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
-            color: var(--white);
-            text-align: center;
-            padding: 50px 20px 60px;
-            border-bottom: 6px solid var(--gold-metallic);
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        header h1 {
-            font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin: 0;
-            color: var(--gold-light);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        header p {
-            font-size: 1.2rem;
-            margin-top: 10px;
-            color: #d1d8d5;
-        }
-
-        /* شريط النصائح */
+        /* شريط النصائح المحدث */
         .ticker-container {
-            width: 90%;
-            max-width: 950px;
-            margin: -70px auto 45px;
-            background: linear-gradient(to bottom, #ffffff, #fcfbf8);
-            border: 1px solid #e0d9c8;
+            width: 95%;
+            margin: 20px auto;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
             border-radius: 50px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08), inset 0 -2px 0 #e0d9c8;
-            padding: 10px 15px;
-            position: relative;
-            z-index: 10;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
-        }
-
-        .ticker-label {
-            background: linear-gradient(to bottom, var(--gold-metallic), #9e7b3a);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            white-space: nowrap;
-            margin-left: 15px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 2;
-        }
-
-        .ticker-wrap {
-            flex-grow: 1;
+            border: 1px solid rgba(255,255,255,0.2);
             overflow: hidden;
-            position: relative;
-            height: 35px;
-            display: flex;
-            align-items: center;
         }
+
+        .ticker-icon { font-size: 0.9rem; margin-left: 10px; color: var(--bright-green); }
+
+        .ticker-wrap { width: 100%; overflow: hidden; }
 
         .ticker-text {
-            position: absolute;
+            display: inline-block;
             white-space: nowrap;
-            color: var(--dark-emerald);
-            font-weight: 700;
-            font-size: 1.1rem;
-            animation: scrollText 30s linear infinite;
+            animation: scroll 40s linear infinite; /* حركة بطيئة جداً */
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
-        .ticker-text span { margin: 0 40px; }
-
-        @keyframes scrollText {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-150%); }
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
-        /* شبكة الكروت */
+        /* كروت زجاجية لامعة */
         .cards-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            padding: 10px 20px;
-            max-width: 1050px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
 
-        /* تصميم الكارت الواقعي (ملمس الورق المقوى) */
         .card {
-            background: linear-gradient(135deg, #ffffff, #fdfbf7);
-            border: 1px solid #e5dfd3;
-            border-radius: 16px;
-            padding: 25px 20px 20px;
-            box-shadow: 
-                0 8px 15px rgba(0,0,0,0.05), 
-                0 3px 6px rgba(0,0,0,0.04),
-                inset 0 -3px 0 rgba(0,0,0,0.02); /* حافة سفلية واقعية */
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            padding: 30px;
             text-align: center;
-            transition: all 0.15s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        /* الأيقونة داخل دائرة مذهبة */
-        .card-icon-wrap {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(to bottom, #fdfdfc, #f4eee1);
-            color: var(--dark-emerald);
-            border: 2px solid var(--gold-metallic);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 15px;
-            font-size: 1.6rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-
-        .card h3 {
-            margin: 0 0 8px 0;
-            color: var(--dark-emerald);
-            font-size: 1.4rem;
-            font-weight: 800;
-        }
-
-        .card p {
-            color: #666;
-            font-size: 1rem;
-            margin: 0 0 15px 0;
-            font-weight: 600;
-        }
-
-        .stars {
-            color: var(--gold-metallic);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* الأزرار الواقعية 3D */
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            transition: all 0.1s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
         }
 
-        /* زر الدخول (أخضر ملكي) */
-        .btn-enter {
-            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
-            border: 1px solid #072017;
-            color: var(--gold-light);
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-            box-shadow: 
-                inset 0 1px 0 rgba(255,255,255,0.2), 
-                0 4px 0 #072017, 
-                0 5px 10px rgba(0,0,0,0.2);
-        }
-        .btn-enter:active {
-            transform: translateY(4px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 #072017, 0 1px 2px rgba(0,0,0,0.2);
-        }
+        .card:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-blue); }
 
-        /* زر المشاركة (أبيض/عاجي) */
-        .btn-share {
-            background: linear-gradient(to bottom, #ffffff, #eceadd);
-            border: 1px solid #c2bbae;
-            color: var(--text-dark);
-            box-shadow: 
-                inset 0 1px 0 #fff, 
-                0 4px 0 #c2bbae, 
-                0 5px 10px rgba(0,0,0,0.1);
-        }
-        .btn-share:active {
-            transform: translateY(4px);
-            box-shadow: inset 0 1px 0 #fff, 0 0 0 #c2bbae, 0 1px 2px rgba(0,0,0,0.1);
-        }
+        .card h3 { font-size: 1.8rem; margin: 10px 0; }
 
-        /* الكارت المحمي (التقييم والمتابعة) */
-        .card-locked {
-            background: linear-gradient(135deg, #fafafa, #eeeeee);
-            border-color: #cccccc;
-        }
-        .card-locked .card-icon-wrap { border-color: #999; color: #777; background: #e0e0e0; }
-        .card-locked h3 { color: #555; }
-        .card-locked .btn-enter {
-            background: linear-gradient(to bottom, #7f8c8d, #636e72);
-            border-color: #2d3436;
-            color: #ddd;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 0 #2d3436, 0 5px 10px rgba(0,0,0,0.2);
-        }
-
-        /* نافذة الباسورد */
-        #password-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #password-modal.active { opacity: 1; visibility: visible; }
-
-        .modal-content {
-            background: linear-gradient(to bottom, #ffffff, var(--paper-bg));
-            padding: 35px 30px;
-            border-radius: 15px;
-            text-align: center;
-            width: 90%;
-            max-width: 360px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            border: 2px solid var(--gold-metallic);
-            transform: scale(0.8);
-            transition: transform 0.3s ease;
-        }
-
-        #password-modal.active .modal-content { transform: scale(1); }
-
-        .modal-content h3 { color: var(--dark-emerald); margin: 0 0 10px; font-size: 1.6rem; font-weight: 800;}
-        
-        .modal-content input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.8rem;
-            text-align: center;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 12px;
-            background: #fff;
-            color: var(--dark-emerald);
+        .btn {
+            background: var(--neon-blue);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
             font-weight: bold;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            color: #000;
+            cursor: pointer;
+            margin-top: 15px;
         }
-        .modal-content input:focus { outline: none; border-color: var(--gold-metallic); }
-
-        .modal-buttons { display: flex; gap: 12px; }
-
-        .error-msg {
-            color: var(--danger);
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: none;
-            background: #fdf0ef;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #f5c6c4;
-            animation: shake 0.4s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            50% { transform: translateX(6px); }
-            75% { transform: translateX(-6px); }
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- الصوتيات -->
-    <!-- مقطع الشيخ الحصري (تم ضبطه ليبدأ من ورتل تماماً) -->
-    <audio id="quranAudio" src="https://everyayah.com/data/Husary_128kbps/073004.mp3" preload="auto"></audio>
-    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
-    <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
-    <audio id="successSound" src="https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D8%B4%D9%8A%D8%AE%D9%86%D8%A7+%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85" preload="auto"></audio>
-
-    <!-- شاشة البداية لتشغيل الصوتيات -->
-    <div id="welcome-screen">
-        <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
-        <button class="start-btn" onclick="startWebsite()">بسم الله نبدأ</button>
-    </div>
-
-    <!-- نافذة كلمة المرور -->
-    <div id="password-modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-lock"></i> منطقة محمية</h3>
-            <p id="modal-desc" style="color:#555; font-size:0.95rem; font-weight: bold;">أدخل رمز المرور لفتح المتابعة</p>
-            
-            <div id="error-msg" class="error-msg">❌ الرمز غير صحيح!</div>
-            
-            <div id="input-area">
-                <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off">
-                <div class="modal-buttons">
-                    <button class="btn btn-enter" onclick="checkPassword()">دخول</button>
-                    <button class="btn btn-share" onclick="closeModal()">إلغاء</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- المحتوى الأساسي -->
-    <header>
-        <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
-        <p>تحت إشراف الشيخ عبدالرحمن</p>
-    </header>
-
     <!-- شريط النصائح -->
     <div class="ticker-container">
-        <div class="ticker-label">💡 قطوف إسلامية</div>
+        <i class="fas fa-star ticker-icon"></i>
         <div class="ticker-wrap">
             <div class="ticker-text">
-                <span>الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة والراحة.</span>
-                <span>الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
-                <span>الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
-                <span>تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
+                🌟 تلاوة القرآن تضيء القلب .. 💡 حافظ على صلاتك فهي سر نجاحك .. 🚀 تعلم اليوم شيئاً جديداً لترتقي .. 🌈 كن بشوشاً فابتسامتك صدقة .. ✍️ ورتل القرآن ترتيلاً .. 📖 القرآن ربيع القلوب .. ✨ استغفر الله تجد الراحة ..
             </div>
         </div>
     </div>
 
-    <main class="cards-container">
-        
-        <!-- الكارت 1 -->
+    <!-- الكروت -->
+    <div class="cards-container">
+        <div class="card" onclick="alert('جاري الانتقال...')">
+            <h3>📖 السراج المنير</h3>
+            <p>أجوبة قرانية ممتعة</p>
+            <button class="btn">دخول</button>
+        </div>
         <div class="card">
-            <div class="card-icon-wrap"><i class="fas fa-book-open"></i></div>
-            <h3>السراج المنير</h3>
-            <p>أسئلة وأجوبة هامة ومفيدة</p>
-            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-            <div class="card-actions">
-                <button class="btn btn-enter" onclick="navigate('السراج المنير.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage('السراج المنير', 'السراج المنير.html', false, event)"><i class="fas fa-share-nodes"></i></button>
-            </div>
+            <h3>🌈 الحياة السعيدة</h3>
+            <p>قصص وعبر للأطفال والكبار</p>
+            <button class="btn">دخول</button>
         </div>
-
-        <!-- الكارت 2 -->
-        <div class="card">
-            <div class="card-icon-wrap"><i class="fas fa-heart"></i></div>
-            <h3>الحياة السعيدة</h3>
-            <p>مجموعة قصص وعبر مفيدة</p>
-            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-            <div class="card-actions">
-                <button class="btn btn-enter" onclick="navigate('الاسئله المفيده للحياه السعيده.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage('الحياة السعيدة', 'الاسئله المفيده للحياه السعيده.html', false, event)"><i class="fas fa-share-nodes"></i></button>
-            </div>
-        </div>
-
-        <!-- الكارت 3 (محمي) -->
-        <div class="card card-locked">
-            <div class="card-icon-wrap"><i class="fas fa-user-check"></i></div>
-            <h3>التقييم والمتابعة</h3>
-            <p>متابعة الإنجاز اليومي بدقة</p>
-            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
-            <div class="card-actions">
-                <button class="btn btn-enter" onclick="openProtectedPage('index1.html', event)"><i class="fas fa-lock"></i> دخول</button>
-                <button class="btn btn-share" onclick="sharePage('التقييم والمتابعة', 'index1.html', true, event)"><i class="fas fa-share-nodes"></i></button>
-            </div>
-        </div>
-
-        <!-- الكارت 4 -->
-        <div class="card">
-            <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
-            <h3>الحياة السعيدة (ج2)</h3>
-            <p>تكملة رائعة للقصص والعبر</p>
-            <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-            <div class="card-actions">
-                <button class="btn btn-enter" onclick="navigate('part2.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage('الحياة السعيدة الجزء الثاني', 'part2.html', false, event)"><i class="fas fa-share-nodes"></i></button>
-            </div>
-        </div>
-
-    </main>
+    </div>
 
     <script>
-        const clickSound = document.getElementById('clickSound');
-        const quranAudio = document.getElementById('quranAudio');
-        const errorSound = document.getElementById('errorSound');
-        const successSound = document.getElementById('successSound');
-        let targetProtectedUrl = '';
-
-        function playClick() {
-            clickSound.currentTime = 0;
-            clickSound.play().catch(()=>{});
-        }
-
-        // إزالة غلاف الشاشة وبدء الآية بصوت الشيخ الحصري من كلمة "ورتل"
+        // تفعيل الصوت عند البداية
         function startWebsite() {
-            playClick();
-            
-            // تم ضبط التوقيت إلى 3.4 ثانية لالتقاط حرف الواو من "ورتل" بدقة للشيخ الحصري
-            quranAudio.currentTime = 3.4; 
-            quranAudio.play().catch(()=>{});
-            
-            const screen = document.getElementById('welcome-screen');
-            screen.style.opacity = '0';
-            setTimeout(() => { screen.style.visibility = 'hidden'; }, 600);
-        }
-
-        function navigate(url, event) {
-            playClick();
-            setTimeout(() => { window.location.href = url; }, 300);
-        }
-
-        function openProtectedPage(url, event) {
-            playClick();
-            targetProtectedUrl = url;
-            document.getElementById('password-modal').classList.add('active');
-            
-            // إعادة العناصر لوضعها الطبيعي
-            document.getElementById('input-area').style.display = 'block';
-            document.getElementById('modal-desc').style.display = 'block';
-            document.getElementById('pass-input').value = '';
-            document.getElementById('error-msg').style.display = 'none';
-            document.getElementById('pass-input').focus();
-        }
-
-        function closeModal() {
-            playClick();
-            document.getElementById('password-modal').classList.remove('active');
-        }
-
-        // فحص الباسورد - استجابة صوتية خالصة عند النجاح
-        function checkPassword() {
-            const pass = document.getElementById('pass-input').value;
-            const errorMsg = document.getElementById('error-msg');
-            const inputArea = document.getElementById('input-area');
-            const modalDesc = document.getElementById('modal-desc');
-            
-            if (pass === '7222') {
-                errorMsg.style.display = 'none';
-                
-                // إخفاء كافة النصوص وحقول الإدخال تماماً
-                inputArea.style.display = 'none';
-                modalDesc.style.display = 'none';
-                
-                // تشغيل الصوت فقط دون أي رسالة نصية
-                successSound.currentTime = 0;
-                successSound.play().catch(()=>{});
-
-                // الانتظار حتى انتهاء الصوت ثم التوجيه
-                setTimeout(() => {
-                    window.location.href = targetProtectedUrl;
-                }, 2500);
-
-            } else {
-                errorSound.currentTime = 0;
-                errorSound.play().catch(()=>{});
-                
-                errorMsg.style.display = 'block';
-                document.getElementById('pass-input').value = '';
-                
-                errorMsg.style.animation = 'none';
-                setTimeout(() => errorMsg.style.animation = 'shake 0.4s', 10);
-            }
-        }
-
-        document.getElementById('pass-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') checkPassword();
-        });
-
-        function sharePage(title, url, isProtected, event) {
-            event.stopPropagation();
-
-            if (isProtected) {
-                errorSound.currentTime = 0;
-                errorSound.play().catch(()=>{});
-                alert('❌ غير مصرح بالمشاركة لهذه الصفحة.');
-                return;
-            }
-
-            playClick();
-            if (url === '#' || url === '') return;
-
-            const fullUrl = new URL(url, window.location.href).href;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: `شاهد صفحة ${title} بموقع مركز خادم القرآن الكريم ✨:`,
-                    url: fullUrl
-                }).catch(err => console.log('تم إلغاء المشاركة'));
-            } else {
-                navigator.clipboard.writeText(fullUrl).then(() => {
-                    alert(`📋 تم نسخ رابط صفحة [${title}] بنجاح!`);
-                });
-            }
+            const audio = new Audio("https://everyayah.com/data/Husary_128kbps/073004.mp3");
+            audio.currentTime = 3.4;
+            audio.play();
         }
     </script>
-
 </body>
 </html>
