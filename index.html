@@ -3,142 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> مركز خادم القران 🌟</title>
-    <title> تحت اشراف الشيخ عبدالرحمن   🌟</title>
+    <title>مركز خادم القران  </title>
     
-    <!-- استدعاء خط عربي جميل ومناسب من جوجل -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* إعدادات عامة */
+        /* الألوان الأساسية المستوحاة من الصورة */
+        :root {
+            --dark-green: #0a4d3c;
+            --gold: #d4af37;
+            --light-gold: #f8f1de;
+            --bg-color: #f4f0e6; /* لون خلفية مائل للورق القديم */
+            --text-dark: #333;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
-            background-color: #f0f8ff; /* لون خلفية سماوي فاتح مريح للعين */
-            background-image: radial-gradient(#fff 20%, transparent 20%), radial-gradient(#fff 20%, transparent 20%);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+            background-color: var(--bg-color);
+            /* إضافة نقوش خفيفة جداً في الخلفية (اختياري) */
+            background-image: repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.03) 0px, rgba(212, 175, 55, 0.03) 2px, transparent 2px, transparent 10px);
         }
 
-        /* تنسيق رأس الصفحة (العنوان) */
+        /* رأس الصفحة (الهيدر الأخضر والذهبي) */
         header {
-            text-align: center;
-            padding: 30px 10px;
-            background-color: #ff9ff3;
+            background-color: var(--dark-green);
             color: white;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            box-shadow: 0 10px 20px rgba(255, 159, 243, 0.3);
-            margin-bottom: 40px;
+            text-align: center;
+            padding: 40px 15px 20px;
+            border-bottom: 8px solid var(--gold);
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
         }
 
         header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
             margin: 0;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: var(--gold);
         }
 
-        /* حاوية الكروت (لجعلها متوافقة مع الموبايل) */
+        header p {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            color: #f1f1f1;
+        }
+
+        /* لافتة الترحيب (تشبه المخطوطة في الصورة) */
+        .welcome-banner {
+            background: linear-gradient(to bottom, #ebd68f, #d4af37);
+            color: var(--dark-green);
+            width: 80%;
+            max-width: 500px;
+            margin: -40px auto 30px; /* لرفعها فوق الهيدر قليلاً */
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+            border: 2px solid white;
+        }
+
+        /* شبكة الكروت المتوافقة مع الموبايل */
         .cards-container {
             display: grid;
-            /* هذا السطر يجعل الكروت تتكيف مع حجم الشاشة تلقائياً */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            gap: 25px;
             padding: 20px;
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
+            direction: rtl;
         }
 
-        /* تنسيق الكارت نفسه */
+        /* تصميم الكارت */
         .card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden; /* لضمان دوران الحواف مع الرأس الأخضر */
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            border: 2px solid var(--gold);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            text-decoration: none; /* إزالة الخط تحت الروابط */
-            padding: 40px 20px;
-            border-radius: 30px; /* حواف دائرية كبيرة */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease; /* تأثير حركي ناعم */
-            position: relative;
-            overflow: hidden;
-            border: 4px solid white;
         }
 
-        /* تأثير عند مرور الماوس أو اللمس (القفز لأعلى) */
         .card:hover, .card:active {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
         }
 
-        /* أيقونات الكروت */
-        .card .icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+        /* رأس الكارت (الجزء الأخضر) */
+        .card-header {
+            background-color: var(--dark-green);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid var(--gold);
         }
 
-        /* نصوص الكروت */
-        .card h2 {
-            margin: 0 0 10px 0;
-            font-size: 1.8rem;
-            color: #2d3436;
+        /* جسم الكارت (الجزء الفاتح) */
+        .card-body {
+            background-color: var(--light-gold);
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
         }
 
-        .card p {
-            margin: 0;
+        .card-body p {
+            margin: 0 0 15px 0;
             font-size: 1.1rem;
-            color: #636e72;
+            font-weight: bold;
+            color: var(--dark-green);
         }
 
-        /* ألوان مختلفة لكل كارت */
-        .card-1 { background-color: #ffeaa7; } /* أصفر */
-        .card-2 { background-color: #81ecec; } /* أزرق فاتح */
-        .card-3 { background-color: #fab1a0; } /* برتقالي/وردي فاتح */
-        .card-4 { background-color: #55efc4; } /* أخضر فاتح */
+        /* تقييم النجوم للزينة بناء على الصورة */
+        .stars {
+            color: #ff9f43; /* لون برتقالي للنجوم */
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-footer {
+            font-size: 0.9rem;
+            color: #d63031;
+            font-weight: bold;
+        }
 
     </style>
 </head>
 <body>
 
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
     <header>
-        <h1>🎈  مركز خادم القران 🎈</h1>
+        <h1>مَرْكَزُ القُرْآنِ الكَرِيمِ</h1>
+        <p>مكتبة السراج المنير والحياة السعيدة</p>
     </header>
+
+    <div class="welcome-banner">
+        🏆 أهلاً بك يا بطل 🏆
+    </div>
 
     <main class="cards-container">
         
-        <!-- الكارت الأول: السراج المنير -->
-        <!-- تأكد أن اسم الملف في href يطابق اسم الملف في GitHub تماماً -->
-        <a href="السراج المنير.html" class="card card-1">
-            <div class="icon">📖</div>
-            <h2>السراج المنير</h2>
-            <p>هيا نقرأ ونتعلم معاً</p>
+        <a href="السراج المنير.html" class="card">
+            <div class="card-header">
+                📖 السراج المنير
+            </div>
+            <div class="card-body">
+                <p>قسم القراءة والتلاوة</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="card-footer">🎯 اضغط للدخول</div>
+            </div>
         </a>
 
-        <!-- الكارت الثاني: الحياة السعيدة -->
-        <!-- استبدل اسم الملف هنا بالاسم الكامل للملف المقطوع في الصورة -->
-        <a href="الاسئله المفيده للحياه السعيده.html" class="card card-2">
-            <div class="icon">🌈</div>
-            <h2>الحياة السعيدة</h2>
-            <p>قصص ونصائح جميلة</p>
+        <a href="الاسئله المفيده للحياه السعيده.html" class="card">
+            <div class="card-header">
+                🌿 الحياة السعيدة
+            </div>
+            <div class="card-body">
+                <p>قصص وعبر مفيدة</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="card-footer">🎯 اضغط للدخول</div>
+            </div>
         </a>
 
-        <!-- الكارت الثالث: صفحة 2 -->
-        <a href="index1.html" class="card card-3">
-            <div class="icon">🚀</div>
-            <h2>متابعه الحفظ </h2>
-            <p>اضغط هنا لاكتشاف المزيد</p>
+        <a href="index1.html" class="card">
+            <div class="card-header">
+                📝 التقييم والمتابعة
+            </div>
+            <div class="card-body">
+                <p>متابعة الإنجاز اليومي</p>
+                <div class="stars">⭐⭐⭐⭐★</div>
+                <div class="card-footer">🎯 اضغط للدخول</div>
+            </div>
         </a>
 
-        <!-- كارت رابع إضافي (يمكنك حذفه أو تعديله) -->
-        <a href="#" class="card card-4">
-            <div class="icon">🎨</div>
-            <h2>المذكره </h2>
-            <p>ألعاب وتلوين</p>
+        <a href="#" class="card">
+            <div class="card-header">
+                🏆 لوحة الشرف
+            </div>
+            <div class="card-body">
+                <p>الأبطال المتميزين</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <div class="card-footer">🎯 قريباً...</div>
+            </div>
         </a>
 
     </main>
+
+    <script>
+        // تعريف متغير الصوت
+        const sound = document.getElementById('clickSound');
+        // جلب جميع الكروت
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', function(event) {
+                // منع الانتقال الفوري للصفحة حتى يعمل الصوت
+                event.preventDefault(); 
+                
+                // جلب الرابط الذي يجب الانتقال إليه
+                const targetUrl = this.getAttribute('href');
+
+                // تشغيل الصوت
+                sound.currentTime = 0; // إرجاع الصوت للبداية
+                sound.play();
+
+                // إذا كان الرابط # لا تنتقل، فقط شغل الصوت
+                if(targetUrl === '#') return;
+
+                // الانتظار جزء من الثانية (300 ملي ثانية) ليظهر الصوت ثم الانتقال للصفحة
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 300);
+            });
+        });
+    </script>
 
 </body>
 </html>
