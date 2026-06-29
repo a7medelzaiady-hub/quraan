@@ -12,14 +12,16 @@
 
     <style>
         :root {
-            --primary: #0b4134; /* أخضر زمردي فاخر */
-            --primary-light: #125746;
-            --gold: #c5a059; /* ذهبي ملكي عتيق */
-            --gold-light: #f4ebd9;
-            --bg: #f9f8f3; /* خلفية لؤلؤية ناعمة */
+            /* الألوان الجديدة المبهجة (الفستقي والأخضر الزاهي) */
+            --primary: #1e8449; /* أخضر زاهي ومفرح */
+            --primary-light: #2ecc71;
+            --pistachio: #e9f7ef; /* لون فستقي فاتح مريح للعين */
+            --pistachio-dark: #abebc6; /* فستقي أغمق للظلال */
+            --gold: #f39c12; /* أصفر ذهبي مفرح */
+            --bg: #fdfefe;
             --text: #2c3e50;
             --white: #ffffff;
-            --danger: #d9534f;
+            --danger: #e74c3c;
         }
 
         * {
@@ -32,8 +34,9 @@
             padding: 0;
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg);
-            background-image: radial-gradient(rgba(197, 160, 89, 0.08) 1px, transparent 1px);
-            background-size: 24px 24px;
+            /* نقوش خفيفة جداً تزيد من البهجة */
+            background-image: radial-gradient(rgba(46, 204, 113, 0.1) 2px, transparent 2px);
+            background-size: 30px 30px;
             background-attachment: fixed;
             overflow-x: hidden;
             padding-bottom: 60px;
@@ -43,7 +46,7 @@
         #welcome-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #05241d, var(--primary));
+            background: linear-gradient(135deg, #117a65, var(--primary));
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -53,67 +56,69 @@
         }
 
         #welcome-screen h1 {
-            color: var(--gold);
+            color: var(--white);
             font-family: 'Amiri', serif;
             font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 40px;
             text-align: center;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
+        /* زر البداية 3D */
         .start-btn {
-            background: linear-gradient(135deg, var(--gold), #aa843d);
-            color: #05241d;
+            background: var(--gold);
+            color: #fff;
             border: none;
-            padding: 14px 45px;
-            font-size: 1.5rem;
+            padding: 15px 50px;
+            font-size: 1.6rem;
             font-family: 'Amiri', serif;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(197, 160, 89, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 0 #d68910, 0 15px 25px rgba(243, 156, 18, 0.4);
+            transition: all 0.15s ease;
         }
-        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(197, 160, 89, 0.5); }
+        .start-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #d68910, 0 5px 10px rgba(243, 156, 18, 0.4);
+        }
 
         /* الهيدر */
         header {
             background: linear-gradient(to bottom, var(--primary), var(--primary-light));
             color: var(--white);
             text-align: center;
-            padding: 60px 20px 55px;
-            border-bottom: 5px solid var(--gold);
+            padding: 50px 20px 65px;
+            border-bottom: 8px solid var(--pistachio-dark);
             border-radius: 0 0 40px 40px;
-            box-shadow: 0 12px 30px rgba(11, 65, 52, 0.2);
-            position: relative;
-            margin-bottom: 60px;
+            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+            margin-bottom: 40px;
         }
 
         header h1 {
             font-family: 'Amiri', serif;
-            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin: 0;
-            color: var(--gold-light);
-            text-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            color: #fff;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.2);
         }
 
         header p {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             margin-top: 10px;
-            color: #cedcd8;
-            font-weight: 400;
+            color: var(--pistachio);
+            font-weight: 600;
         }
 
-        /* شريط النصائح الديناميكي المتحرك */
+        /* شريط النصائح - تم تعديل الحركة لتكون من اليمين لليسار ببطء */
         .ticker-container {
             width: 90%;
             max-width: 950px;
-            margin: -85px auto 45px;
+            margin: -80px auto 45px;
             background: var(--white);
-            border: 2px solid var(--gold);
+            border: 3px solid var(--pistachio-dark);
             border-radius: 50px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 0 var(--pistachio-dark);
             padding: 12px 20px;
             position: relative;
             z-index: 10;
@@ -122,154 +127,170 @@
         }
 
         .ticker-label {
-            background: var(--primary);
-            color: var(--gold-light);
-            padding: 4px 14px;
+            background: var(--gold);
+            color: #fff;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             white-space: nowrap;
             margin-left: 15px;
-            box-shadow: 0 3px 8px rgba(11, 65, 52, 0.2);
+            box-shadow: 0 4px 0 #d68910;
+            z-index: 2;
         }
 
         .ticker-wrap {
-            width: 100%;
+            flex-grow: 1;
             overflow: hidden;
+            position: relative;
+            height: 35px;
+            display: flex;
+            align-items: center;
         }
 
         .ticker-text {
-            display: inline-block;
+            position: absolute;
             white-space: nowrap;
-            padding-right: 100%;
-            animation: marquee 30s linear infinite;
             color: var(--primary);
-            font-weight: 600;
-            font-size: 1.05rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            /* تبدأ الحركة من خارج الشاشة يميناً وتنتهي خارجها يساراً */
+            animation: scrollText 30s linear infinite;
         }
 
         .ticker-text span {
-            margin-right: 50px;
+            margin: 0 40px;
         }
 
-        @keyframes marquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
+        @keyframes scrollText {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-150%); } /* يضمن خروج النص بالكامل من جهة اليسار */
         }
 
-        /* شبكة الكروت المدمجة والاحترافية */
+        /* شبكة الكروت */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
+            gap: 30px;
             padding: 10px 20px;
-            max-width: 1000px;
+            max-width: 1050px;
             margin: 0 auto;
         }
 
-        /* تصميم كارت أنيق وأصغر حجمًا */
+        /* تصميم كارت 3D مفرح (اللون الفستقي) */
         .card {
-            background: var(--white);
-            border-radius: 18px;
+            background: linear-gradient(145deg, #ffffff, var(--pistachio));
+            border-radius: 25px;
             padding: 30px 20px 20px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-            border: 1px solid rgba(197, 160, 89, 0.15);
+            border: 2px solid var(--pistachio-dark);
+            /* تأثير 3D بواسطة الظلال السفلية */
+            box-shadow: 0 10px 0 var(--pistachio-dark), 0 15px 20px rgba(0,0,0,0.08);
             text-align: center;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.15s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            cursor: pointer;
         }
 
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 30px rgba(11, 65, 52, 0.1);
-            border-color: var(--gold);
+        /* تأثير الضغط على الكارت بالكامل (يهبط للأسفل) */
+        .card:active {
+            transform: translateY(10px);
+            box-shadow: 0 0 0 var(--pistachio-dark), 0 5px 10px rgba(0,0,0,0.05);
         }
 
         .card-icon-wrap {
-            width: 55px;
-            height: 55px;
-            background: var(--gold-light);
-            color: var(--primary);
+            width: 65px;
+            height: 65px;
+            background: var(--primary-light);
+            color: var(--white);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto 15px;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover .card-icon-wrap {
-            background: var(--primary);
-            color: var(--gold-light);
+            font-size: 1.8rem;
+            box-shadow: 0 5px 0 var(--primary), 0 8px 15px rgba(46, 204, 113, 0.4);
         }
 
         .card h3 {
             margin: 0 0 8px 0;
             color: var(--primary);
-            font-size: 1.35rem;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
         }
 
         .card p {
-            color: #666;
-            font-size: 0.95rem;
+            color: #555;
+            font-size: 1rem;
             margin: 0 0 15px 0;
+            font-weight: 600;
         }
 
         .stars {
             color: var(--gold);
-            font-size: 0.95rem;
+            font-size: 1rem;
             margin-bottom: 20px;
         }
 
         .card-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
+        /* أزرار 3D داخل الكروت */
         .btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 6px;
         }
 
-        .btn:active { transform: scale(0.96); }
-
         .btn-enter {
             background: var(--primary);
             color: var(--white);
+            box-shadow: 0 5px 0 #145a32;
         }
-        .btn-enter:hover { background: var(--primary-light); }
+        .btn-enter:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 transparent;
+        }
 
         .btn-share {
-            background: #f5f6f7;
+            background: #fff;
             color: var(--text);
-            border: 1px solid #e1e4e6;
+            border: 2px solid #bdc3c7;
+            box-shadow: 0 5px 0 #bdc3c7;
         }
-        .btn-share:hover { background: #eaecf0; }
+        .btn-share:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 transparent;
+        }
 
         /* الكارت المحمي */
-        .card-locked .card-icon-wrap { background: #f0f0f0; color: #888; }
-        .card-locked h3 { color: #444; }
-        .card-locked .btn-enter { background: #555; }
-        .card-locked .btn-enter:hover { background: #444; }
+        .card-locked {
+            background: linear-gradient(145deg, #ffffff, #f2f4f4);
+            border-color: #d5dbdb;
+            box-shadow: 0 10px 0 #d5dbdb, 0 15px 20px rgba(0,0,0,0.08);
+        }
+        .card-locked .card-icon-wrap { background: #95a5a6; box-shadow: 0 5px 0 #7f8c8d; }
+        .card-locked h3 { color: #555; }
+        .card-locked .btn-enter { background: #7f8c8d; box-shadow: 0 5px 0 #616a6b; }
+        .card-locked:active {
+            box-shadow: 0 0 0 #d5dbdb, 0 5px 10px rgba(0,0,0,0.05);
+        }
 
-        /* نافذة الباسورد */
+        /* نافذة الباسورد 3D */
         #password-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -289,36 +310,33 @@
         .modal-content {
             background: var(--white);
             padding: 35px 30px;
-            border-radius: 20px;
+            border-radius: 25px;
             text-align: center;
             width: 90%;
             max-width: 380px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-            border: 2px solid var(--gold);
-            transform: scale(0.85);
+            box-shadow: 0 10px 0 var(--primary), 0 20px 40px rgba(0,0,0,0.3);
+            border: 3px solid var(--pistachio-dark);
+            transform: scale(0.8);
             transition: transform 0.3s ease;
         }
 
         #password-modal.active .modal-content { transform: scale(1); }
 
-        .modal-content h3 {
-            color: var(--primary);
-            margin: 0 0 10px;
-            font-size: 1.5rem;
-        }
-
+        .modal-content h3 { color: var(--primary); margin: 0 0 10px; font-size: 1.6rem; font-weight: 800;}
         .modal-content input {
             width: 100%;
-            padding: 12px;
-            font-size: 1.6rem;
+            padding: 15px;
+            font-size: 1.8rem;
             text-align: center;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            border: 3px solid var(--pistachio-dark);
+            border-radius: 12px;
             margin: 20px 0;
             font-family: 'Cairo', sans-serif;
-            letter-spacing: 8px;
+            letter-spacing: 10px;
+            background: var(--pistachio);
+            color: var(--primary);
+            font-weight: bold;
         }
-
         .modal-content input:focus { outline: none; border-color: var(--primary); }
 
         .modal-buttons { display: flex; gap: 12px; }
@@ -328,9 +346,9 @@
             font-weight: 700;
             margin-bottom: 15px;
             display: none;
-            background: #fceade;
-            padding: 8px;
-            border-radius: 6px;
+            background: #fadbd8;
+            padding: 10px;
+            border-radius: 10px;
             animation: shake 0.4s;
         }
 
@@ -346,13 +364,12 @@
 <body>
 
     <!-- الصوتيات -->
-    <!-- تم ضبط بداية المقطع برمجياً بدقة لتبدأ الكلمة الأولى من "ورتل القرآن ترتيلا" -->
-    <audio id="quranAudio" src="https://everyayah.com/data/Alafasy_128kbps/073004.mp3" preload="auto"></audio>
+    <!-- مقطع الشيخ الحصري لسورة المزمل الآية 4 -->
+    <audio id="quranAudio" src="https://everyayah.com/data/Husary_128kbps/073004.mp3" preload="auto"></audio>
     <!-- الأصوات التفاعلية -->
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
-    <!-- صوت الترحيب بالشيخ الكريم -->
-    <audio id="successSound" src="https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=%D9%85%D8%B1%D8%A8%D8%A3%D9%8B+%D8%A8%D9%83+%D8%B4%D9%8A%D8%AE%D9%86%D8%A7+%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85" preload="auto"></audio>
+    <audio id="successSound" src="https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B+%D8%A8%D9%83+%D8%B4%D9%8A%D8%AE%D9%86%D8%A7+%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85" preload="auto"></audio>
 
     <!-- شاشة البداية لتشغيل الصوتيات -->
     <div id="welcome-screen">
@@ -364,9 +381,9 @@
     <div id="password-modal">
         <div class="modal-content">
             <h3><i class="fas fa-lock"></i> منطقة محمية</h3>
-            <p style="color:#555; font-size:0.95rem;">الرجاء إدخال رمز المرور لفتح صفحة المتابعة</p>
+            <p style="color:#555; font-size:0.95rem; font-weight: bold;">أدخل رمز المرور لفتح المتابعة</p>
             
-            <div id="error-msg" class="error-msg">❌ غير مصرح بالدخول</div>
+            <div id="error-msg" class="error-msg">❌ الرمز غير صحيح!</div>
             
             <div id="input-area">
                 <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off">
@@ -384,14 +401,15 @@
         <p>تحت إشراف الشيخ عبدالرحمن</p>
     </header>
 
-    <!-- شريط النصائح الإسلامية المتحرك -->
+    <!-- شريط النصائح (الآن يسير ببطء من اليمين لليسار) -->
     <div class="ticker-container">
-        <div class="ticker-label">💡 نصيحة اليوم</div>
+        <div class="ticker-label">💡 قطوف إسلامية</div>
         <div class="ticker-wrap">
             <div class="ticker-text">
-                <span>الصلاة عماد الدين، فحافظ على صلاتك في وقتها لتنعم بالبركة والتوفيق والراحة النفسية الدائمة.</span>
-                <span>الصوم جُنَّة وتهذيب للروح والبدن، فاحرص على النوافل والأيام البيض تقرباً لله سبحانه وتعالى.</span>
-                <span>الزكاة والصدقة طُهرة للمال ونماء للرزق، فصنائع المعروف والصدقات الخفية تقي مصارع السوء والخطايا.</span>
+                <span>الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة والراحة.</span>
+                <span>الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
+                <span>الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
+                <span>تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
             </div>
         </div>
     </div>
@@ -399,9 +417,9 @@
     <main class="cards-container">
         
         <!-- الكارت 1 -->
-        <div class="card">
-            <div style="cursor: pointer" onclick="navigate('السراج المنير.html', event)">
-                <div class="card-icon-wrap"><i class="fas fa-book-quran"></i></div>
+        <div class="card" onclick="navigate('السراج المنير.html', event)">
+            <div>
+                <div class="card-icon-wrap"><i class="fas fa-book-open"></i></div>
                 <h3>السراج المنير</h3>
                 <p>أسئلة وأجوبة هامة ومفيدة</p>
                 <div class="stars">
@@ -415,8 +433,8 @@
         </div>
 
         <!-- الكارت 2 -->
-        <div class="card">
-            <div style="cursor: pointer" onclick="navigate('الاسئله المفيده للحياه السعيده.html', event)">
+        <div class="card" onclick="navigate('الاسئله المفيده للحياه السعيده.html', event)">
+            <div>
                 <div class="card-icon-wrap"><i class="fas fa-heart"></i></div>
                 <h3>الحياة السعيدة</h3>
                 <p>مجموعة قصص وعبر مفيدة</p>
@@ -430,9 +448,9 @@
             </div>
         </div>
 
-        <!-- الكارت 3 (محمي بكلمة مرور) -->
-        <div class="card card-locked">
-            <div style="cursor: pointer" onclick="openProtectedPage('index1.html', event)">
+        <!-- الكارت 3 (محمي) -->
+        <div class="card card-locked" onclick="openProtectedPage('index1.html', event)">
+            <div>
                 <div class="card-icon-wrap"><i class="fas fa-user-check"></i></div>
                 <h3>التقييم والمتابعة</h3>
                 <p>متابعة الإنجاز اليومي بدقة</p>
@@ -441,14 +459,14 @@
                 </div>
             </div>
             <div class="card-actions">
-                <button class="btn btn-enter" onclick="openProtectedPage('index1.html', event)"><i class="fas fa-key"></i> دخول</button>
+                <button class="btn btn-enter" onclick="openProtectedPage('index1.html', event)"><i class="fas fa-lock"></i> دخول</button>
                 <button class="btn btn-share" onclick="sharePage('التقييم والمتابعة', 'index1.html', true, event)"><i class="fas fa-share-nodes"></i></button>
             </div>
         </div>
 
         <!-- الكارت 4 -->
-        <div class="card">
-            <div style="cursor: pointer" onclick="navigate('part2.html', event)">
+        <div class="card" onclick="navigate('part2.html', event)">
+            <div>
                 <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
                 <h3>الحياة السعيدة (ج2)</h3>
                 <p>تكملة رائعة للقصص والعبر</p>
@@ -476,12 +494,12 @@
             clickSound.play().catch(()=>{});
         }
 
-        // إزالة غلاف الشاشة وبدء آية ورتل القرآن ترتيلا
+        // إزالة غلاف الشاشة وبدء الآية بصوت الشيخ الحصري
         function startWebsite() {
             playClick();
             
-            // ضبط التوقيت عند ثانية 1.4 لتبدأ كلمة "ورتل" مباشرة وبشكل دقيق ومكتمل
-            quranAudio.currentTime = 1.4; 
+            // قراءة الشيخ الحصري بطيئة نسبياً، الكلمة تبدأ عند 4.5 ثانية تقريباً
+            quranAudio.currentTime = 4.5; 
             quranAudio.play().catch(()=>{});
             
             const screen = document.getElementById('welcome-screen');
@@ -490,11 +508,16 @@
         }
 
         function navigate(url, event) {
+            // منع الانتقال إذا ضغط المستخدم على زر المشاركة أو الدخول (لمنع التداخل)
+            if (event.target.closest('.btn')) return;
+            
             playClick();
-            setTimeout(() => { window.location.href = url; }, 250);
+            setTimeout(() => { window.location.href = url; }, 300);
         }
 
         function openProtectedPage(url, event) {
+            if (event.target.closest('.btn-share')) return;
+            
             playClick();
             targetProtectedUrl = url;
             document.getElementById('password-modal').classList.add('active');
@@ -517,20 +540,16 @@
             
             if (pass === '7222') {
                 errorMsg.style.display = 'none';
-                // إخفاء حقول الإدخال لتجربة بصرية مريحة
                 inputArea.style.opacity = '0';
                 
-                // تشغيل الترحيب الصوتي فقط دون أي كتابة على الشاشة
                 successSound.currentTime = 0;
                 successSound.play().catch(()=>{});
 
-                // الانتظار حتى انتهاء المقطع الصوتي الترحيبي ثم التوجيه تلقائيًا
                 setTimeout(() => {
                     window.location.href = targetProtectedUrl;
                 }, 2200);
 
             } else {
-                // صوت تنبيه الخطأ واهتزاز الحقل
                 errorSound.currentTime = 0;
                 errorSound.play().catch(()=>{});
                 
@@ -546,7 +565,6 @@
             if (e.key === 'Enter') checkPassword();
         });
 
-        // دالة المشاركة مع حظر صفحة المتابعة
         function sharePage(title, url, isProtected, event) {
             if(event) event.stopPropagation();
 
