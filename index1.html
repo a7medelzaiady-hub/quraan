@@ -183,9 +183,9 @@ function collectData(containerId,isQ){
 // التصميم الجرافيكي الاحترافي للتقرير (Professional Certificate-style Canvas Report)
 // ═══════════════════════════════════════════════
 var C_W = 1080;
-var PAD = 54;
-var CARD_PAD_X = 34;
-var CARD_PAD_Y = 26;
+var PAD = 44;
+var CARD_PAD_X = 38;
+var CARD_PAD_Y = 30;
 
 var PALETTE = {
   deep:   '#04201a',
@@ -262,7 +262,7 @@ function wrapText(ctx, text, maxWidth){
   return lines;
 }
 
-function drawPill(ctx, text, rightEdgeX, y, opts){
+function drawPill(ctx, text, anchorX, y, opts){
   opts = opts || {};
   ctx.save();
   var font = opts.font || '700 19px Cairo, sans-serif';
@@ -270,7 +270,7 @@ function drawPill(ctx, text, rightEdgeX, y, opts){
   var padX = opts.padX != null ? opts.padX : 18;
   var h = opts.h || 40;
   var w = ctx.measureText(text).width + padX * 2;
-  var left = rightEdgeX - w;
+  var left = opts.align === 'left' ? anchorX : anchorX - w;
   if(opts.draw !== false){
     rr(ctx, left, y, w, h, h/2);
     ctx.fillStyle = opts.bg || '#ffffff';
@@ -312,41 +312,48 @@ function drawCornerBrackets(ctx, w, h, inset, len, color){
 }
 
 function drawSectionHeader(ctx, sec, rightX, y, draw){
-  var r = 25;
+  var r = 32;
   var cx = rightX - r;
   if(draw){
     ctx.save();
     var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r);
     g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
     ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
-    ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '22px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = PALETTE.goldLt;
     ctx.fillText(sec.icon, cx, y+r+2);
 
-    ctx.font = '800 27px Cairo, sans-serif';
+    ctx.font = '900 36px Cairo, sans-serif';
     ctx.fillStyle = PALETTE.mid;
     ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-    ctx.fillText(sec.title, cx - r - 16, y+r+1);
+    ctx.fillText(sec.title, cx - r - 18, y+r+1);
 
     var textW = ctx.measureText(sec.title).width;
-    var lineStartX = cx - r - 16 - textW - 18;
+    var lineStartX = cx - r - 18 - textW - 20;
     var lineEndX = PAD;
     if(lineStartX > lineEndX){
       var lg = ctx.createLinearGradient(lineEndX, 0, lineStartX, 0);
       lg.addColorStop(0, 'rgba(212,175,55,0)'); lg.addColorStop(1, PALETTE.gold);
-      ctx.strokeStyle = lg; ctx.lineWidth = 3;
+      ctx.strokeStyle = lg; ctx.lineWidth = 3.5;
       ctx.beginPath(); ctx.moveTo(lineStartX, y+r+1); ctx.lineTo(lineEndX, y+r+1); ctx.stroke();
     }
     ctx.restore();
   }
-  return 2*r + 22;
+  return 2*r + 26;
 }
 
 // يحسب/يرسم بطاقة عنصر واحد (سورة أو سؤال) ويعيد ارتفاعها الفعلي
+var F_TITLE = '900 40px Cairo, sans-serif';
+var F_TAG   = '700 23px Cairo, sans-serif';
+var F_PILL  = '800 25px Cairo, sans-serif';
+var F_PLANLBL = '800 22px Cairo, sans-serif';
+var F_PLANTXT = '700 24px Cairo, sans-serif';
+
 function renderItemCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2;
   var rightX = x + width - CARD_PAD_X;
+  var leftX  = x + CARD_PAD_X;
   var cy = y + CARD_PAD_Y;
 
   var mainTxt, subTxt = null;
@@ -359,43 +366,46 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t;
   }
 
-  ctx.font = '800 27px Cairo, sans-serif';
-  var titleLines = wrapText(ctx, mainTxt, innerW);
+  // نحجز جزءاً من العرض على اليسار للوسم الجانبي (نوع السورة/المدى) حتى تمتلئ البطاقة بالكامل
+  ctx.font = F_TAG;
+  var tagW = subTxt ? (ctx.measureText(subTxt).width + 28 + 24) : 0;
+  ctx.font = F_TITLE;
+  var titleMaxW = Math.max(innerW - tagW, innerW * 0.5);
+  var titleLines = wrapText(ctx, mainTxt, titleMaxW);
+  var lineH = 46;
+  var titleBlockH = titleLines.length * lineH;
+
   if(draw){
     titleLines.forEach(function(line, i){
-      ctx.font = '800 27px Cairo, sans-serif';
+      ctx.font = F_TITLE;
       ctx.fillStyle = PALETTE.deep;
       ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 27 + i*34);
+      ctx.fillText(line, rightX, cy + 32 + i*lineH);
     });
   }
-  cy += titleLines.length * 34 + 4;
 
   if(subTxt){
-    ctx.font = '700 18px Cairo, sans-serif';
-    var tagH = 34;
-    drawPill(ctx, subTxt, rightX, cy, {font:'700 18px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:tagH, padX:14, draw:draw});
-    cy += tagH + 14;
-  } else {
-    cy += 10;
+    var tagH = 44;
+    var tagY = cy + Math.max(0, titleBlockH/2 - tagH/2);
+    drawPill(ctx, subTxt, leftX, tagY, {font:F_TAG, bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:tagH, padX:14, align:'left', draw:draw});
   }
+  cy += titleBlockH + 22;
 
   var hasRating = !!item.rating;
   var hasErrors = item.errors !== '' && item.errors != null;
   if(hasRating || hasErrors){
-    var curRight = rightX;
+    var pillH = 54;
     if(hasRating){
       var rs = ratingStyle(item.rating);
-      var wR = drawPill(ctx, item.rating, curRight, cy, {font:'700 19px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:1.5, h:42, padX:18, draw:draw});
-      curRight -= wR + 14;
+      drawPill(ctx, item.rating, rightX, cy, {font:F_PILL, bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:pillH, padX:22, align:'right', draw:draw});
     }
     if(hasErrors){
       var isZero = (item.errors === '0');
       var errTxt = isZero ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      drawPill(ctx, errTxt, curRight, cy, {font:'700 19px Cairo, sans-serif', bg:es.bg, color:es.color, border:es.border, borderWidth:1.5, h:42, padX:18, draw:draw});
+      drawPill(ctx, errTxt, leftX, cy, {font:F_PILL, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:pillH, padX:22, align:'left', draw:draw});
     }
-    cy += 42 + 16;
+    cy += pillH + 20;
   }
 
   var hasPlan = !!(item.nextPlanSr || (item.nextPlanF !== undefined && item.nextPlanF !== '' && item.nextPlanF != null));
@@ -408,35 +418,35 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
       var u2 = isRq2 ? 'رقم' : 'سؤال';
       planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT;
     }
-    ctx.font = '700 20px Cairo, sans-serif';
-    var boxInnerW = innerW - 40;
+    ctx.font = F_PLANTXT;
+    var boxInnerW = innerW - 48;
     var planLines = wrapText(ctx, planTxt, boxInnerW);
-    var boxTopPad = 16, boxLabelH = 30, lineH = 27, boxBotPad = 14;
-    var boxH = boxTopPad + boxLabelH + planLines.length*lineH + boxBotPad;
-    var boxX = x + CARD_PAD_X - 16;
-    var boxW = width - (CARD_PAD_X - 16)*2;
+    var boxTopPad = 18, boxLabelH = 34, planLineH = 32, boxBotPad = 18;
+    var boxH = boxTopPad + boxLabelH + planLines.length*planLineH + boxBotPad;
+    var boxX = leftX - 14;
+    var boxW = width - (CARD_PAD_X - 14)*2;
     if(draw){
-      rr(ctx, boxX, cy, boxW, boxH, 14);
+      rr(ctx, boxX, cy, boxW, boxH, 16);
       ctx.fillStyle = '#fbf3d9';
       ctx.fill();
       ctx.save();
-      ctx.setLineDash([7,5]);
-      ctx.lineWidth = 1.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+      ctx.setLineDash([8,5]);
+      ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
       ctx.restore();
-      ctx.font = '800 19px Cairo, sans-serif';
+      ctx.font = F_PLANLBL;
       ctx.fillStyle = PALETTE.goldDk;
       ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText('🎯 الخطة القادمة', rightX - 16, cy + boxTopPad + 18);
+      ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + boxTopPad + 20);
       planLines.forEach(function(line, i){
-        ctx.font = '700 20px Cairo, sans-serif';
+        ctx.font = F_PLANTXT;
         ctx.fillStyle = '#5a4400';
-        ctx.fillText(line, rightX - 16, cy + boxTopPad + boxLabelH + 22 + i*lineH);
+        ctx.fillText(line, rightX - 20, cy + boxTopPad + boxLabelH + 24 + i*planLineH);
       });
     }
-    cy += boxH + 10;
+    cy += boxH + 12;
   }
 
-  cy += CARD_PAD_Y - 10;
+  cy += CARD_PAD_Y - 8;
   return cy - y;
 }
 
@@ -478,15 +488,15 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.font = '58px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     ctx.fillText('🕌', C_W/2, 22);
 
-    ctx.font = '900 46px Amiri, serif';
+    ctx.font = '900 52px Amiri, serif';
     ctx.fillStyle = PALETTE.goldLt;
     ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
-    ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 92);
+    ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 90);
     ctx.shadowColor = 'transparent';
 
-    ctx.font = '700 21px Cairo, sans-serif';
+    ctx.font = '700 24px Cairo, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 148);
+    ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 150);
 
     // زخرفة نقاط ذهبية صغيرة
     ctx.fillStyle = PALETTE.gold;
@@ -498,14 +508,14 @@ function layoutReport(ctx, canvasH, nm, data, draw){
 
   // ===== بطاقة اسم البطل (وسام ذهبي) =====
   var by = y - 6;
-  var bh = 84;
-  ctx.font = '800 34px Cairo, sans-serif';
+  var bh = 96;
+  ctx.font = '900 42px Cairo, sans-serif';
   var nameTxt = 'بطلنا:  ' + nm + '  🏆';
   var nmW = ctx.measureText(nameTxt).width;
-  var bw = Math.min(Math.max(nmW + 90, 420), C_W - PAD*2);
-  var fontSize = 34;
-  if(nmW + 90 > C_W - PAD*2){
-    fontSize = Math.max(22, Math.floor(34 * (C_W - PAD*2 - 90) / nmW));
+  var bw = Math.min(Math.max(nmW + 100, 460), C_W - PAD*2);
+  var fontSize = 42;
+  if(nmW + 100 > C_W - PAD*2){
+    fontSize = Math.max(26, Math.floor(42 * (C_W - PAD*2 - 100) / nmW));
   }
   var bx = (C_W - bw) / 2;
   if(draw){
@@ -518,27 +528,27 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke();
     ctx.restore();
 
-    ctx.font = '800 ' + fontSize + 'px Cairo, sans-serif';
+    ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif';
     ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
   y = by + bh;
 
   // ===== التاريخ =====
-  y += 30;
+  y += 34;
   if(draw){
     var dateTxt = hijriDate();
-    ctx.font = '700 20px Cairo, sans-serif';
-    var dW = ctx.measureText('📅  ' + dateTxt).width + 40;
-    var dH = 40;
+    ctx.font = '700 23px Cairo, sans-serif';
+    var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
+    var dH = 48;
     var dX = (C_W - dW)/2;
-    rr(ctx, dX, y - 26, dW, dH, dH/2);
+    rr(ctx, dX, y - 30, dW, dH, dH/2);
     ctx.fillStyle = '#ffffff'; ctx.fill();
-    ctx.lineWidth = 1.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
+    ctx.fillText('📅  ' + dateTxt, C_W/2, y - 6);
   }
-  y += 34;
+  y += 38;
 
   // ===== الأقسام والبطاقات =====
   var cardX = PAD;
@@ -589,14 +599,14 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y);
     ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
 
-    ctx.font = '800 22px Cairo, sans-serif';
+    ctx.font = '800 25px Cairo, sans-serif';
     ctx.fillStyle = PALETTE.goldLt;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
 
-    ctx.font = '600 16px Cairo, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 70);
+    ctx.font = '600 18px Cairo, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
 
     drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
   }
