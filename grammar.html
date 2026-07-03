@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي الجرامر السحري مع يوسف ومحمود 🚀</title>
+    <style>
+        :root {
+            --primary-color: #4cc9f0;
+            --secondary-color: #7209b7;
+            --accent-color: #f72585;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Profile Selector */
+        .profile-selector {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #eee;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-mahmoud { background-color: #ffb703; color: #fff; }
+        .btn-youssef { background-color: #219ebc; color: #fff; }
+        
+        .profile-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #fff;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #fdfdfd;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 16px;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .msg.bot {
+            background-color: #e9ecef;
+            align-self: flex-start;
+            border-top-right-radius: 2px;
+        }
+
+        .msg.user {
+            background-color: #d8f3dc;
+            align-self: flex-end;
+            border-top-left-radius: 2px;
+        }
+
+        /* Interaction Zone */
+        .interaction-zone {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            background: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #f0f0f0;
+            border-color: #999;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .mic-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.4);
+            transition: all 0.3s;
+        }
+
+        .mic-btn.recording {
+            background-color: #d90429;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(217, 4, 41, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(217, 4, 41, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(217, 4, 41, 0); }
+        }
+
+        /* Audio Player Styling */
+        .audio-saved-container {
+            width: 100%;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+
+        .audio-saved-container audio {
+            width: 100%;
+        }
+
+        /* Stats Dashboard */
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #f1faee;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stars { color: #ffb703; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>مغامرات الجرامر السحرية ✨</h1>
+            <p>اضغط على اسمك وابدأ التحدي الصوتي والعب مع المستر!</p>
+        </div>
+
+        <!-- Profile Selector -->
+        <div class="profile-selector">
+            <button class="profile-btn btn-mahmoud active" onclick="switchProfile('mahmoud')">👦 محمود (8 سنوات)</button>
+            <button class="profile-btn btn-youssef" onclick="switchProfile('youssef')">🧑 يوسف (12 سنة)</button>
+        </div>
+
+        <!-- Dashboard Stat -->
+        <div class="dashboard">
+            <span>اللاعب الحالي: <span id="current-player-name">محمود</span></span>
+            <span class="stars">⭐ النجوم: <span id="star-count">0</span></span>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area" id="chat-box">
+            <!-- Messages dynamically generated here -->
+        </div>
+
+        <!-- Interaction Zone -->
+        <div class="interaction-zone">
+            <!-- Multiple Choice Options -->
+            <div class="options-container" id="options-box">
+                <!-- Buttons change based on question -->
+            </div>
+
+            <!-- Voice Controls -->
+            <div class="controls">
+                <button class="mic-btn" id="mic-button" onclick="toggleRecording()">🎤</button>
+                <span id="record-status" style="font-size: 14px; color: #666;">اضغط على المايك وسجل إجابتك بصوتك! 📣</span>
+            </div>
+            
+            <!-- Voice playback box -->
+            <div id="audio-playback-zone" style="width: 100%; display: none;">
+                <p style="font-size: 12px; color: #555; margin-bottom: 5px;">تسجيلك الصوتي المحفوظ 🎧:</p>
+                <div class="audio-saved-container" id="audio-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State Database
+        const gameData = {
+            mahmoud: {
+                name: "محمود العسل",
+                question: "حبيبي يا حودة يا عسل! جاهز للعب؟ بص يا بطل، لو أنا بتكلم عن نفسي هقول (I) يعني (أنا)، طب لو أنا وأنت ويوسف واقفين سوا وعايزين نقول (نحن).. تفتكر الكلمة السحرية هتبقى (We) ولا (They)؟ افتح المايك فوراً وسجل لي صوتك وقولي الإجابة، واختارها من الزراير تحت!",
+                options: ["We", "They"],
+                correct: "We",
+                successMsg: "عاش يا وحش الوحوش! 🎉 إجابة صحيحة يا حودة يا كينج.. (We) يعني نحن! خد مكافأة ليك ⭐ نورت الكوكب يا بطل!",
+                failMsg: "يا حودة يا سكر ركز معايا.. (They) دي بتاعة الناس الغايبين (هم)، لكن إحنا واقفين سوا يبقى (We)! جرب تاني يا بطل متقلقش إحنا بنلعب سوا 😂"
+            },
+            youssef: {
+                name: "الكابتن يوسف",
+                question: "جو يا كبير! منور الساحة يا وحش الـ 12 سنة. سيبك من تحدي حودة السهل ده وتعال لي في تحدي الملوك. لو عايز تقول بالإنجليزي 'أنا شفته هو في النادي'.. كلمة 'هو' هنا مفعول به (Object pronoun). الجملة بتقول: (I saw ____ at the club).. تفتكر الفراغ ده هنحط فيه (He) ولا (Him)؟ شغل المايك يا جو وسمعني فويس بإجابتك الجامدة واختار من تحت!",
+                options: ["He", "Him"],
+                correct: "Him",
+                successMsg: "كفوووو يا جو! 🔥 الله أكبر عليك، (Him) هي المفعول به الصح! دماغك دي ألماظ وكنافة بالمانجا.. خد النجمة بتاعتك يستاهلها بطل الملوك! ⭐",
+                failMsg: "لا يا جو.. فكر تاني! (He) دي فاعل بتيجي في أول الجملة، لكن هنا وقعت مفعول به فتبقى (Him). شغل المايك وقولها تاني صح يا كابتن!"
+            }
+        };
+
+        let currentProfile = 'mahmoud';
+        let scores = { mahmoud: 0, youssef: 0 };
+        
+        // Recording variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        // Initialize App
+        function initApp() {
+            switchProfile('mahmoud');
+        }
+
+        // Switch Profiles
+        function switchProfile(profile) {
+            currentProfile = profile;
+            
+            // Update Active Buttons UI
+            document.querySelectorAll('.profile-btn').forEach(btn => btn.classList.remove('active'));
+            if(profile === 'mahmoud') document.querySelector('.btn-mahmoud').classList.add('active');
+            if(profile === 'youssef') document.querySelector('.btn-youssef').classList.add('active');
+            
+            // Update Dashboard text
+            document.getElementById('current-player-name').innerText = gameData[profile].name;
+            document.getElementById('star-count').innerText = scores[profile];
+            
+            // Clear Audio zone
+            document.getElementById('audio-playback-zone').style.display = 'none';
+            document.getElementById('audio-container').innerHTML = '';
+
+            // Reset chat with new questions
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `
+                <div class="msg bot">👋 أهلاً بك في تحدي الجرامر السحري!</div>
+                <div class="msg bot">${gameData[profile].question}</div>
+            `;
+            
+            // Draw Interactive buttons
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+            gameData[profile].options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt);
+                optionsBox.appendChild(btn);
+            });
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Check selected answer & give dynamic banter feedback
+        function checkAnswer(selectedOption) {
+            const current = gameData[currentProfile];
+            const chatBox = document.getElementById('chat-box');
+            
+            // User side message representation
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.innerText = `أنا اخترت: ${selectedOption} 🎤 (وبعتلك تسجيل صووتي)`;
+            chatBox.appendChild(userMsg);
+
+            // Bot response based on correctness
+            const botMsg = document.createElement('div');
+            botMsg.className = 'msg bot';
+            
+            if (selectedOption === current.correct) {
+                scores[currentProfile] += 1;
+                document.getElementById('star-count').innerText = scores[currentProfile];
+                botMsg.innerText = current.successMsg;
+                botMsg.style.borderLeft = "5px solid #2a9d8f";
+            } else {
+                botMsg.innerText = current.failMsg;
+                botMsg.style.borderLeft = "5px solid #e63946";
+            }
+            
+            setTimeout(() => {
+                chatBox.appendChild(botMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+
+        // Real browser-side voice recording implementation using Web Audio API
+        async function toggleRecording() {
+            const micBtn = document.getElementById('mic-button');
+            const statusText = document.getElementById('record-status');
+
+            if (!isRecording) {
+                // Start Recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // Display and save audio playback element inside document
+                        document.getElementById('audio-playback-zone').style.display = 'block';
+                        const audioContainer = document.getElementById('audio-container');
+                        audioContainer.innerHTML = `<audio src="${audioUrl}" controls></audio>`;
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    micBtn.classList.add('recording');
+                    micBtn.innerText = '⏹️';
+                    statusText.innerText = "بيسجل دلوقتي.. اتكلم يا بطل واقفل لما تخلص!";
+                } catch (err) {
+                    alert("عفوًا، يحتاج المتصفح لإذن الوصول للميكروفون لتشغيل ميزة التسجيل الحقيقي 🎤");
+                    console.error(err);
+                }
+            } else {
+                // Stop Recording
+                mediaRecorder.stop();
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                micBtn.innerText = '🎤';
+                statusText.innerText = "تم حفظ تسجيلك الصوتي بنجاح! 🎉 اختار الإجابة من الأزرار الآن.";
+            }
+        }
+
+        // Run application on start
+        window.onload = initApp;
+    </script>
+</body>
+</html>
