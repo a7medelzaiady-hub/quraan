@@ -72,12 +72,12 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       </div>
     </div>
   </div>
-  <!-- باقي الأقسام كما هي -->
+  
   <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div><div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div><div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,false)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div><div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
   <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div><div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div><div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,false)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div><div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addQuestion('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سؤال</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div><div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div><div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addSurah('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
   <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div><div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div></div>
 </div>
 <div class="submit-wrap"><button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button></div>
@@ -122,7 +122,7 @@ function getExtraForQ(includeNextPlan,label,isRange){
 function addSurah(containerId,prefix,withExtra,includeNextPlan){
   counters[prefix]++;var idx=counters[prefix];
   var div=document.createElement('div');div.className='surah-row';div.id='row-'+prefix+idx;
-  var label=(prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':'القسم');
+  var label=(prefix==='ns')?'السورة':(prefix==='ps'?'الماضي':(prefix==='sj'?'السراج':'القسم'));
   var extraHtml=withExtra?getExtraForNewSurah(includeNextPlan,label,prefix,idx):'';
   div.innerHTML=(idx>1?'<button class="del-btn" onclick="delRow(\'row-'+prefix+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+idx+'"></div></div>'+
@@ -343,7 +343,6 @@ function drawSectionHeader(ctx, sec, rightX, y, draw){
   return 2*r + 26;
 }
 
-// يحسب/يرسم بطاقة عنصر واحد (سورة أو سؤال) ويعيد ارتفاعها الفعلي
 var F_TITLE = '900 40px Cairo, sans-serif';
 var F_TAG   = '700 23px Cairo, sans-serif';
 var F_PILL  = '800 25px Cairo, sans-serif';
@@ -361,12 +360,11 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     mainTxt = item.sr;
     subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً';
   } else {
-    var isRq = (sec.key === 'sj' || sec.key === 'hd');
+    var isRq = (sec.key === 'hd');
     var u = isRq ? 'رقم' : 'سؤال';
     mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t;
   }
 
-  // نحجز جزءاً من العرض على اليسار للوسم الجانبي (نوع السورة/المدى) حتى تمتلئ البطاقة بالكامل
   ctx.font = F_TAG;
   var tagW = subTxt ? (ctx.measureText(subTxt).width + 28 + 24) : 0;
   ctx.font = F_TITLE;
@@ -414,7 +412,7 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     if(item.nextPlanSr){
       planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً');
     } else {
-      var isRq2 = (sec.key === 'sj' || sec.key === 'hd');
+      var isRq2 = (sec.key === 'hd');
       var u2 = isRq2 ? 'رقم' : 'سؤال';
       planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT;
     }
@@ -450,11 +448,9 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
   return cy - y;
 }
 
-// دالة موحّدة: تُستخدم أولاً للقياس (draw=false) ثم للرسم الفعلي (draw=true) بنفس الحسابات تماماً
 function layoutReport(ctx, canvasH, nm, data, draw){
   var y = 0;
 
-  // ===== الخلفية =====
   if(draw){
     ctx.fillStyle = PALETTE.cream;
     ctx.fillRect(0, 0, C_W, canvasH);
@@ -468,7 +464,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.restore();
   }
 
-  // ===== الهيدر =====
   var hH = 232;
   if(draw){
     var hG = ctx.createLinearGradient(0, 0, 0, hH);
@@ -498,7 +493,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.fillStyle = '#ffffff';
     ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 150);
 
-    // زخرفة نقاط ذهبية صغيرة
     ctx.fillStyle = PALETTE.gold;
     for(var d=-2; d<=2; d++){
       ctx.beginPath(); ctx.arc(C_W/2 + d*22, 182, d===0?4:2.5, 0, Math.PI*2); ctx.fill();
@@ -506,7 +500,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   }
   y = hH;
 
-  // ===== بطاقة اسم البطل (وسام ذهبي) =====
   var by = y - 6;
   var bh = 96;
   ctx.font = '900 42px Cairo, sans-serif';
@@ -534,7 +527,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   }
   y = by + bh;
 
-  // ===== التاريخ =====
   y += 34;
   if(draw){
     var dateTxt = hijriDate();
@@ -550,7 +542,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   }
   y += 38;
 
-  // ===== الأقسام والبطاقات =====
   var cardX = PAD;
   var cardW = C_W - PAD*2;
 
@@ -566,7 +557,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
       if(draw){
         ctx.save();
         ctx.shadowColor = 'rgba(0,0,0,0.07)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6;
-        // نحتاج ارتفاع البطاقة أولاً بدون رسم لضبط الظل والحدود بدقة
       }
       var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
       if(draw){
@@ -591,7 +581,6 @@ function layoutReport(ctx, canvasH, nm, data, draw){
 
   y += 14;
 
-  // ===== الفوتر =====
   var fH = 96;
   if(draw){
     ctx.fillStyle = PALETTE.deep;
@@ -674,7 +663,7 @@ async function generateAndShare() {
   var data = {
     ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
     mq: collectData('mur-questions', true), pm: collectData('past-mur', true),
-    sj: collectData('suraj-section', true), hd: collectData('hadith-section', true)
+    sj: collectData('suraj-section', false), hd: collectData('hadith-section', true)
   };
 
   try {
@@ -688,10 +677,10 @@ async function generateAndShare() {
 
 // تهيئة مبدئية للصفوف
 addSurah('new-surahs','ns',true,true);
-addSurah('past-surahs','ps',true,false);
+addSurah('past-surahs','ps',true,true);
 addQuestion('mur-questions','mq',true,true);
-addQuestion('past-mur','pm',true,false);
-addQuestion('suraj-section','sj',true,true);
+addQuestion('past-mur','pm',true,true);
+addSurah('suraj-section','sj',true,true);
 addQuestion('hadith-section','hd',true,true);
 </script>
 </body>
