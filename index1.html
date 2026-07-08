@@ -22,11 +22,11 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
-.hdr { background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); padding: 30px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
+.hdr { background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); padding: 30px 166px; text-align: center; border-bottom: 4px solid var(--gold); }
 .hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(212, 175, 55, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 26px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; }
-.body { padding: 20px 14px 120px; max-width: 800px; margin: 0 auto; }
+.body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
 .section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: hidden; }
 .sec-head { background: var(--green-mid); padding: 14px 16px; }
 .sec-head-title { color: var(--gold-light); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -55,8 +55,14 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add { border-color: #b45309; color: #b45309; background: rgba(180, 83, 9, 0.03); }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
-.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
-.submit-btn { width: 100%; max-width: 800px; margin: 0 auto; display: block; padding: 16px; background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 12px rgba(6, 78, 59, 0.3); }
+
+/* أزرار التثبيت السفلي المنفصلة */
+.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
+.submit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 800px; margin: 0 auto; }
+.submit-btn { width: 100%; padding: 14px 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-report { background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
+.btn-appreciation { background: linear-gradient(135deg, #6b21a8, #4c1d95); color: #fff; border: 2px solid var(--gold); }
+.submit-btn:active { transform: scale(0.98); }
 </style>
 </head>
 <body>
@@ -74,7 +80,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
         <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً...">
       </div>
       <div class="frow">
-        <div class="flbl">التقييم العام للبطل (يظهر بالتقرير النصي الثاني)</div>
+        <div class="flbl">التقييم العام للبطل (يظهر بأعلى شهادة التقدير)</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
             <option value="ممتاز 🌟">مستوى ممتاز 🌟</option>
@@ -88,7 +94,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
   
   <!-- 1. السور الجديدة -->
-  <div class="section">
+  <div class="section" id="sec-ns">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📖 الحفظ الحالي:</div>
@@ -102,7 +108,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 
   <!-- 2. ماضي السور -->
-  <div class="section">
+  <div class="section" id="sec-ps">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📚 الماضي الحالي:</div>
@@ -116,7 +122,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 
   <!-- 3. أسئلة المذكرة الجديدة -->
-  <div class="section">
+  <div class="section" id="sec-mq">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📝 الأسئلة الحالية:</div>
@@ -130,7 +136,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 
   <!-- 4. ماضي المذكرة -->
-  <div class="section">
+  <div class="section" id="sec-pm">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📋 ماضي المذكرة الحالي:</div>
@@ -144,7 +150,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 
   <!-- 5. السراج -->
-  <div class="section">
+  <div class="section" id="sec-sj">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">💡 السراج الحالي:</div>
@@ -158,7 +164,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 
   <!-- 6. الحديث والأذكار -->
-  <div class="section">
+  <div class="section" id="sec-hd">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📿 الحديث والأذكار الحالية:</div>
@@ -172,7 +178,13 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<div class="submit-wrap"><button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button></div>
+<!-- شريط الأزرار المنفصلة السفلي -->
+<div class="submit-wrap">
+  <div class="submit-grid">
+    <button class="submit-btn btn-report" onclick="generateReportOnly()">📊 تقرير المتابعة</button>
+    <button class="submit-btn btn-appreciation" onclick="generateAppreciationOnly()">📜 شهادة التقييم</button>
+  </div>
+</div>
 
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
@@ -269,8 +281,17 @@ function collectSectionData(prefix, isQ) {
   return { currents: currents, nexts: nexts };
 }
 
+// دالة جلب تقييم قسم محدد ديناميكياً لاستخدامه في شهادة التقدير
+function getSectionRating(prefix) {
+  var found = "";
+  document.querySelectorAll('[id^="crow-'+prefix+'-"] .rating-sel').forEach(sel => {
+    if(sel.value && !found) found = sel.value;
+  });
+  return found || "متميز المستوي ✨";
+}
+
 // ═══════════════════════════════════════════════
-// التصميم الجرافيكي الاحترافي للتقرير الفاخر والتكبير الكامل للخطوط
+// محرك الرسم الاحترافي على الـ Canvas
 // ═══════════════════════════════════════════════
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
@@ -292,7 +313,7 @@ var F_PLANTXT = '700 32px Cairo, sans-serif';
 function rr(ctx,x,y,w,h,r){
   ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
   ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
+  ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
 }
 function hijriDate(){ try { return new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {weekday:'long', year:'numeric', month:'long', day:'numeric'}).format(new Date()); } catch(e) { return ''; } }
 function timeStamp(){ try { return new Intl.DateTimeFormat('ar-EG', {hour:'2-digit', minute:'2-digit'}).format(new Date()); } catch(e){ return ''; } }
@@ -452,7 +473,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     var dateTxt = hijriDate(); ctx.font = '700 24px Cairo, sans-serif';
     var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
-    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; stroke();
     ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
   }
   y += 38;
@@ -498,31 +519,79 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   return y + fH;
 }
 
-async function drawAppreciationReport(nm, rating) {
-  await loadFonts(); var canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1080; var ctx = canvas.getContext('2d');
-  var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); bgG.addColorStop(0, '#ebdcb9'); bgG.addColorStop(1, '#dfce9f'); ctx.fillStyle = bgG; ctx.fillRect(0, 0, canvas.width, canvas.height);
+// ═══════════════════════════════════════════════
+// لوحة رسم شهادة التقدير المراجعة والمطورة بالكامل
+// ═══════════════════════════════════════════════
+async function drawAppreciationReport(nm, rating, ratingsObj) {
+  await loadFonts(); 
+  var canvas = document.createElement('canvas'); 
+  canvas.width = 1080; 
+  canvas.height = 1320; // تم زيادة الارتفاع ليتسع للحصاد المفصل والإمضاء الرسمي بروعة
+  var ctx = canvas.getContext('2d');
+  
+  // خلفية فاخرة
+  var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
+  bgG.addColorStop(0, '#ebdcb9'); bgG.addColorStop(1, '#dfce9f'); 
+  ctx.fillStyle = bgG; ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawCornerBrackets(ctx, canvas.width, canvas.height, 24, 50, '#8a6d0a');
   
+  // الهلال العلوي الجمالي
   ctx.save(); ctx.beginPath(); ctx.arc(540, 95, 48, 0, Math.PI * 2); ctx.fillStyle = '#601212'; ctx.fill(); ctx.lineWidth = 3.5; ctx.strokeStyle = '#d4af37'; ctx.stroke();
   ctx.font = '42px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#d4af37'; ctx.fillText('🌙', 540, 97); ctx.restore();
   
   ctx.font = '700 44px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 210);
   ctx.beginPath(); ctx.moveTo(400, 248); ctx.lineTo(680, 248); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.stroke();
   
+  // التقييم العام بأعلى الشهادة
   drawPill(ctx, 'مستوى ' + rating, 540, 280, { font: '800 30px Cairo, sans-serif', bg: '#fdf6e0', color: '#8a6d0a', border: '#d4af37', borderWidth: 2, h: 58, padX: 34, align: 'center' });
   
-  var textY = 400; ctx.font = '700 34px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
-  var p1 = '،مِنْ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + '، سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
-  var p2 = 'فَإِنَّ الْحَدِيثَ عَنْ بَطَلِنَا حَدِيثُ سُرُورٍ وَفَخْرٍ، فَقَدْ بَلَغَ مِنَ الْإِتْقَانِ وَحُسْنِ الْأَدَاءِ مَبْلَغاً يَسُرُّ كُلَّ مَنْ يُتَابِعُ خُطَاهُ، وَقَدْ بَرَزَ بَطَلُنَا بِتَفَوُّقٍ ظَاهِرٍ فِي بَابِ «مُتَابَعَةِ الْحِفْظِ وَالْمُرَاجَعَةِ»، وَهُوَ مَوْضِعُ اعْتِزَازٍ يُحْسَبُ لَهُ بِإِذْنِ اللَّهِ.';
-  var p3 = 'وَقَدْ رَصَدْنَا جُهُودَهُ الْمُبَارَكَةَ الَّتِي نَنْصَحُ بِمُعَالَجَتِهَا بِمَزِيدٍ مِنَ Тَّكْرَارِ وَالتَّسْمِيعِ. وَالْمَطْلُوبُ مِنْهُ الْآنَ هُوَ الثَّبَاتُ عَلَى هَذَا الْمُسْتَوَى الْرَّفِيعِ وَعَدَمُ التَّفْرِيطِ فِي وِرْدِهِ الْيَوْمِيِّ، فَحِفْظُ الْقُرْآنِ أَمَانَةٌ تَحْتَاجُ إِلَى مُدَاوَمَةٍ لَا فُتُورَ فِيهَا.';
-  var p4 = 'فَنَسْأَلُ اللَّهَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يَزِيدَهُ ثَبَاتاً وَرِفْعَةً.';
+  var textY = 400; ctx.font = '700 33px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
+  
+  // نصوص بليغة ومصححة بالكامل
+  var p1 = 'مِنْ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + '، سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
+  var p2 = 'فَإِنَّ الْحَدِيثَ عَنْ بَطَلِنَا حَدِيثُ سُرُورٍ وَفَخْرٍ، فَقَدْ بَلَغَ مِنَ الْإِتْقَانِ وَحُسْنِ الْأَدَاءِ مَبْلَغاً يَسُرُّ كُلَّ مَنْ يُتَابِعُ خُطَاهُ التَّعْلِيمِيَّةَ وَالتَّرْبَوِيَّةَ، وَهُوَ مَوْضِعُ اعْتِزَازٍ نَفْخَرُ بِهِ نَظِيرَ تَمَيُّزِهِ الْوَاضِحِ.';
+  var p3 = 'وَنَحْنُ إِذْ نُقَدِّمُ هَذَا التَّقْيِيمَ، نُوصِي بَطَلَنَا بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ، وَالِاسْتِمْرَارِ فِي التَّكْرَارِ وَالتَّسْمِيعِ لِيَظَلَّ كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ وَعَقْلِهِ.';
+  var p4 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ الطَّيِّبَيْنِ.';
   
   var maxW = 900;
   var allParagraphs = [wrapText(ctx, p1, maxW), wrapText(ctx, p2, maxW), wrapText(ctx, p3, maxW), wrapText(ctx, p4, maxW)];
   ctx.textBaseline = 'top';
   allParagraphs.forEach(function(lines) {
-    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 50; }); textY += 28;
+    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 24;
   });
+  
+  // 📊 صندوق الحصاد المفصل للأقسام (التركيز الأساسي المضاف)
+  var boxY = textY + 10;
+  var boxW = 900;
+  var boxH = 240;
+  var boxX = 90;
+  rr(ctx, boxX, boxY, boxW, boxH, 20);
+  ctx.fillStyle = 'rgba(4, 32, 26, 0.04)';
+  ctx.fill();
+  ctx.strokeStyle = '#0b3d2e';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = '800 28px Cairo, sans-serif';
+  ctx.fillStyle = '#04201a';
+  ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 950, boxY + 35);
+
+  ctx.font = '700 24px Cairo, sans-serif';
+  ctx.fillStyle = '#111827';
+  ctx.fillText('📖 تَقْيِيمُ حِفْظِ وَمُرَاجَعَةِ الآيَاتِ وَالسُّورِ:  ' + ratingsObj.surah, 940, boxY + 95);
+  ctx.fillText('📝 تَقْيِيمُ مَسَارِ أَسْئِلَةِ الْمُذَكِّرَةِ الْجَدِيدَةِ:  ' + ratingsObj.notebook, 940, boxY + 145);
+  ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ وَمَحَاوِرِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 940, boxY + 195);
+  
+  // ✍️ مربع الإمضاء والتوقيع الرسمي للشيخ
+  var sigY = boxY + boxH + 50;
+  ctx.font = '700 26px Cairo, sans-serif';
+  ctx.fillStyle = '#601212';
+  ctx.textAlign = 'left';
+  ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 360, sigY);
+  ctx.font = '900 36px Amiri, serif';
+  ctx.fillStyle = '#04201a';
+  ctx.fillText('الشيخ عبد الرحمن', 310, sigY + 45);
+  
   return canvas;
 }
 
@@ -534,46 +603,59 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-function showTwoImagesModal(imgSrc1, imgSrc2, nm) {
+// نافذة منبثقة مخصصة لعرض وحفظ صورة واحدة فقط عند تعذر الشير المباشر
+function showSingleImageModal(imgSrc, downloadName) {
   var modal=document.createElement('div');
-  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;';
-  modal.innerHTML='<div style="display:flex;gap:16px;max-width:100%;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">'
-    +'<img src="'+imgSrc1+'" style="max-width:45%;max-height:70vh;border-radius:14px;box-shadow:0 8px 40px rgba(212,175,55,.2);">'
-    +'<img src="'+imgSrc2+'" style="max-width:45%;max-height:70vh;border-radius:14px;box-shadow:0 8px 40px rgba(212,175,55,.2);">'
-    +'</div>'
-    +'<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">'
-    +'<button id="mc" style="padding:12px 30px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
-    +'<button id="ms1" style="padding:12px 30px;background:#064e3b;color:#fef08a;border:2px solid #d4af37;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ تقرير المتابعة</button>'
-    +'<button id="ms2" style="padding:12px 30px;background:#7c2d12;color:#fef08a;border:2px solid #d4af37;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ التقييم النصي</button>'
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+  modal.innerHTML='<img src="'+imgSrc+'" style="max-width:95%;max-height:75vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.4);margin-bottom:20px;">'
+    +'<div style="display:flex;gap:12px;justify-content:center;width:100%;">'
+    +'<button id="mbtn-close" style="padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
+    +'<button id="mbtn-down" style="padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ الجهاز</button>'
     +'</div>';
   document.body.appendChild(modal);
-  document.getElementById('mc').onclick=function(){modal.remove();};
-  document.getElementById('ms1').onclick=function(){ var a=document.createElement('a');a.href=imgSrc1;a.download='تقرير_متابعة_'+nm+'.png';a.click(); };
-  document.getElementById('ms2').onclick=function(){ var a=document.createElement('a');a.href=imgSrc2;a.download='تقييم_نصي_'+nm+'.png';a.click(); };
+  document.getElementById('mbtn-close').onclick=function(){modal.remove();};
+  document.getElementById('mbtn-down').onclick=function(){ var a=document.createElement('a');a.href=imgSrc;a.download=downloadName;a.click(); };
 }
 
-async function shareTwoFiles(dataUrl1, dataUrl2, nm) {
+async function shareSingleFile(dataUrl, filename, title, fallbackName) {
   try {
-    const response1 = await fetch(dataUrl1); const blob1 = await response1.blob(); const file1 = new File([blob1], 'report_'+nm+'.jpg', { type: 'image/jpeg' });
-    const response2 = await fetch(dataUrl2); const blob2 = await response2.blob(); const file2 = new File([blob2], 'appreciation_'+nm+'.jpg', { type: 'image/jpeg' });
-    if (navigator.canShare && navigator.canShare({ files: [file1, file2] })) {
-      await navigator.share({ files: [file1, file2], title: 'تقارير متابعة الحفظ', text: 'إليك تقرير الحفظ والتقييم التعبيري للبطل ' + nm });
-    } else { showTwoImagesModal(dataUrl1, dataUrl2, nm); }
-  } catch (err) { showTwoImagesModal(dataUrl1, dataUrl2, nm); }
+    const res = await fetch(dataUrl); const blob = await res.blob();
+    const file = new File([blob], filename, { type: 'image/jpeg' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: title });
+    } else { showSingleImageModal(dataUrl, fallbackName); }
+  } catch (e) { showSingleImageModal(dataUrl, fallbackName); }
 }
 
-async function generateAndShare() {
-  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل'); return; }
+// 1. تشغيل استخراج ومشاركة تقرير المتابعة منفصلاً
+async function generateReportOnly() {
+  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
+  var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+  try {
+    var canvas = await drawReport(nm, data);
+    shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'report_'+nm+'.jpg', 'تقرير متابعة البطل', 'تقرير_متابعة_'+nm+'.jpg');
+  } catch (e) { alert('حدث خطأ: ' + e.message); }
+}
+
+// 2. تشغيل استخراج ومشاركة شهادة التقييم منفصلة وبتركيز تفصيلي
+async function generateAppreciationOnly() {
+  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
-  var data = {};
-  SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+  
+  // تجميع التقييمات التفصيلية المدخلة من الأقسام المحددة بالطلب
+  var ratingsObj = {
+    surah: getSectionRating('ns') || getSectionRating('ps') || "ممتاز 🌟",
+    notebook: getSectionRating('mq') || getSectionRating('pm') || "ممتاز 🌟",
+    seraj: getSectionRating('sj') || "ممتاز 🌟"
+  };
+  
   try {
-    var c1 = await drawReport(nm, data); var c2 = await drawAppreciationReport(nm, genRating);
-    shareTwoFiles(c1.toDataURL('image/jpeg', 0.92), c2.toDataURL('image/jpeg', 0.92), nm);
-  } catch (e) { alert('حدث خطأ أثناء الإنشاء: ' + e.message); }
+    var canvas = await drawAppreciationReport(nm, genRating, ratingsObj);
+    shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'appreciation_'+nm+'.jpg', 'شهادة تقييم البطل', 'شهادة_تقييم_'+nm+'.jpg');
+  } catch (e) { alert('حدث خطأ: ' + e.message); }
 }
 
-// التنشيط التلقائي لصفوف البداية بكل الأقسام بشكل مستقل تماماً ومريح للعين
+// التنشيط التلقائي لصفوف البداية بكل الأقسام عند التحميل الأول
 SECTIONS.forEach(sec => {
   if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
