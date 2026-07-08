@@ -84,14 +84,14 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم البطل </div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل  ...">
+        <div class="flbl">اسم البطل الكريم</div>
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً بشكل واضح...">
       </div>
       <div class="frow">
-        <div class="flbl">التقييم العام للمسار (يظهر في اعلى الشهادة)</div>
+        <div class="flbl">التقييم العام للمسار (يظهر في الهيدر العلوي للشهادة)</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
-            <option value="بارك الله فيك 🌟">مستوى ممتاز 🌟</option>
+            <option value="ممتاز 🌟">مستوى ممتاز 🌟</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
             <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
@@ -171,15 +171,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     </div>
   </div>
 
-  <!-- 6.  الأذكار -->
+  <!-- 6. الحديث والأذكار -->
   <div class="section" id="sec-hd">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i> الأذكار</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿   الأذكار الحالية:</div>
+      <div class="sub-sec-title">📿 الحديث الشريف والأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة للاذكار:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للحديث:</div>
       <div id="hd-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
     </div>
@@ -306,7 +306,6 @@ function getSectionRating(prefix) {
   return found || "ممتاز 🌟";
 }
 
-// 1. محرك توليد النصائح والتوجيهات المخصصة لأولياء الأمور بناءً على مدخلات الجداول
 function getPersonalizedAdvice(data) {
   let low = [];
   let high = [];
@@ -519,7 +518,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
     var bG = ctx.createLinearGradient(bx, by, bx, by+bh); bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
-    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; stroke(); ctx.restore();
+    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.restore(); // تم إصلاح دالة المحاذاة والرسم هنا لمنع انقطاع الخطأ
     ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
   y = by + bh + 34;
@@ -572,12 +571,11 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   return y + fH;
 }
 
-// 2. تحديث دالة رسم الشهادة لتستوعب التقرير الاستشاري والنصائح بذكاء ودون تداخل
 async function drawAppreciationReport(nm, rating, adviceLines) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = 1750; // زيادة الارتفاع لضمان عدم حدوث تداخل بين السطور
+  canvas.height = 1800; // تم زيادة الارتفاع الكلي لإعطاء أريحية كاملة للنصوص التربوية بدون تداخل
   var ctx = canvas.getContext('2d');
   
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
@@ -606,30 +604,28 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
     lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 18;
   });
   
-  // بناء صندوق الملاحظات والتوجيهات المنزلية الذكي التلقائي
-  var boxY = textY + 15;
+  var boxY = textY + 25;
   var boxW = 900; var boxX = 90;
   
-  // حساب الارتفاع المطلوب ديناميكياً بناءً على عدد وحجم النصائح لمنع طفح النصوص
   var calculatedBoxH = 100;
   ctx.font = '600 28px Cairo, sans-serif';
   adviceLines.forEach(function(line) {
     var linesCount = wrapText(ctx, line, 840).length;
     calculatedBoxH += (linesCount * 44) + 20;
   });
-  calculatedBoxH = Math.max(calculatedBoxH, 280);
+  calculatedBoxH = Math.max(calculatedBoxH, 290);
 
   rr(ctx, boxX, boxY, boxW, calculatedBoxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 التوجيهات التربوية والنصائح المخصصة لولي الأمر:', 940, boxY + 30);
+  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 التوجيهات التربوية والنصائح المخصصة لولي الأمر:', 940, boxY + 35);
 
-  var insideTextY = boxY + 95;
+  var insideTextY = boxY + 100;
   adviceLines.forEach(function(line) {
     if (line.startsWith("توجيه")) {
-      ctx.fillStyle = '#b91c1c'; // أحمر داكن للفت الانتباه والتنبيهات
+      ctx.fillStyle = '#b91c1c'; 
       ctx.font = '700 28px Cairo, sans-serif';
     } else if (line.startsWith("نقاط")) {
-      ctx.fillStyle = '#15803d'; // أخضر للمدح والثناء
+      ctx.fillStyle = '#15803d'; 
       ctx.font = '700 28px Cairo, sans-serif';
     } else {
       ctx.fillStyle = '#111827';
@@ -644,7 +640,7 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
     insideTextY += 15;
   });
   
-  var sigY = boxY + calculatedBoxH + 60;
+  var sigY = boxY + calculatedBoxH + 65;
   ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'left';
   ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 380, sigY);
   ctx.font = '900 38px Amiri, serif'; ctx.fillStyle = '#04201a';
@@ -693,16 +689,13 @@ async function generateReportOnly() {
   } catch (e) { customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message); }
 }
 
-// 3. ربط وتمرير النصائح الذكية مباشرة للشهادة لحل كافة مشاكل الـ undefined والقصور البرمجي
 async function generateAppreciationOnly() {
   var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   
-  // تجميع البيانات بدقة متناهية
   var data = {}; 
   SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   
-  // استدعاء محرك التوجيهات لاستخلاص تقرير الأقسام الحالي
   var adviceLines = getPersonalizedAdvice(data);
   
   try {
