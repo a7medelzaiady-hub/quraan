@@ -15,29 +15,28 @@
 
     <style>
         :root {
-            /* نظام ألوان مشرق، مبهج، ونقي */
-            --bg-main: #f8faf9;
-            --surface-white: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(16, 185, 129, 0.12);
+            /* نظام ألوان نيومودرن إسلامي فاخر */
+            --bg-deep: #06110e;
+            --surface-dark: #0a1b16;
+            --surface-card: #102720;
+            --glass-bg: rgba(16, 39, 32, 0.65);
+            --glass-border: rgba(212, 163, 89, 0.15);
             
-            --emerald-bright: #10b981;
-            --emerald-light: #e6f7f2;
-            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --emerald-vibrant: #1fa87a;
+            --emerald-glow: rgba(31, 168, 122, 0.15);
             
-            --gold-sunny: #f59e0b;
-            --gold-light: #fef3c7;
-            --gold-glow: rgba(245, 158, 11, 0.2);
+            --gold-matte: #d4a359;
+            --gold-light: #f3dca1;
+            --gold-glow: rgba(212, 163, 89, 0.3);
             
-            --text-dark: #1f2937;
-            --text-body: #4b5563;
-            --text-muted: #9ca3af;
-            --danger: #ef4444;
+            --text-pure: #ffffff;
+            --text-body: #b9cfc7;
+            --text-muted: #6e8c81;
+            --danger: #ff5252;
             
             --radius-main: 24px;
             --radius-sm: 14px;
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.04);
         }
 
         * { 
@@ -52,22 +51,21 @@
         body {
             font-family: 'Tajawal', sans-serif;
             color: var(--text-body);
-            background-color: var(--bg-main);
+            background-color: var(--bg-deep);
             background-image: 
-                radial-gradient(circle at 0% 0%, var(--emerald-glow) 0%, transparent 45%),
-                radial-gradient(circle at 100% 100%, var(--gold-glow) 0%, transparent 45%);
+                radial-gradient(circle at 0% 0%, var(--emerald-glow) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, var(--gold-glow) 0%, transparent 40%);
             background-attachment: fixed;
             overflow-x: hidden;
             line-height: 1.6;
             padding-bottom: 40px;
         }
 
-        /* ===== شاشة الدخول المشرقة والمبهجة ===== */
+        /* ===== شاشة الدخول الاحترافية (Minimalist Welcome) ===== */
         #welcome-screen {
             position: fixed;
             inset: 0;
-            background: var(--bg-main);
-            background-image: radial-gradient(circle at center, #ffffff 0%, var(--bg-main) 100%);
+            background: var(--bg-deep);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -78,8 +76,8 @@
 
         .welcome-art {
             position: relative;
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             margin-bottom: 30px;
             display: flex;
             justify-content: center;
@@ -90,15 +88,15 @@
             content: '';
             position: absolute;
             inset: 0;
-            border: 2px dashed var(--emerald-bright);
+            border: 2px dashed var(--gold-matte);
             border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
             animation: morphing 10s infinite linear;
         }
 
         .welcome-art i {
-            font-size: 2.8rem;
-            color: var(--emerald-bright);
-            filter: drop-shadow(0 0 15px var(--emerald-glow));
+            font-size: 2.5rem;
+            color: var(--gold-matte);
+            text-shadow: 0 0 20px var(--gold-glow);
         }
 
         @keyframes morphing {
@@ -108,46 +106,45 @@
         }
 
         #welcome-screen h1 {
-            color: var(--text-dark);
-            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--text-pure);
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 900;
             margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
 
         .welcome-sub {
-            color: var(--gold-sunny);
-            font-size: 1.1rem;
-            font-weight: 700;
+            color: var(--gold-matte);
+            font-size: 0.95rem;
+            letter-spacing: 2px;
             margin-bottom: 40px;
-            opacity: 0.9;
+            opacity: 0.8;
         }
 
         .start-btn {
-            background: linear-gradient(135deg, var(--emerald-bright), #059669);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--gold-matte), #b8833c);
+            color: var(--bg-deep);
             border: none;
-            padding: 18px 48px;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
+            padding: 16px 44px;
+            font-size: 1.1rem;
+            font-weight: 700;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            box-shadow: 0 10px 25px var(--emerald-glow);
+            box-shadow: 0 10px 30px var(--gold-glow);
             transition: var(--transition);
         }
 
         .start-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px var(--emerald-glow);
-            filter: brightness(1.05);
+            box-shadow: 0 15px 35px var(--gold-glow);
+            filter: brightness(1.1);
         }
 
-        /* ===== الهيدر المشرق الجديد ===== */
+        /* ===== الهيدر الحديث (Modern Glassmorphic Header) ===== */
         header {
             max-width: 1200px;
-            margin: 30px auto 10px;
-            padding: 30px 24px;
+            margin: 40px auto 20px;
+            padding: 40px 24px;
             text-align: center;
             position: relative;
         }
@@ -156,53 +153,50 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--emerald-light);
+            background: rgba(214, 163, 89, 0.08);
             border: 1px solid var(--glass-border);
-            padding: 8px 18px;
+            padding: 8px 16px;
             border-radius: 100px;
-            color: #047857;
+            color: var(--gold-light);
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-subtle);
         }
 
         header h1 {
-            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-size: clamp(2rem, 6vw, 3.5rem);
             font-weight: 900;
-            color: var(--text-dark);
+            color: var(--text-pure);
             line-height: 1.2;
         }
 
         header p {
-            color: var(--text-body);
+            color: var(--text-muted);
             font-size: 1.1rem;
             margin-top: 12px;
-            font-weight: 500;
         }
 
-        /* ===== شريط المحتوى المشرق السلس ===== */
+        /* ===== شريط المحتوى المتحرك فائق النعومة ===== */
         .ticker-container {
             max-width: 1120px;
-            margin: 0 auto 40px;
-            background: var(--surface-white);
-            border: 1px solid rgba(0,0,0,0.03);
+            margin: 0 auto 50px;
+            background: var(--surface-dark);
+            border: 1px solid rgba(255,255,255,0.03);
             border-radius: var(--radius-sm);
-            padding: 14px 20px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             gap: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow-subtle);
         }
 
         .ticker-label {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--gold-sunny);
-            font-size: 0.95rem;
-            font-weight: 800;
+            color: var(--gold-matte);
+            font-size: 0.9rem;
+            font-weight: 700;
             white-space: nowrap;
             position: relative;
         }
@@ -211,7 +205,7 @@
             content: '';
             width: 1px;
             height: 16px;
-            background: rgba(0,0,0,0.08);
+            background: rgba(255,255,255,0.1);
             margin-right: 16px;
         }
 
@@ -232,14 +226,14 @@
         .ticker-track span {
             color: var(--text-body);
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 500;
             margin-left: 60px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .ticker-track span i { color: var(--emerald-bright); font-size: 0.8rem; }
+        .ticker-track span i { color: var(--emerald-vibrant); font-size: 0.8rem; }
 
         @keyframes scrollText {
             from { transform: translateX(0); }
@@ -249,14 +243,14 @@
         /* ===== عنوان الأقسام ===== */
         .section-heading {
             max-width: 1120px;
-            margin: 0 auto 30px;
+            margin: 0 auto 32px;
             padding: 0 24px;
         }
 
         .section-heading h2 {
             font-size: 1.6rem;
             font-weight: 800;
-            color: var(--text-dark);
+            color: var(--text-pure);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -266,10 +260,10 @@
             content: '';
             flex-grow: 1;
             height: 1px;
-            background: linear-gradient(90deg, rgba(0,0,0,0.06), transparent);
+            background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
         }
 
-        /* ===== شبكة الكروت المشرقة والبهية ===== */
+        /* ===== شبكة الكروت النيون-زجاجية المتطورة (Modern Grid Layout) ===== */
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -280,8 +274,10 @@
         }
 
         .card {
-            background: var(--surface-white);
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-main);
             padding: 32px;
             position: relative;
@@ -289,24 +285,23 @@
             display: flex;
             flex-direction: column;
             transition: var(--transition);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
         }
 
+        /* تأثير إضاءة حافة ثلاثي الأبعاد عند الحركية */
         .card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at top left, var(--emerald-light), transparent 60%);
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 70%);
             pointer-events: none;
-            opacity: 0.5;
         }
 
         .card:hover {
             transform: translateY(-6px);
-            border-color: rgba(16, 185, 129, 0.25);
+            border-color: rgba(212, 163, 89, 0.35);
             box-shadow: 
-                0 20px 40px rgba(16, 185, 129, 0.06),
-                0 0 30px rgba(245, 158, 11, 0.02);
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(31, 168, 122, 0.05);
         }
 
         .card-header-layout {
@@ -314,45 +309,44 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
-            z-index: 1;
         }
 
         .card-icon-wrap {
             width: 56px;
             height: 56px;
-            background: var(--emerald-light);
-            border: 1px solid rgba(16, 185, 129, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-sm);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 1.4rem;
-            color: var(--emerald-bright);
+            color: var(--emerald-vibrant);
             transition: var(--transition);
         }
 
         .card:hover .card-icon-wrap {
-            background: var(--emerald-bright);
-            color: #ffffff;
-            border-color: var(--emerald-bright);
-            box-shadow: 0 8px 20px var(--emerald-glow);
+            background: var(--emerald-vibrant);
+            color: var(--bg-deep);
+            border-color: var(--emerald-vibrant);
+            box-shadow: 0 0 20px rgba(31, 168, 122, 0.4);
         }
 
         .card-badge {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 100px;
-            background: #f3f4f6;
-            color: var(--text-body);
+            background: rgba(255,255,255,0.04);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.04);
         }
 
         .card h3 {
             font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            z-index: 1;
+            font-weight: 700;
+            color: var(--text-pure);
+            margin-bottom: 8px;
         }
 
         .card p {
@@ -360,8 +354,7 @@
             font-size: 0.95rem;
             margin-bottom: 24px;
             flex-grow: 1;
-            font-weight: 500;
-            z-index: 1;
+            opacity: 0.8;
         }
 
         .card-footer-layout {
@@ -369,12 +362,11 @@
             align-items: center;
             gap: 12px;
             margin-top: auto;
-            z-index: 1;
         }
 
-        /* أزرار عصرية مشرقة */
+        /* أزرار عصرية مسطحة */
         .btn {
-            padding: 14px 24px;
+            padding: 12px 24px;
             border: none;
             border-radius: var(--radius-sm);
             font-family: 'Tajawal', sans-serif;
@@ -390,64 +382,62 @@
 
         .btn-enter {
             flex-grow: 1;
-            background: #f3f4f6;
-            color: var(--text-dark);
-            border: 1px solid rgba(0,0,0,0.02);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-pure);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .card:hover .btn-enter {
-            background: linear-gradient(135deg, var(--gold-sunny), #e08e0b);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--gold-matte), #b8833c);
+            color: var(--bg-deep);
             border-color: transparent;
             box-shadow: 0 8px 20px var(--gold-glow);
         }
 
         .btn-share {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             padding: 0;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            color: var(--text-body);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
             border-radius: var(--radius-sm);
         }
 
         .btn-share:hover {
-            background: #f3f4f6;
-            color: var(--text-dark);
-            border-color: #d1d5db;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-pure);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* حالة الكارت المقفل المشرق */
+        /* حالة الكارت المقفل الفاخرة */
         .card-locked {
-            background: #fbfbfb;
-            border-color: rgba(0,0,0,0.01);
+            background: rgba(7, 18, 15, 0.4);
+            border-color: rgba(255,255,255,0.02);
         }
         
         .card-locked .card-icon-wrap {
-            background: #f3f4f6;
             color: var(--text-muted);
-            border-color: transparent;
         }
 
         .card-locked .btn-enter {
             background: transparent;
             color: var(--text-muted);
-            border: 1px dashed #d1d5db;
+            border: 1px dashed rgba(255,255,255,0.1);
         }
 
         .card-locked:hover .btn-enter {
-            background: rgba(239, 68, 110, 0.08);
+            background: rgba(255,53,53,0.1);
             color: var(--danger);
-            border-color: rgba(239, 68, 110, 0.2);
+            border-color: rgba(255,53,53,0.2);
             box-shadow: none;
         }
 
-        /* ===== نافذة كلمة المرور المشرقة (Light Glass Modal) ===== */
+        /* ===== نافذة كلمة المرور الحديثة (Glass Modal) ===== */
         #password-modal {
             position: fixed;
             inset: 0;
-            background: rgba(243, 244, 246, 0.75);
+            background: rgba(3, 8, 7, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             display: flex;
@@ -462,14 +452,14 @@
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-content {
-            background: var(--surface-white);
+            background: var(--surface-card);
             border: 1px solid var(--glass-border);
             padding: 40px 32px;
             border-radius: var(--radius-main);
             text-align: center;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
             transform: scale(0.9);
             transition: var(--transition);
         }
@@ -477,14 +467,14 @@
         #password-modal.active .modal-content { transform: scale(1); }
 
         .modal-content h3 {
-            color: var(--text-dark);
+            color: var(--text-pure);
             font-size: 1.5rem;
             font-weight: 800;
             margin-bottom: 8px;
         }
 
         #modal-desc { 
-            color: var(--text-body); 
+            color: var(--text-muted); 
             font-size: 0.95rem; 
             margin-bottom: 24px; 
         }
@@ -494,11 +484,11 @@
             padding: 16px;
             font-size: 1.5rem;
             text-align: center;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: var(--radius-sm);
             margin-bottom: 20px;
-            background: #f9fafb;
-            color: var(--emerald-bright);
+            background: var(--bg-deep);
+            color: var(--gold-light);
             font-weight: 700;
             letter-spacing: 8px;
             transition: var(--transition);
@@ -506,9 +496,8 @@
         
         .modal-content input:focus { 
             outline: none; 
-            border-color: var(--emerald-bright);
-            box-shadow: 0 0 15px var(--emerald-glow);
-            background: #ffffff;
+            border-color: var(--gold-matte);
+            box-shadow: 0 0 15px rgba(212, 163, 89, 0.15);
         }
 
         .modal-buttons { display: flex; gap: 12px; }
@@ -520,10 +509,10 @@
             font-size: 0.9rem;
             margin-bottom: 16px;
             display: none;
-            background: rgba(239, 68, 68, 0.08);
+            background: rgba(255, 82, 82, 0.1);
             padding: 12px;
             border-radius: var(--radius-sm);
-            border: 1px solid rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(255, 82, 82, 0.2);
             animation: shake 0.4s;
         }
 
@@ -538,35 +527,32 @@
             text-align: center;
             margin-top: 80px;
             padding: 24px;
-            color: var(--text-body);
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-top: 1px solid rgba(0,0,0,0.03);
-            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <!-- جلب الصوتيات موثوقة المصدر -->
+    <!-- جلب الصوتيات -->
     <audio id="quranAudio" src="https://everyayah.com/data/Husary_128kbps/073004.mp3" preload="auto"></audio>
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
     <audio id="successSound" src="welcome.mp3" preload="auto"></audio>
 
-    <!-- شاشة الترحيب المشرقة والمبهجة -->
+    <!-- شاشة الترحيب النيومودرن -->
     <div id="welcome-screen">
         <div class="welcome-art">
-            <!-- تغيير الرمز إلى مصحف مفتوح -->
-            <i class="fa-solid fa-book-quran"></i>
+            <i class="fa-solid fa-star-and-crescent"></i>
         </div>
         <h1>خادم القرآن الكريم</h1>
         <div class="welcome-sub">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-        <!-- استبدال النص بـ بسم الله الرحمن الرحيم -->
-        <button class="start-btn" onclick="startWebsite()">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</button>
+        <button class="start-btn" onclick="startWebsite()">ابدأ التجربة الرقمية</button>
     </div>
 
-    <!-- نافذة حماية البيانات المشرقة -->
+    <!-- نافذة حماية البيانات -->
     <div id="password-modal">
         <div class="modal-content">
             <h3>منطقة محمية</h3>
@@ -577,7 +563,7 @@
             <div id="input-area">
                 <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off" inputmode="numeric">
                 <div class="modal-buttons">
-                    <button class="btn btn-enter" style="background: var(--emerald-bright); color: #ffffff;" onclick="checkPassword()">تأكيد</button>
+                    <button class="btn btn-enter" style="background: var(--gold-matte); color: var(--bg-deep);" onclick="checkPassword()">تأكيد</button>
                     <button class="btn btn-share" style="flex-grow: 1; width: auto;" onclick="closeModal()">إلغاء</button>
                 </div>
             </div>
@@ -587,14 +573,14 @@
     <!-- رأس الصفحة -->
     <header>
         <div class="header-badge">
-            <i class="fa-solid fa-circle-check" style="color: var(--emerald-bright);"></i>
+            <i class="fa-solid fa-circle-check" style="color: var(--emerald-vibrant);"></i>
             <span>المنصة الرسمية المعتمدة</span>
         </div>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ</h1>
         <p>تحت إشراف الشيخ عبدالرحمن</p>
     </header>
 
-    <!-- شريط الإعلانات التفاعلي السلس المشرق -->
+    <!-- شريط الإعلانات التفاعلي السلس -->
     <div class="ticker-container">
         <div class="ticker-label"><i class="fa-solid fa-bolt"></i> إشراقات</div>
         <div class="ticker-wrap">
@@ -611,7 +597,7 @@
         <h2>محتويات البوابة الإثرائية</h2>
     </div>
 
-    <!-- شبكة الكروت المتطورة والمشرقة -->
+    <!-- شبكة الكروت المتطورة -->
     <main class="cards-container">
 
         <!-- الكارت 1 -->
@@ -642,11 +628,11 @@
             </div>
         </div>
 
-        <!-- الكارت 3 (محمي بأسلوب عصري مشرق) -->
+        <!-- الكارت 3 (محمي بأسلوب عصري) -->
         <div class="card card-locked">
             <div class="card-header-layout">
                 <div class="card-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="card-badge" style="color: var(--danger); background: rgba(239, 68, 68, 0.05);">محمي</div>
+                <div class="card-badge" style="color: var(--danger); background: rgba(255,82,82,0.05);">محمي</div>
             </div>
             <h3>التقييم والمتابعة</h3>
             <p>نظام إلكتروني مغلق لتقييم ومتابعة درجات التحصيل وإنجاز الطلاب اليومي.</p>
@@ -673,8 +659,7 @@
         <!-- الكارت 5 -->
         <div class="card">
             <div class="card-header-layout">
-                <!-- الرمز هنا أيضًا مصحف مفتوح كفكرة تصميمية متناسقة -->
-                <div class="card-icon-wrap"><i class="fa-solid fa-book-quran"></i></div>
+                <div class="card-icon-wrap"><i class="fa-solid fa-mosque"></i></div>
                 <div class="card-badge">القرآن الكريم</div>
             </div>
             <h3>المصحف الكريم</h3>
@@ -711,7 +696,7 @@
         const successSound = document.getElementById('successSound');
         let targetProtectedUrl = '';
 
-        // مضاعفة تيكر النصوص للتحرك المشرق اللانهائي
+        // مضاعفة التيكر للتحرك اللانهائي بدون انقطاع
         const track = document.getElementById('tickerTrack');
         track.innerHTML += track.innerHTML;
 
