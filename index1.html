@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مَركَز خَادِم القُرآن - مُتابَعَة الحِفظ</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<title>مركز خادم القرآن - متابعة الحفظ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
 :root {
   --green-deep: #04201a;
   --green-mid: #0b3d2e;
   --green-light: #14795c;
-  --gold: #c9a227;
+  --gold: #d4af37;
   --gold-light: #fef08a;
   --white: #ffffff;
   --cream: #fdfbf5;
@@ -23,10 +23,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
 .hdr { background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); padding: 30px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
-.hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(201, 162, 39, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(201, 162, 39, 0.3); }
+.hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(212, 175, 55, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 26px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; }
-.body { padding: 20px 14px 150px; max-width: 800px; margin: 0 auto; }
+.body { padding: 20px 14px 120px; max-width: 800px; margin: 0 auto; }
 .section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: hidden; }
 .sec-head { background: var(--green-mid); padding: 14px 16px; }
 .sec-head-title { color: var(--gold-light); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -46,58 +46,55 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .ac-item:hover { background: var(--green-light); color: white; }
 .surah-row, .q-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 12px; background: var(--cream); border-radius: 12px; padding: 12px; border: 1px solid var(--border); position: relative; }
 .q-row { grid-template-columns: 1fr 1fr; }
-.del-btn { position: absolute; left: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--red); color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.del-btn { position: absolute; left: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--red); color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
 .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--border); }
 .range-row.hidden { display: none; }
 .add-btn { width: 100%; padding: 12px; margin-top: 6px; border: 2px dashed var(--green-mid); border-radius: 10px; background: rgba(6, 78, 59, 0.05); color: var(--green-mid); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
 .add-btn:hover { background: rgba(6, 78, 59, 0.1); }
-.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
+.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-btn { width: 100%; max-width: 800px; margin: 0 auto; display: block; padding: 16px; background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 12px rgba(6, 78, 59, 0.3); }
-.hint-line { font-size: 11px; color: var(--sub); text-align: center; margin-top: 8px; }
-.loading-overlay { position: fixed; inset: 0; background: rgba(4,32,26,0.92); z-index: 9998; display: none; align-items: center; justify-content: center; flex-direction: column; color: #fef08a; font-family: 'Cairo', sans-serif; text-align:center; padding: 20px; }
-.loading-overlay .spin { width: 54px; height: 54px; border-radius: 50%; border: 4px solid rgba(212,175,55,0.25); border-top-color: #d4af37; animation: sp 0.9s linear infinite; margin-bottom: 18px; }
-@keyframes sp { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 <div class="hdr">
   <div class="hdr-emblem">🕌</div>
-  <div class="hdr-title">مَركَز خَادِم القُرآن الكَريم</div>
-  <div class="hdr-subtitle">تَحتَ إِشراف الشَّيخ عَبدالرَّحمَن</div>
+  <div class="hdr-title">مركز خادم القرآن الكريم</div>
+  <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
 </div>
 <div class="body">
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بَيانات البَطَل</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم البَطَل</div>
+        <div class="flbl">اسم البطل</div>
         <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً...">
-        <button onclick="loadStudentData()" class="add-btn" style="margin-top:12px; background: #fffbeb; border-color: var(--gold); color: #b45309;"><i class="ti ti-restore"></i> اِستِرجاع التَّقرير السَّابِق</button>
       </div>
+      <div class="frow">
+        <div class="flbl">التقييم العام للبطل (يظهر بالتقرير النصي الثاني)</div>
+        <div class="sel-wrap">
+          <select class="inp" id="inp-general-rating">
+            <option value="ممتاز 🌟">مستوى ممتاز 🌟</option>
+            <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
+            <option value="جيد 👍">مستوى جيد 👍</option>
+            <option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="loadStudentData()" class="add-btn" style="margin-top:12px; background: #fffbeb; border-color: var(--gold); color: #b45309;"><i class="ti ti-restore"></i> استرجاع التقرير السابق</button>
     </div>
   </div>
   
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السُّوَر الجَديدة</div></div><div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السُّوَر</div></div><div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئِلة المُذَكِّرة الجَديدة</div></div><div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المُذَكِّرة</div></div><div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السِّراج</div></div><div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addSurah('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
-  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحَديث والأذكار</div></div><div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div><div class="sec-body"><div id="new-surahs"></div><button class="add-btn" onclick="addSurah('new-surahs','ns',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div><div class="sec-body"><div id="past-surahs"></div><button class="add-btn" onclick="addSurah('past-surahs','ps',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div><div class="sec-body"><div id="mur-questions"></div><button class="add-btn" onclick="addQuestion('mur-questions','mq',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div><div class="sec-body"><div id="past-mur"></div><button class="add-btn" onclick="addQuestion('past-mur','pm',true,true)"><i class="ti ti-plus"></i> إضافة أسئلة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div><div class="sec-body"><div id="suraj-section"></div><button class="add-btn" onclick="addSurah('suraj-section','sj',true,true)"><i class="ti ti-plus"></i> إضافة سورة</button></div></div>
+  <div class="section"><div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div><div class="sec-body"><div id="hadith-section"></div><button class="add-btn" onclick="addQuestion('hadith-section','hd',true,true)"><i class="ti ti-plus"></i> إضافة حديث / ذكر</button></div></div>
 </div>
-<div class="submit-wrap">
-  <button class="submit-btn" onclick="generateAndShare()">إنشاء ومُشاركة التَّقرير</button>
-  <div class="hint-line">سَيتِمّ إنشاء صُورَتَين: تَقرير الحِفظ، وتَقييم البَطَل</div>
-</div>
-<div class="loading-overlay" id="loadingOverlay"><div class="spin"></div><div id="loadingText">جارٍ تَجهيز التَّقرير...</div></div>
+<div class="submit-wrap"><button class="submit-btn" onclick="generateAndShare()">إنشاء ومشاركة التقرير</button></div>
 
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-var SURAS_TASHKEEL=['الفَاتِحَة','البَقَرَة','آل عِمْرَان','النِّسَاء','المَائِدَة','الأَنْعَام','الأَعْرَاف','الأَنْفَال','التَّوْبَة','يُونُس','هُود','يُوسُف','الرَّعْد','إِبْرَاهِيم','الحِجْر','النَّحْل','الإِسْرَاء','الكَهْف','مَرْيَم','طه','الأَنْبِيَاء','الحَجّ','المُؤْمِنُون','النُّور','الفُرْقَان','الشُّعَرَاء','النَّمْل','القَصَص','العَنْكَبُوت','الرُّوم','لُقْمَان','السَّجْدَة','الأَحْزَاب','سَبَأ','فَاطِر','يس','الصَّافَّات','ص','الزُّمَر','غَافِر','فُصِّلَت','الشُّورَى','الزُّخْرُف','الدُّخَان','الجَاثِيَة','الأَحْقَاف','مُحَمَّد','الفَتْح','الحُجُرَات','ق','الذَّارِيَات','الطُّور','النَّجْم','القَمَر','الرَّحْمَن','الوَاقِعَة','الحَدِيد','المُجَادَلَة','الحَشْر','المُمْتَحَنَة','الصَّفّ','الجُمُعَة','المُنَافِقُون','التَّغَابُن','الطَّلَاق','التَّحْرِيم','المُلْك','القَلَم','الحَاقَّة','المَعَارِج','نُوح','الجِنّ','المُزَّمِّل','المُدَّثِّر','القِيَامَة','الإِنْسَان','المُرْسَلَات','النَّبَأ','النَّازِعَات','عَبَس','التَّكْوِير','الِانْفِطَار','المُطَفِّفِين','الِانْشِقَاق','البُرُوج','الطَّارِق','الأَعْلَى','الغَاشِيَة','الفَجْر','البَلَد','الشَّمْس','اللَّيْل','الضُّحَى','الشَّرْح','التِّين','العَلَق','القَدْر','البَيِّنَة','الزَّلْزَلَة','العَادِيَات','القَارِعَة','التَّكَاثُر','العَصْر','الهُمَزَة','الفِيل','قُرَيْش','المَاعُون','الكَوْثَر','الكَافِرُون','النَّصْر','المَسَد','الإِخْلَاص','الفَلَق','النَّاس'];
-function tashkeelOf(plainName){
-  if(!plainName)return plainName;
-  var i=SURAS_PLAIN.indexOf(plainName.trim());
-  return i>-1?SURAS_TASHKEEL[i]:plainName;
-}
 var counters={ns:0,ps:0,mq:0,pm:0,sj:0,hd:0};
 
 function getExtraForNewSurah(includeNextPlan,label,prefix,idx){
@@ -193,41 +190,33 @@ function collectData(containerId,isQ){
   return res;
 }
 
-function loadStudentData(){
-  // Placeholder hook kept for compatibility with older report retrieval flows.
-  alert('لا يوجد اتصال بسجل سابق في هذه النسخة. أدخل بيانات البطل يدوياً.');
-}
-
 // ═══════════════════════════════════════════════
-// اللوحة الأولى: تقرير على هيئة صفحة مصحف مُذهَّبة
+// التصميم الجرافيكي الاحترافي للتقرير (Professional Certificate-style Canvas Report)
 // ═══════════════════════════════════════════════
 var C_W = 1080;
-var PAD = 58;
-var CARD_PAD_X = 36;
-var CARD_PAD_Y = 28;
+var PAD = 44;
+var CARD_PAD_X = 38;
+var CARD_PAD_Y = 30;
 
 var PALETTE = {
-  deep:    '#04201a',
-  mid:     '#0b3d2e',
-  light:   '#14795c',
-  gold:    '#c9a227',
-  goldHi:  '#f0d878',
-  goldLt:  '#fef3c7',
-  goldDk:  '#7a5c0e',
-  maroon:  '#7a1f1f',
-  parch:   '#f8efd6',
-  parch2:  '#f1e3bd',
-  ink:     '#2a1f10',
-  sub:     '#5b6472'
+  deep:   '#04201a',
+  mid:    '#0b3d2e',
+  light:  '#14795c',
+  gold:   '#d4af37',
+  goldLt: '#fef08a',
+  goldDk: '#8a6d0a',
+  cream:  '#fdfbf5',
+  ink:    '#111827',
+  sub:    '#5b6472'
 };
 
 var SECTIONS = [
-  {key:'ns', title:'السُّوَر الجَديدة', icon:'📖'},
-  {key:'ps', title:'ماضي السُّوَر', icon:'📚'},
-  {key:'mq', title:'المُذَكِّرة الجَديدة', icon:'📝'},
-  {key:'pm', title:'ماضي المُذَكِّرة', icon:'📋'},
-  {key:'sj', title:'السِّراج', icon:'💡'},
-  {key:'hd', title:'الحَديث والأذكار', icon:'📿'}
+  {key:'ns', title:'السور الجديدة', icon:'📖'},
+  {key:'ps', title:'ماضي السور', icon:'📚'},
+  {key:'mq', title:'المذكرة الجديدة', icon:'📝'},
+  {key:'pm', title:'ماضي المذكرة', icon:'📋'},
+  {key:'sj', title:'السراج', icon:'💡'},
+  {key:'hd', title:'الحديث والأذكار', icon:'📿'}
 ];
 
 function rr(ctx,x,y,w,h,r){
@@ -252,18 +241,14 @@ function timeStamp(){
 async function loadFonts(){
   try {
     await Promise.all([
-      document.fonts.load('900 44px Cairo'),
-      document.fonts.load('800 28px Cairo'),
-      document.fonts.load('700 26px Cairo'),
-      document.fonts.load('700 20px Cairo'),
-      document.fonts.load('700 19px Cairo'),
+      document.fonts.load('900 46px Cairo'),
+      document.fonts.load('800 32px Cairo'),
+      document.fonts.load('700 28px Cairo'),
+      document.fonts.load('700 24px Cairo'),
       document.fonts.load('600 22px Cairo'),
       document.fonts.load('400 20px Cairo'),
-      document.fonts.load('700 40px Amiri'),
-      document.fonts.load('700 24px Amiri'),
-      document.fonts.load('400 26px Amiri'),
-      document.fonts.load('700 30px "Aref Ruqaa"'),
-      document.fonts.load('700 44px "Aref Ruqaa"')
+      document.fonts.load('700 42px Amiri'),
+      document.fonts.load('700 32px Amiri')
     ]);
     if(document.fonts.ready) await document.fonts.ready;
   } catch(e) {}
@@ -290,12 +275,12 @@ function wrapText(ctx, text, maxWidth){
 function drawPill(ctx, text, anchorX, y, opts){
   opts = opts || {};
   ctx.save();
-  var font = opts.font || '700 19px Cairo, sans-serif';
+  var font = opts.font || '700 22px Cairo, sans-serif';
   ctx.font = font;
-  var padX = opts.padX != null ? opts.padX : 18;
-  var h = opts.h || 40;
+  var padX = opts.padX != null ? opts.padX : 20;
+  var h = opts.h || 46;
   var w = ctx.measureText(text).width + padX * 2;
-  var left = opts.align === 'left' ? anchorX : anchorX - w;
+  var left = opts.align === 'left' ? anchorX : (opts.align === 'center' ? anchorX - w/2 : anchorX - w);
   if(opts.draw !== false){
     rr(ctx, left, y, w, h, h/2);
     ctx.fillStyle = opts.bg || '#ffffff';
@@ -316,212 +301,64 @@ function drawPill(ctx, text, anchorX, y, opts){
 
 function ratingStyle(rating){
   if(rating.indexOf('ممتاز')>-1) return {bg:'#e7f5ee', color:'#0b3d2e', border:'#0b3d2e'};
-  if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fdf6e0', color:'#7a5c0e', border:'#c9a227'};
+  if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fdf6e0', color:'#8a6d0a', border:'#d4af37'};
   if(rating.indexOf('جيد')>-1) return {bg:'#eef2ff', color:'#3243a6', border:'#6366f1'};
   return {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
 }
 
-function ratingScore(rating){
-  if(!rating) return null;
-  if(rating.indexOf('ممتاز')>-1) return 4;
-  if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return 3;
-  if(rating.indexOf('جيد')>-1) return 2;
-  return 1;
-}
-
-// ---- Islamic manuscript-style ornamentation helpers ----
-function drawDiamond(ctx, cx, cy, r, fill, stroke){
+function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.save();
-  ctx.translate(cx, cy); ctx.rotate(Math.PI/4);
-  ctx.beginPath(); ctx.rect(-r/1.8, -r/1.8, r*1.11, r*1.11);
-  ctx.fillStyle = fill; ctx.fill();
-  if(stroke){ ctx.lineWidth = 1.5; ctx.strokeStyle = stroke; ctx.stroke(); }
-  ctx.restore();
-}
-
-function drawBorderChain(ctx, x, y, w, h, step){
-  // repeating diamond chain around a rectangle, alternating gold/green
-  var pts = [];
-  var perim = 2*(w+h);
-  var n = Math.floor(perim/step);
-  for(var i=0;i<n;i++){
-    var d = i*step;
-    var px, py;
-    if(d < w){ px = x+d; py = y; }
-    else if(d < w+h){ px = x+w; py = y+(d-w); }
-    else if(d < 2*w+h){ px = x+w-(d-w-h); py = y+h; }
-    else { px = x; py = y+h-(d-2*w-h); }
-    pts.push([px,py]);
-  }
-  pts.forEach(function(p,i){
-    var big = i%2===0;
-    drawDiamond(ctx, p[0], p[1], big?7:4.5, big?PALETTE.gold:PALETTE.mid, big?'#8a6d0a':null);
-  });
-}
-
-function drawRosette(ctx, cx, cy, r, colorA, colorB){
-  ctx.save();
-  var petals = 8;
-  for(var i=0;i<petals;i++){
-    var ang = (Math.PI*2/petals)*i;
-    ctx.save();
-    ctx.translate(cx,cy); ctx.rotate(ang);
+  ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  function bracket(x, y, dx, dy){
     ctx.beginPath();
-    ctx.ellipse(r*0.55, 0, r*0.5, r*0.24, 0, 0, Math.PI*2);
-    ctx.fillStyle = i%2===0?colorA:colorB;
-    ctx.globalAlpha = 0.9;
-    ctx.fill();
-    ctx.restore();
+    ctx.moveTo(x, y + dy*len); ctx.lineTo(x, y); ctx.lineTo(x + dx*len, y);
+    ctx.stroke();
   }
-  ctx.beginPath(); ctx.arc(cx,cy,r*0.32,0,Math.PI*2);
-  ctx.fillStyle = PALETTE.deep; ctx.fill();
-  ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.goldHi; ctx.stroke();
+  bracket(inset, inset, 1, 1);
+  bracket(w-inset, inset, -1, 1);
+  bracket(inset, h-inset, 1, -1);
+  bracket(w-inset, h-inset, -1, -1);
   ctx.restore();
 }
 
-function drawManuscriptFrame(ctx, w, h){
-  // outer flat wash
-  ctx.fillStyle = PALETTE.parch;
-  ctx.fillRect(0,0,w,h);
-
-  // subtle marbled texture
-  ctx.save();
-  ctx.globalAlpha = 0.06;
-  for(var i=0;i<70;i++){
-    var rx = (i*137.5)%w, ry=(i*97.3)%h;
-    ctx.beginPath();
-    ctx.ellipse(rx, ry, 60+ (i%5)*10, 30+(i%4)*8, i, 0, Math.PI*2);
-    ctx.fillStyle = i%2===0?PALETTE.gold:PALETTE.mid;
-    ctx.fill();
-  }
-  ctx.restore();
-
-  // triple frame lines
-  var o1=26, o2=36, o3=44;
-  ctx.lineWidth=6; ctx.strokeStyle=PALETTE.gold;
-  rr(ctx,o1,o1,w-o1*2,h-o1*2,26); ctx.stroke();
-  ctx.lineWidth=2; ctx.strokeStyle=PALETTE.mid;
-  rr(ctx,o2,o2,w-o2*2,h-o2*2,20); ctx.stroke();
-  ctx.lineWidth=1.5; ctx.strokeStyle=PALETTE.gold;
-  rr(ctx,o3,o3,w-o3*2,h-o3*2,16); ctx.stroke();
-
-  // diamond chain band
-  drawBorderChain(ctx, o3+10, o3+10, w-(o3+10)*2, h-(o3+10)*2, 34);
-
-  // corner rosettes
-  drawRosette(ctx, o1+4, o1+4, 22, PALETTE.gold, PALETTE.mid);
-  drawRosette(ctx, w-o1-4, o1+4, 22, PALETTE.gold, PALETTE.mid);
-  drawRosette(ctx, o1+4, h-o1-4, 22, PALETTE.gold, PALETTE.mid);
-  drawRosette(ctx, w-o1-4, h-o1-4, 22, PALETTE.gold, PALETTE.mid);
-}
-
-function drawUnwanHeader(ctx, w, y, title, subtitle, draw){
-  // pointed-arch illuminated headpiece, like the opening page of a surah
-  var archW = Math.min(w - PAD*2, 760);
-  var archX = (w-archW)/2;
-  var domeH = 96;
-  var bodyH = 128;
-
+function drawSectionHeader(ctx, sec, rightX, y, draw){
+  var r = 32;
+  var cx = rightX - r;
   if(draw){
     ctx.save();
-    // dome / pointed arch top
-    ctx.beginPath();
-    ctx.moveTo(archX, y+domeH);
-    ctx.quadraticCurveTo(archX, y, archX+archW/2, y-18);
-    ctx.quadraticCurveTo(archX+archW, y, archX+archW, y+domeH);
-    ctx.closePath();
-    var g = ctx.createLinearGradient(0,y-18,0,y+domeH);
-    g.addColorStop(0, PALETTE.goldHi); g.addColorStop(1, PALETTE.gold);
-    ctx.fillStyle = g; ctx.fill();
-    ctx.lineWidth = 3; ctx.strokeStyle = PALETTE.deep; ctx.stroke();
-
-    // body band
-    rr(ctx, archX, y+domeH-4, archW, bodyH, 10);
-    var g2 = ctx.createLinearGradient(0,y+domeH,0,y+domeH+bodyH);
-    g2.addColorStop(0, PALETTE.mid); g2.addColorStop(1, PALETTE.deep);
-    ctx.fillStyle = g2; ctx.fill();
-    ctx.lineWidth = 3; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-
-    // inner hairline
-    ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(240,216,120,0.5)';
-    rr(ctx, archX+10, y+domeH+6, archW-20, bodyH-20, 6); ctx.stroke();
-
-    // finial dot at the peak
-    ctx.beginPath(); ctx.arc(archX+archW/2, y-18, 8, 0, Math.PI*2);
-    ctx.fillStyle = PALETTE.deep; ctx.fill();
-    ctx.lineWidth=2; ctx.strokeStyle=PALETTE.goldHi; ctx.stroke();
-
-    // emblem in dome
-    ctx.font = '38px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('🕌', archX+archW/2, y+domeH/2+8);
-
-    // title
-    ctx.font = '700 46px "Aref Ruqaa", "Amiri", serif';
-    ctx.fillStyle = PALETTE.goldHi;
-    ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=8; ctx.shadowOffsetY=2;
-    ctx.fillText(title, archX+archW/2, y+domeH+50);
-    ctx.shadowColor='transparent';
-
-    ctx.font = '700 22px Cairo, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(subtitle, archX+archW/2, y+domeH+90);
-
-    // small gold dots divider
-    ctx.fillStyle = PALETTE.gold;
-    for(var d=-2; d<=2; d++){
-      ctx.beginPath(); ctx.arc(archX+archW/2 + d*20, y+domeH+112, d===0?3.5:2.2, 0, Math.PI*2); ctx.fill();
-    }
-    ctx.restore();
-  }
-  return domeH + bodyH + 18;
-}
-
-function drawSectionHeader(ctx, sec, rightX, leftBound, y, draw){
-  // banner-style label like a surah-name box in a mushaf, pointed ends
-  var h = 58;
-  ctx.font = '800 27px Cairo, sans-serif';
-  var textW = ctx.measureText(sec.icon + '  ' + sec.title).width;
-  var bw = Math.min(Math.max(textW + 90, 260), rightX-leftBound);
-  var bx = rightX - bw;
-
-  if(draw){
-    ctx.save();
-    var g = ctx.createLinearGradient(bx, y, bx+bw, y);
-    g.addColorStop(0, PALETTE.deep); g.addColorStop(1, PALETTE.mid);
-    var tip = 16;
-    ctx.beginPath();
-    ctx.moveTo(bx+tip, y);
-    ctx.lineTo(bx+bw, y);
-    ctx.lineTo(bx+bw-tip, y+h/2);
-    ctx.lineTo(bx+bw, y+h);
-    ctx.lineTo(bx+tip, y+h);
-    ctx.lineTo(bx, y+h/2);
-    ctx.closePath();
-    ctx.fillStyle = g; ctx.fill();
+    var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r);
+    g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
+    ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = PALETTE.goldLt;
+    ctx.fillText(sec.icon, cx, y+r+2);
 
-    ctx.font = '800 27px Cairo, sans-serif';
-    ctx.fillStyle = PALETTE.goldHi;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(sec.icon + '  ' + sec.title, bx+bw/2, y+h/2+1);
+    ctx.font = '900 38px Cairo, sans-serif';
+    ctx.fillStyle = PALETTE.mid;
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(sec.title, cx - r - 18, y+r+1);
 
-    // connecting rule to the page edge
-    if(bx > leftBound){
-      var lg = ctx.createLinearGradient(leftBound, 0, bx, 0);
-      lg.addColorStop(0, 'rgba(201,162,39,0)'); lg.addColorStop(1, PALETTE.gold);
-      ctx.strokeStyle = lg; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(leftBound, y+h/2); ctx.lineTo(bx, y+h/2); ctx.stroke();
+    var textW = ctx.measureText(sec.title).width;
+    var lineStartX = cx - r - 18 - textW - 20;
+    var lineEndX = PAD;
+    if(lineStartX > lineEndX){
+      var lg = ctx.createLinearGradient(lineEndX, 0, lineStartX, 0);
+      lg.addColorStop(0, 'rgba(212,175,55,0)'); lg.addColorStop(1, PALETTE.gold);
+      ctx.strokeStyle = lg; ctx.lineWidth = 3.5;
+      ctx.beginPath(); ctx.moveTo(lineStartX, y+r+1); ctx.lineTo(lineEndX, y+r+1); stroke();
     }
     ctx.restore();
   }
-  return h + 18;
+  return 2*r + 26;
 }
 
-var F_TITLE = '700 40px Amiri, serif';
-var F_TAG   = '700 22px Cairo, sans-serif';
-var F_PILL  = '800 24px Cairo, sans-serif';
-var F_PLANLBL = '800 21px Cairo, sans-serif';
-var F_PLANTXT = '700 25px Amiri, serif';
+// الخطوط الكبيرة والمحدثة للتقرير الأول بناءً على طلبك
+var F_TITLE = '900 44px Cairo, sans-serif';
+var F_TAG   = '700 26px Cairo, sans-serif';
+var F_PILL  = '800 28px Cairo, sans-serif';
+var F_PLANLBL = '800 28px Cairo, sans-serif'; // تكبير عنوان الخطة القادمة
+var F_PLANTXT = '700 32px Cairo, sans-serif'; // تكبير خط محتوى الخطة القادمة ليصبح واضحاً جداً
 
 function renderItemCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2;
@@ -531,12 +368,12 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
 
   var mainTxt, subTxt = null;
   if(item.sr){
-    mainTxt = tashkeelOf(item.sr);
-    subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'كامِلةً';
+    mainTxt = item.sr;
+    subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً';
   } else {
     var isRq = (sec.key === 'hd');
     var u = isRq ? 'رقم' : 'سؤال';
-    mainTxt = 'مِن ' + u + ' ' + item.f + ' إلى ' + item.t;
+    mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t;
   }
 
   ctx.font = F_TAG;
@@ -544,61 +381,61 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
   ctx.font = F_TITLE;
   var titleMaxW = Math.max(innerW - tagW, innerW * 0.5);
   var titleLines = wrapText(ctx, mainTxt, titleMaxW);
-  var lineH = 48;
+  var lineH = 52;
   var titleBlockH = titleLines.length * lineH;
 
   if(draw){
     titleLines.forEach(function(line, i){
       ctx.font = F_TITLE;
-      ctx.fillStyle = PALETTE.ink;
+      ctx.fillStyle = PALETTE.deep;
       ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 34 + i*lineH);
+      ctx.fillText(line, rightX, cy + 36 + i*lineH);
     });
   }
 
   if(subTxt){
-    var tagH = 42;
+    var tagH = 50;
     var tagY = cy + Math.max(0, titleBlockH/2 - tagH/2);
-    drawPill(ctx, subTxt, leftX, tagY, {font:F_TAG, bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:tagH, padX:14, align:'left', draw:draw});
+    drawPill(ctx, subTxt, leftX, tagY, {font:F_TAG, bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:tagH, padX:16, align:'left', draw:draw});
   }
-  cy += titleBlockH + 20;
+  cy += titleBlockH + 24;
 
   var hasRating = !!item.rating;
   var hasErrors = item.errors !== '' && item.errors != null;
   if(hasRating || hasErrors){
-    var pillH = 52;
+    var pillH = 60;
     if(hasRating){
       var rs = ratingStyle(item.rating);
-      drawPill(ctx, item.rating, rightX, cy, {font:F_PILL, bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:pillH, padX:22, align:'right', draw:draw});
+      drawPill(ctx, item.rating, rightX, cy, {font:F_PILL, bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:pillH, padX:24, align:'right', draw:draw});
     }
     if(hasErrors){
       var isZero = (item.errors === '0');
-      var errTxt = isZero ? 'بِلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
+      var errTxt = isZero ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      drawPill(ctx, errTxt, leftX, cy, {font:F_PILL, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:pillH, padX:22, align:'left', draw:draw});
+      drawPill(ctx, errTxt, leftX, cy, {font:F_PILL, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:pillH, padX:24, align:'left', draw:draw});
     }
-    cy += pillH + 18;
+    cy += pillH + 22;
   }
 
   var hasPlan = !!(item.nextPlanSr || (item.nextPlanF !== undefined && item.nextPlanF !== '' && item.nextPlanF != null));
   if(hasPlan){
     var planTxt;
     if(item.nextPlanSr){
-      planTxt = tashkeelOf(item.nextPlanSr) + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كامِلةً');
+      planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً');
     } else {
       var isRq2 = (sec.key === 'hd');
       var u2 = isRq2 ? 'رقم' : 'سؤال';
-      planTxt = 'مِن ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT;
+      planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT;
     }
     ctx.font = F_PLANTXT;
     var boxInnerW = innerW - 48;
     var planLines = wrapText(ctx, planTxt, boxInnerW);
-    var boxTopPad = 16, boxLabelH = 32, planLineH = 34, boxBotPad = 16;
+    var boxTopPad = 22, boxLabelH = 38, planLineH = 40, boxBotPad = 22;
     var boxH = boxTopPad + boxLabelH + planLines.length*planLineH + boxBotPad;
     var boxX = leftX - 14;
     var boxW = width - (CARD_PAD_X - 14)*2;
     if(draw){
-      rr(ctx, boxX, cy, boxW, boxH, 14);
+      rr(ctx, boxX, cy, boxW, boxH, 16);
       ctx.fillStyle = '#fbf3d9';
       ctx.fill();
       ctx.save();
@@ -608,482 +445,341 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
       ctx.font = F_PLANLBL;
       ctx.fillStyle = PALETTE.goldDk;
       ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText('🎯 الخُطَّة القادِمَة', rightX - 20, cy + boxTopPad + 18);
+      ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + boxTopPad + 24);
       planLines.forEach(function(line, i){
         ctx.font = F_PLANTXT;
         ctx.fillStyle = '#5a4400';
-        ctx.fillText(line, rightX - 20, cy + boxTopPad + boxLabelH + 24 + i*planLineH);
+        ctx.fillText(line, rightX - 20, cy + boxTopPad + boxLabelH + 30 + i*planLineH);
       });
     }
-    cy += boxH + 10;
+    cy += boxH + 14;
   }
 
-  cy += CARD_PAD_Y - 6;
+  cy += CARD_PAD_Y - 8;
   return cy - y;
 }
 
 function layoutReport(ctx, canvasH, nm, data, draw){
   var y = 0;
 
-  if(draw){ drawManuscriptFrame(ctx, C_W, canvasH); }
+  if(draw){
+    ctx.fillStyle = PALETTE.cream;
+    ctx.fillRect(0, 0, C_W, canvasH);
+    ctx.save();
+    ctx.strokeStyle = PALETTE.gold;
+    ctx.globalAlpha = 0.045;
+    ctx.lineWidth = 1.5;
+    for(let i = -canvasH; i < C_W*2; i += 44){
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i - canvasH, canvasH); ctx.stroke();
+    }
+    ctx.restore();
+  }
 
-  var frameIn = 54;
-  y = frameIn + 14;
+  var hH = 232;
+  if(draw){
+    var hG = ctx.createLinearGradient(0, 0, 0, hH);
+    hG.addColorStop(0, PALETTE.deep);
+    hG.addColorStop(1, PALETTE.mid);
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(C_W, 0); ctx.lineTo(C_W, hH - 36);
+    ctx.quadraticCurveTo(C_W/2, hH + 36, 0, hH - 36);
+    ctx.closePath();
+    ctx.fillStyle = hG; ctx.fill();
 
-  var headH = drawUnwanHeader(ctx, C_W, y, 'مَركَز خَادِم القُرآن الكَريم', 'تَحتَ إِشراف الشَّيخ عَبدالرَّحمَن', draw);
-  y += headH + 8;
+    ctx.beginPath();
+    ctx.moveTo(0, hH - 36);
+    ctx.quadraticCurveTo(C_W/2, hH + 36, C_W, hH - 36);
+    ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
 
-  var by = y;
-  var bh = 84;
-  ctx.font = '700 38px Amiri, serif';
-  var nameTxt = 'بَطَلُنا: ' + nm + '  🏆';
+    ctx.font = '58px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText('🕌', C_W/2, 22);
+
+    ctx.font = '900 54px Amiri, serif';
+    ctx.fillStyle = PALETTE.goldLt;
+    ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
+    ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 90);
+    ctx.shadowColor = 'transparent';
+
+    ctx.font = '700 26px Cairo, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 152);
+
+    ctx.fillStyle = PALETTE.gold;
+    for(var d=-2; d<=2; d++){
+      ctx.beginPath(); ctx.arc(C_W/2 + d*22, 184, d===0?4:2.5, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  y = hH;
+
+  var by = y - 6;
+  var bh = 96;
+  ctx.font = '900 44px Cairo, sans-serif';
+  var nameTxt = 'بطلنا:  ' + nm + '  🏆';
   var nmW = ctx.measureText(nameTxt).width;
-  var maxNameW = C_W - (frameIn+PAD)*2;
-  var bw = Math.min(Math.max(nmW + 90, 420), maxNameW);
-  var fontSize = 38;
-  if(nmW + 90 > maxNameW){
-    fontSize = Math.max(24, Math.floor(38 * (maxNameW - 90) / nmW));
+  var bw = Math.min(Math.max(nmW + 100, 460), C_W - PAD*2);
+  var fontSize = 44;
+  if(nmW + 100 > C_W - PAD*2){
+    fontSize = Math.max(28, Math.floor(44 * (C_W - PAD*2 - 100) / nmW));
   }
   var bx = (C_W - bw) / 2;
   if(draw){
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 6;
+    ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
     var bG = ctx.createLinearGradient(bx, by, bx, by+bh);
-    bG.addColorStop(0, PALETTE.goldHi); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#8a6d0a');
-    rr(ctx, bx, by, bw, bh, 38);
+    bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
+    rr(ctx, bx, by, bw, bh, 42);
     ctx.fillStyle = bG; ctx.fill();
     ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke();
     ctx.restore();
 
-    ctx.font = '700 ' + fontSize + 'px Amiri, serif';
+    ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif';
     ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
-  y = by + bh + 30;
+  y = by + bh;
 
+  y += 34;
   if(draw){
     var dateTxt = hijriDate();
-    ctx.font = '700 22px Cairo, sans-serif';
-    var dW = ctx.measureText('📅 ' + dateTxt).width + 46;
-    var dH = 46;
+    ctx.font = '700 24px Cairo, sans-serif';
+    var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
+    var dH = 50;
     var dX = (C_W - dW)/2;
-    rr(ctx, dX, y - 28, dW, dH, dH/2);
+    rr(ctx, dX, y - 30, dW, dH, dH/2);
     ctx.fillStyle = '#ffffff'; ctx.fill();
     ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('📅 ' + dateTxt, C_W/2, y - 5);
+    ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
   }
-  y += 36;
+  y += 38;
 
-  var cardX = frameIn + PAD - 22;
-  var cardW = C_W - cardX*2;
+  var cardX = PAD;
+  var cardW = C_W - PAD*2;
 
   SECTIONS.forEach(function(sec){
     var items = (data[sec.key] || []).filter(function(i){ return i.sr || i.f; });
     if(!items.length) return;
 
-    y += 6;
-    var hH = drawSectionHeader(ctx, sec, cardX + cardW, cardX, y, draw);
-    y += hH;
+    y += 8;
+    var headH = drawSectionHeader(ctx, sec, cardX + cardW, y, draw);
+    y += headH + 4;
 
     items.forEach(function(item){
       if(draw){
         ctx.save();
-        ctx.shadowColor = 'rgba(0,0,0,0.08)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 5;
+        ctx.shadowColor = 'rgba(0,0,0,0.07)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6;
       }
       var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
       if(draw){
-        rr(ctx, cardX, y, cardW, h, 16);
-        ctx.fillStyle = '#fffdf6'; ctx.fill();
+        rr(ctx, cardX, y, cardW, h, 18);
+        ctx.fillStyle = '#ffffff'; ctx.fill();
         ctx.restore();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8d9a8'; ctx.stroke();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
 
         var rs = item.rating ? ratingStyle(item.rating) : {border: PALETTE.mid};
         ctx.save();
-        rr(ctx, cardX, y, 7, h, 4);
+        rr(ctx, cardX, y, 8, h, 4);
         ctx.fillStyle = rs.border || PALETTE.mid;
         ctx.fill();
         ctx.restore();
 
         renderItemCard(ctx, item, sec, cardX, y, cardW, true);
       }
-      y += h + 18;
+      y += h + 20;
     });
-    y += 14;
+    y += 16;
   });
 
-  y += 10;
+  y += 14;
 
-  var fH = 110;
+  var fH = 96;
   if(draw){
-    var g3 = ctx.createLinearGradient(0,y,0,y+fH);
-    g3.addColorStop(0, PALETTE.mid); g3.addColorStop(1, PALETTE.deep);
-    ctx.fillStyle = g3;
-    ctx.fillRect(frameIn, y, C_W-frameIn*2, fH);
-    ctx.lineWidth = 3; ctx.strokeStyle = PALETTE.gold;
-    ctx.strokeRect(frameIn, y, C_W-frameIn*2, fH);
+    ctx.fillStyle = PALETTE.deep;
+    ctx.fillRect(0, y, C_W, fH);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y);
+    ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
 
-    ctx.font = '700 26px Amiri, serif';
-    ctx.fillStyle = PALETTE.goldHi;
+    ctx.font = '800 26px Cairo, sans-serif';
+    ctx.fillStyle = PALETTE.goldLt;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('مَركَز خَادِم القُرآن الكَريم  |  تَقرير مُتابَعَة الحِفظ', C_W/2, y + 42);
+    ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
 
-    ctx.font = '600 18px Cairo, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.82)';
-    ctx.fillText('تَمَّ إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 76);
+    ctx.font = '600 19px Cairo, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
+
+    drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
   }
-  y += fH + 40;
+  y += fH;
 
   return y;
 }
 
+// ═══════════════════════════════════════════════
+// بناء التقييم التعبيري الثاني بدقة تامة ومنع تداخل البسملة
+// ═══════════════════════════════════════════════
+async function drawAppreciationReport(nm, rating) {
+  await loadFonts();
+  var canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1080;
+  var ctx = canvas.getContext('2d');
+  
+  // خلفية كلاسيكية فخمة متدرجة تماثل الصورة تماماً
+  var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  bgG.addColorStop(0, '#ebdcb9');
+  bgG.addColorStop(1, '#dfce9f');
+  ctx.fillStyle = bgG;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  drawCornerBrackets(ctx, canvas.width, canvas.height, 24, 50, '#8a6d0a');
+  
+  // 1. معالجة وتثبيت رمز الهلال والبسملة لمنع التداخل نهائياً
+  var emX = canvas.width / 2;
+  var emY = 95;  // الشعار الدائري بالأعلى
+  var emR = 48;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(emX, emY, emR, 0, Math.PI * 2);
+  ctx.fillStyle = '#601212';
+  ctx.fill();
+  ctx.lineWidth = 3.5;
+  ctx.strokeStyle = '#d4af37';
+  ctx.stroke();
+  
+  ctx.font = '42px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#d4af37';
+  ctx.fillText('🌙', emX, emY + 2);
+  ctx.restore();
+  
+  // البسملة تم إزاحتها للأسفل لتبدأ من الإحداثي 210 لضمان مسافة أمان ممتازة من الرمز الدائري
+  ctx.font = '700 44px Amiri, serif';
+  ctx.fillStyle = '#04201a';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', canvas.width / 2, 210);
+  
+  // خط فاصل رفيع تحت البسملة
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 2 - 140, 248);
+  ctx.lineTo(canvas.width / 2 + 140, 248);
+  ctx.strokeStyle = '#d4af37';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  
+  // كبسولة التقييم العام المختار
+  var badgeText = 'مستوى ' + rating;
+  drawPill(ctx, badgeText, canvas.width / 2, 280, {
+    font: '800 30px Cairo, sans-serif',
+    bg: '#fdf6e0',
+    color: '#8a6d0a',
+    border: '#d4af37',
+    borderWidth: 2,
+    h: 58,
+    padX: 34,
+    align: 'center'
+  });
+  
+  // نصوص رسالة التقييم والافتتاحية بخط كبير وواضح
+  var textY = 400;
+  ctx.font = '700 34px Amiri, serif';
+  ctx.fillStyle = '#111827';
+  ctx.textAlign = 'right';
+  
+  var p1 = '،مِنْ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + '، سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
+  var p2 = 'فَإِنَّ الْحَدِيثَ عَنْ بَطَلِنَا حَدِيثُ سُرُورٍ وَفَخْرٍ، فَقَدْ بَلَغَ مِنَ الْإِتْقَانِ وَحُسْنِ الْأَدَاءِ مَبْلَغاً يَسُرُّ كُلَّ مَنْ يُتَابِعُ خُطَاهُ، وَقَدْ بَرَزَ بَطَلُنَا بِتَفَوُّقٍ ظَاهِرٍ فِي بَابِ «مُتَابَعَةِ الْحِفْظِ وَالْمُرَاجَعَةِ»، وَهُوَ مَوْضِعُ اعْتِزَازٍ يُحْسَبُ لَهُ بِإِذْنِ اللَّهِ.';
+  var p3 = 'وَقَدْ رَصَدْنَا جُهُودَهُ الْمُبَارَكَةَ الَّتِي نَنْصَحُ بِمُعَالَجَتِهَا بِمَزِيدٍ مِنَ التَّكْرَارِ وَالتَّسْمِيعِ. وَالْمَطْلُوبُ مِنْهُ الْآنَ هُوَ الثَّبَاتُ عَلَى هَذَا الْمُسْتَوَى الْرَّفِيعِ وَعَدَمُ التَّفْرِيطِ فِي وِرْدِهِ الْيَوْمِيِّ، فَحِفْظُ الْقُرْآنِ أَمَانَةٌ تَحْتَاجُ إِلَى مُدَاوَمَةٍ لَا فُتُورَ فِيهَا.';
+  var p4 = 'Fَنَسْأَلُ اللَّهَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يَزِيدَهُ ثَبَاتاً وَرِفْعَةً.';
+  
+  var maxW = canvas.width - 180;
+  var allParagraphs = [
+    wrapText(ctx, p1, maxW),
+    wrapText(ctx, p2, maxW),
+    wrapText(ctx, p3, maxW),
+    wrapText(ctx, p4, maxW)
+  ];
+  
+  ctx.textBaseline = 'top';
+  allParagraphs.forEach(function(lines) {
+    lines.forEach(function(line) {
+      ctx.fillText(line, canvas.width - 90, textY);
+      textY += 50;
+    });
+    textY += 28;
+  });
+  
+  return canvas;
+}
+
 async function drawReport(nm, data){
   await loadFonts();
+
   var tmp = document.createElement('canvas');
   tmp.width = C_W; tmp.height = 10;
   var mctx = tmp.getContext('2d');
   var totalH = layoutReport(mctx, 0, nm, data, false);
 
   var canvas = document.createElement('canvas');
-  canvas.width = C_W; canvas.height = Math.max(totalH, 900);
+  canvas.width = C_W; canvas.height = Math.max(totalH, 700);
   var ctx = canvas.getContext('2d');
   layoutReport(ctx, canvas.height, nm, data, true);
+
   return canvas;
 }
 
-// ═══════════════════════════════════════════════
-// اللوحة الثانية: رسالة تقييم على هيئة رسالة من عهد الخلفاء الراشدين
-// ═══════════════════════════════════════════════
-function sectionFriendlyName(key){
-  var map = {ns:'حِفظ السُّوَر الجَديدة', ps:'ماضي السُّوَر', mq:'المُذَكِّرة الجَديدة', pm:'ماضي المُذَكِّرة', sj:'السِّراج', hd:'الحَديث والأذكار'};
-  return map[key]||key;
-}
-
-function buildAssessment(nm, data){
-  var perSection = {};
-  var allScores = [];
-  var totalErrors = 0, errorCount = 0, zeroErrorCount = 0, ratedCount = 0;
-
-  SECTIONS.forEach(function(sec){
-    var items = (data[sec.key]||[]).filter(function(i){return i.sr||i.f;});
-    var scores = [];
-    items.forEach(function(it){
-      var s = ratingScore(it.rating);
-      if(s){ scores.push(s); allScores.push(s); ratedCount++; }
-      if(it.errors !== '' && it.errors != null && !isNaN(parseInt(it.errors))){
-        var e = parseInt(it.errors);
-        totalErrors += e; errorCount++;
-        if(e===0) zeroErrorCount++;
-      }
-    });
-    if(scores.length){
-      perSection[sec.key] = {avg: scores.reduce((a,b)=>a+b,0)/scores.length, count: scores.length, title: sectionFriendlyName(sec.key)};
-    }
-  });
-
-  var overallAvg = allScores.length ? allScores.reduce((a,b)=>a+b,0)/allScores.length : null;
-
-  var bestKey=null, worstKey=null;
-  Object.keys(perSection).forEach(function(k){
-    if(bestKey===null || perSection[k].avg > perSection[bestKey].avg) bestKey=k;
-    if(worstKey===null || perSection[k].avg < perSection[worstKey].avg) worstKey=k;
-  });
-
-  var tier;
-  if(overallAvg===null) tier='none';
-  else if(overallAvg>=3.5) tier='excellent';
-  else if(overallAvg>=2.7) tier='veryGood';
-  else if(overallAvg>=2) tier='good';
-  else tier='needsWork';
-
-  var openings = {
-    excellent: 'فَإِنَّ الحَديثَ عَن بَطَلِنا حَديثُ سُرورٍ وَفَخرٍ، فَقَد بَلَغَ مِن الإِتقانِ وَحُسنِ الأداءِ مَبلَغاً يَسُرُّ كُلَّ مَن يُتابِعُ خُطاهُ.',
-    veryGood: 'فَإِنَّ بَطَلَنا يَسيرُ بِخُطَىً ثابِتَةٍ وَاثِقَةٍ، وَقَد لَمَسنا فيهِ اجتِهاداً وَاضِحاً يَستَحِقُّ الثَّناءَ وَالتَّشجيع.',
-    good: 'فَإِنَّ بَطَلَنا قَد خَطا خُطُواتٍ طَيِّبَةً في طَريقِ الحِفظِ، وَفيهِ مِن الخَيرِ وَالِاجتِهادِ ما يُبَشِّرُ بِمُستَقبَلٍ أَفضَل.',
-    needsWork: 'فَإِنَّ بَطَلَنا في بِدايَةِ الطَّريقِ، وَبَينَ يَدَيهِ فُرصَةٌ عَظيمَةٌ لِيُثبِتَ هِمَّتَهُ وَيُعيدَ الكَرَّةَ بِعَزمٍ جَديد.',
-    none: 'فَإِنَّ رِحلَةَ بَطَلِنا مَعَ كِتابِ اللهِ لا تَزالُ في أَوَّلِها، وَكُلُّ بِدايَةٍ صادِقَةٍ تَستَحِقُّ الدُّعاءَ وَالتَّشجيع.'
-  };
-
-  var strengthLine = '';
-  if(bestKey && perSection[bestKey].avg >= 2.5){
-    strengthLine = ' وَقَد بَرَزَ بِبَطَلِنا تَفَوُّقٌ ظاهِرٌ في بابِ «' + perSection[bestKey].title + '»، وَهُوَ مَوضِعُ اعتِزازٍ يُحسَبُ لَهُ بِإِذنِ الله.';
-  }
-
-  var errorLine = '';
-  if(errorCount>0){
-    if(zeroErrorCount === errorCount){
-      errorLine = ' وَمِمّا يُثلِجُ الصَّدرَ أَنَّهُ لَم يَقَع في شَيءٍ مِن الخَطَأ في هَذِهِ المَرحَلَة، وَهَذا دَليلُ إِتقانٍ وَحُسنِ مُراجَعَة.';
-    } else if(totalErrors <= errorCount){
-      errorLine = ' وَأَخطاؤُهُ كانَت يَسيرَةً لا تَكادُ تُذكَر، وَهَذا مِمّا يُحمَدُ لَهُ وَيُرجى مَعَهُ الاستِمرارُ عَلى هَذا النَّهج.';
-    } else {
-      errorLine = ' وَقَد رُصِدَت بَعضُ الأَخطاءِ الَّتي نَنصَحُ بِمُعالَجَتِها بِمَزيدٍ مِن التَّكرارِ وَالتَّسميع.';
-    }
-  }
-
-  var needLine = '';
-  if(worstKey && worstKey !== bestKey && perSection[worstKey].avg < 3){
-    needLine = ' وَالمَطلوبُ مِنهُ في المَرحَلَةِ القادِمَةِ أَن يُولِيَ بابَ «' + perSection[worstKey].title + '» مَزيداً مِن العِنايَةِ وَالمُراجَعَةِ اليَومِيَّة.';
-  } else if(tier==='excellent'){
-    needLine = ' وَالمَطلوبُ مِنهُ الآنَ هُوَ الثَّباتُ عَلى هَذا المُستَوى وَعَدَمُ التَّفريطِ في وِردِهِ اليَومِيّ، فَحِفظُ القُرآنِ أَمانَةٌ تَحتاجُ إِلى مُداوَمَةٍ لا فُتور.';
-  } else {
-    needLine = ' وَالمَطلوبُ مِنهُ المُداوَمَةُ عَلى وِردٍ يَومِيٍّ ثابِتٍ وَلَو قَلَّ، فَإِنَّ أَحَبَّ الأَعمالِ إِلى اللهِ أَدوَمُها.';
-  }
-
-  var closings = {
-    excellent: 'فَنَسأَلُ اللهَ أَن يَجعَلَهُ مِن حَمَلَةِ كِتابِهِ العامِلينَ بِهِ، وَأَن يَزيدَهُ ثَباتاً وَرِفعَة.',
-    veryGood: 'فَنَسأَلُ اللهَ أَن يُبارِكَ في جُهدِهِ وَأَن يُبَلِّغَهُ أَعلى الدَّرَجات.',
-    good: 'فَنَسأَلُ اللهَ أَن يُعينَهُ وَأَن يَشرَحَ صَدرَهُ لِلمَزيدِ مِن الحِفظِ وَالإِتقان.',
-    needsWork: 'فَنَسأَلُ اللهَ أَن يُلهِمَهُ الهِمَّةَ وَالعَزيمَةَ، وَأَن يُعينَهُ عَلى إِتمامِ ما بَدَأَه.',
-    none: 'فَنَسأَلُ اللهَ أَن يُبارِكَ لَهُ في بِدايَتِهِ وَأَن يُوَفِّقَهُ لِخَتمِ كِتابِهِ الكَريم.'
-  };
-
-  var levelLabel = {excellent:'مُستَوىً مُمتاز 🌟', veryGood:'مُستَوىً جَيِّدٌ جِدّاً ⭐', good:'مُستَوىً جَيِّد 👍', needsWork:'مُستَوىً يَحتاجُ هِمَّةً أَكبَر 📖', none:'بِدايَةُ الطَّريق 🌱'}[tier];
-
-  var greeting = 'مِن خادِمِ القُرآنِ الكَريم، إِلى وَلِيِّ أَمرِ البَطَلِ المُبارَك: ' + nm + '، سَلامٌ عَلَيكُم وَرَحمَةُ اللهِ وَبَرَكاتُه، أَمّا بَعد:';
-  var body1 = openings[tier] + strengthLine;
-  var body2 = errorLine + needLine;
-  var body3 = closings[tier];
-
-  return {
-    levelLabel: levelLabel,
-    greeting: greeting,
-    paragraphs: [body1, body2, body3].filter(function(s){return s && s.trim();})
-  };
-}
-
-var LETTER_W = 1080;
-function drawParchmentTexture(ctx, w, h){
-  var g = ctx.createLinearGradient(0,0,w,h);
-  g.addColorStop(0, '#e9d9ad'); g.addColorStop(0.5, '#e2cc98'); g.addColorStop(1, '#d8bd85');
-  ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-
-  ctx.save();
-  for(var i=0;i<130;i++){
-    var rx=(i*211.7)%w, ry=(i*151.3)%h;
-    var rad = 40+(i%6)*22;
-    var rg = ctx.createRadialGradient(rx,ry,0,rx,ry,rad);
-    rg.addColorStop(0,'rgba(120,90,45,0.10)'); rg.addColorStop(1,'rgba(120,90,45,0)');
-    ctx.fillStyle = rg;
-    ctx.beginPath(); ctx.arc(rx,ry,rad,0,Math.PI*2); ctx.fill();
-  }
-  // vignette
-  var vg = ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.25,w/2,h/2,Math.max(w,h)*0.72);
-  vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(60,35,10,0.35)');
-  ctx.fillStyle = vg; ctx.fillRect(0,0,w,h);
-  ctx.restore();
-
-  // torn/deckled edge suggestion
-  ctx.save();
-  ctx.strokeStyle='rgba(90,60,25,0.35)'; ctx.lineWidth=2;
-  for(var s=0;s<4;s++){
-    ctx.beginPath();
-    var pad = 10+s*3;
-    ctx.rect(pad,pad,w-pad*2,h-pad*2);
-    ctx.globalAlpha = 0.25;
-    ctx.stroke();
-  }
-  ctx.restore();
-}
-
-function drawWaxSeal(ctx, cx, cy, r){
-  ctx.save();
-  var g = ctx.createRadialGradient(cx-r*0.3,cy-r*0.3,r*0.1,cx,cy,r);
-  g.addColorStop(0,'#9c3b3b'); g.addColorStop(0.6,'#7a1f1f'); g.addColorStop(1,'#5c1414');
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
-  ctx.lineWidth=3; ctx.strokeStyle='#3f0d0d'; ctx.stroke();
-
-  // ribbon hints
-  ctx.strokeStyle='rgba(63,13,13,0.6)'; ctx.lineWidth=6;
-  ctx.beginPath(); ctx.moveTo(cx-r*1.35,cy); ctx.lineTo(cx-r*0.85,cy); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(cx+r*0.85,cy); ctx.lineTo(cx+r*1.35,cy); ctx.stroke();
-
-  // inner emblem: star & crescent motif drawn simply
-  ctx.fillStyle='rgba(255,224,150,0.85)';
-  ctx.beginPath();
-  ctx.arc(cx, cy, r*0.42, Math.PI*0.15, Math.PI*1.65);
-  ctx.arc(cx+r*0.16, cy, r*0.34, Math.PI*1.1, Math.PI*0.35, true);
-  ctx.closePath();
-  ctx.fill();
-  ctx.beginPath(); ctx.arc(cx-r*0.12, cy-r*0.34, r*0.09, 0, Math.PI*2); ctx.fill();
-  ctx.restore();
-}
-
-function layoutLetter(ctx, canvasH, nm, assessment, draw){
-  var w = LETTER_W;
-  if(draw) drawParchmentTexture(ctx, w, canvasH);
-
-  var frameIn = 40;
-  if(draw){
-    ctx.lineWidth=3; ctx.strokeStyle='rgba(90,55,20,0.55)';
-    rr(ctx, frameIn, frameIn, w-frameIn*2, canvasH-frameIn*2, 8); ctx.stroke();
-    ctx.lineWidth=1; ctx.strokeStyle='rgba(90,55,20,0.35)';
-    rr(ctx, frameIn+10, frameIn+10, w-(frameIn+10)*2, canvasH-(frameIn+10)*2, 6); ctx.stroke();
-  }
-
-  var y = frameIn + 40;
-  if(draw) drawWaxSeal(ctx, w/2, y+34, 44);
-  y += 100;
-
-  if(draw){
-    ctx.font = '700 40px "Aref Ruqaa", Amiri, serif';
-    ctx.fillStyle = '#3b2412';
-    ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-    ctx.fillText('بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ', w/2, y);
-  }
-  y += 46;
-
-  if(draw){
-    ctx.strokeStyle='rgba(90,55,20,0.5)'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(w/2-140,y); ctx.lineTo(w/2+140,y); ctx.stroke();
-    ctx.fillStyle=PALETTE.maroon;
-    ctx.beginPath(); ctx.arc(w/2,y,4,0,Math.PI*2); ctx.fill();
-  }
-  y += 44;
-
-  var textX1 = frameIn + 70;
-  var textX2 = w - frameIn - 70;
-  var maxTextW = textX2 - textX1;
-
-  // level badge
-  if(draw){
-    ctx.font='800 26px Cairo, sans-serif';
-    var bw = ctx.measureText(assessment.levelLabel).width + 60;
-    var bx = w/2 - bw/2, bh=52;
-    rr(ctx, bx, y-6, bw, bh, bh/2);
-    var bg = ctx.createLinearGradient(bx,y,bx+bw,y);
-    bg.addColorStop(0,'#f0d878'); bg.addColorStop(1,'#c9a227');
-    ctx.fillStyle=bg; ctx.fill();
-    ctx.lineWidth=2; ctx.strokeStyle='#5c1414'; ctx.stroke();
-    ctx.fillStyle='#3b2412'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(assessment.levelLabel, w/2, y-6+bh/2+1);
-  }
-  y += 78;
-
-  ctx.font = '700 27px Amiri, serif';
-  var greetLines = wrapText(ctx, assessment.greeting, maxTextW);
-  var lh1 = 42;
-  if(draw){
-    ctx.fillStyle='#2a1a0d'; ctx.textAlign='right'; ctx.textBaseline='alphabetic';
-    greetLines.forEach(function(l,i){ ctx.fillText(l, textX2, y+30+i*lh1); });
-  }
-  y += 30 + greetLines.length*lh1 + 26;
-
-  ctx.font = '400 30px Amiri, serif';
-  var lh2 = 48;
-  assessment.paragraphs.forEach(function(p){
-    var lines = wrapText(ctx, p, maxTextW);
-    if(draw){
-      ctx.fillStyle='#3b2412'; ctx.textAlign='right'; ctx.textBaseline='alphabetic';
-      lines.forEach(function(l,i){ ctx.fillText(l, textX2, y+32+i*lh2); });
-    }
-    y += 32 + lines.length*lh2 + 20;
-  });
-
-  y += 10;
-  if(draw){
-    ctx.strokeStyle='rgba(90,55,20,0.5)'; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(w/2-140,y); ctx.lineTo(w/2+140,y); ctx.stroke();
-    ctx.fillStyle=PALETTE.maroon;
-    ctx.beginPath(); ctx.arc(w/2,y,4,0,Math.PI*2); ctx.fill();
-  }
-  y += 44;
-
-  if(draw){
-    ctx.font = '700 30px Amiri, serif';
-    ctx.fillStyle='#2a1a0d'; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-    ctx.fillText('وَالسَّلامُ عَلَيكُم وَرَحمَةُ اللهِ وَبَرَكاتُه', w/2, y);
-  }
-  y += 46;
-
-  if(draw){
-    ctx.font = '700 26px "Aref Ruqaa", Amiri, serif';
-    ctx.fillStyle='#5c1414'; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-    ctx.fillText('خادِمُ القُرآنِ الكَريم — الشَّيخ عَبدالرَّحمَن', w/2, y);
-  }
-  y += 34;
-
-  if(draw){
-    ctx.font = '600 18px Cairo, sans-serif';
-    ctx.fillStyle='rgba(60,35,10,0.75)'; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-    ctx.fillText(hijriDate(), w/2, y);
-  }
-  y += 40;
-
-  return y;
-}
-
-async function drawAssessmentLetter(nm, data){
-  await loadFonts();
-  var assessment = buildAssessment(nm, data);
-
-  var tmp = document.createElement('canvas');
-  tmp.width = LETTER_W; tmp.height = 10;
-  var mctx = tmp.getContext('2d');
-  var totalH = layoutLetter(mctx, 0, nm, assessment, false);
-
-  var canvas = document.createElement('canvas');
-  canvas.width = LETTER_W; canvas.height = Math.max(totalH, 700);
-  var ctx = canvas.getContext('2d');
-  layoutLetter(ctx, canvas.height, nm, assessment, true);
-  return canvas;
-}
-
-// ═══════════════════════════════════════════════
-// المشاركة والتنزيل
-// ═══════════════════════════════════════════════
-function showImageModal(images, nm) {
+function showTwoImagesModal(imgSrc1, imgSrc2, nm) {
   var modal=document.createElement('div');
-  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;gap:18px;';
-  var imgsHtml = images.map(function(im){
-    return '<img src="'+im.src+'" style="max-width:100%;max-height:60vh;border-radius:14px;box-shadow:0 8px 40px rgba(201,162,39,.25);">'
-      +'<button class="dlbtn" data-src="'+im.src+'" data-name="'+im.name+'" style="padding:10px 26px;background:#064e3b;color:#fef08a;border:2px solid #c9a227;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;margin-bottom:8px;">💾 حفظ ' + im.label + '</button>';
-  }).join('<div style="height:6px;"></div>');
-  modal.innerHTML = imgsHtml +
-    '<button id="mc" style="padding:12px 30px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>';
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto;';
+  modal.innerHTML='<div style="display:flex;gap:16px;max-width:100%;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">'
+    +'<img src="'+imgSrc1+'" style="max-width:45%;max-height:70vh;border-radius:14px;box-shadow:0 8px 40px rgba(212,175,55,.2);">'
+    +'<img src="'+imgSrc2+'" style="max-width:45%;max-height:70vh;border-radius:14px;box-shadow:0 8px 40px rgba(212,175,55,.2);">'
+    +'</div>'
+    +'<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">'
+    +'<button id="mc" style="padding:12px 30px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
+    +'<button id="ms1" style="padding:12px 30px;background:#064e3b;color:#fef08a;border:2px solid #d4af37;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ تقرير المتابعة</button>'
+    +'<button id="ms2" style="padding:12px 30px;background:#7c2d12;color:#fef08a;border:2px solid #d4af37;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ التقييم النصي</button>'
+    +'</div>';
   document.body.appendChild(modal);
   document.getElementById('mc').onclick=function(){modal.remove();};
-  modal.querySelectorAll('.dlbtn').forEach(function(btn){
-    btn.onclick=function(){
-      var a=document.createElement('a');
-      a.href=btn.getAttribute('data-src');
-      a.download=btn.getAttribute('data-name');
-      a.click();
-    };
-  });
+  document.getElementById('ms1').onclick=function(){
+    var a=document.createElement('a');a.href=imgSrc1;a.download='تقرير_متابعة_'+(nm||'')+'.png';a.click();
+  };
+  document.getElementById('ms2').onclick=function(){
+    var a=document.createElement('a');a.href=imgSrc2;a.download='تقييم_نصي_'+(nm||'')+'.png';a.click();
+  };
 }
 
-async function shareFiles(fileDataList) {
+async function shareTwoFiles(dataUrl1, dataUrl2, nm) {
   try {
-    var files = [];
-    for(var i=0;i<fileDataList.length;i++){
-      var resp = await fetch(fileDataList[i].dataUrl);
-      var blob = await resp.blob();
-      files.push(new File([blob], fileDataList[i].fileName, {type:'image/jpeg'}));
-    }
-    if (navigator.canShare && navigator.canShare({ files: files })) {
-      await navigator.share({
-        files: files,
-        title: 'تقرير متابعة الحفظ وتقييم البطل',
-        text: 'إليك تقرير حفظ القرآن الكريم وتقييم البطل'
-      });
-      return;
-    }
-    throw new Error('multi-share-unsupported');
-  } catch (err) {
-    showImageModal(fileDataList.map(function(f){return {src:f.dataUrl, name:f.fileName, label:f.label};}), '');
-  }
-}
+    const response1 = await fetch(dataUrl1);
+    const blob1 = await response1.blob();
+    const file1 = new File([blob1], 'report_' + nm + '.jpg', { type: 'image/jpeg' });
 
-function setLoading(on, text){
-  var el = document.getElementById('loadingOverlay');
-  var t = document.getElementById('loadingText');
-  if(text) t.textContent = text;
-  el.style.display = on ? 'flex' : 'none';
+    const response2 = await fetch(dataUrl2);
+    const blob2 = await response2.blob();
+    const file2 = new File([blob2], 'appreciation_' + nm + '.jpg', { type: 'image/jpeg' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file1, file2] })) {
+      await navigator.share({
+        files: [file1, file2],
+        title: 'تقارير متابعة الحفظ الكريم',
+        text: 'إليك تقرير الحفظ والتقييم التعبيري للبطل ' + nm
+      });
+    } else {
+      showTwoImagesModal(dataUrl1, dataUrl2, nm);
+    }
+  } catch (err) {
+    console.error('فشل في المشاركة:', err);
+    showTwoImagesModal(dataUrl1, dataUrl2, nm);
+  }
 }
 
 async function generateAndShare() {
   var nm = document.getElementById('inp-student').value.trim();
   if (!nm) { alert('يرجى إدخال اسم البطل'); return; }
+  var genRating = document.getElementById('inp-general-rating').value;
 
   var data = {
     ns: collectData('new-surahs', false), ps: collectData('past-surahs', false),
@@ -1092,26 +788,19 @@ async function generateAndShare() {
   };
 
   try {
-    setLoading(true, 'جارٍ رسم تقرير الحفظ...');
     var canvas1 = await drawReport(nm, data);
-    var img1 = canvas1.toDataURL('image/jpeg', 0.92);
-
-    setLoading(true, 'جارٍ كتابة تقييم البطل...');
-    var canvas2 = await drawAssessmentLetter(nm, data);
-    var img2 = canvas2.toDataURL('image/jpeg', 0.92);
-
-    setLoading(false);
-    await shareFiles([
-      {dataUrl: img1, fileName: 'تقرير_'+nm+'.jpg', label: 'تقرير الحفظ'},
-      {dataUrl: img2, fileName: 'تقييم_'+nm+'.jpg', label: 'تقييم البطل'}
-    ]);
+    var canvas2 = await drawAppreciationReport(nm, genRating);
+    
+    var imgData1 = canvas1.toDataURL('image/jpeg', 0.92);
+    var imgData2 = canvas2.toDataURL('image/jpeg', 0.92);
+    
+    await shareTwoFiles(imgData1, imgData2, nm);
   } catch (e) {
-    setLoading(false);
     alert('حدث خطأ أثناء الإنشاء: ' + e.message);
   }
 }
 
-// تهيئة مبدئية للصفوف
+// تهيئة مبدئية مستقلة تماماً للصفوف لضمان تفعيل أزرار الإضافة لكل الأقسام
 addSurah('new-surahs','ns',true,true);
 addSurah('past-surahs','ps',true,true);
 addQuestion('mur-questions','mq',true,true);
