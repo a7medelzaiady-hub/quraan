@@ -197,6 +197,17 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={};
 
+function customAlert(msg) {
+  var m=document.createElement('div');
+  m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  m.innerHTML='<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:400px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">'+
+    '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
+    '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حسناً</button>'+
+    '</div>';
+  document.body.appendChild(m);
+  document.getElementById('c-alert-close').onclick=function(){m.remove();};
+}
+
 function addCurrentSurah(containerId, prefix){
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'surah-row'; div.id = 'crow-'+prefix+'-'+idx;
@@ -336,7 +347,6 @@ function wrapText(ctx, text, maxWidth){
   if(cur) lines.push(cur); return lines.length ? lines : [''];
 }
 
-/* زيادة عرض ومساحة الكبسولات الاستيعابية (Pills) لضمان عدم اقتصاص الأيقونات والرموز التعبيرية */
 function drawPill(ctx, text, anchorX, y, opts){
   opts = opts || {}; ctx.save(); ctx.font = opts.font || '700 22px Cairo, sans-serif';
   var padX = opts.padX != null ? opts.padX : 28; var h = opts.h || 46;
@@ -466,7 +476,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
     var bG = ctx.createLinearGradient(bx, by, bx, by+bh); bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
-    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; stroke(); ctx.restore();
+    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.restore();
     ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
   y = by + bh + 34;
@@ -512,16 +522,13 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     ctx.fillStyle = PALETTE.deep; ctx.fillRect(0, y, C_W, fH);
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
+    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'transparent'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
     ctx.font = '600 19px Cairo, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
     drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
   }
   return y + fH;
 }
 
-// ═══════════════════════════════════════════════
-// لوحة رسم شهادة التقدير بعد التطوير والتحديث الفوري
-// ═══════════════════════════════════════════════
 async function drawAppreciationReport(nm, rating, ratingsObj) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
@@ -544,7 +551,6 @@ async function drawAppreciationReport(nm, rating, ratingsObj) {
   
   var textY = 370; ctx.font = '700 34px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
   
-  /* 🌟 الاختصار التعبيري الفخم مع الاحتفاظ بكلمة تفضلوا تقرير البطل الكريم */
   var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ)؛ سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
   var p2 = 'تَفَضَّلُوا تَقْرِيرَ الْبَطَلِ الْكَرِيمِ الَّذِي أَبْدَعَ وَأَظْهَرَ تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا الْحَصَادَ الْمُفَصَّلَ، نُوصِيهِ بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ لِيَبْقَى كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ.';
   var p3 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ.';
@@ -556,20 +562,17 @@ async function drawAppreciationReport(nm, rating, ratingsObj) {
     lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 18;
   });
   
-  // 📊 صندوق الحصاد: تكبير حجم الخط لـ 32px وتوسيع الحقول لمنع اقتصاص الأيقونات
   var boxY = textY + 15;
   var boxW = 900; var boxH = 265; var boxX = 90;
   rr(ctx, boxX, boxY, boxW, boxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
 
   ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 940, boxY + 30);
 
-  // حجم خط كبير وجلي (30px) مع توفير مساحات مريحة للاستيعاب الكلي للأيقونات والأرقام
   ctx.font = '700 30px Cairo, sans-serif'; ctx.fillStyle = '#111827';
   ctx.fillText('📖 تَقْيِيمُ آيَاتِ وَسُورِ الْقُرْآنِ:  ' + ratingsObj.surah, 930, boxY + 100);
   ctx.fillText('📝 تَقْيِيمُ تَمَارِينِ وَأَسْئِلَةِ الْمُذَكِّرَةِ:  ' + ratingsObj.notebook, 930, boxY + 155);
   ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 930, boxY + 210);
   
-  // ✍️ التوقيع الرسمي
   var sigY = boxY + boxH + 60;
   ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'left';
   ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 380, sigY);
@@ -611,16 +614,16 @@ async function shareSingleFile(dataUrl, filename, title, fallbackName) {
 }
 
 async function generateReportOnly() {
-  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
+  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
   var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   try {
     var canvas = await drawReport(nm, data);
     shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'report_'+nm+'.jpg', 'تقرير متابعة الحفظ', 'تقرير_متابعة_'+nm+'.jpg');
-  } catch (e) { alert('حدث خطأ: ' + e.message); }
+  } catch (e) { customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message); }
 }
 
 async function generateAppreciationOnly() {
-  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
+  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   
   var ratingsObj = {
@@ -632,7 +635,7 @@ async function generateAppreciationOnly() {
   try {
     var canvas = await drawAppreciationReport(nm, genRating, ratingsObj);
     shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'appreciation_'+nm+'.jpg', 'شهادة تقييم البطل', 'شهادة_تقييم_'+nm+'.jpg');
-  } catch (e) { alert('حدث خطأ: ' + e.message); }
+  } catch (e) { customAlert('حدث خطأ أثناء إعداد الشهادة: ' + e.message); }
 }
 
 SECTIONS.forEach(sec => {
