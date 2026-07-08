@@ -529,58 +529,56 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   return y + fH;
 }
 
-async function drawAppreciationReport(nm, rating, ratingsObj, detailedData) {
+async function drawAppreciationReport(nm, rating, ratingsObj) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = 1600; // زدنا الطول لاستيعاب النصائح
+  canvas.height = 1430; 
   var ctx = canvas.getContext('2d');
   
-  // الخلفية والأطر (نفس التصميم السابق)
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
   bgG.addColorStop(0, '#ebdcb9'); bgG.addColorStop(1, '#dfce9f'); 
   ctx.fillStyle = bgG; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drawCornerBrackets(ctx, canvas.width, canvas.height, 24, 50, '#8a6d0a');
   
-  // العنوان
-  ctx.font = '700 44px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center';
-  ctx.fillText('تقرير إنجاز ومسيرة حفظ البطل: ' + nm, 540, 100);
-
-  // --- تحليل التقييمات وتوليد النصائح ---
-  var adviceLines = [];
-  var lowPerformance = [];
-  var highPerformance = [];
-
-  // تصنيف الأداء
-  detailedData.forEach(item => {
-    if(item.rating === 'يحتاج مراجعة 📖' || item.rating === 'جيد 👍') {
-      lowPerformance.push(item.name);
-    } else {
-      highPerformance.push(item.name);
-    }
-  });
-
-  // صياغة النصيحة
-  if (lowPerformance.length > 0) {
-    adviceLines.push("نوصي يا أبا " + nm.split(' ')[0] + " بالتركيز بشكل خاص على: " + lowPerformance.join('، ') + ".");
-    adviceLines.push("تحتاج هذه الأجزاء إلى قليل من المتابعة المنزلية الهادئة والمراجعة المستمرة لترسخ في ذهن البطل.");
-  }
+  ctx.save(); ctx.beginPath(); ctx.arc(540, 95, 48, 0, Math.PI * 2); ctx.fillStyle = '#601212'; ctx.fill(); ctx.lineWidth = 3.5; ctx.strokeStyle = '#d4af37'; ctx.stroke();
+  ctx.font = '42px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#d4af37'; ctx.fillText('🌙', 540, 97); ctx.restore();
   
-  if (highPerformance.length > 0) {
-    adviceLines.push("ما شاء الله، أظهر البطل إتقاناً رائعاً في: " + highPerformance.join('، ') + "، استمروا في تشجيعه!");
-  }
-
-  // رسم النصائح في الشهادة
-  ctx.font = '700 30px Cairo, sans-serif'; 
-  ctx.textAlign = 'right';
-  var textY = 250;
-  adviceLines.forEach(line => {
-    wrapText(ctx, line, 900).forEach(l => {
-      ctx.fillText(l, 990, textY);
-      textY += 50;
-    });
+  ctx.font = '700 44px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 200);
+  ctx.beginPath(); ctx.moveTo(400, 235); ctx.lineTo(680, 235); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.stroke();
+  
+  drawPill(ctx, 'مستوى ' + rating, 540, 265, { font: '800 30px Cairo, sans-serif', bg: '#fdf6e0', color: '#8a6d0a', border: '#d4af37', borderWidth: 2, h: 58, padX: 34, align: 'center' });
+  
+  var textY = 370; ctx.font = '700 34px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
+  
+  var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ)؛ سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
+  var p2 = 'تَفَضَّلُوا تَقْرِيرَ الْبَطَلِ الْكَرِيمِ الَّذِي أَبْدَعَ وَأَظْهَرَ تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا الْحَصَادَ الْمُفَصَّلَ، نُوصِيهِ بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ لِيَبْقَى كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ.';
+  var p3 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ.';
+  
+  var maxW = 900;
+  var allParagraphs = [wrapText(ctx, p1, maxW), wrapText(ctx, p2, maxW), wrapText(ctx, p3, maxW)];
+  ctx.textBaseline = 'top';
+  allParagraphs.forEach(function(lines) {
+    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 18;
   });
+  
+  var boxY = textY + 15;
+  var boxW = 900; var boxH = 265; var boxX = 90;
+  rr(ctx, boxX, boxY, boxW, boxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  // (باقي الكود لرسم الأقسام والتقييمات كما هو...)
+  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 940, boxY + 30);
+
+  ctx.font = '700 30px Cairo, sans-serif'; ctx.fillStyle = '#111827';
+  ctx.fillText('📖 تَقْيِيمُ آيَاتِ وَسُورِ الْقُرْآنِ:  ' + ratingsObj.surah, 930, boxY + 100);
+  ctx.fillText('📝 تَقْيِيمُ تَمَارِينِ وَأَسْئِلَةِ الْمُذَكِّرَةِ:  ' + ratingsObj.notebook, 930, boxY + 155);
+  ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 930, boxY + 210);
+  
+  var sigY = boxY + boxH + 60;
+  ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'left';
+  ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 380, sigY);
+  ctx.font = '900 38px Amiri, serif'; ctx.fillStyle = '#04201a';
+  ctx.fillText('الشيخ عبد الرحمن', 320, sigY + 48);
+  
   return canvas;
 }
 
