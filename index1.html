@@ -84,14 +84,14 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم البطل الكريم</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً بشكل واضح...">
+        <div class="flbl">اسم البطل </div>
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل  ...">
       </div>
       <div class="frow">
-        <div class="flbl">التقييم العام للمسار (يظهر في الهيدر العلوي للشهادة)</div>
+        <div class="flbl">التقييم العام للمسار (يظهر في اعلى الشهادة)</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
-            <option value="ممتاز 🌟">مستوى ممتاز 🌟</option>
+            <option value="بارك الله فيك 🌟">مستوى ممتاز 🌟</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
             <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
@@ -171,15 +171,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     </div>
   </div>
 
-  <!-- 6. الحديث والأذكار -->
+  <!-- 6.  الأذكار -->
   <div class="section" id="sec-hd">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i> الأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿 الحديث الشريف والأذكار الحالية:</div>
+      <div class="sub-sec-title">📿   الأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة للحديث:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للاذكار:</div>
       <div id="hd-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
     </div>
