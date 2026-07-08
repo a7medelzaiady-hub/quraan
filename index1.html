@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن - متابعة الحفظ</title>
+<title>مركز خادم القرآن - نظام المتابعة الذكي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
@@ -22,10 +22,18 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
-.hdr { background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); padding: 30px 166px; text-align: center; border-bottom: 4px solid var(--gold); }
+
+/* إصلاح الهيدر ليكون متجاوباً تماماً على الموبايل بدون انضغاط النصوص */
+.hdr { 
+  background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
+  padding: 24px 16px; 
+  text-align: center; 
+  border-bottom: 4px solid var(--gold); 
+}
 .hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(212, 175, 55, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
-.hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 26px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-.hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; }
+.hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
+
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
 .section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: hidden; }
 .sec-head { background: var(--green-mid); padding: 14px 16px; }
@@ -56,12 +64,12 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* أزرار التثبيت السفلي المنفصلة */
+/* أزرار التثبيت السفلي المستقلة والمنفصلة تماماً */
 .submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 800px; margin: 0 auto; }
-.submit-btn { width: 100%; padding: 14px 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.submit-btn { width: 100%; padding: 14px 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; gap: 6px; border: none; }
 .btn-report { background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
-.btn-appreciation { background: linear-gradient(135deg, #6b21a8, #4c1d95); color: #fff; border: 2px solid var(--gold); }
+.btn-appreciation { background: linear-gradient(135deg, #581c87, #3b0764); color: #fff; border: 2px solid var(--gold); }
 .submit-btn:active { transform: scale(0.98); }
 </style>
 </head>
@@ -73,69 +81,65 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 </div>
 <div class="body">
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم البطل</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً...">
+        <div class="flbl">اسم البطل الكريم</div>
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً بشكل واضح...">
       </div>
       <div class="frow">
-        <div class="flbl">التقييم العام للبطل (يظهر بأعلى شهادة التقدير)</div>
+        <div class="flbl">التقييم العام للمسار (يظهر في الهيدر العلوي للشهادة)</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
             <option value="ممتاز 🌟">مستوى ممتاز 🌟</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option>
+            <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
           </select>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- 1. السور الجديدة -->
   <div class="section" id="sec-ns">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📖 الحفظ الحالي:</div>
+      <div class="sub-sec-title">📖 الحفظ الحالي للآيات:</div>
       <div id="ns-current-list"></div>
       <button class="add-btn" onclick="addCurrentSurah('ns-current-list','ns')"><i class="ti ti-plus"></i> إضافة سورة للحفظ الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للآيات:</div>
       <div id="ns-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextSurah('ns-next-list','ns')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
+      <button class="add-btn next-add" onclick="addNextSurah('ns-next-list','ns')"><i class="ti ti-plus"></i> إضافة خطة حفظ قادمة</button>
     </div>
   </div>
 
-  <!-- 2. ماضي السور -->
   <div class="section" id="sec-ps">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-books"></i>ماضي السور</div></div>
     <div class="sec-body">
       <div class="sub-sec-title">📚 الماضي الحالي:</div>
       <div id="ps-current-list"></div>
-      <button class="add-btn" onclick="addCurrentSurah('ps-current-list','ps')"><i class="ti ti-plus"></i> إضافة سورة للماضي الحالي</button>
+      <button class="add-btn" onclick="addCurrentSurah('ps-current-list','ps')"><i class="ti ti-plus"></i> إضافة سورة للمماضي الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للماضي:</div>
       <div id="ps-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextSurah('ps-next-list','ps')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
+      <button class="add-btn next-add" onclick="addNextSurah('ps-next-list','ps')"><i class="ti ti-plus"></i> إضافة خطة ماضي قادمة</button>
     </div>
   </div>
 
-  <!-- 3. أسئلة المذكرة الجديدة -->
   <div class="section" id="sec-mq">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-pencil"></i>أسئلة المذكرة الجديدة</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📝 الأسئلة الحالية:</div>
+      <div class="sub-sec-title">📝 الأسئلة والتمارين الحالية:</div>
       <div id="mq-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('mq-current-list','mq')"><i class="ti ti-plus"></i> إضافة أسئلة للمذكرة الحالية</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للمذكرة:</div>
       <div id="mq-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('mq-next-list','mq')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
   </div>
 
-  <!-- 4. ماضي المذكرة -->
   <div class="section" id="sec-pm">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-history"></i>ماضي المذكرة</div></div>
     <div class="sec-body">
@@ -143,42 +147,39 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       <div id="pm-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('pm-current-list','pm')"><i class="ti ti-plus"></i> إضافة أسئلة للماضي الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة لماضي المذكرة:</div>
       <div id="pm-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('pm-next-list','pm')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
   </div>
 
-  <!-- 5. السراج -->
   <div class="section" id="sec-sj">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-bulb"></i>السراج</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">💡 السراج الحالي:</div>
+      <div class="sub-sec-title">💡 منهج السراج الحالي:</div>
       <div id="sj-current-list"></div>
       <button class="add-btn" onclick="addCurrentSurah('sj-current-list','sj')"><i class="ti ti-plus"></i> إضافة سورة للسراج الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للسراج:</div>
       <div id="sj-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextSurah('sj-next-list','sj')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
+      <button class="add-btn next-add" onclick="addNextSurah('sj-next-list','sj')"><i class="ti ti-plus"></i> إضافة خطة قادمة للسراج</button>
     </div>
   </div>
 
-  <!-- 6. الحديث والأذكار -->
   <div class="section" id="sec-hd">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿 الحديث والأذكار الحالية:</div>
+      <div class="sub-sec-title">📿 الحديث الشريف والأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للحديث:</div>
       <div id="hd-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
+      <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
     </div>
   </div>
 </div>
 
-<!-- شريط الأزرار المنفصلة السفلي -->
 <div class="submit-wrap">
   <div class="submit-grid">
     <button class="submit-btn btn-report" onclick="generateReportOnly()">📊 تقرير المتابعة</button>
@@ -281,17 +282,17 @@ function collectSectionData(prefix, isQ) {
   return { currents: currents, nexts: nexts };
 }
 
-// دالة جلب تقييم قسم محدد ديناميكياً لاستخدامه في شهادة التقدير
+// دالة لجلب أول تقييم تم اختياره لقسم معين ديناميكياً لاستخدامه في الشهادة الرسمية
 function getSectionRating(prefix) {
   var found = "";
   document.querySelectorAll('[id^="crow-'+prefix+'-"] .rating-sel').forEach(sel => {
     if(sel.value && !found) found = sel.value;
   });
-  return found || "متميز المستوي ✨";
+  return found || "ممتاز 🌟";
 }
 
 // ═══════════════════════════════════════════════
-// محرك الرسم الاحترافي على الـ Canvas
+// محرك الرسم الاحترافي على الـ Canvas للمستندات منفصلة
 // ═══════════════════════════════════════════════
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
@@ -473,7 +474,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     var dateTxt = hijriDate(); ctx.font = '700 24px Cairo, sans-serif';
     var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
-    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; stroke();
+    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
   }
   y += 38;
@@ -520,38 +521,38 @@ function layoutReport(ctx, canvasH, nm, data, draw){
 }
 
 // ═══════════════════════════════════════════════
-// لوحة رسم شهادة التقدير المراجعة والمطورة بالكامل
+// لوحة رسم شهادة التقدير المصححة وبتركيز تفصيلي على الأركان الثلاثة والإمضاء
 // ═══════════════════════════════════════════════
 async function drawAppreciationReport(nm, rating, ratingsObj) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = 1320; // تم زيادة الارتفاع ليتسع للحصاد المفصل والإمضاء الرسمي بروعة
+  canvas.height = 1450; // تم ضبط الارتفاع ليتسع للحصاد التفصيلي للأركان الثلاثة والإمضاء الرسمي دون أي نقص
   var ctx = canvas.getContext('2d');
   
-  // خلفية فاخرة
+  // خلفية ملكية فاخرة بنقوش زاوية
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
   bgG.addColorStop(0, '#ebdcb9'); bgG.addColorStop(1, '#dfce9f'); 
   ctx.fillStyle = bgG; ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawCornerBrackets(ctx, canvas.width, canvas.height, 24, 50, '#8a6d0a');
   
-  // الهلال العلوي الجمالي
+  // أيقونة الهلال العلوي الجمالي للمركز
   ctx.save(); ctx.beginPath(); ctx.arc(540, 95, 48, 0, Math.PI * 2); ctx.fillStyle = '#601212'; ctx.fill(); ctx.lineWidth = 3.5; ctx.strokeStyle = '#d4af37'; ctx.stroke();
   ctx.font = '42px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#d4af37'; ctx.fillText('🌙', 540, 97); ctx.restore();
   
   ctx.font = '700 44px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 210);
   ctx.beginPath(); ctx.moveTo(400, 248); ctx.lineTo(680, 248); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.stroke();
   
-  // التقييم العام بأعلى الشهادة
+  // عرض التقييم العام بأعلى المستند
   drawPill(ctx, 'مستوى ' + rating, 540, 280, { font: '800 30px Cairo, sans-serif', bg: '#fdf6e0', color: '#8a6d0a', border: '#d4af37', borderWidth: 2, h: 58, padX: 34, align: 'center' });
   
-  var textY = 400; ctx.font = '700 33px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
+  var textY = 390; ctx.font = '700 34px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
   
-  // نصوص بليغة ومصححة بالكامل
-  var p1 = 'مِنْ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + '، سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
-  var p2 = 'فَإِنَّ الْحَدِيثَ عَنْ بَطَلِنَا حَدِيثُ سُرُورٍ وَفَخْرٍ، فَقَدْ بَلَغَ مِنَ الْإِتْقَانِ وَحُسْنِ الْأَدَاءِ مَبْلَغاً يَسُرُّ كُلَّ مَنْ يُتَابِعُ خُطَاهُ التَّعْلِيمِيَّةَ وَالتَّرْبَوِيَّةَ، وَهُوَ مَوْضِعُ اعْتِزَازٍ نَفْخَرُ بِهِ نَظِيرَ تَمَيُّزِهِ الْوَاضِحِ.';
-  var p3 = 'وَنَحْنُ إِذْ نُقَدِّمُ هَذَا التَّقْيِيمَ، نُوصِي بَطَلَنَا بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ، وَالِاسْتِمْرَارِ فِي التَّكْرَارِ وَالتَّسْمِيعِ لِيَظَلَّ كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ وَعَقْلِهِ.';
-  var p4 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ الطَّيِّبَيْنِ.';
+  // نصوص التقييم البليغة والكاملة بعد مراجعتها وتصحيح العبارات الناقصة لغوياً
+  var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ وَرَعَاهُ)؛ سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
+  var p2 = 'فَإِنَّ الْحَدِيثَ عَنْ بَطَلِنَا الْكَرِيمِ حَدِيثُ سُرُورٍ وَفَخْرٍ، فَقَدْ بَلَغَ مِنَ الْإِتْقَانِ وَحُسْنِ الْأَدَاءِ مَبْلَغاً يَسُرُّ كُلَّ مَنْ يُتَابِعُ خُطَاهُ التَّعْلِيمِيَّةَ وَالتَّرْبَوِيَّةَ، وَقَدْ أَظْهَرَ بَطَلُنَا تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَهُوَ مَوْضِعُ اعْتِزَازٍ نَفْخَرُ بِهِ بَيْنَ أَقْرَانِهِ.';
+  var p3 = 'وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا التَّقْيِيمَ الْمُفَصَّلَ، نُوصِي بَطَلَنَا بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ، وَالِاسْتِمْرَارِ فِي التَّكْرَارِ وَالتَّسْمِيعِ لِيَبْقَى كِتَابُ اللَّهِ تَعَالَى رَاسِخاً عَمِيقاً فِي قَلْبِهِ وَفِكْرِهِ مَدَى الدَّهْرِ.';
+  var p4 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ الطَّيِّبَيْنِ، وَيُنْبِتَهُ نَبَاتاً حَسَناً.';
   
   var maxW = 900;
   var allParagraphs = [wrapText(ctx, p1, maxW), wrapText(ctx, p2, maxW), wrapText(ctx, p3, maxW), wrapText(ctx, p4, maxW)];
@@ -560,37 +561,24 @@ async function drawAppreciationReport(nm, rating, ratingsObj) {
     lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 24;
   });
   
-  // 📊 صندوق الحصاد المفصل للأقسام (التركيز الأساسي المضاف)
+  // 📊 صندوق حصاد أداء البطل الإضافي (التركيز الحصري على الأركان الثلاثة المدخلة)
   var boxY = textY + 10;
-  var boxW = 900;
-  var boxH = 240;
-  var boxX = 90;
-  rr(ctx, boxX, boxY, boxW, boxH, 20);
-  ctx.fillStyle = 'rgba(4, 32, 26, 0.04)';
-  ctx.fill();
-  ctx.strokeStyle = '#0b3d2e';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  var boxW = 900; var boxH = 245; var boxX = 90;
+  rr(ctx, boxX, boxY, boxW, boxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  ctx.font = '800 28px Cairo, sans-serif';
-  ctx.fillStyle = '#04201a';
-  ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 950, boxY + 35);
+  ctx.font = '800 28px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 950, boxY + 35);
 
-  ctx.font = '700 24px Cairo, sans-serif';
-  ctx.fillStyle = '#111827';
-  ctx.fillText('📖 تَقْيِيمُ حِفْظِ وَمُرَاجَعَةِ الآيَاتِ وَالسُّورِ:  ' + ratingsObj.surah, 940, boxY + 95);
-  ctx.fillText('📝 تَقْيِيمُ مَسَارِ أَسْئِلَةِ الْمُذَكِّرَةِ الْجَدِيدَةِ:  ' + ratingsObj.notebook, 940, boxY + 145);
-  ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ وَمَحَاوِرِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 940, boxY + 195);
+  ctx.font = '700 25px Cairo, sans-serif'; ctx.fillStyle = '#111827';
+  ctx.fillText('📖 تَقْيِيمُ حِفْظِ وَمُرَاجَعَةِ الْآيَاتِ وَالسُّورِ:  ' + ratingsObj.surah, 940, boxY + 98);
+  ctx.fillText('📝 تَقْيِيمُ اسْتِيعَابِ وَإِجَابَةِ أَسْئِلَةِ الْمُذَكِّرَةِ:  ' + ratingsObj.notebook, 940, boxY + 148);
+  ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ وَمَحَاوِرِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 940, boxY + 198);
   
-  // ✍️ مربع الإمضاء والتوقيع الرسمي للشيخ
-  var sigY = boxY + boxH + 50;
-  ctx.font = '700 26px Cairo, sans-serif';
-  ctx.fillStyle = '#601212';
-  ctx.textAlign = 'left';
-  ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 360, sigY);
-  ctx.font = '900 36px Amiri, serif';
-  ctx.fillStyle = '#04201a';
-  ctx.fillText('الشيخ عبد الرحمن', 310, sigY + 45);
+  // ✍️ مربع توقيع وإمضاء الشيخ الرسمي أسفل اليسار بكفاءة عالية
+  var sigY = boxY + boxH + 60;
+  ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'left';
+  ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 380, sigY);
+  ctx.font = '900 38px Amiri, serif'; ctx.fillStyle = '#04201a';
+  ctx.fillText('الشيخ عبد الرحمن', 320, sigY + 48);
   
   return canvas;
 }
@@ -603,14 +591,13 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-// نافذة منبثقة مخصصة لعرض وحفظ صورة واحدة فقط عند تعذر الشير المباشر
 function showSingleImageModal(imgSrc, downloadName) {
   var modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
   modal.innerHTML='<img src="'+imgSrc+'" style="max-width:95%;max-height:75vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.4);margin-bottom:20px;">'
     +'<div style="display:flex;gap:12px;justify-content:center;width:100%;">'
     +'<button id="mbtn-close" style="padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">إغلاق</button>'
-    +'<button id="mbtn-down" style="padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ الجهاز</button>'
+    +'<button id="mbtn-down" style="padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">💾 حفظ على الجهاز</button>'
     +'</div>';
   document.body.appendChild(modal);
   document.getElementById('mbtn-close').onclick=function(){modal.remove();};
@@ -627,22 +614,22 @@ async function shareSingleFile(dataUrl, filename, title, fallbackName) {
   } catch (e) { showSingleImageModal(dataUrl, fallbackName); }
 }
 
-// 1. تشغيل استخراج ومشاركة تقرير المتابعة منفصلاً
+// 1. استخراج تقرير المتابعة منفصلاً تماماً
 async function generateReportOnly() {
   var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
   var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   try {
     var canvas = await drawReport(nm, data);
-    shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'report_'+nm+'.jpg', 'تقرير متابعة البطل', 'تقرير_متابعة_'+nm+'.jpg');
+    shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'report_'+nm+'.jpg', 'تقرير متابعة الحفظ', 'تقرير_متابعة_'+nm+'.jpg');
   } catch (e) { alert('حدث خطأ: ' + e.message); }
 }
 
-// 2. تشغيل استخراج ومشاركة شهادة التقييم منفصلة وبتركيز تفصيلي
+// 2. استخراج شهادة التقييم منفصلة مع التركيز على تقييم الآيات والمذكرة والسراج والإمضاء
 async function generateAppreciationOnly() {
   var nm = document.getElementById('inp-student').value.trim(); if (!nm) { alert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   
-  // تجميع التقييمات التفصيلية المدخلة من الأقسام المحددة بالطلب
+  // تجميع وقراءة التقييمات المدخلة لكل ركن من الأركان المطلوبة ديناميكياً
   var ratingsObj = {
     surah: getSectionRating('ns') || getSectionRating('ps') || "ممتاز 🌟",
     notebook: getSectionRating('mq') || getSectionRating('pm') || "ممتاز 🌟",
@@ -655,7 +642,7 @@ async function generateAppreciationOnly() {
   } catch (e) { alert('حدث خطأ: ' + e.message); }
 }
 
-// التنشيط التلقائي لصفوف البداية بكل الأقسام عند التحميل الأول
+// بناء صفوف البداية التلقائية بكل الأقسام عند التحميل الأول للمنصة
 SECTIONS.forEach(sec => {
   if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
