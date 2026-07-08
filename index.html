@@ -4,129 +4,253 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مركز خادم القرآن الكريم</title>
-    
+
     <!-- الخطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <!-- الأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* ألوان واقعية وفخمة جداً */
-            --dark-emerald: #0b2e21; /* أخضر داكن جداً كلون كسوة المصحف */
-            --emerald-light: #164d39;
-            --gold-metallic: #b8934a; /* ذهبي معدني واقعي */
-            --gold-light: #e8d399;
-            --paper-bg: #f4f0e6; /* لون ورق عاجي / رخام فاتح */
-            --white: #ffffff;
-            --text-dark: #1a1a1a;
-            --danger: #b9322b;
+            /* === نظام الألوان: تذهيب المخطوطات === */
+            --ink-950: #071510;
+            --ink-900: #0a1f18;
+            --emerald-800: #0d3327;
+            --emerald-700: #134a37;
+            --emerald-600: #1b5f47;
+            --emerald-500: #24785a;
+
+            --gold-700: #8f6a2c;
+            --gold-600: #b8873a;
+            --gold-500: #cf9f4e;
+            --gold-400: #e3c26a;
+            --gold-200: #f3e3b2;
+
+            --paper: #f6efdf;
+            --paper-2: #efe4c9;
+            --paper-edge: #ddceaa;
+
+            --ink-text: #16241d;
+            --ink-muted: #5b6a60;
+            --danger: #9c3a33;
+
+            --radius-lg: 20px;
+            --radius-md: 14px;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--paper-bg);
-            /* تأثير ملمس الورق/الرخام الخفيف في الخلفية */
-            background-image: 
-                radial-gradient(rgba(184, 147, 74, 0.05) 2px, transparent 2px),
-                linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
-            background-size: 20px 20px, 100% 100%;
+            font-family: 'Tajawal', sans-serif;
+            color: var(--ink-text);
+            background-color: var(--paper);
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(184,135,58,0.06), transparent 45%),
+                radial-gradient(circle at 85% 30%, rgba(19,74,55,0.05), transparent 40%),
+                repeating-linear-gradient(135deg, rgba(184,135,58,0.035) 0px, rgba(184,135,58,0.035) 1px, transparent 1px, transparent 26px);
             background-attachment: fixed;
             overflow-x: hidden;
-            padding-bottom: 60px;
+            padding-bottom: 70px;
         }
 
-        /* شاشة الدخول الافتتاحية */
+        /* اطار زخرفي علوي وسفلي ثابت، بمثابة "حافة المخطوطة" */
+        body::before, body::after {
+            content: "";
+            position: fixed;
+            left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent, var(--gold-500) 20%, var(--gold-200) 50%, var(--gold-500) 80%, transparent);
+            z-index: 500;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        body::before { top: 0; }
+        body::after { bottom: 0; }
+
+        /* ===== شاشة الدخول الافتتاحية ===== */
         #welcome-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--dark-emerald), #05140e);
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(207,159,78,0.10), transparent 55%),
+                linear-gradient(160deg, var(--ink-900), var(--ink-950) 65%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s;
+            transition: opacity 0.7s ease, visibility 0.7s;
+            overflow: hidden;
         }
+
+        /* الخاتم الذهبي الدوّار — العنصر المميز للتصميم */
+        .khatam {
+            position: absolute;
+            width: min(90vw, 640px);
+            height: min(90vw, 640px);
+            border-radius: 50%;
+            opacity: 0.35;
+            background:
+                repeating-conic-gradient(from 0deg,
+                    rgba(227,194,106,0.35) 0deg 11.25deg,
+                    transparent 11.25deg 22.5deg);
+            -webkit-mask: radial-gradient(circle, transparent 38%, black 39%, black 41%, transparent 42%),
+                          radial-gradient(circle, black 0 100%);
+            -webkit-mask-composite: source-in;
+            mask-composite: intersect;
+            animation: spin-slow 90s linear infinite;
+        }
+        .khatam.reverse {
+            width: min(70vw, 480px);
+            height: min(70vw, 480px);
+            opacity: 0.5;
+            animation: spin-slow-rev 70s linear infinite;
+        }
+        @keyframes spin-slow { to { transform: rotate(360deg); } }
+        @keyframes spin-slow-rev { to { transform: rotate(-360deg); } }
 
         #welcome-screen h1 {
-            color: var(--gold-metallic);
+            position: relative;
+            color: var(--gold-400);
             font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 50px;
+            font-size: clamp(2rem, 6vw, 3.6rem);
+            margin: 0 0 14px;
             text-align: center;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            letter-spacing: 0.5px;
+        }
+        .welcome-eyebrow {
+            position: relative;
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-200);
+            opacity: 0.75;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            margin-bottom: 46px;
         }
 
-        /* زر البداية - تصميم واقعي ملموس */
         .start-btn {
-            background: linear-gradient(to bottom, #d4af37, var(--gold-metallic));
-            color: var(--dark-emerald);
-            border: 1px solid #8f6e2e;
-            padding: 15px 50px;
-            font-size: 1.6rem;
+            position: relative;
+            background: linear-gradient(to bottom, var(--gold-400), var(--gold-600));
+            color: var(--ink-950);
+            border: 1px solid var(--gold-700);
+            padding: 16px 54px;
+            font-size: 1.5rem;
             font-family: 'Amiri', serif;
-            font-weight: bold;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 
-                inset 0 2px 0 rgba(255,255,255,0.4), /* لمعة علوية */
-                0 6px 0 #8f6e2e, /* سمك الزر */
-                0 10px 20px rgba(0,0,0,0.4); /* الظل */
-            transition: all 0.1s ease;
+            box-shadow:
+                inset 0 2px 0 rgba(255,255,255,0.45),
+                0 6px 0 var(--gold-700),
+                0 12px 24px rgba(0,0,0,0.45);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
         .start-btn:active {
             transform: translateY(6px);
-            box-shadow: 
-                inset 0 1px 0 rgba(255,255,255,0.2), 
-                0 0 0 #8f6e2e, 
-                0 2px 5px rgba(0,0,0,0.4);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 var(--gold-700), 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        /* الهيدر */
+        /* ===== الهيدر ===== */
         header {
-            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
-            color: var(--white);
-            text-align: center;
-            padding: 50px 20px 60px;
-            border-bottom: 6px solid var(--gold-metallic);
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 40px;
             position: relative;
+            background:
+                radial-gradient(circle at 50% -20%, rgba(227,194,106,0.10), transparent 55%),
+                linear-gradient(180deg, var(--emerald-700), var(--ink-900) 120%);
+            color: var(--paper);
+            text-align: center;
+            padding: 56px 24px 64px;
+            border-radius: 0 0 32px 32px;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+            margin-bottom: 44px;
+            overflow: hidden;
+        }
+
+        header .khatam {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            opacity: 0.14;
+        }
+
+        /* اطار مزدوج داخل الهيدر بأسلوب حواف المصحف */
+        header .frame {
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(227,194,106,0.35);
+            border-radius: 24px;
+            pointer-events: none;
+        }
+        header .frame::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(227,194,106,0.18);
+            border-radius: 18px;
+        }
+        .corner-mark {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 1px solid var(--gold-400);
+            transform: rotate(45deg);
+            opacity: 0.6;
+        }
+        .corner-mark.tl { top: 2px; left: 2px; }
+        .corner-mark.tr { top: 2px; right: 2px; }
+        .corner-mark.bl { bottom: 2px; left: 2px; }
+        .corner-mark.br { bottom: 2px; right: 2px; }
+
+        header .eyebrow {
+            position: relative;
+            display: inline-block;
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--gold-400);
+            border: 1px solid rgba(227,194,106,0.4);
+            padding: 6px 18px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+            background: rgba(0,0,0,0.12);
         }
 
         header h1 {
+            position: relative;
             font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.1rem, 5.4vw, 3.7rem);
             margin: 0;
-            color: var(--gold-light);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            color: var(--gold-200);
+            text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            line-height: 1.35;
         }
 
         header p {
-            font-size: 1.2rem;
-            margin-top: 10px;
-            color: #d1d8d5;
+            position: relative;
+            font-size: 1.1rem;
+            margin-top: 12px;
+            color: #cdd9d1;
+            font-weight: 500;
         }
 
-        /* شريط النصائح */
+        /* ===== شريط النصائح ===== */
         .ticker-container {
-            width: 90%;
-            max-width: 950px;
-            margin: -70px auto 45px;
-            background: linear-gradient(to bottom, #ffffff, #fcfbf8);
-            border: 1px solid #e0d9c8;
+            width: 92%;
+            max-width: 960px;
+            margin: -74px auto 46px;
+            background: linear-gradient(to bottom, #fffdf8, var(--paper));
+            border: 1px solid var(--paper-edge);
             border-radius: 50px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08), inset 0 -2px 0 #e0d9c8;
-            padding: 10px 15px;
+            box-shadow: 0 10px 26px rgba(10,31,24,0.14), inset 0 -2px 0 var(--paper-edge);
+            padding: 8px 8px 8px 18px;
             position: relative;
             z-index: 10;
             display: flex;
@@ -134,185 +258,207 @@
         }
 
         .ticker-label {
-    background: linear-gradient(to bottom, var(--gold-metallic), #9e7b3a);
-    color: #fff;
-    padding: 4px 10px;      /* أصغر */
-    border-radius: 16px;
-    font-size: 0.8rem;      /* تصغير الكتابة */
-    font-weight: bold;
-    white-space: nowrap;
-    margin-left: 10px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.2);
-    z-index: 2;
-}
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(to bottom, var(--gold-500), var(--gold-700));
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            margin-left: 12px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 5px rgba(0,0,0,0.18);
+            flex-shrink: 0;
+        }
 
         .ticker-wrap {
             flex-grow: 1;
             overflow: hidden;
             position: relative;
-            height: 35px;
+            height: 34px;
             display: flex;
             align-items: center;
+            -webkit-mask-image: linear-gradient(to left, transparent, black 8%, black 92%, transparent);
+            mask-image: linear-gradient(to left, transparent, black 8%, black 92%, transparent);
         }
 
-        .ticker-text {
-    position: absolute;
-    white-space: nowrap;
-    color: var(--dark-emerald);
-    font-weight: 700;
-    font-size: 1.1rem;
-    animation: scrollText 90s linear infinite;
+        .ticker-track {
+            display: flex;
+            white-space: nowrap;
+            animation: scrollText 48s linear infinite;
+            will-change: transform;
         }
-
-        .ticker-text span { margin: 0 40px; }
+        .ticker-track span {
+            color: var(--emerald-800);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-left: 56px;
+        }
+        .ticker-track span i { color: var(--gold-600); margin-left: 8px; }
 
         @keyframes scrollText {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(100%);
-    }
-        
-}
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
 
-        /* شبكة الكروت */
+        /* ===== شبكة الكروت ===== */
+        .section-heading {
+            text-align: center;
+            margin: 0 auto 30px;
+            max-width: 700px;
+            padding: 0 20px;
+        }
+        .section-heading .eyebrow {
+            display: inline-block;
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-700);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .section-heading h2 {
+            font-family: 'Amiri', serif;
+            color: var(--emerald-800);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin: 0;
+        }
+
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
+            gap: 26px;
             padding: 10px 20px;
-            max-width: 1050px;
+            max-width: 1080px;
             margin: 0 auto;
         }
 
-        /* تصميم الكارت الواقعي (ملمس الورق المقوى) */
         .card {
-            background: linear-gradient(135deg, #ffffff, #fdfbf7);
-            border: 1px solid #e5dfd3;
-            border-radius: 16px;
-            padding: 25px 20px 20px;
-            box-shadow: 
-                0 8px 15px rgba(0,0,0,0.05), 
-                0 3px 6px rgba(0,0,0,0.04),
-                inset 0 -3px 0 rgba(0,0,0,0.02); /* حافة سفلية واقعية */
+            position: relative;
+            background: linear-gradient(160deg, #fffdf9, var(--paper));
+            border: 1px solid var(--paper-edge);
+            border-radius: var(--radius-lg);
+            padding: 28px 22px 22px;
+            box-shadow:
+                0 10px 20px rgba(10,31,24,0.06),
+                0 3px 8px rgba(10,31,24,0.05),
+                inset 0 -3px 0 rgba(10,31,24,0.02);
             text-align: center;
-            transition: all 0.15s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            /* شريط ذهبي علوي رفيع كترويسة صفحة مخطوطة */
+            content: "";
+            position: absolute;
+            top: 0; left: 14%; right: 14%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-500), transparent);
+            border-radius: 0 0 6px 6px;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 28px rgba(10,31,24,0.10), 0 4px 10px rgba(10,31,24,0.06);
         }
 
-        /* الأيقونة داخل دائرة مذهبة */
         .card-icon-wrap {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(to bottom, #fdfdfc, #f4eee1);
-            color: var(--dark-emerald);
-            border: 2px solid var(--gold-metallic);
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(to bottom, #fffef9, var(--paper-2));
+            color: var(--emerald-800);
+            border: 2px solid var(--gold-500);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 15px;
+            margin: 0 auto 16px;
             font-size: 1.6rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 10px rgba(10,31,24,0.10);
         }
 
         .card h3 {
             margin: 0 0 8px 0;
-            color: var(--dark-emerald);
-            font-size: 1.4rem;
-            font-weight: 800;
+            color: var(--emerald-800);
+            font-family: 'Amiri', serif;
+            font-size: 1.45rem;
+            font-weight: 700;
         }
 
         .card p {
-            color: #666;
-            font-size: 1rem;
-            margin: 0 0 15px 0;
-            font-weight: 600;
+            color: var(--ink-muted);
+            font-size: 0.98rem;
+            margin: 0 0 16px 0;
+            font-weight: 500;
         }
 
-        .stars {
-            color: var(--gold-metallic);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
+        .stars { color: var(--gold-600); font-size: 0.85rem; margin-bottom: 20px; }
 
-        .card-actions {
-            display: flex;
-            gap: 12px;
-        }
+        .card-actions { display: flex; gap: 12px; }
 
-        /* الأزرار الواقعية 3D */
         .btn {
             flex: 1;
-            padding: 10px;
+            padding: 11px;
             border: none;
-            border-radius: 8px;
-            font-family: 'Cairo', sans-serif;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.1s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 6px;
         }
 
-        /* زر الدخول (أخضر ملكي) */
         .btn-enter {
-            background: linear-gradient(to bottom, var(--emerald-light), var(--dark-emerald));
-            border: 1px solid #072017;
-            color: var(--gold-light);
-            text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-            box-shadow: 
-                inset 0 1px 0 rgba(255,255,255,0.2), 
-                0 4px 0 #072017, 
-                0 5px 10px rgba(0,0,0,0.2);
+            background: linear-gradient(to bottom, var(--emerald-600), var(--emerald-800));
+            border: 1px solid var(--ink-900);
+            color: var(--gold-200);
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 0 var(--ink-900), 0 6px 12px rgba(10,31,24,0.2);
         }
         .btn-enter:active {
             transform: translateY(4px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 #072017, 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 var(--ink-900), 0 1px 2px rgba(10,31,24,0.2);
         }
 
-        /* زر المشاركة (أبيض/عاجي) */
         .btn-share {
-            background: linear-gradient(to bottom, #ffffff, #eceadd);
-            border: 1px solid #c2bbae;
-            color: var(--text-dark);
-            box-shadow: 
-                inset 0 1px 0 #fff, 
-                0 4px 0 #c2bbae, 
-                0 5px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(to bottom, #ffffff, var(--paper-2));
+            border: 1px solid var(--paper-edge);
+            color: var(--ink-text);
+            box-shadow: inset 0 1px 0 #fff, 0 4px 0 var(--paper-edge), 0 6px 12px rgba(10,31,24,0.08);
         }
         .btn-share:active {
             transform: translateY(4px);
-            box-shadow: inset 0 1px 0 #fff, 0 0 0 #c2bbae, 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 0 #fff, 0 0 0 var(--paper-edge), 0 1px 2px rgba(10,31,24,0.08);
         }
 
-        /* الكارت المحمي (التقييم والمتابعة) */
         .card-locked {
-            background: linear-gradient(135deg, #fafafa, #eeeeee);
-            border-color: #cccccc;
+            background: linear-gradient(160deg, #fafaf7, #eeece4);
+            border-color: #d8d2c2;
         }
-        .card-locked .card-icon-wrap { border-color: #999; color: #777; background: #e0e0e0; }
-        .card-locked h3 { color: #555; }
+        .card-locked .card-icon-wrap { border-color: #9a9484; color: #6b6659; background: #e6e2d6; }
+        .card-locked h3 { color: #6b6659; }
         .card-locked .btn-enter {
-            background: linear-gradient(to bottom, #7f8c8d, #636e72);
-            border-color: #2d3436;
-            color: #ddd;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 0 #2d3436, 0 5px 10px rgba(0,0,0,0.2);
+            background: linear-gradient(to bottom, #837b68, #5c5648);
+            border-color: #2f2b21;
+            color: #f0e9d6;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 0 #2f2b21, 0 6px 12px rgba(10,31,24,0.2);
         }
+        .card-locked::before { background: linear-gradient(90deg, transparent, #9a9484, transparent); }
 
-        /* نافذة الباسورد */
+        /* ===== نافذة كلمة المرور ===== */
         #password-modal {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
+            inset: 0;
+            background: rgba(7,21,16,0.72);
+            backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -321,42 +467,55 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-content {
-            background: linear-gradient(to bottom, #ffffff, var(--paper-bg));
-            padding: 35px 30px;
-            border-radius: 15px;
+            position: relative;
+            background: linear-gradient(160deg, #fffdf8, var(--paper));
+            padding: 38px 32px;
+            border-radius: var(--radius-lg);
             text-align: center;
             width: 90%;
-            max-width: 360px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            border: 2px solid var(--gold-metallic);
+            max-width: 370px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+            border: 2px solid var(--gold-500);
             transform: scale(0.8);
             transition: transform 0.3s ease;
         }
-
         #password-modal.active .modal-content { transform: scale(1); }
+        .modal-content .corner-mark { border-color: var(--gold-600); opacity: 0.5; }
+        .modal-content .corner-mark.tl { top: 8px; left: 8px; }
+        .modal-content .corner-mark.tr { top: 8px; right: 8px; }
+        .modal-content .corner-mark.bl { bottom: 8px; left: 8px; }
+        .modal-content .corner-mark.br { bottom: 8px; right: 8px; }
 
-        .modal-content h3 { color: var(--dark-emerald); margin: 0 0 10px; font-size: 1.6rem; font-weight: 800;}
-        
+        .modal-content h3 {
+            color: var(--emerald-800);
+            margin: 0 0 10px;
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .modal-content h3 i { color: var(--gold-600); }
+
+        #modal-desc { color: var(--ink-muted); font-size: 0.95rem; font-weight: 700; }
+
         .modal-content input {
             width: 100%;
             padding: 15px;
             font-size: 1.8rem;
             text-align: center;
-            border: 2px solid #ccc;
-            border-radius: 8px;
+            border: 2px solid var(--paper-edge);
+            border-radius: 10px;
             margin: 20px 0;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Tajawal', sans-serif;
             letter-spacing: 12px;
             background: #fff;
-            color: var(--dark-emerald);
-            font-weight: bold;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            color: var(--emerald-800);
+            font-weight: 700;
+            box-shadow: inset 0 2px 4px rgba(10,31,24,0.06);
         }
-        .modal-content input:focus { outline: none; border-color: var(--gold-metallic); }
+        .modal-content input:focus { outline: none; border-color: var(--gold-500); }
 
         .modal-buttons { display: flex; gap: 12px; }
 
@@ -365,10 +524,10 @@
             font-weight: 700;
             margin-bottom: 15px;
             display: none;
-            background: #fdf0ef;
+            background: #fbeeec;
             padding: 10px;
             border-radius: 8px;
-            border: 1px solid #f5c6c4;
+            border: 1px solid #edc9c5;
             animation: shake 0.4s;
         }
 
@@ -379,18 +538,38 @@
             75% { transform: translateX(-6px); }
         }
 
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 0 20px;
+            color: var(--ink-muted);
+            font-size: 0.9rem;
+        }
+        footer .divider {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-500), transparent);
+            margin: 0 auto 16px;
+        }
+
+        @media (max-width: 420px) {
+            .ticker-container { margin-top: -60px; }
+        }
     </style>
 </head>
 <body>
 
     <!-- الصوتيات -->
-    <!-- مقطع الشيخ الحصري (تم ضبطه ليبدأ من ورتل تماماً) -->
     <audio id="quranAudio" src="https://everyayah.com/data/Husary_128kbps/073004.mp3" preload="auto"></audio>
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
     <audio id="successSound" src="welcome.mp3" preload="auto"></audio>
-    <!-- شاشة البداية لتشغيل الصوتيات -->
+
+    <!-- شاشة البداية -->
     <div id="welcome-screen">
+        <div class="khatam"></div>
+        <div class="khatam reverse"></div>
+        <div class="welcome-eyebrow">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
         <button class="start-btn" onclick="startWebsite()">بسم الله نبدأ</button>
     </div>
@@ -398,13 +577,17 @@
     <!-- نافذة كلمة المرور -->
     <div id="password-modal">
         <div class="modal-content">
+            <span class="corner-mark tl"></span>
+            <span class="corner-mark tr"></span>
+            <span class="corner-mark bl"></span>
+            <span class="corner-mark br"></span>
             <h3><i class="fas fa-lock"></i> منطقة محمية</h3>
-            <p id="modal-desc" style="color:#555; font-size:0.95rem; font-weight: bold;">أدخل رمز المرور لفتح المتابعة</p>
-            
+            <p id="modal-desc">أدخل رمز المرور لفتح المتابعة</p>
+
             <div id="error-msg" class="error-msg">❌ الرمز غير صحيح!</div>
-            
+
             <div id="input-area">
-                <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off">
+                <input type="password" id="pass-input" placeholder="••••" maxlength="4" autocomplete="off" inputmode="numeric">
                 <div class="modal-buttons">
                     <button class="btn btn-enter" onclick="checkPassword()">دخول</button>
                     <button class="btn btn-share" onclick="closeModal()">إلغاء</button>
@@ -415,46 +598,37 @@
 
     <!-- المحتوى الأساسي -->
     <header>
+        <div class="khatam"></div>
+        <div class="frame"></div>
+        <span class="corner-mark tl"></span>
+        <span class="corner-mark tr"></span>
+        <span class="corner-mark bl"></span>
+        <span class="corner-mark br"></span>
+        <span class="eyebrow">مرحباً بكم</span>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ الكَرِيمِ</h1>
         <p>تحت إشراف الشيخ عبدالرحمن</p>
     </header>
 
     <!-- شريط النصائح -->
     <div class="ticker-container">
-        <div class="ticker-label">
-    <i class="fas fa-lightbulb" style="font-size:13px;"></i>
-    قطوف إسلامية
-</div>
+        <div class="ticker-label"><i class="fas fa-lightbulb"></i>قطوف إسلامية</div>
         <div class="ticker-wrap">
-            <div class="ticker-text">
-                <span>الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة والراحة.</span>
-                <span>الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
-                <span>الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
-                <span>تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
-    <span>الصلاة نور يضيء دربك</span>
-    <span>الصوم مدرسة لتهذيب النفس</span>
-    <span>الصدقة تطفئ غضب الرب</span>
-    <span>تلاوة القرآن تجلي هموم القلب</span>
-<span>الصلاة نور يضيء دربك...</span>
-<span>الصوم مدرسة...</span>
-<span>الصدقة...</span>
-<span>تلاوة القرآن...</span>
-
-<span>الصلاة نور يضيء دربك...</span>
-<span>الصوم مدرسة...</span>
-<span>الصدقة...</span>
-<span>تلاوة القرآن...</span>
-
-<span>الصلاة نور يضيء دربك...</span>
-<span>الصوم مدرسة...</span>
-<span>الصدقة...</span>
-<span>تلاوة القرآن...</span>
+            <div class="ticker-track" id="tickerTrack">
+                <span><i class="fas fa-star-and-crescent"></i>الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة والراحة.</span>
+                <span><i class="fas fa-star-and-crescent"></i>الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
+                <span><i class="fas fa-star-and-crescent"></i>الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
+                <span><i class="fas fa-star-and-crescent"></i>تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
             </div>
         </div>
     </div>
 
+    <div class="section-heading">
+        <div class="eyebrow">اختر وجهتك</div>
+        <h2>محتوى مختار لخدمتك</h2>
+    </div>
+
     <main class="cards-container">
-        
+
         <!-- الكارت 1 -->
         <div class="card">
             <div class="card-icon-wrap"><i class="fas fa-book-open"></i></div>
@@ -499,34 +673,39 @@
             <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('part2.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage('  الحياه السعيده', 'part2.html', false, event)"><i class="fas fa-share-nodes"></i></button>
+                <button class="btn btn-share" onclick="sharePage('الحياه السعيده', 'part2.html', false, event)"><i class="fas fa-share-nodes"></i></button>
             </div>
         </div>
-        
-<!-- الكارت 4 -->
+
+        <!-- الكارت 5 -->
         <div class="card">
             <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
-            <h3>  المصحف الكريم</h3>
-            <p>   ورتل القرآن ترتيلا</p>
+            <h3>المصحف الكريم</h3>
+            <p>ورتل القرآن ترتيلا</p>
             <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('mos7af.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage(' المصحف الكريم  ', 'mos7af.html', false, event)"><i class="fas fa-share-nodes"></i></button>
+                <button class="btn btn-share" onclick="sharePage('المصحف الكريم', 'mos7af.html', false, event)"><i class="fas fa-share-nodes"></i></button>
             </div>
         </div>
-                
-<!-- الكارت 4 -->
+
+        <!-- الكارت 6 -->
         <div class="card">
             <div class="card-icon-wrap"><i class="fas fa-star-and-crescent"></i></div>
-            <h3>  كتاب الاخيار</h3>
-            <p>   ماتيسر من الاخاديث  </p>
+            <h3>كتاب الأخيار</h3>
+            <p>ما تيسر من الأحاديث</p>
             <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
             <div class="card-actions">
                 <button class="btn btn-enter" onclick="navigate('alakhyar.html', event)">دخول</button>
-                <button class="btn btn-share" onclick="sharePage(' الاخيار   ', 'alakhyar.html', false, event)"><i class="fas fa-share-nodes"></i></button>
+                <button class="btn btn-share" onclick="sharePage('الأخيار', 'alakhyar.html', false, event)"><i class="fas fa-share-nodes"></i></button>
             </div>
         </div>
     </main>
+
+    <footer>
+        <div class="divider"></div>
+        وَقُل رَّبِّ زِدْنِي عِلْمًا
+    </footer>
 
     <script>
         const clickSound = document.getElementById('clickSound');
@@ -535,22 +714,23 @@
         const successSound = document.getElementById('successSound');
         let targetProtectedUrl = '';
 
+        // تكرار محتوى الشريط مرة واحدة إضافية لعمل حلقة سلسة بلا فجوات
+        const track = document.getElementById('tickerTrack');
+        track.innerHTML += track.innerHTML;
+
         function playClick() {
             clickSound.currentTime = 0;
             clickSound.play().catch(()=>{});
         }
 
-        // إزالة غلاف الشاشة وبدء الآية بصوت الشيخ الحصري من كلمة "ورتل"
         function startWebsite() {
             playClick();
-            
-            // تم ضبط التوقيت إلى 3.4 ثانية لالتقاط حرف الواو من "ورتل" بدقة للشيخ الحصري
-            quranAudio.currentTime = 3.4; 
+            quranAudio.currentTime = 3.4;
             quranAudio.play().catch(()=>{});
-            
+
             const screen = document.getElementById('welcome-screen');
             screen.style.opacity = '0';
-            setTimeout(() => { screen.style.visibility = 'hidden'; }, 600);
+            setTimeout(() => { screen.style.visibility = 'hidden'; }, 700);
         }
 
         function navigate(url, event) {
@@ -562,8 +742,7 @@
             playClick();
             targetProtectedUrl = url;
             document.getElementById('password-modal').classList.add('active');
-            
-            // إعادة العناصر لوضعها الطبيعي
+
             document.getElementById('input-area').style.display = 'block';
             document.getElementById('modal-desc').style.display = 'block';
             document.getElementById('pass-input').value = '';
@@ -576,25 +755,20 @@
             document.getElementById('password-modal').classList.remove('active');
         }
 
-        // فحص الباسورد - استجابة صوتية خالصة عند النجاح
         function checkPassword() {
             const pass = document.getElementById('pass-input').value;
             const errorMsg = document.getElementById('error-msg');
             const inputArea = document.getElementById('input-area');
             const modalDesc = document.getElementById('modal-desc');
-            
+
             if (pass === '7222') {
                 errorMsg.style.display = 'none';
-                
-                // إخفاء كافة النصوص وحقول الإدخال تماماً
                 inputArea.style.display = 'none';
                 modalDesc.style.display = 'none';
-                
-                // تشغيل الصوت فقط دون أي رسالة نصية
+
                 successSound.currentTime = 0;
                 successSound.play().catch(()=>{});
 
-                // الانتظار حتى انتهاء الصوت ثم التوجيه
                 setTimeout(() => {
                     window.location.href = targetProtectedUrl;
                 }, 2500);
@@ -602,10 +776,10 @@
             } else {
                 errorSound.currentTime = 0;
                 errorSound.play().catch(()=>{});
-                
+
                 errorMsg.style.display = 'block';
                 document.getElementById('pass-input').value = '';
-                
+
                 errorMsg.style.animation = 'none';
                 setTimeout(() => errorMsg.style.animation = 'shake 0.4s', 10);
             }
