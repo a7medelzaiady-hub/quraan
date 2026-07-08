@@ -84,13 +84,13 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-body">
       <div class="frow">
         <div class="flbl">اسم البطل الكريم</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل ثلاثياً بشكل واضح...">
+        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل">
       </div>
       <div class="frow">
         <div class="flbl">التقييم العام للمسار</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
-            <option value="بارك الله فيه 👑">مستوى بارك الله فيه 👑</option>
+            <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
             <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
@@ -209,7 +209,7 @@ function addCurrentSurah(containerId, prefix){
     '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+'-c-'+idx+'" onchange="toggleRange(\'rng-'+prefix+'-c-'+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
     '<div class="range-row hidden" id="rng-'+prefix+'-c-'+idx+'" style="grid-column:1/-1;"><div class="frow"><input class="inp num main-f" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" type="number" placeholder="إلى آية"></div></div>'+
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:5px;">'+
-      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيه 👑">بارك الله فيه 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
+      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<input class="inp num error-inp" type="number" placeholder="عدد الأخطاء ❌">'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -235,7 +235,7 @@ function addCurrentQuestion(containerId, prefix){
     '<div class="frow"><input class="inp num main-qf" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num main-qt" type="number" placeholder="'+pTo+'"></div>'+
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:5px;">'+
-      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيه 👑">بارك الله فيه 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
+      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<input class="inp num error-inp" type="number" placeholder="عدد الأخطاء ❌">'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -296,7 +296,7 @@ function getSectionRating(prefix) {
   document.querySelectorAll('[id^="crow-'+prefix+'-"] .rating-sel').forEach(sel => {
     if(sel.value && !found) found = sel.value;
   });
-  return found || "بارك الله فيه 👑";
+  return found || "بارك الله فيك 👑";
 }
 
 function getPersonalizedAdvice(data) {
@@ -320,7 +320,7 @@ function getPersonalizedAdvice(data) {
 
           if (item.rating === 'يحتاج مراجعة 📖' || item.rating === 'جيد 👍' || (item.rating && item.rating.includes('جيد'))) {
             low.push(name);
-          } else if (item.rating === 'بارك الله فيه 👑' || (item.rating && item.rating.includes('بارك الله'))) {
+          } else if (item.rating === 'بارك الله فيك 👑' || (item.rating && item.rating.includes('بارك الله'))) {
             high.push(name);
           }
         });
@@ -387,7 +387,6 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
   var w = ctx.measureText(text).width + padX * 2.5;
   var left = opts.align === 'left' ? anchorX : (opts.align === 'center' ? anchorX - w/2 : anchorX - w);
   if(opts.draw !== false){
-    // رسم الخلفية مع انحناء خفيف فاخر ونقاط زخرفية جانية وليس دائرية تقليدية
     ctx.beginPath();
     ctx.moveTo(left + 15, y);
     ctx.lineTo(left + w - 15, y);
@@ -401,7 +400,6 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
     ctx.fillStyle = opts.bg || '#ffffff'; ctx.fill();
     if(opts.border){ 
       ctx.lineWidth = opts.borderWidth || 2; ctx.strokeStyle = opts.border; ctx.stroke(); 
-      // إضافة خط داخلي جمالي للمظهر الملكي
       ctx.save(); ctx.strokeStyle = opts.border; ctx.lineWidth = 0.8; ctx.globalAlpha = 0.5;
       ctx.stroke(); ctx.restore();
     }
@@ -550,7 +548,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
         rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
         ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
         var rs = item.rating ? ratingStyle(item.rating) : {border: PALETTE.mid};
-        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = rs.border; ctx.fill(); restore();
+        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = rs.border; ctx.fill(); ctx.restore(); // تم إصلاح الخطأ البرمجي هنا
         renderItemCard(ctx, item, sec, cardX, y, cardW, true);
       }
       y += h + 16;
@@ -583,7 +581,7 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = 1950; /* تم زيادة الارتفاع لترك تباعد كامل بين الفقرات يمنع أي تداخل عمودي */
+  canvas.height = 1950;
   var ctx = canvas.getContext('2d');
   
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
@@ -597,10 +595,8 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   ctx.font = '700 46px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 230);
   ctx.beginPath(); ctx.moveTo(380, 270); ctx.lineTo(700, 270); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2.5; ctx.stroke();
   
-  /* البادج المطور بدلاً من الشكل التقليدي الدائري */
   drawRoyalPill(ctx, 'مستوى ' + rating, 540, 310, { font: '800 32px Cairo, sans-serif', bg: '#fdf8e6', color: '#725304', border: '#d4af37', borderWidth: 2.5, h: 64, padX: 40, align: 'center' });
   
-  /* معالجة وضبط المسافات وسطور النص لإراحتها بصرياً */
   var textY = 440; ctx.font = '700 36px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
   
   var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ)؛';
@@ -613,7 +609,7 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   ctx.textBaseline = 'top';
   
   allParagraphs.forEach(function(lines) {
-    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 54; }); textY += 34; /* مسافات عمودية واسعة وفخمة */
+    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 54; }); textY += 34;
   });
   
   var boxY = textY + 10;
@@ -642,10 +638,8 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
     insideTextY += 20;
   });
   
-  /* تطوير الإمضاء الاحترافي مع ختم ذهبي فخم بجهة اليسار */
   var sigY = boxY + calculatedBoxH + 90;
   
-  // رسم ختم دائري ملكي مائي على خلفية التوقيع لإعطائه صفة رسمية مبهرة
   ctx.save();
   ctx.beginPath(); ctx.arc(220, sigY + 50, 65, 0, Math.PI*2);
   ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)'; ctx.lineWidth = 3; ctx.stroke();
@@ -655,7 +649,6 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   ctx.fillText('مركز خادم القرآن', 220, sigY + 38); ctx.fillText('مُعتمد 🛡️', 220, sigY + 62);
   ctx.restore();
   
-  // خط التوقيع اليدوي الإنسيابي الرائع
   ctx.font = '700 28px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'center';
   ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ', 250, sigY);
   
@@ -686,23 +679,19 @@ function showSingleImageModal(imgSrc, downloadName) {
   document.getElementById('mbtn-down').onclick=function(){ var a=document.createElement('a');a.href=imgSrc;a.download=downloadName;a.click(); };
 }
 
-/* دالة المعالجة المدمجة الجديدة لاستخراج الصورتين كملفات منفصلة تالياً بضغطة زر واحدة */
 async function generateAllOutputs() {
   var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   
   try {
-    // 1. إنشاء ومشاركة التقرير أولاً
     var reportCanvas = await drawReport(nm, data);
     var reportUrl = reportCanvas.toDataURL('image/jpeg', 0.92);
     
-    // 2. إنشاء ومشاركة شهادة التقييم ثانياً
     var adviceLines = getPersonalizedAdvice(data);
     var appCanvas = await drawAppreciationReport(nm, genRating, adviceLines);
     var appUrl = appCanvas.toDataURL('image/jpeg', 0.92);
     
-    // تفعيل نافذة تحميل للملف الأول ثم الثاني
     showSingleImageModal(reportUrl, 'تقرير_متابعة_'+nm+'.jpg');
     setTimeout(() => {
       showSingleImageModal(appUrl, 'شهادة_تقييم_'+nm+'.jpg');
