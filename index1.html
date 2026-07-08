@@ -306,6 +306,49 @@ function getSectionRating(prefix) {
   return found || "ممتاز 🌟";
 }
 
+// 1. محرك توليد النصائح والتوجيهات المخصصة لأولياء الأمور بناءً على مدخلات الجداول
+function getPersonalizedAdvice(data) {
+  let low = [];
+  let high = [];
+
+  if (typeof SECTIONS !== 'undefined' && Array.isArray(SECTIONS)) {
+    SECTIONS.forEach(sec => {
+      let sectionData = data[sec.key];
+      if (sectionData && Array.isArray(sectionData.currents)) {
+        sectionData.currents.forEach(item => {
+          let name = "";
+          if (item.sr) {
+            name = "سورة " + item.sr;
+          } else if (item.f && item.t) {
+            var unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
+            name = sec.title + " (" + unit + " " + item.f + " إلى " + item.t + ")";
+          } else {
+            name = sec.title;
+          }
+
+          if (item.rating === 'يحتاج مراجعة 📖' || item.rating === 'جيد 👍' || (item.rating && item.rating.includes('جيد'))) {
+            low.push(name);
+          } else if (item.rating === 'ممتاز 🌟' || (item.rating && item.rating.includes('ممتاز'))) {
+            high.push(name);
+          }
+        });
+      }
+    });
+  }
+
+  let adviceLines = [];
+  if (low.length > 0) {
+    adviceLines.push("توجيه لولي الأمر: نوصي بشدة بالتركيز والمتابعة المنزلية المكثفة في ( " + low.join('، ') + " ) لتثبيت المادة وتجاوز الصعوبات الحالية.");
+  }
+  if (high.length > 0) {
+    adviceLines.push("نقاط القوة والمواطن المتميزة: ما شاء الله تبارك الله، أظهر البطل إتقاناً مبهراً وسرعة استجابة في ( " + high.join('، ') + " )، استمروا في تعزيزه وتحفيزه!");
+  }
+  if (adviceLines.length === 0) {
+    adviceLines.push("نوصي بالمداومة المستمرة على مراجعة المحفوظات اليومية بانتظام لضمان المحافظة على ثبات هذا المستوى المبارك.");
+  }
+  return adviceLines;
+}
+
 // ═══════════════════════════════════════════════
 // محرك الرسم الاحترافي على الـ Canvas
 // ═══════════════════════════════════════════════
@@ -476,7 +519,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
     var bG = ctx.createLinearGradient(bx, by, bx, by+bh); bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
-    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.restore();
+    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; stroke(); ctx.restore();
     ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
   y = by + bh + 34;
@@ -529,11 +572,12 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   return y + fH;
 }
 
-async function drawAppreciationReport(nm, rating, ratingsObj) {
+// 2. تحديث دالة رسم الشهادة لتستوعب التقرير الاستشاري والنصائح بذكاء ودون تداخل
+async function drawAppreciationReport(nm, rating, adviceLines) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = 1430; 
+  canvas.height = 1750; // زيادة الارتفاع لضمان عدم حدوث تداخل بين السطور
   var ctx = canvas.getContext('2d');
   
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
@@ -562,18 +606,45 @@ async function drawAppreciationReport(nm, rating, ratingsObj) {
     lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 46; }); textY += 18;
   });
   
+  // بناء صندوق الملاحظات والتوجيهات المنزلية الذكي التلقائي
   var boxY = textY + 15;
-  var boxW = 900; var boxH = 265; var boxX = 90;
-  rr(ctx, boxX, boxY, boxW, boxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
-
-  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 حَصَادُ أَدَاءِ الْبَطَلِ فِي الْأَقْسَامِ الرَّئِيسِيَّةِ:', 940, boxY + 30);
-
-  ctx.font = '700 30px Cairo, sans-serif'; ctx.fillStyle = '#111827';
-  ctx.fillText('📖 تَقْيِيمُ آيَاتِ وَسُورِ الْقُرْآنِ:  ' + ratingsObj.surah, 930, boxY + 100);
-  ctx.fillText('📝 تَقْيِيمُ تَمَارِينِ وَأَسْئِلَةِ الْمُذَكِّرَةِ:  ' + ratingsObj.notebook, 930, boxY + 155);
-  ctx.fillText('💡 تَقْيِيمُ مَنْهَجِ السِّرَاجِ الْمُضِيءِ:  ' + ratingsObj.seraj, 930, boxY + 210);
+  var boxW = 900; var boxX = 90;
   
-  var sigY = boxY + boxH + 60;
+  // حساب الارتفاع المطلوب ديناميكياً بناءً على عدد وحجم النصائح لمنع طفح النصوص
+  var calculatedBoxH = 100;
+  ctx.font = '600 28px Cairo, sans-serif';
+  adviceLines.forEach(function(line) {
+    var linesCount = wrapText(ctx, line, 840).length;
+    calculatedBoxH += (linesCount * 44) + 20;
+  });
+  calculatedBoxH = Math.max(calculatedBoxH, 280);
+
+  rr(ctx, boxX, boxY, boxW, calculatedBoxH, 20); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
+
+  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.fillText('📊 التوجيهات التربوية والنصائح المخصصة لولي الأمر:', 940, boxY + 30);
+
+  var insideTextY = boxY + 95;
+  adviceLines.forEach(function(line) {
+    if (line.startsWith("توجيه")) {
+      ctx.fillStyle = '#b91c1c'; // أحمر داكن للفت الانتباه والتنبيهات
+      ctx.font = '700 28px Cairo, sans-serif';
+    } else if (line.startsWith("نقاط")) {
+      ctx.fillStyle = '#15803d'; // أخضر للمدح والثناء
+      ctx.font = '700 28px Cairo, sans-serif';
+    } else {
+      ctx.fillStyle = '#111827';
+      ctx.font = '600 28px Cairo, sans-serif';
+    }
+
+    var wrapped = wrapText(ctx, line, 840);
+    wrapped.forEach(function(l) {
+      ctx.fillText(l, 930, insideTextY);
+      insideTextY += 44;
+    });
+    insideTextY += 15;
+  });
+  
+  var sigY = boxY + calculatedBoxH + 60;
   ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'left';
   ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ:', 380, sigY);
   ctx.font = '900 38px Amiri, serif'; ctx.fillStyle = '#04201a';
@@ -622,18 +693,20 @@ async function generateReportOnly() {
   } catch (e) { customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message); }
 }
 
+// 3. ربط وتمرير النصائح الذكية مباشرة للشهادة لحل كافة مشاكل الـ undefined والقصور البرمجي
 async function generateAppreciationOnly() {
   var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   
-  var ratingsObj = {
-    surah: getSectionRating('ns') || getSectionRating('ps') || "ممتاز 🌟",
-    notebook: getSectionRating('mq') || getSectionRating('pm') || "ممتاز 🌟",
-    seraj: getSectionRating('sj') || "ممتاز 🌟"
-  };
+  // تجميع البيانات بدقة متناهية
+  var data = {}; 
+  SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+  
+  // استدعاء محرك التوجيهات لاستخلاص تقرير الأقسام الحالي
+  var adviceLines = getPersonalizedAdvice(data);
   
   try {
-    var canvas = await drawAppreciationReport(nm, genRating, ratingsObj);
+    var canvas = await drawAppreciationReport(nm, genRating, adviceLines);
     shareSingleFile(canvas.toDataURL('image/jpeg', 0.92), 'appreciation_'+nm+'.jpg', 'شهادة تقييم البطل', 'شهادة_تقييم_'+nm+'.jpg');
   } catch (e) { customAlert('حدث خطأ أثناء إعداد الشهادة: ' + e.message); }
 }
