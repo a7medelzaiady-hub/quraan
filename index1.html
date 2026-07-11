@@ -34,6 +34,47 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
+/* شريط نظام الأخطاء الجديد */
+.system-selector-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 8px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 14px auto 0;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.system-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+}
+.system-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.system-radio-btn {
+  display: none;
+}
+.system-radio-label {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: block;
+}
+.system-radio-btn:checked + .system-radio-label {
+  background: var(--gold);
+  color: var(--green-deep);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
 .section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: hidden; }
 .sec-head { background: var(--green-mid); padding: 14px 16px; }
@@ -64,7 +105,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* تنسيق عداد الأخطاء التفاعلي */
+/* تنسيق عداد الأخطاء التفاعلي الهجين */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
@@ -80,7 +121,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
 .submit-btn:active { transform: scale(0.98); }
 
-/* نافذة مصحف التسميع الذكي الجديدة */
+/* نافذة مصحف التسميع */
 .quran-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 99999; align-items: center; justify-content: center; padding: 16px; }
 .quran-box { background: #fff; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--green-mid); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
 .quran-header { background: var(--green-mid); color: var(--gold-light); padding: 16px; text-align: center; font-weight: 700; font-size: 16px; }
@@ -96,6 +137,18 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-emblem">🕌</div>
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
+  
+  <!-- أزرار اختيار نظام الرصد العلوي الجديد -->
+  <div class="system-selector-wrap">
+    <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
+    <div class="system-grid">
+      <input type="radio" id="sys-count" name="error-system" class="system-system-radio system-system-radio-btn system-radio-btn" value="count" checked onchange="handleSystemChange()">
+      <label for="sys-count" class="system-radio-label">بالعدد التلقائي (1، 2..) 🔢</label>
+      
+      <input type="radio" id="sys-ayah" name="error-system" class="system-system-radio system-system-radio-btn system-radio-btn" value="ayah" onchange="handleSystemChange()">
+      <label for="sys-ayah" class="system-radio-label">برقم الآية / السؤال 🎯</label>
+    </div>
+  </div>
 </div>
 <div class="body">
   <div class="section">
@@ -205,7 +258,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<!-- نافذة مصحف التسميع المرئية الذكية -->
+<!-- نافذة مصحف التسميع التفاعلية المخصصة للآيات -->
 <div class="quran-modal" id="quran-modal">
   <div class="quran-box">
     <div class="quran-header" id="quran-modal-header">مصحف التسميع التفاعلي</div>
@@ -232,12 +285,47 @@ function customAlert(msg) {
   document.getElementById('c-alert-close').onclick=function(){m.remove();};
 }
 
-/* دالة فتح مصحف التسميع بناء على المدخلات */
+/* دالة الاستجابة عند تغيير خيار نظام رصد الأخطاء العلوي لتهيئة الحقول الحالية */
+function handleSystemChange() {
+  var sys = document.querySelector('input[name="error-system"]:checked').value;
+  document.querySelectorAll('.error-inp').forEach(inp => {
+    inp.value = '0';
+    inp.placeholder = sys === 'count' ? "عدد الأخطاء ❌" : "بلا أخطاء ✨";
+  });
+}
+
+/* دالة إدارة عمل أزرار العداد بناء على النظام المختار علوياً */
+function handleCounterAction(action, errorInpId, rowId, isQ) {
+  var sys = document.querySelector('input[name="error-system"]:checked').value;
+  var inp = document.getElementById(errorInpId);
+  if (!inp) return;
+
+  if (sys === 'count') {
+    // نظام الأعداد التلقائي العادي (1، 2، 3)
+    var current = parseInt(inp.value) || 0;
+    if (action === 'plus') {
+      inp.value = current + 1;
+    } else {
+      var down = current - 1;
+      inp.value = down < 0 ? 0 : down;
+    }
+  } else {
+    // نظام مصحف التسميع وشبكة الآيات والأسئلة التفاعلي
+    if (action === 'plus') {
+      openQuranModal(errorInpId, rowId, isQ);
+    } else {
+      // زر الناقص في نظام الآيات يمسح كل شيء ويصفر الحقل
+      inp.value = '0';
+    }
+  }
+}
+
+/* دالة فتح مصحف التسميع التفاعلي */
 function openQuranModal(errorInpId, rowId, isQ) {
   var row = document.getElementById(rowId);
   if (!row) return;
 
-  var fromNum = 1, toNum = 30; // افتراضي إذا كانت السورة كاملة
+  var fromNum = 1, toNum = 30;
   var title = "اختر الآيات المخطأ فيها:";
 
   if (!isQ) {
@@ -256,7 +344,6 @@ function openQuranModal(errorInpId, rowId, isQ) {
         return;
       }
     } else {
-      // إذا كانت السورة كاملة يفتح 1-50 كخيار سريع، أو يمكنك تحديد نطاق ليكون أدق
       fromNum = 1; toNum = 50; 
       title += " (عرض أول 50 آية)";
     }
@@ -279,9 +366,8 @@ function openQuranModal(errorInpId, rowId, isQ) {
   var grid = document.getElementById('quran-modal-grid');
   grid.innerHTML = "";
 
-  // قراءة الأخطاء الحالية لتحديد الأزرار النشطة مسبقاً
   var currentErrors = document.getElementById(errorInpId).value;
-  var activeItems = currentErrors !== '0' ? currentErrors.split('، ').map(x => parseInt(x.replace(/[^\d]/g, ''))) : [];
+  var activeItems = (currentErrors !== '0' && isNaN(currentErrors)) ? currentErrors.split('، ').map(x => parseInt(x.replace(/[^\d]/g, ''))) : [];
 
   var labelPrefix = isQ ? "س " : "آية ";
 
@@ -326,11 +412,6 @@ function closeQuranModal() {
   activeErrorInputId = null;
 }
 
-function clearAllErrors(errorInpId) {
-  var inp = document.getElementById(errorInpId);
-  if (inp) inp.value = '0';
-}
-
 function addCurrentSurah(containerId, prefix){
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'surah-row'; div.id = 'crow-'+prefix+'-'+idx;
@@ -343,9 +424,9 @@ function addCurrentSurah(containerId, prefix){
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
-        '<button class="counter-btn minus" type="button" onclick="clearAllErrors(\''+inpErrorId+'\')">✕</button>'+
-        '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="بلا أخطاء ✨" value="0" readonly style="pointer-events:none;">'+
-        '<button class="counter-btn plus" type="button" onclick="openQuranModal(\''+inpErrorId+'\', \''+rowId+'\', false)">+</button>'+
+        '<button class="counter-btn minus" type="button" onclick="handleCounterAction(\'minus\', \''+inpErrorId+'\', \''+rowId+'\', false)">-</button>'+
+        '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="عدد الأخطاء ❌" value="0" readonly style="pointer-events:none;">'+
+        '<button class="counter-btn plus" type="button" onclick="handleCounterAction(\'plus\', \''+inpErrorId+'\', \''+rowId+'\', false)">+</button>'+
       '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -375,9 +456,9 @@ function addCurrentQuestion(containerId, prefix){
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
-        '<button class="counter-btn minus" type="button" onclick="clearAllErrors(\''+inpErrorId+'\')">✕</button>'+
-        '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="بلا أخطاء ✨" value="0" readonly style="pointer-events:none;">'+
-        '<button class="counter-btn plus" type="button" onclick="openQuranModal(\''+inpErrorId+'\', \''+rowId+'\', true)">+</button>'+
+        '<button class="counter-btn minus" type="button" onclick="handleCounterAction(\'minus\', \''+inpErrorId+'\', \''+rowId+'\', true)">-</button>'+
+        '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="عدد الأخطاء ❌" value="0" readonly style="pointer-events:none;">'+
+        '<button class="counter-btn plus" type="button" onclick="handleCounterAction(\'plus\', \''+inpErrorId+'\', \''+rowId+'\', true)">+</button>'+
       '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -533,7 +614,7 @@ function drawSectionHeader(ctx, sec, rightX, y, draw){
     ctx.save(); var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r); g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
     ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = PALETTE.goldLt; ctx.fillText(sec.icon, cx, y+r+2);
-    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
+    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.shadowColor = 'transparent'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
   }
   return 2*r + 26;
 }
@@ -564,7 +645,9 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
       drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 28px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:60, padX:26, align:'right', draw:draw});
     }
     if(item.errors !== '' && item.errors != null){
-      var isZero = (item.errors === '0'); var errTxt = isZero ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
+      var isZero = (item.errors === '0'); 
+      // تهيئة النص بناء على ما إذا كان مسجلاً بالعدد أو بقائمة الآيات
+      var errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors + ' ❌') : ('عدد الأخطاء: ' + item.errors + ' ❌'));
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
       
       var errorFont = item.errors.length > 20 ? '800 22px Cairo, sans-serif' : '800 28px Cairo, sans-serif';
