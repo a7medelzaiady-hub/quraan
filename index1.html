@@ -64,6 +64,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
+/* تنسيق عداد الأخطاء الذكي الجديد */
+.counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
+.counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
+.counter-btn.plus:active { background: #fee2e2; }
+.counter-btn.minus { background: #f3f4f6; color: var(--sub); border-left: 1px solid var(--border); }
+.counter-btn.minus:active { background: #e5e7eb; }
+.counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 15px; font-weight: 700; text-align: center; width: 100%; padding: 0; outline: none; }
+
 /* أزرار التثبيت السفلي المدمجة */
 .submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; }
@@ -193,7 +202,7 @@ var counters={};
 function customAlert(msg) {
   var m=document.createElement('div');
   m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:400px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">'+
+  m.innerHTML='<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:400px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">';+
     '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
     '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حسناً</button>'+
     '</div>';
@@ -201,16 +210,31 @@ function customAlert(msg) {
   document.getElementById('c-alert-close').onclick=function(){m.remove();};
 }
 
+/* دالة التحكم بالعداد التفاعلي زيادة ونقصان */
+function stepError(inputId, amount) {
+  var inp = document.getElementById(inputId);
+  if (!inp) return;
+  var current = parseInt(inp.value) || 0;
+  var newVal = current + amount;
+  if (newVal < 0) newVal = 0;
+  inp.value = newVal;
+}
+
 function addCurrentSurah(containerId, prefix){
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'surah-row'; div.id = 'crow-'+prefix+'-'+idx;
+  var inpErrorId = 'err-'+prefix+'-c-'+idx;
   div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'crow-'+prefix+'-'+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+'-c-'+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+'-c-'+idx+'"></div></div>'+
     '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+'-c-'+idx+'" onchange="toggleRange(\'rng-'+prefix+'-c-'+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
     '<div class="range-row hidden" id="rng-'+prefix+'-c-'+idx+'" style="grid-column:1/-1;"><div class="frow"><input class="inp num main-f" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" type="number" placeholder="إلى آية"></div></div>'+
-    '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:5px;">'+
+    '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
-      '<input class="inp num error-inp" type="number" placeholder="عدد الأخطاء ❌">'+
+      '<div class="counter-box">'+
+        '<button class="counter-btn minus" type="button" onclick="stepError(\''+inpErrorId+'\', -1)">-</button>'+
+        '<input class="error-inp" id="'+inpErrorId+'" type="number" placeholder="الأخطاء ❌" value="0" min="0">'+
+        '<button class="counter-btn plus" type="button" onclick="stepError(\''+inpErrorId+'\', 1)">+</button>'+
+      '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
   setupAC(document.getElementById('sr-'+prefix+'-c-'+idx), document.getElementById('drop-'+prefix+'-c-'+idx));
@@ -231,12 +255,17 @@ function addCurrentQuestion(containerId, prefix){
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'q-row'; div.id = 'crow-'+prefix+'-'+idx;
   var isRq = (prefix==='hd'); var pFrom = isRq?'من رقم':'من س', pTo = isRq?'إلى رقم':'إلى س';
+  var inpErrorId = 'err-'+prefix+'-c-'+idx;
   div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'crow-'+prefix+'-'+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num main-qf" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num main-qt" type="number" placeholder="'+pTo+'"></div>'+
-    '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:5px;">'+
+    '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
-      '<input class="inp num error-inp" type="number" placeholder="عدد الأخطاء ❌">'+
+      '<div class="counter-box">'+
+        '<button class="counter-btn minus" type="button" onclick="stepError(\''+inpErrorId+'\', -1)">-</button>'+
+        '<input class="error-inp" id="'+inpErrorId+'" type="number" placeholder="الأخطاء ❌" value="0" min="0">'+
+        '<button class="counter-btn plus" type="button" onclick="stepError(\''+inpErrorId+'\', 1)">+</button>'+
+      '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
 }
@@ -269,7 +298,7 @@ function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.c
 function collectSectionData(prefix, isQ) {
   var currents = []; var nexts = [];
   document.querySelectorAll('[id^="crow-'+prefix+'-"]').forEach(row => {
-    var item = { rating: row.querySelector('.rating-sel')?.value || '', errors: row.querySelector('.error-inp')?.value || '' };
+    var item = { rating: row.querySelector('.rating-sel')?.value || '', errors: row.querySelector('.error-inp')?.value || '0' };
     if (!isQ) {
       item.sr = row.querySelector('.main-sr')?.value; item.type = row.querySelector('.main-sel')?.value;
       item.f = row.querySelector('.main-f')?.value; item.t = row.querySelector('.main-t')?.value;
@@ -315,7 +344,7 @@ function getPersonalizedAdvice(data) {
   return adviceLines;
 }
 
-// Canvas engine
+/* محرك الـ Canvas للرسم وثبات جودة التصدير */
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
 var SECTIONS = [
@@ -415,13 +444,13 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 26px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:50, padX:20, align:'left', draw:draw});
   }
   cy += titleBlockH + 24;
-  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null;
-  if(hasRating || hasErrors){
+  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null && item.errors !== '0';
+  if(hasRating || hasErrors || item.errors === '0'){
     if(hasRating){
       var rs = ratingStyle(item.rating);
       drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 28px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:60, padX:26, align:'right', draw:draw});
     }
-    if(hasErrors){
+    if(item.errors !== '' && item.errors != null){
       var isZero = (item.errors === '0'); var errTxt = isZero ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
       drawRoyalPill(ctx, errTxt, leftX, cy, {font:'800 28px Cairo, sans-serif', bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:60, padX:26, align:'left', draw:draw});
@@ -597,7 +626,6 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-/* نافذة عرض ذكية تدعم مشاركة الملفات الحقيقية عبر Web Share API */
 function showSingleImageModal(canvasElement, downloadName) {
   var modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
