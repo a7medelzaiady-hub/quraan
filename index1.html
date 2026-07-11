@@ -34,7 +34,7 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* شريط نظام الأخطاء الجديد */
+/* شريط نظام الأخطاء العلوي */
 .system-selector-wrap {
   background: rgba(255, 255, 255, 0.08);
   padding: 8px;
@@ -105,7 +105,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* تنسيق عداد الأخطاء التفاعلي الهجين */
+/* تنسيق عداد الأخطاء التفاعلي */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
@@ -138,14 +138,14 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
   
-  <!-- أزرار اختيار نظام الرصد العلوي الجديد -->
+  <!-- أزرار اختيار نظام الرصد العلوي -->
   <div class="system-selector-wrap">
     <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
     <div class="system-grid">
-      <input type="radio" id="sys-count" name="error-system" class="system-system-radio system-system-radio-btn system-radio-btn" value="count" checked onchange="handleSystemChange()">
+      <input type="radio" id="sys-count" name="error-system" class="system-radio-btn" value="count" checked onchange="handleSystemChange()">
       <label for="sys-count" class="system-radio-label">بالعدد التلقائي (1، 2..) 🔢</label>
       
-      <input type="radio" id="sys-ayah" name="error-system" class="system-system-radio system-system-radio-btn system-radio-btn" value="ayah" onchange="handleSystemChange()">
+      <input type="radio" id="sys-ayah" name="error-system" class="system-radio-btn" value="ayah" onchange="handleSystemChange()">
       <label for="sys-ayah" class="system-radio-label">برقم الآية / السؤال 🎯</label>
     </div>
   </div>
@@ -273,6 +273,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={};
 var activeErrorInputId = null;
+var currentQuranRowId = null;
+var currentQuranIsQ = false;
 
 function customAlert(msg) {
   var m=document.createElement('div');
@@ -285,7 +287,6 @@ function customAlert(msg) {
   document.getElementById('c-alert-close').onclick=function(){m.remove();};
 }
 
-/* دالة الاستجابة عند تغيير خيار نظام رصد الأخطاء العلوي لتهيئة الحقول الحالية */
 function handleSystemChange() {
   var sys = document.querySelector('input[name="error-system"]:checked').value;
   document.querySelectorAll('.error-inp').forEach(inp => {
@@ -294,14 +295,12 @@ function handleSystemChange() {
   });
 }
 
-/* دالة إدارة عمل أزرار العداد بناء على النظام المختار علوياً */
 function handleCounterAction(action, errorInpId, rowId, isQ) {
   var sys = document.querySelector('input[name="error-system"]:checked').value;
   var inp = document.getElementById(errorInpId);
   if (!inp) return;
 
   if (sys === 'count') {
-    // نظام الأعداد التلقائي العادي (1، 2، 3)
     var current = parseInt(inp.value) || 0;
     if (action === 'plus') {
       inp.value = current + 1;
@@ -310,68 +309,95 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       inp.value = down < 0 ? 0 : down;
     }
   } else {
-    // نظام مصحف التسميع وشبكة الآيات والأسئلة التفاعلي
     if (action === 'plus') {
       openQuranModal(errorInpId, rowId, isQ);
     } else {
-      // زر الناقص في نظام الآيات يمسح كل شيء ويصفر الحقل
       inp.value = '0';
     }
   }
 }
 
-/* دالة فتح مصحف التسميع التفاعلي */
+/* دالة توليد وفتح شبكة المصحف الواقعية مع تطبيق الشروط الجديدة */
 function openQuranModal(errorInpId, rowId, isQ) {
   var row = document.getElementById(rowId);
   if (!row) return;
 
-  var fromNum = 1, toNum = 30;
+  var fromNum = 1, toNum = 50;
   var title = "اختر الآيات المخطأ فيها:";
 
   if (!isQ) {
+    // [شرط 1] التحقق التام من تسجيل اسم السورة أولاً
+    var surahName = row.querySelector('.main-sr')?.value.trim();
+    if (!surahName) {
+      customAlert("⚠️ لا يمكن رصد الأخطاء؛ يرجى كتابة اسم السورة أولاً.");
+      return;
+    }
+
     var typeSel = row.querySelector('.main-sel')?.value;
-    var surahName = row.querySelector('.main-sr')?.value || "السورة";
     title = "مصحف تسميع: سورة " + surahName;
 
     if (typeSel === 'range') {
       var fVal = parseInt(row.querySelector('.main-f')?.value);
       var tVal = parseInt(row.querySelector('.main-t')?.value);
-      if (!isNaN(fVal) && !isNaN(tVal) && tVal >= fVal) {
-        fromNum = fVal;
-        toNum = tVal;
-      } else {
-        customAlert("يرجى إدخال نطاق الآيات (من آية / إلى آية) بشكل صحيح أولاً لتوليد لوحة المصحف السريعة.");
+      // [شرط 1] التأكد من تحديد نطاق كم لكام بدقة
+      if (isNaN(fVal) || isNaN(tVal) || tVal < fVal) {
+        customAlert("⚠️ يرجى تحديد نطاق الآيات كاملاً (من آية / إلى آية) بشكل صحيح أولاً.");
         return;
       }
+      fromNum = fVal;
+      toNum = tVal;
     } else {
-      fromNum = 1; toNum = 50; 
-      title += " (عرض أول 50 آية)";
+      // السورة كاملة افتراضي من 1 لـ 50 كخيار سريع واقعي لضمان عدم وجود أرقام عشوائية
+      fromNum = 1;
+      toNum = 50;
+      title += " (السورة كاملة)";
     }
   } else {
     var qf = parseInt(row.querySelector('.main-qf')?.value);
     var qt = parseInt(row.querySelector('.main-qt')?.value);
     title = "لوحة الأسئلة والتمارين";
-    if (!isNaN(qf) && !isNaN(qt) && qt >= qf) {
-      fromNum = qf;
-      toNum = qt;
-    } else {
-      customAlert("يرجى إدخال أرقام الأسئلة أولاً.");
+    if (isNaN(qf) || isNaN(qt) || qt < qf) {
+      customAlert("⚠️ يرجى تحديد نطاق أرقام الأسئلة كاملاً أولاً.");
       return;
     }
+    fromNum = qf;
+    toNum = qt;
   }
 
   activeErrorInputId = errorInpId;
-  document.getElementById('quran-modal-header').innerText = title;
+  currentQuranRowId = rowId;
+  currentQuranIsQ = isQ;
   
+  document.getElementById('quran-modal-header').innerText = title;
+  renderQuranGrid(fromNum, toNum, isQ, errorInpId);
+  document.getElementById('quran-modal').style.display = 'flex';
+}
+
+/* دالة بناء أزرار المصحف التي تختفي تلقائياً بمجرد تجاوز الآية لمنع العشوائية */
+function renderQuranGrid(fromNum, toNum, isQ, errorInpId) {
   var grid = document.getElementById('quran-modal-grid');
   grid.innerHTML = "";
 
+  // قراءة الأخطاء المدخلة حالياً لمعرفة من أين تبدأ الآية الصالحة التالية
   var currentErrors = document.getElementById(errorInpId).value;
-  var activeItems = (currentErrors !== '0' && isNaN(currentErrors)) ? currentErrors.split('، ').map(x => parseInt(x.replace(/[^\d]/g, ''))) : [];
+  var maxPressedNum = 0;
+  var activeItems = [];
 
+  if (currentErrors !== '0' && currentErrors.trim() !== '') {
+    currentErrors.split('، ').forEach(x => {
+      var num = parseInt(x.replace(/[^\d]/g, ''));
+      if (!isNaN(num)) {
+        activeItems.push(num);
+        if (num > maxPressedNum) maxPressedNum = num;
+      }
+    });
+  }
+
+  // [شرط 2] إذا تم الضغط على آية معينة، الآيات السابقة تختفي وتبدأ اللوحة من الآية الحالية فصاعداً لواقعية القراءة
+  var startRenderingFrom = Math.max(fromNum, maxPressedNum);
   var labelPrefix = isQ ? "س " : "آية ";
 
-  for (var i = fromNum; i <= toNum; i++) {
+  for (var i = startRenderingFrom; i <= toNum; i++) {
     var btn = document.createElement('button');
     btn.className = "ayah-btn" + (activeItems.includes(i) ? " active" : "");
     btn.type = "button";
@@ -379,13 +405,15 @@ function openQuranModal(errorInpId, rowId, isQ) {
     btn.setAttribute('data-num', i);
     
     btn.onclick = function() {
+      var clickedNum = parseInt(this.getAttribute('data-num'));
       this.classList.toggle('active');
+      
+      // تحديث الحقل فوراً وإعادة رسم المصحف لإخفاء الآيات التي تم تجاوزها
       updateErrorInputFromGrid(isQ);
+      renderQuranGrid(fromNum, toNum, isQ, errorInpId);
     };
     grid.appendChild(btn);
   }
-
-  document.getElementById('quran-modal').style.display = 'flex';
 }
 
 function updateErrorInputFromGrid(isQ) {
@@ -396,13 +424,23 @@ function updateErrorInputFromGrid(isQ) {
   
   var labelPrefix = isQ ? "س " : "آية ";
 
-  if (activeBtns.length === 0) {
+  // تجميع الأخطاء بشكل تصاعدي واقعي
+  var currentErrors = inp.value;
+  var list = [];
+  if (currentErrors !== '0' && currentErrors.trim() !== '') {
+    list = currentErrors.split('، ').filter(x => x.trim() !== '');
+  }
+
+  activeBtns.forEach(btn => {
+    var itemStr = labelPrefix + btn.getAttribute('data-num');
+    if (!list.includes(itemStr)) {
+      list.push(itemStr);
+    }
+  });
+
+  if (list.length === 0) {
     inp.value = '0';
   } else {
-    var list = [];
-    activeBtns.forEach(btn => {
-      list.push(labelPrefix + btn.getAttribute('data-num'));
-    });
     inp.value = list.join('، ');
   }
 }
@@ -410,6 +448,12 @@ function updateErrorInputFromGrid(isQ) {
 function closeQuranModal() {
   document.getElementById('quran-modal').style.display = 'none';
   activeErrorInputId = null;
+  currentQuranRowId = null;
+}
+
+function clearAllErrors(errorInpId) {
+  var inp = document.getElementById(errorInpId);
+  if (inp) inp.value = '0';
 }
 
 function addCurrentSurah(containerId, prefix){
@@ -614,7 +658,7 @@ function drawSectionHeader(ctx, sec, rightX, y, draw){
     ctx.save(); var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r); g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
     ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = PALETTE.goldLt; ctx.fillText(sec.icon, cx, y+r+2);
-    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.shadowColor = 'transparent'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
+    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
   }
   return 2*r + 26;
 }
@@ -646,7 +690,6 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     }
     if(item.errors !== '' && item.errors != null){
       var isZero = (item.errors === '0'); 
-      // تهيئة النص بناء على ما إذا كان مسجلاً بالعدد أو بقائمة الآيات
       var errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors + ' ❌') : ('عدد الأخطاء: ' + item.errors + ' ❌'));
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
       
