@@ -23,7 +23,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
 
-/* الهيدر المتجاوب */
+/* الهيدر */
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px; 
@@ -64,7 +64,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* تنسيق عداد الأخطاء الذكي المربوط بالآيات أو الأسئلة */
+/* تنسيق عداد الأخطاء التفاعلي */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
@@ -79,6 +79,16 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .submit-btn { width: 100%; padding: 16px 8px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 15px rgba(186, 143, 12, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
 .btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
 .submit-btn:active { transform: scale(0.98); }
+
+/* نافذة مصحف التسميع الذكي الجديدة */
+.quran-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 99999; align-items: center; justify-content: center; padding: 16px; }
+.quran-box { background: #fff; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--green-mid); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+.quran-header { background: var(--green-mid); color: var(--gold-light); padding: 16px; text-align: center; font-weight: 700; font-size: 16px; }
+.quran-grid { padding: 16px; overflow-y: auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; background: var(--cream); flex: 1; }
+.ayah-btn { background: #fff; border: 2px solid var(--border); border-radius: 10px; padding: 12px 0; font-size: 15px; font-weight: 700; color: var(--text); cursor: pointer; text-align: center; transition: 0.2s; font-family: 'Cairo', sans-serif; }
+.ayah-btn.active { background: var(--red); color: #fff; border-color: #b91c1c; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+.quran-footer { padding: 12px; background: #fff; border-top: 1px solid var(--border); text-align: center; }
+.quran-close { padding: 10px 40px; background: var(--green-deep); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; }
 </style>
 </head>
 <body>
@@ -195,14 +205,13 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<!-- نافذة إدخال الآية/السؤال المنبثقة المخصصة -->
-<div id="custom-prompt-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.6); z-index:99999; align-items:center; justify-content:center; padding:20px;">
-  <div style="background:#fff; padding:24px; border-radius:16px; text-align:center; max-width:360px; width:100%; box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">
-    <div id="prompt-modal-title" style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:14px; font-family:Cairo,sans-serif;">أدخل رقم الآية أو السؤال:</div>
-    <input type="number" id="prompt-modal-input" class="inp num" placeholder="الرقم هنا..." style="margin-bottom:16px;">
-    <div style="display:flex; gap:10px; justify-content:center;">
-      <button id="prompt-modal-ok" style="padding:8px 24px; background:var(--green-mid); color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; font-family:Cairo,sans-serif;">تأكيد</button>
-      <button id="prompt-modal-cancel" style="padding:8px 24px; background:#e5e7eb; color:var(--text); border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; font-family:Cairo,sans-serif;">إلغاء</button>
+<!-- نافذة مصحف التسميع المرئية الذكية -->
+<div class="quran-modal" id="quran-modal">
+  <div class="quran-box">
+    <div class="quran-header" id="quran-modal-header">مصحف التسميع التفاعلي</div>
+    <div class="quran-grid" id="quran-modal-grid"></div>
+    <div class="quran-footer">
+      <button class="quran-close" onclick="closeQuranModal()">تم الانتهاء واحتساب الأخطاء</button>
     </div>
   </div>
 </div>
@@ -210,6 +219,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 var counters={};
+var activeErrorInputId = null;
 
 function customAlert(msg) {
   var m=document.createElement('div');
@@ -222,65 +232,110 @@ function customAlert(msg) {
   document.getElementById('c-alert-close').onclick=function(){m.remove();};
 }
 
-/* دالة نافذة الإدخال الذكية المخصصة */
-function showCustomPrompt(title, callback) {
-  var modal = document.getElementById('custom-prompt-modal');
-  var titleEl = document.getElementById('prompt-modal-title');
-  var inputEl = document.getElementById('prompt-modal-input');
-  var okBtn = document.getElementById('prompt-modal-ok');
-  var cancelBtn = document.getElementById('prompt-modal-cancel');
+/* دالة فتح مصحف التسميع بناء على المدخلات */
+function openQuranModal(errorInpId, rowId, isQ) {
+  var row = document.getElementById(rowId);
+  if (!row) return;
+
+  var fromNum = 1, toNum = 30; // افتراضي إذا كانت السورة كاملة
+  var title = "اختر الآيات المخطأ فيها:";
+
+  if (!isQ) {
+    var typeSel = row.querySelector('.main-sel')?.value;
+    var surahName = row.querySelector('.main-sr')?.value || "السورة";
+    title = "مصحف تسميع: سورة " + surahName;
+
+    if (typeSel === 'range') {
+      var fVal = parseInt(row.querySelector('.main-f')?.value);
+      var tVal = parseInt(row.querySelector('.main-t')?.value);
+      if (!isNaN(fVal) && !isNaN(tVal) && tVal >= fVal) {
+        fromNum = fVal;
+        toNum = tVal;
+      } else {
+        customAlert("يرجى إدخال نطاق الآيات (من آية / إلى آية) بشكل صحيح أولاً لتوليد لوحة المصحف السريعة.");
+        return;
+      }
+    } else {
+      // إذا كانت السورة كاملة يفتح 1-50 كخيار سريع، أو يمكنك تحديد نطاق ليكون أدق
+      fromNum = 1; toNum = 50; 
+      title += " (عرض أول 50 آية)";
+    }
+  } else {
+    var qf = parseInt(row.querySelector('.main-qf')?.value);
+    var qt = parseInt(row.querySelector('.main-qt')?.value);
+    title = "لوحة الأسئلة والتمارين";
+    if (!isNaN(qf) && !isNaN(qt) && qt >= qf) {
+      fromNum = qf;
+      toNum = qt;
+    } else {
+      customAlert("يرجى إدخال أرقام الأسئلة أولاً.");
+      return;
+    }
+  }
+
+  activeErrorInputId = errorInpId;
+  document.getElementById('quran-modal-header').innerText = title;
   
-  titleEl.innerText = title;
-  inputEl.value = '';
-  modal.style.display = 'flex';
-  inputEl.focus();
-  
-  okBtn.onclick = function() {
-    var val = inputEl.value.trim();
-    modal.style.display = 'none';
-    if(val) callback(val);
-  };
-  cancelBtn.onclick = function() {
-    modal.style.display = 'none';
-  };
+  var grid = document.getElementById('quran-modal-grid');
+  grid.innerHTML = "";
+
+  // قراءة الأخطاء الحالية لتحديد الأزرار النشطة مسبقاً
+  var currentErrors = document.getElementById(errorInpId).value;
+  var activeItems = currentErrors !== '0' ? currentErrors.split('، ').map(x => parseInt(x.replace(/[^\d]/g, ''))) : [];
+
+  var labelPrefix = isQ ? "س " : "آية ";
+
+  for (var i = fromNum; i <= toNum; i++) {
+    var btn = document.createElement('button');
+    btn.className = "ayah-btn" + (activeItems.includes(i) ? " active" : "");
+    btn.type = "button";
+    btn.innerText = labelPrefix + i;
+    btn.setAttribute('data-num', i);
+    
+    btn.onclick = function() {
+      this.classList.toggle('active');
+      updateErrorInputFromGrid(isQ);
+    };
+    grid.appendChild(btn);
+  }
+
+  document.getElementById('quran-modal').style.display = 'flex';
 }
 
-/* دالة التحكم بإضافة وحذف أرقام الأخطاء */
-function modifyErrors(inputId, type, isQ) {
-  var inp = document.getElementById(inputId);
-  if (!inp) return;
-  var currentVal = inp.value.trim();
+function updateErrorInputFromGrid(isQ) {
+  if (!activeErrorInputId) return;
+  var grid = document.getElementById('quran-modal-grid');
+  var activeBtns = grid.querySelectorAll('.ayah-btn.active');
+  var inp = document.getElementById(activeErrorInputId);
   
-  // تصفية المصفوفة الحالية وتجنب كلمة "بلا أخطاء"
-  var items = [];
-  if (currentVal && currentVal !== '0' && !currentVal.includes('بلا أخطاء')) {
-    items = currentVal.split('، ').map(x => x.trim());
-  }
+  var labelPrefix = isQ ? "س " : "آية ";
 
-  var labelUnit = isQ ? 'س' : 'آية';
-
-  if (type === 'plus') {
-    var titleText = isQ ? 'أدخل رقم السؤال المخطأ فيه:' : 'أدخل رقم الآية المخطأ فيها:';
-    showCustomPrompt(titleText, function(num) {
-      items.push(labelUnit + ' ' + num);
-      inp.value = items.join('، ');
+  if (activeBtns.length === 0) {
+    inp.value = '0';
+  } else {
+    var list = [];
+    activeBtns.forEach(btn => {
+      list.push(labelPrefix + btn.getAttribute('data-num'));
     });
-  } else if (type === 'minus') {
-    if (items.length > 0) {
-      items.pop(); // حذف آخر آية مدخلة
-    }
-    if (items.length === 0) {
-      inp.value = '0';
-    } else {
-      inp.value = items.join('، ');
-    }
+    inp.value = list.join('، ');
   }
+}
+
+function closeQuranModal() {
+  document.getElementById('quran-modal').style.display = 'none';
+  activeErrorInputId = null;
+}
+
+function clearAllErrors(errorInpId) {
+  var inp = document.getElementById(errorInpId);
+  if (inp) inp.value = '0';
 }
 
 function addCurrentSurah(containerId, prefix){
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'surah-row'; div.id = 'crow-'+prefix+'-'+idx;
   var inpErrorId = 'err-'+prefix+'-c-'+idx;
+  var rowId = div.id;
   div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'crow-'+prefix+'-'+idx+'\')">✕</button>':'')+
     '<div class="ac-wrap"><input class="inp main-sr" id="sr-'+prefix+'-c-'+idx+'" placeholder="اسم السورة..."><div class="ac-drop" id="drop-'+prefix+'-c-'+idx+'"></div></div>'+
     '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+'-c-'+idx+'" onchange="toggleRange(\'rng-'+prefix+'-c-'+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
@@ -288,9 +343,9 @@ function addCurrentSurah(containerId, prefix){
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
-        '<button class="counter-btn minus" type="button" onclick="modifyErrors(\''+inpErrorId+'\', \'minus\', false)">-</button>'+
+        '<button class="counter-btn minus" type="button" onclick="clearAllErrors(\''+inpErrorId+'\')">✕</button>'+
         '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="بلا أخطاء ✨" value="0" readonly style="pointer-events:none;">'+
-        '<button class="counter-btn plus" type="button" onclick="modifyErrors(\''+inpErrorId+'\', \'plus\', false)">+</button>'+
+        '<button class="counter-btn plus" type="button" onclick="openQuranModal(\''+inpErrorId+'\', \''+rowId+'\', false)">+</button>'+
       '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -313,15 +368,16 @@ function addCurrentQuestion(containerId, prefix){
   var div = document.createElement('div'); div.className = 'q-row'; div.id = 'crow-'+prefix+'-'+idx;
   var isRq = (prefix==='hd'); var pFrom = isRq?'من رقم':'من س', pTo = isRq?'إلى رقم':'إلى س';
   var inpErrorId = 'err-'+prefix+'-c-'+idx;
+  var rowId = div.id;
   div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'crow-'+prefix+'-'+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num main-qf" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num main-qt" type="number" placeholder="'+pTo+'"></div>'+
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
       '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
-        '<button class="counter-btn minus" type="button" onclick="modifyErrors(\''+inpErrorId+'\', \'minus\', true)">-</button>'+
+        '<button class="counter-btn minus" type="button" onclick="clearAllErrors(\''+inpErrorId+'\')">✕</button>'+
         '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="بلا أخطاء ✨" value="0" readonly style="pointer-events:none;">'+
-        '<button class="counter-btn plus" type="button" onclick="modifyErrors(\''+inpErrorId+'\', \'plus\', true)">+</button>'+
+        '<button class="counter-btn plus" type="button" onclick="openQuranModal(\''+inpErrorId+'\', \''+rowId+'\', true)">+</button>'+
       '</div>'+
     '</div>';
   document.getElementById(containerId).appendChild(div);
@@ -401,7 +457,7 @@ function getPersonalizedAdvice(data) {
   return adviceLines;
 }
 
-/* محرك الـ Canvas للرسم وثبات جودة التصدير */
+/* محرك الـ Canvas */
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
 var SECTIONS = [
@@ -511,7 +567,6 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
       var isZero = (item.errors === '0'); var errTxt = isZero ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors + ' ❌');
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
       
-      // تصغير الخط قليلاً إذا كانت سلسلة أرقام الآيات طويلة لتتناسب مع البطاقة
       var errorFont = item.errors.length > 20 ? '800 22px Cairo, sans-serif' : '800 28px Cairo, sans-serif';
       drawRoyalPill(ctx, errTxt, leftX, cy, {font:errorFont, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:60, padX:26, align:'left', draw:draw});
     }
@@ -553,7 +608,7 @@ function layoutReport(ctx, canvasH, nm, data, draw){
   if(draw){
     var hG = ctx.createLinearGradient(0, 0, 0, hH); hG.addColorStop(0, PALETTE.deep); hG.addColorStop(1, PALETTE.mid);
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(C_W, 0); ctx.lineTo(C_W, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, 0, hH - 36); ctx.closePath(); ctx.fillStyle = hG; ctx.fill();
-    ctx.beginPath(); ctx.moveTo(0, hH - 36); quadraticCurveTo = ctx.quadraticCurveTo(C_W/2, hH + 36, C_W, hH - 36); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, C_W, hH - 36); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.font = '58px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText('🕌', C_W/2, 22);
     ctx.font = '900 54px Amiri, serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 90); ctx.shadowColor = 'transparent';
     ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 152);
