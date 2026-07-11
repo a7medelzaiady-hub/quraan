@@ -55,9 +55,7 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
-.system-radio-btn {
-  display: none;
-}
+.system-radio-btn { display: none; }
 .system-radio-label {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.7);
@@ -114,7 +112,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .counter-btn.minus:active { background: #e5e7eb; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* أزرار التثبيت السفلي المدمجة */
+/* أزرار التثبيت السفلي */
 .submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; }
 .submit-btn { width: 100%; padding: 16px 8px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 15px rgba(186, 143, 12, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
@@ -138,6 +136,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   text-align: right; 
   box-shadow: 0 2px 6px rgba(0,0,0,0.02);
   position: relative;
+  line-height: 2.2;
 }
 .ayah-text-card:hover { border-color: var(--green-light); background: #faf9f2; }
 .ayah-text-card .ayah-num-badge {
@@ -156,10 +155,9 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 }
 .ayah-text-card .ayah-content {
   font-family: 'Amiri', serif;
-  font-size: 21px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--green-deep);
-  line-height: 1.8;
   vertical-align: middle;
 }
 .ayah-text-card.active {
@@ -313,28 +311,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 
-// قاعدة بيانات نصوص الآيات لتوليد مصحف واقعي بالكامل بناء على طلبك
-var QURAN_TEXTS_DB = {
-  'الفاتحة': {
-    1: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 2: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', 3: 'الرَّحْمَٰنِ الرَّحِيمِ', 4: 'مَالِكِ يَوْمِ الدِّينِ', 5: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', 6: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ', 7: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ'
-  },
-  'البقرة': {
-    1: 'الم', 2: 'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ', 3: 'الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ', 4: 'وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ', 5: 'أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ', 6: 'إِنَّ الَّذِينَ كَفَرُوا سَوَاءٌ عَلَيْهِم| أَأَنذَرْتَهُمْ أَمْ لَمْ تُنذِرْهُمْ لَا يُؤْمِنُونَ', 7: 'خَتَمَ اللَّهُ عَلَىٰ قُلُوبِهِمْ وَعَلَىٰ سَمْعِهِمْ ۖ وَعَلَىٰ أَبْصَارِهِمْ غِشَاوَةٌ ۖ وَلَهُمْ عَذَابٌ عَظِيمٌ', 8: 'وَمِنَ النَّاسِ مَن يَقُولُ آمَنَّا بِاللَّهِ وَبِالْيَوْمِ الْآخِرِ وَمَا هُم بِمُؤْمِنِينَ', 9: 'يُخَادِعُونَ اللَّهَ وَالَّذِينَ آمَنُوا وَمَا يَخْدَعُونَ إِلَّا أَنفُسَهُمْ وَمَا يَشْعُرُونَ', 10: 'فِي قُلُوبِهِم مَّرَضٌ فَزَادَهُمُ اللَّهُ مَرَضًا ۖ وَلَهُمْ عَذَابٌ أَلِيمٌ بِمَا كَانُوا يَكْذِبُونَ'
-  },
-  'النبأ': {
-    1: 'عَمَّ يَتَسَاءَلُونَ', 2: 'عَنِ النَّبَإِ الْعَظِيمِ', 3: 'الَّذِي هُمْ فِيهِ مُخْتَلِفُونَ', 4: 'كَلَّا سَيَعْلَمُونَ', 5: 'ثُمَّ كَلَّا سَيَعْلَمُونَ', 6: 'أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا', 7: 'وَالْجِبَالَ أَوْتَادًا', 8: 'وَخَلَقْنَاكُمْ أَزْوَاجًا', 9: 'وَنَجَعْلَا نَوْمَكُمْ سُبَاتًا', 10: 'وَجَعَلْنَا اللَّيْلَ لِبَاسًا'
-  },
-  'الإخلاص': {
-    1: 'قُلْ هُوَ اللَّهُ أَحَدٌ', 2: 'اللَّهُ الصَّمَدُ', 3: 'لَمْ يَلِدْ وَلَمْ يُولَدْ', 4: 'وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ'
-  },
-  'الفلق': {
-    1: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ', 2: 'مِن شَرِّ مَا خَلَقlogger', 3: 'وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ', 4: 'وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ', 5: 'وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ'
-  },
-  'الناس': {
-    1: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ', 2: 'مَلِكِ النَّاسِ', 3: 'إِلَٰهِ النَّاسِ', 4: 'مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ', 5: 'الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ', 6: 'مِنَ الْجِنَّةِ وَالنَّاسِ'
-  }
-};
-
+// ذاكرة تخزين مؤقتة (Cache) لعدم تحميل السورة أكثر من مرة من الإنترنت
+var SURAS_CACHE = {}; 
 var counters={};
 var activeErrorInputId = null;
 var currentQuranRowId = null;
@@ -376,13 +354,13 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
     if (action === 'plus') {
       openQuranModal(errorInpId, rowId, isQ);
     } else {
-      // [تعديل الحذف المخصص] يحذف آخر عنصر فقط مضاف إلى القائمة بدلاً من التصفير الكامل للحقلي
+      // يحذف آخر عنصر فقط مضاف إلى القائمة بدلاً من التصفير الكامل (كما طلبت)
       var currentErrors = inp.value;
       if (currentErrors === '0' || currentErrors.trim() === '') return;
       
       var list = currentErrors.split('، ').filter(x => x.trim() !== '');
       if (list.length > 0) {
-        list.pop(); // حذف آخر آية
+        list.pop(); // حذف آخر خطأ
       }
       
       if (list.length === 0) {
@@ -394,13 +372,15 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
   }
 }
 
-function openQuranModal(errorInpId, rowId, isQ) {
+// دالة جلب الآيات من الـ API الذكي وفتح المصحف
+async function openQuranModal(errorInpId, rowId, isQ) {
   var row = document.getElementById(rowId);
   if (!row) return;
 
   var fromNum = 1, toNum = 30;
   var title = "اختر المواضع المخطأ فيها:";
   var surahName = "";
+  var typeSel = "full";
 
   if (!isQ) {
     surahName = row.querySelector('.main-sr')?.value.trim();
@@ -409,7 +389,7 @@ function openQuranModal(errorInpId, rowId, isQ) {
       return;
     }
 
-    var typeSel = row.querySelector('.main-sel')?.value;
+    typeSel = row.querySelector('.main-sel')?.value;
     title = "مصحف تسميع: سورة " + surahName;
 
     if (typeSel === 'range') {
@@ -421,10 +401,6 @@ function openQuranModal(errorInpId, rowId, isQ) {
       }
       fromNum = fVal;
       toNum = tVal;
-    } else {
-      fromNum = 1;
-      toNum = 30; // افتراضي للسورة الكاملة لتجنب الأعداد اللا نهائية عشوائياً
-      title += " (عرض المحتوى)";
     }
   } else {
     var qf = parseInt(row.querySelector('.main-qf')?.value);
@@ -443,12 +419,41 @@ function openQuranModal(errorInpId, rowId, isQ) {
   currentQuranIsQ = isQ;
   
   document.getElementById('quran-modal-header').innerText = title;
-  renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName);
   document.getElementById('quran-modal').style.display = 'flex';
+  var grid = document.getElementById('quran-modal-grid');
+
+  // جلب الآيات من الإنترنت إذا لم تكن مخزنة مسبقاً (للسور فقط وليس الأسئلة)
+  if (!isQ) {
+    var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
+    if (surahIndex > 0) {
+      if (!SURAS_CACHE[surahIndex]) {
+        // شاشة تحميل أنيقة أثناء استدعاء السورة
+        grid.innerHTML = '<div style="text-align:center; padding: 50px 20px; color: var(--green-mid); font-weight: bold; font-size: 20px; grid-column: 1/-1;">جاري تحميل آيات سورة ' + surahName + ' بالرسم العثماني... ⏳</div>';
+        try {
+          // رابط API رسمي ومجاني للقرآن الكريم (AlQuran.cloud)
+          let res = await fetch(`https://api.alquran.cloud/v1/surah/${surahIndex}/quran-uthmani`);
+          let json = await res.json();
+          if (json && json.data && json.data.ayahs) {
+            SURAS_CACHE[surahIndex] = json.data.ayahs;
+          }
+        } catch(e) {
+          console.log("Internet Fetch Error:", e);
+        }
+      }
+      
+      // إذا كانت السورة كاملة ومحملة بالفعل، حدد النهاية لتكون آخر آية في السورة
+      if (typeSel !== 'range' && SURAS_CACHE[surahIndex]) {
+        toNum = SURAS_CACHE[surahIndex].length;
+      }
+    }
+  }
+
+  // رسم المصحف بعد التحميل
+  renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel);
 }
 
 /* بناء وتحديث صفحة المصحف الواقعية بنصوص الآيات بدلاً من الأزرار الرقمية الجافة */
-function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName) {
+function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
   var grid = document.getElementById('quran-modal-grid');
   grid.innerHTML = "";
 
@@ -468,21 +473,44 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName) {
 
   // تبدأ الصفحة من النطاق المحدد أو من آية ما بعد آخر خطأ مسجل لمنع العشوائية والرجوع للخلف
   var startRenderingFrom = Math.max(fromNum, maxPressedNum);
+  
+  if (startRenderingFrom > toNum) {
+      grid.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--green-deep); font-weight: bold; font-size: 22px; grid-column: 1/-1;">تم الانتهاء من النطاق المحدد للمراجعة 🎉</div>';
+      return;
+  }
+
   var labelPrefix = isQ ? "س " : "آية ";
+  var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
+  var ayahsData = SURAS_CACHE[surahIndex];
+
+  // تأمين إضافي لعدم تجاوز عدد آيات السورة الفعلي
+  if (!isQ && ayahsData && toNum > ayahsData.length) {
+      toNum = ayahsData.length;
+  }
 
   for (var i = startRenderingFrom; i <= toNum; i++) {
     var card = document.createElement('div');
     card.className = "ayah-text-card" + (activeItems.includes(i) ? " active" : "");
     card.setAttribute('data-num', i);
     
-    // سحب نص الآية الحقيقي إن وُجد في قاعدة البيانات، وإلا توفير نص افتراضي منظم
-    var displayTxt = "قراءة ومتابعة الموضع التعليمي الفعلي بانتظام..";
-    if (!isQ && QURAN_TEXTS_DB[surahName] && QURAN_TEXTS_DB[surahName][i]) {
-      displayTxt = QURAN_TEXTS_DB[surahName][i];
+    var displayTxt = "";
+    if (!isQ && ayahsData) {
+      // سحب نص الآية الحقيقي من قاعدة البيانات
+      let ayahObj = ayahsData.find(a => a.numberInSurah === i);
+      if (ayahObj) {
+        displayTxt = ayahObj.text + " ۝";
+        // إزالة البسملة من أول آية إلا في الفاتحة (ليكون التسميع مباشراً وواقعياً)
+        if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
+           displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
+        }
+      } else {
+        displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
+      }
     } else if (isQ) {
-      displayTxt = "السؤال أو التمرين التدريبي الرقم " + i + " داخل المذكرة المعتمدة.";
+      displayTxt = "السؤال أو التمرين التدريبي رقم " + i + " داخل المذكرة المعتمدة.";
     } else {
-      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " بِالرَّسْمِ العُثْمَانِيِّ المُبَارَكِ ﴾";
+      // في حالة عدم وجود إنترنت للتحميل
+      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
     }
 
     card.innerHTML = '<span class="ayah-num-badge">' + i + '</span>' +
@@ -490,10 +518,9 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName) {
     
     card.onclick = function() {
       var clickedNum = parseInt(this.getAttribute('data-num'));
-      
-      // إضافة الخطأ بشكل مباشر وإعادة تهيئة الصفحة لإخفاء ما تم تجاوزه وتثبيت الرصد
       toggleErrorState(clickedNum, isQ);
-      renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName);
+      // إعادة الرسم فوراً لإخفاء ما تم تجاوزه وتثبيت الرصد
+      renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel);
     };
     
     grid.appendChild(card);
@@ -533,6 +560,11 @@ function closeQuranModal() {
   document.getElementById('quran-modal').style.display = 'none';
   activeErrorInputId = null;
   currentQuranRowId = null;
+}
+
+function clearAllErrors(errorInpId) {
+  var inp = document.getElementById(errorInpId);
+  if (inp) inp.value = '0';
 }
 
 function addCurrentSurah(containerId, prefix){
