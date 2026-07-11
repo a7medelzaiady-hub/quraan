@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة خادم القرآن الكريم الرقمية</title>
 
     <!-- الخطوط الروحانية والحديثة -->
@@ -15,31 +15,28 @@
 
     <style>
         :root {
-            /* نظام الألوان الزمردي والذهبي الملكي الجديد */
-            --bg-base: #030f11;
-            --bg-gradient: radial-gradient(circle at 50% 0%, #072225 0%, #020b0d 100%);
-            --surface-glass: rgba(7, 34, 37, 0.45);
-            --border-glass: rgba(212, 175, 55, 0.08);
-            --border-hover: rgba(212, 175, 55, 0.35);
+            --bg-base: #021612;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #052e25 0%, #010f0c 100%);
+            --surface-glass: rgba(5, 46, 37, 0.6);
+            --border-glass: rgba(212, 175, 55, 0.15);
+            --border-hover: rgba(212, 175, 55, 0.4);
             
             --gold-primary: #d4af37;
             --gold-light: #f3e5ab;
-            --gold-glow: rgba(212, 175, 55, 0.15);
+            --gold-glow: rgba(212, 175, 55, 0.2);
             
             --emerald-accent: #00f5d4;
-            --emerald-glow: rgba(0, 245, 212, 0.1);
-            
             --text-primary: #f5f7f8;
-            --text-secondary: #9cb1b4;
-            --text-muted: #566f73;
+            --text-secondary: #a3bca9;
+            --text-muted: #5e7e68;
             
             --danger: #ff5e62;
             --danger-bg: rgba(255, 94, 98, 0.1);
             
-            --radius-xl: 24px;
-            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-lg: 14px;
             --radius-sm: 8px;
-            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { 
@@ -47,6 +44,7 @@
             margin: 0; 
             padding: 0; 
             -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; /* تحسين استجابة اللمس على الهاتف */
         }
 
         body {
@@ -55,100 +53,84 @@
             background: var(--bg-base) var(--bg-gradient);
             background-attachment: fixed;
             overflow-x: hidden;
-            line-height: 1.8;
+            line-height: 1.7;
             padding-bottom: 40px;
         }
 
-        /* توهج خلفي ناعم */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -10%; left: 50%;
-            transform: translateX(-50%);
-            width: 60vw; height: 50vh;
-            background: radial-gradient(circle, rgba(7, 48, 43, 0.6) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* ===== شاشة الترحيب الذكية ===== */
+        /* ===== شاشة الترحيب الذكية للموبايل ===== */
         #welcome-screen {
             position: fixed;
             inset: 0;
-            background: #020b0d;
+            background: #010f0c;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: var(--transition-smooth);
+            padding: 20px;
         }
 
         .welcome-center {
             text-align: center;
-            transform: translateY(0);
-            transition: var(--transition-smooth);
+            width: 100%;
         }
 
         .welcome-logo {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 30px;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 25px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, rgba(7, 34, 37, 0.6), rgba(212, 175, 55, 0.1));
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px var(--gold-glow);
-            font-size: 3rem;
+            background: linear-gradient(135deg, rgba(5, 46, 37, 0.7), rgba(212, 175, 55, 0.15));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px var(--gold-glow);
+            font-size: 2.7rem;
             color: var(--gold-primary);
             animation: pulseGlow 3s infinite alternate;
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px var(--gold-glow); }
-            100% { transform: scale(1.05); box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212, 175, 55, 0.3); }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.04); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 35px rgba(212, 175, 55, 0.3); }
         }
 
         #welcome-screen h1 {
             color: var(--text-primary);
-            font-size: 2.5rem;
+            font-size: 2.1rem;
             font-weight: 900;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
 
         .welcome-sub {
             color: var(--gold-primary);
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
+            font-size: 1.05rem;
+            margin-bottom: 35px;
         }
 
         .btn-start {
             background: linear-gradient(135deg, var(--gold-primary), #b08f26);
-            color: #030f11;
+            color: #010f0c;
             border: none;
-            padding: 16px 45px;
-            font-size: 1.15rem;
+            padding: 15px 40px;
+            font-size: 1.1rem;
             font-weight: 700;
             border-radius: var(--radius-lg);
-            cursor: pointer;
+            width: 85%;
+            max-width: 280px;
             box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
             transition: var(--transition-smooth);
         }
 
-        .btn-start:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        .btn-start:active {
+            transform: scale(0.98);
         }
 
-        /* ===== الهيدر والتحكم العلوى ===== */
+        /* ===== الهيدر والوصف ===== */
         header {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 50px 24px 20px;
+            padding: 40px 20px 25px;
             text-align: center;
         }
 
@@ -156,18 +138,18 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(212, 175, 55, 0.06);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             padding: 6px 18px;
             border-radius: 100px;
             color: var(--gold-primary);
             font-size: 0.85rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         header h1 {
-            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-size: 2rem;
             font-weight: 900;
             color: var(--text-primary);
             font-family: 'Cairo', sans-serif;
@@ -175,99 +157,50 @@
 
         header p {
             color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-top: 8px;
+        }
+
+        header p::after {
+            content: '\f684'; 
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            display: block;
             font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        /* شريط البحث الذكي وأزرار الفلترة */
-        .search-filter-section {
-            max-width: 800px;
-            margin: 30px auto 40px;
-            padding: 0 24px;
-        }
-
-        .search-wrapper {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-wrapper i {
-            position: absolute;
-            right: 20px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 16px 50px 16px 20px;
-            background: var(--surface-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-lg);
-            color: var(--text-primary);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition-smooth);
-            backdrop-filter: blur(10px);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--border-hover);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.1);
-        }
-
-        .filter-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 22px;
-            background: transparent;
-            border: 1px solid var(--border-glass);
-            color: var(--text-secondary);
-            border-radius: 100px;
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: var(--transition-smooth);
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold-primary);
             color: var(--gold-primary);
+            margin-top: 8px;
+            animation: prayMotion 3s infinite ease-in-out;
         }
 
-        /* ===== شريط الإشراقات المتحرك ===== */
+        @keyframes prayMotion {
+            0%, 100% { transform: scaleY(1); opacity: 0.6; }
+            50% { transform: scaleY(0.85); opacity: 1; }
+        }
+
+        /* ===== شريط الإشراقات المتحرك والمسرّع ===== */
         .ticker-container {
-            max-width: 1120px;
-            margin: 0 auto 40px;
+            margin: 0 16px 30px;
             background: var(--surface-glass);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            padding: 12px 20px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .ticker-label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: var(--gold-primary);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             white-space: nowrap;
-            padding-left: 15px;
-            border-left: 1px solid rgba(156, 177, 180, 0.2);
+            padding-left: 12px;
+            border-left: 1px solid rgba(163, 188, 169, 0.2);
         }
 
         .ticker-wrap {
@@ -278,79 +211,66 @@
         .ticker-track {
             display: flex;
             white-space: nowrap;
-            animation: scrollText 25s linear infinite;
+            animation: scrollText 15s linear infinite;
         }
 
         .ticker-track span {
             color: var(--text-primary);
             font-size: 0.95rem;
-            margin-left: 60px;
+            margin-left: 50px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .ticker-track span i { color: var(--gold-primary); font-size: 0.6rem; }
 
         @keyframes scrollText {
             from { transform: translateX(0); }
             to   { transform: translateX(-50%); }
         }
 
-        /* ===== شبكة الكروت المطورة ===== */
+        /* ===== شبكة الكروت المحسنة بالكامل للموبايل ===== */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 24px;
+            grid-template-columns: 1fr; /* عمود واحد مريح على الهاتف */
+            gap: 20px;
+            padding: 0 16px;
         }
 
         .card {
             background: var(--surface-glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-xl);
-            padding: 30px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            transition: var(--transition-smooth);
             position: relative;
-            overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
+        /* استبدال الـ hover بـ تأثير active عند الضغط بالإصبع */
+        .card:active {
             border-color: var(--border-hover);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px var(--gold-glow);
+            background: rgba(5, 46, 37, 0.8);
         }
 
         .card-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .card-icon {
-            width: 55px; height: 55px;
-            background: rgba(212, 175, 55, 0.04);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            width: 48px; height: 48px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: var(--radius-lg);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--gold-primary);
-            transition: var(--transition-smooth);
-        }
-
-        .card:hover .card-icon {
-            background: var(--gold-primary);
-            color: #030f11;
-            transform: scale(1.05) rotate(3deg);
         }
 
         .card-tag {
@@ -358,29 +278,28 @@
             font-weight: 700;
             padding: 4px 12px;
             border-radius: 100px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.05);
             color: var(--text-secondary);
         }
 
         .card h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
         }
 
         .card p {
             color: var(--text-secondary);
             font-size: 0.95rem;
-            margin-bottom: 25px;
-            flex-grow: 1;
+            margin-bottom: 20px;
         }
 
         .card-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             margin-top: auto;
         }
 
@@ -392,74 +311,51 @@
             font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            transition: var(--transition-smooth);
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-main {
             flex-grow: 1;
-            background: rgba(212, 175, 55, 0.08);
+            background: rgba(212, 175, 55, 0.1);
             color: var(--gold-primary);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.25);
         }
 
-        .card:hover .btn-main {
+        .btn-main:active {
             background: linear-gradient(135deg, var(--gold-primary), #b08f26);
-            color: #030f11;
-            border-color: transparent;
+            color: #021612;
         }
 
         .btn-icon-only {
-            width: 48px; height: 48px;
+            width: 46px; height: 46px;
             padding: 0;
             background: transparent;
-            border: 1px solid rgba(156, 177, 180, 0.15);
+            border: 1px solid rgba(163, 188, 169, 0.2);
             color: var(--text-muted);
         }
 
-        .btn-icon-only:hover {
+        .btn-icon-only:active {
             border-color: var(--gold-primary);
             color: var(--gold-primary);
-            background: rgba(212, 175, 55, 0.05);
         }
 
-        /* كارت المنطقة المقفلة للمشرفين */
-        .card-secure {
-            border-color: rgba(255, 94, 98, 0.15);
-        }
-        .card-secure .card-icon {
-            color: var(--danger);
-            background: rgba(255, 94, 98, 0.04);
-            border-color: rgba(255, 94, 98, 0.15);
-        }
-        .card-secure .card-tag {
-            color: var(--danger);
-            background: var(--danger-bg);
-        }
-        .card-secure .btn-main {
-            background: rgba(255, 94, 98, 0.08);
-            color: var(--danger);
-            border-color: rgba(255, 94, 98, 0.2);
-        }
-        .card-secure:hover {
-            border-color: var(--danger);
-            box-shadow: 0 20px 40px rgba(255, 94, 98, 0.1);
-        }
-        .card-secure:hover .btn-main {
-            background: var(--danger);
-            color: #fff;
-        }
+        /* كارت المشرفين المحمي للموبايل */
+        .card-secure { border-color: rgba(255, 94, 98, 0.2); }
+        .card-secure .card-icon { color: var(--danger); background: rgba(255, 94, 98, 0.05); }
+        .card-secure .card-tag { color: var(--danger); background: var(--danger-bg); }
+        .card-secure .btn-main { background: rgba(255, 94, 98, 0.08); color: var(--danger); border-color: rgba(255, 94, 98, 0.25); }
+        .card-secure .btn-main:active { background: var(--danger); color: #fff; }
 
-        /* ===== لوحة إدخال الرمز السري المتطورة ===== */
+        /* ===== لوحة إدخال الرمز السري المخصصة للموبايل (PIN Pad) ===== */
         #password-modal {
             position: fixed;
             inset: 0;
-            background: rgba(2, 11, 13, 0.9);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(1, 15, 12, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -472,53 +368,42 @@
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-box {
-            background: #05191c;
+            background: #04241e;
             border: 1px solid var(--border-glass);
-            padding: 40px 30px;
+            padding: 30px 20px;
             border-radius: var(--radius-xl);
             text-align: center;
-            width: 90%;
-            max-width: 380px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            transform: scale(0.9);
-            transition: var(--transition-smooth);
+            width: 92%;
+            max-width: 340px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
-        
-        #password-modal.active .modal-box { transform: scale(1); }
 
         .modal-shield {
-            width: 60px; height: 60px;
-            background: rgba(212, 175, 55, 0.05);
+            width: 55px; height: 55px;
+            background: rgba(212, 175, 55, 0.06);
             color: var(--gold-primary);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.6rem;
-            margin: 0 auto 15px;
-        }
-
-        .modal-box h3 {
-            color: var(--text-primary);
             font-size: 1.5rem;
-            margin-bottom: 5px;
+            margin: 0 auto 12px;
         }
 
+        .modal-box h3 { color: var(--text-primary); font-size: 1.4rem; margin-bottom: 4px; }
         .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* عرض الرموز المدخلة */
         .pin-display {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .pin-dot {
-            width: 16px; height: 16px;
+            width: 14px; height: 14px;
             border: 2px solid var(--text-muted);
             border-radius: 50%;
-            transition: var(--transition-smooth);
         }
 
         .pin-dot.active {
@@ -527,29 +412,27 @@
             box-shadow: 0 0 10px var(--gold-primary);
         }
 
-        /* لوحة أزرار الأرقام */
+        /* تصميم أزرار كبير ومريح لليد على شاشات الموبايل */
         .pin-pad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .pad-btn {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
             color: var(--text-primary);
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            padding: 15px 0;
+            padding: 12px 0;
             border-radius: var(--radius-lg);
             cursor: pointer;
-            transition: var(--transition-smooth);
         }
 
-        .pad-btn:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold-primary);
+        .pad-btn:active {
+            background: rgba(212, 175, 55, 0.2);
             color: var(--gold-primary);
         }
 
@@ -558,35 +441,28 @@
             border: none;
             color: var(--text-muted);
             font-weight: 600;
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            padding: 5px;
         }
-        .modal-cancel-btn:hover { color: var(--danger); }
 
         .toast-error {
             color: var(--danger);
             background: var(--danger-bg);
             padding: 10px;
             border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
             display: none;
         }
 
         /* ===== الفوتر ===== */
         footer {
             text-align: center;
-            margin-top: 60px;
-            padding: 30px;
+            margin-top: 40px;
+            padding: 25px;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(156, 177, 180, 0.05);
-        }
-
-        @media (max-width: 768px) {
-            header { padding: 30px 20px; }
-            .cards-grid { grid-template-columns: 1fr; }
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(163, 188, 169, 0.08);
         }
     </style>
 </head>
@@ -598,22 +474,22 @@
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
     <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/1107/1107-preview.mp3" preload="auto"></audio>
 
-    <!-- شاشة الترحيب الذكية -->
+    <!-- شاشة الترحيب الذكية للموبايل -->
     <div id="welcome-screen">
         <div class="welcome-center">
-            <div class="welcome-logo"><i class="fa-solid fa-book-quran"></i></div>
+            <div class="welcome-logo"><i class="fa-solid fa-kaaba"></i></div>
             <h1>خادم القرآن الكريم</h1>
             <div class="welcome-sub">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
             <button class="btn-start" onclick="startPlatform()">الدخول للمنصة</button>
         </div>
     </div>
 
-    <!-- نافذة الحماية الذكية (PIN Pad) -->
+    <!-- نافذة الحماية الذكية (PIN Pad) المتوافقة مع اللمس -->
     <div id="password-modal">
         <div class="modal-box">
             <div class="modal-shield"><i class="fa-solid fa-user-shield"></i></div>
             <h3>منطقة الإدارة</h3>
-            <p>يرجى إدخال الرمز السري المكون من 4 أرقام</p>
+            <p>يرجى إدخال الرمز السري للمشرفين</p>
 
             <div id="toast-error" class="toast-error"><i class="fa-solid fa-circle-exclamation"></i> الرمز المدخل غير صحيح</div>
 
@@ -639,33 +515,19 @@
                 <button class="pad-btn" style="color: var(--emerald-accent)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
             </div>
 
-            <button class="modal-cancel-btn" onclick="closeModal()">إلغاء التصفح</button>
+            <button class="modal-cancel-btn" onclick="closeModal()">إلغاء</button>
         </div>
     </div>
 
-    <!-- الهيدر -->
+    <!-- الهيدر برمز الكعبة المشرّفة -->
     <header>
-        <div class="platform-badge"><i class="fa-solid fa-mosque"></i> منصة خادم القرآن الرقمية</div>
+        <div class="platform-badge"><i class="fa-solid fa-kaaba"></i> منصة خادم القرآن الرقمية</div>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ</h1>
         <p>بإشراف فضيلة الشيخ عبدالرحمن</p>
     </header>
 
-    <!-- شريط البحث والفلترة الذكي -->
-    <section class="search-filter-section">
-        <div class="search-wrapper">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن الكتب، القصص، أو المصاحف..." oninput="filterCards()">
-        </div>
-        <div class="filter-tabs">
-            <button class="filter-btn active" onclick="filterCategory('all', this)">الكل</button>
-            <button class="filter-btn" onclick="filterCategory('quran', this)">علوم القرآن</button>
-            <button class="filter-btn" onclick="filterCategory('stories', this)">إيمانيات وقصص</button>
-            <button class="filter-btn" onclick="filterCategory('admin', this)">الإدارة</button>
-        </div>
-    </section>
-
-    <!-- شريط الإشراقات -->
-    <div class="ticker-container">
+    <!-- شريط الإشراقات السريع (يدعم اللمس لإيقافه مؤقتاً) -->
+    <div class="ticker-container" ontouchstart="pauseTicker()" ontouchend="resumeTicker()">
         <div class="ticker-label"><i class="fa-solid fa-heart-open"></i> إشراقات</div>
         <div class="ticker-wrap">
             <div class="ticker-track" id="tickerTrack">
@@ -677,11 +539,11 @@
         </div>
     </div>
 
-    <!-- شبكة المحتوى التفاعلية -->
-    <main class="cards-grid" id="cardsGrid">
+    <!-- شبكة المحتوى الرقمي المتكاملة للهواتف الذكية -->
+    <main class="cards-grid">
 
         <!-- كارت 1 -->
-        <div class="card" data-category="quran">
+        <div class="card">
             <div class="card-meta">
                 <div class="card-icon"><i class="fa-solid fa-book-open-reader"></i></div>
                 <div class="card-tag">أسئلة وأجوبة</div>
@@ -695,9 +557,9 @@
         </div>
 
         <!-- كارت 2 -->
-        <div class="card" data-category="stories">
+        <div class="card">
             <div class="card-meta">
-                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="card-icon"><i class="fa-solid fa-mosque"></i></div>
                 <div class="card-tag">قصص وعبر</div>
             </div>
             <h3>الحياة السعيدة</h3>
@@ -708,10 +570,10 @@
             </div>
         </div>
 
-        <!-- كارت 3 (مقفل) -->
-        <div class="card card-secure" data-category="admin">
+        <!-- كارت 3 (المنطقة المقفلة للمشرفين) -->
+        <div class="card card-secure">
             <div class="card-meta">
-                <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+                <div class="card-icon"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="card-tag">منطقة مقفلة</div>
             </div>
             <h3>التقييم والمتابعة</h3>
@@ -723,7 +585,7 @@
         </div>
 
         <!-- كارت 4 -->
-        <div class="card" data-category="stories">
+        <div class="card">
             <div class="card-meta">
                 <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="card-tag">الجزء الثاني</div>
@@ -737,9 +599,9 @@
         </div>
 
         <!-- كارت 5 -->
-        <div class="card" data-category="quran">
+        <div class="card">
             <div class="card-meta">
-                <div class="card-icon"><i class="fa-solid fa-mosque"></i></div>
+                <div class="card-icon"><i class="fa-solid fa-book-quran"></i></div>
                 <div class="card-tag">المصحف الرقمي</div>
             </div>
             <h3>القرآن الكريم</h3>
@@ -751,7 +613,7 @@
         </div>
 
         <!-- كارت 6 -->
-        <div class="card" data-category="quran">
+        <div class="card">
             <div class="card-meta">
                 <div class="card-icon"><i class="fa-solid fa-scroll"></i></div>
                 <div class="card-tag">أحاديث نبوية</div>
@@ -767,11 +629,10 @@
 
     <footer>
         رَبِّ زِدْنِي عِلْمًا • مركز خادم القرآن الكريم <br>
-        <span style="font-size: 0.8rem; opacity: 0.5; display: inline-block; margin-top: 5px;">الإصدار الذكي والمطور</span>
+        <span style="font-size: 0.75rem; opacity: 0.4; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
     </footer>
 
     <script>
-        // جلب العناصر الصوتية المعتمدة لديك
         const clickSound = document.getElementById('clickSound');
         const quranAudio = document.getElementById('quranAudio');
         const errorSound = document.getElementById('errorSound');
@@ -779,9 +640,8 @@
         
         let targetProtectedUrl = '';
         let currentPin = '';
-        let currentCategory = 'all';
 
-        // تكرار محتوى شريط الإعلانات لحركة لانهائية ناعمة
+        // تكرار شريط الإشراقات للحركة اللانهائية
         const track = document.getElementById('tickerTrack');
         track.innerHTML += track.innerHTML;
 
@@ -792,7 +652,9 @@
             }
         }
 
-        // بدء تشغيل المنصة وإخفاء شاشة الترحيب بانسيابية
+        function pauseTicker() { track.style.animationPlayState = 'paused'; }
+        function resumeTicker() { track.style.animationPlayState = 'running'; }
+
         function startPlatform() {
             playSound(clickSound);
             quranAudio.currentTime = 3.4;
@@ -800,50 +662,15 @@
 
             const welcome = document.getElementById('welcome-screen');
             welcome.style.opacity = '0';
-            welcome.style.filter = 'blur(20px)';
-            setTimeout(() => { welcome.style.visibility = 'hidden'; }, 500);
+            welcome.style.filter = 'blur(10px)';
+            setTimeout(() => { welcome.style.visibility = 'hidden'; }, 400);
         }
 
-        // الانتقال الفوري بين الصفحات
         function navigate(url) {
             playSound(clickSound);
-            setTimeout(() => { window.location.href = url; }, 200);
+            setTimeout(() => { window.location.href = url; }, 150);
         }
 
-        // لوحة الفلترة والبحث الذكي
-        function filterCategory(category, buttonElement) {
-            playSound(clickSound);
-            currentCategory = category;
-            
-            // تحديث تصميم الأزرار النشطة
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            buttonElement.classList.add('active');
-            
-            filterCards();
-        }
-
-        function filterCards() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.card');
-
-            cards.forEach(card => {
-                const title = card.querySelector('h3').innerText.toLowerCase();
-                const desc = card.querySelector('p').innerText.toLowerCase();
-                const cat = card.getAttribute('data-category');
-
-                const matchesSearch = title.includes(searchText) || desc.includes(searchText);
-                const matchesCategory = (currentCategory === 'all' || cat === currentCategory);
-
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = 'flex';
-                    card.style.animate = 'fadeIn 0.4s ease';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // إدارة الـ PIN Pad المطور للمنطقة المحمية
         function openProtectedPage(url) {
             playSound(clickSound);
             targetProtectedUrl = url;
@@ -865,7 +692,7 @@
                 updatePinDots();
             }
             if (currentPin.length === 4) {
-                setTimeout(submitPin, 200); // إدخال تلقائي عند اكتمال الأرقام الأربعة
+                setTimeout(submitPin, 200);
             }
         }
 
@@ -891,14 +718,9 @@
             if (currentPin === '7222') {
                 toastError.style.display = 'none';
                 playSound(successSound);
-                
-                // تأثير بصري للنجاح
                 document.querySelector('.modal-box').style.borderColor = 'var(--emerald-accent)';
                 document.querySelector('.modal-shield').style.color = 'var(--emerald-accent)';
-                
-                setTimeout(() => {
-                    window.location.href = targetProtectedUrl;
-                }, 800);
+                setTimeout(() => { window.location.href = targetProtectedUrl; }, 600);
             } else {
                 playSound(errorSound);
                 toastError.style.display = 'block';
@@ -907,19 +729,15 @@
             }
         }
 
-        // ميزة مشاركة الروابط الذكية
         function sharePage(title, url, isProtected, event) {
             event.stopPropagation();
-
             if (isProtected) {
                 playSound(errorSound);
                 alert('❌ لأسباب أمنية، لا يمكن مشاركة الروابط الخاصة بالإدارة.');
                 return;
             }
-
             playSound(clickSound);
             const fullUrl = new URL(url, window.location.href).href;
-
             if (navigator.share) {
                 navigator.share({
                     title: title,
@@ -928,7 +746,7 @@
                 }).catch(() => {});
             } else {
                 navigator.clipboard.writeText(fullUrl).then(() => {
-                    alert(`📋 تم نسخ رابط [${title}] بنجاح إلى الحافظة!`);
+                    alert(`📋 تم نسخ رابط [${title}] بنجاح!`);
                 });
             }
         }
