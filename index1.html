@@ -368,7 +368,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   let existingStudentsList = [];
 
-  // دالة تحويل التاريخ إلى هجري خالص بنسبة 100%
+  // دالة تحويل التاريخ إلى هجري خالص
   function getHijriDateString() {
     try {
       const now = new Date();
@@ -422,7 +422,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     if (!e.target.closest('.ac-wrap')) { studentDrop.style.display = 'none'; }
   });
 
-  // إضافة طالب جديد مباشرة مع عدم التكرار
+  // إضافة طالب جديد مباشرة مع عدم التكرار (تم إزالة balance و createdAt)
   async function addNewStudentPrompt() {
     const name = prompt("أدخل اسم البطل الجديد:");
     if (!name || !name.trim()) return;
@@ -440,9 +440,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       await studentsCollection.add({
         name: cleanName,
         phone: phone.trim(),
-        balance: 0,
-        transactions: [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        transactions: []
       });
 
       document.getElementById('inp-student').value = cleanName;
@@ -453,7 +451,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   }
 
-  // الحفظ واستخرج تقرير المتابعة وحفظ البيانات في قاعدة البيانات
+  // الحفظ واستخراج تقرير المتابعة وحفظ البيانات في قاعدة البيانات (تم إزالة isPay و amount)
   async function saveAndGenerateReport() {
     var studentName = document.getElementById('inp-student').value.trim();
     if (!studentName) {
@@ -492,8 +490,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       date: hijriDateStr,
       type: 'تقرير متابعة',
       desc: descParts.join(' | '),
-      amount: generalRating,
-      isPay: true,
+      generalRating: generalRating,
       academicData: data
     };
 
@@ -503,17 +500,13 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       if (!snapshot.empty) {
         const docRef = snapshot.docs[0].ref;
         await docRef.update({
-          transactions: firebase.firestore.FieldValue.arrayUnion(newReportTx),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          transactions: firebase.firestore.FieldValue.arrayUnion(newReportTx)
         });
       } else {
         await studentsCollection.add({
           name: studentName,
           phone: '',
-          balance: 0,
-          transactions: [newReportTx],
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          transactions: [newReportTx]
         });
       }
     } catch (e) {
@@ -896,11 +889,9 @@ async function loadFonts(){
   } catch(e) {}
 }
 
-// دالة رسم تقرير المتابعة مع كافة التعديلات المطلوبة
 async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
   await loadFonts();
   
-  // حساب الارتفاع المطلوب ديناميكياً
   let totalRowsCount = 0;
   SECTIONS.forEach(sec => {
     let sData = data[sec.key];
@@ -915,20 +906,17 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   canvas.height = Math.max(1400, 600 + (totalRowsCount * 95));
   var ctx = canvas.getContext('2d');
 
-  // الخلفية
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
   bgG.addColorStop(0, '#fbfaf5'); 
   bgG.addColorStop(1, '#f3eee0'); 
   ctx.fillStyle = bgG; 
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // إطار خارجي
   rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
   ctx.strokeStyle = '#0b3d2e';
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // الهيدر الرئيسي (مسح اسم المركز)
   rr(ctx, 35, 35, canvas.width - 70, 150, 18);
   var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
   hdrGradient.addColorStop(0, '#04201a');
@@ -936,13 +924,11 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.fillStyle = hdrGradient;
   ctx.fill();
 
-  // إطار ذهبي داخلي للهيدر
   rr(ctx, 40, 40, canvas.width - 80, 140, 14);
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // نصوص الهيدر
   ctx.font = '800 32px Cairo, sans-serif';
   ctx.fillStyle = '#fef08a';
   ctx.textAlign = 'center';
@@ -952,12 +938,10 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.fillStyle = '#ffffff';
   ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 125);
 
-  // التاريخ الهجري الصريح عند السهم
   ctx.font = '600 18px Cairo, sans-serif';
   ctx.fillStyle = '#d4af37';
   ctx.fillText('التاريخ: ' + hijriDateStr, 540, 155);
 
-  // كارت اسم البطل والتقييم العام
   var curY = 215;
   rr(ctx, 40, curY, canvas.width - 80, 120, 16);
   ctx.fillStyle = '#ffffff';
@@ -966,13 +950,11 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // اسم البطل (تغيير النص وتوسيطه)
   ctx.font = '800 28px Cairo, sans-serif';
   ctx.fillStyle = '#04201a';
   ctx.textAlign = 'center';
   ctx.fillText('اسم البطل: ' + studentName, 540, curY + 48);
 
-  // التقييم العام (توسيطه في السطر التابع له)
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#725304';
   ctx.textAlign = 'center';
@@ -980,14 +962,12 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
 
   curY += 145;
 
-  // رسم الأقسام والبنود
   SECTIONS.forEach(sec => {
     let sData = data[sec.key];
     let hasCurrents = sData && sData.currents && sData.currents.length > 0;
     let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
 
     if (hasCurrents || hasNexts) {
-      // عنوان القسم الرئيسي
       rr(ctx, 40, curY, canvas.width - 80, 50, 10);
       ctx.fillStyle = '#0b3d2e';
       ctx.fill();
@@ -998,7 +978,6 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
       ctx.fillText(sec.icon + ' ' + sec.title, 980, curY + 34);
       curY += 65;
 
-      // رسم الحفظ والماضي الحالي
       if (hasCurrents) {
         sData.currents.forEach(item => {
           let itemTitle = "";
@@ -1017,13 +996,11 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 1. عنوان الإنجاز الحالي
             ctx.font = '700 20px Cairo, sans-serif';
             ctx.fillStyle = '#111827';
             ctx.textAlign = 'right';
             ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 960, curY + 32);
 
-            // 2. وضع التقييم والأخطاء في مكان الدوائر (في الجانب الأيمن أسفل العنوان)
             let rateTxt = item.rating ? item.rating : 'تم التسميع';
             let errTxt = (item.errors && item.errors !== '0') ? ` (الأخطاء: ${item.errors})` : ' (بدون أخطاء ✨)';
 
@@ -1037,7 +1014,6 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
         });
       }
 
-      // رسم الخطة القادمة
       if (hasNexts) {
         sData.nexts.forEach(item => {
           let planTitle = "";
@@ -1070,7 +1046,6 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
     }
   });
 
-  // التوقيع السفلي للتقرير (حذف مشرف المسار)
   var footerY = canvas.height - 80;
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#0b3d2e';
