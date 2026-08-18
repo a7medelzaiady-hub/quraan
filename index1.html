@@ -29,10 +29,40 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
   padding: 24px 16px; 
   text-align: center; 
   border-bottom: 4px solid var(--gold); 
+  position: relative;
 }
 .hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(212, 175, 55, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
+
+/* أزرار التنقل السريعة بالإدارة */
+.nav-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+.btn-nav-action {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--gold-light);
+  border: 1px solid var(--gold);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: 'Cairo', sans-serif;
+}
+.btn-nav-action:hover {
+  background: var(--gold);
+  color: var(--green-deep);
+}
 
 /* شريط نظام الأخطاء العلوي */
 .system-selector-wrap {
@@ -103,7 +133,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* تنسيق عداد الأخطاء التفاعلي */
+/* عداد الأخطاء التفاعلي */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
@@ -112,20 +142,18 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .counter-btn.minus:active { background: #e5e7eb; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* أزرار التثبيت السفلي */
+/* زر التثبيت السفلي الرئيسي */
 .submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; }
-.submit-btn { width: 100%; padding: 16px 8px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 15px rgba(186, 143, 12, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-.btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
+.submit-btn { width: 100%; padding: 16px 8px; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 15px rgba(11, 61, 46, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; border: none; background: linear-gradient(135deg, #0b3d2e, #14795c); color: var(--gold-light); border: 2px solid var(--gold); }
 .submit-btn:active { transform: scale(0.98); }
 
-/* نافذة مصحف التسميع الفعلي المتجاوب وعرض الآيات نصاً */
+/* نافذة مصحف التسميع */
 .quran-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 99999; align-items: center; justify-content: center; padding: 12px; }
 .quran-box { background: #fff; border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--green-mid); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
 .quran-header { background: var(--green-mid); color: var(--gold-light); padding: 16px; text-align: center; font-weight: 700; font-size: 16px; border-bottom: 2px solid var(--gold); }
 .quran-grid { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #fdfcf7; flex: 1; }
 
-/* بطاقات الآيات المقروءة والواقعية */
 .ayah-text-card { 
   background: #ffffff; 
   border: 1px solid #e2decb; 
@@ -177,7 +205,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
   
-  <!-- أزرار اختيار نظام الرصد العلوي -->
+  <div class="nav-actions">
+    <a href="manage.html" class="btn-nav-action"><i class="ti ti-settings"></i> صفحة الإدارة (manage.html)</a>
+  </div>
+
   <div class="system-selector-wrap">
     <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
     <div class="system-grid">
@@ -189,6 +220,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     </div>
   </div>
 </div>
+
 <div class="body">
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
@@ -211,7 +243,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     </div>
   </div>
   
-  <!-- Sections -->
   <div class="section" id="sec-ns">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
     <div class="sec-body">
@@ -293,11 +324,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
-    <button class="submit-btn btn-combined" onclick="generateAllOutputs()">✨ استخراج التقرير والشهادة معاً</button>
+    <button class="submit-btn" id="btn-save-cert" onclick="saveAndGenerateCertificate()">✨ الحفظ واستخراج الشهادة</button>
   </div>
 </div>
 
-<!-- نافذة مصحف التسميع التفاعلية المخصصة لعرض نصوص الآيات الفعلي -->
 <div class="quran-modal" id="quran-modal">
   <div class="quran-box">
     <div class="quran-header" id="quran-modal-header">مصحف التسميع التفاعلي</div>
@@ -308,15 +338,83 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+    authDomain: "ahmedelzaiady.firebaseapp.com",
+    projectId: "ahmedelzaiady",
+    storageBucket: "ahmedelzaiady.firebasestorage.app",
+    messagingSenderId: "300306825071",
+    appId: "1:300306825071:web:0426ddde56280fa090329a",
+    measurementId: "G-WE04GK5XZZ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  window.saveAndGenerateCertificate = async function() {
+    var studentName = document.getElementById('inp-student').value.trim();
+    if (!studentName) {
+      customAlert('⚠️ يرجى إدخال اسم البطل أولاً.');
+      return;
+    }
+
+    var btn = document.getElementById('btn-save-cert');
+    var originalText = btn.innerHTML;
+    btn.innerHTML = 'جاري الحفظ واستخراج الشهادة... ⏳';
+    btn.disabled = true;
+
+    var generalRating = document.getElementById('inp-general-rating').value;
+    var data = {};
+    SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+
+    try {
+      await addDoc(collection(db, "students"), {
+        studentName: studentName,
+        generalRating: generalRating,
+        academicData: data,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    } catch (e) {
+      console.error("Firebase Save Error:", e);
+    }
+
+    try {
+      var adviceLines = getPersonalizedAdvice(data);
+      var appCanvas = await drawAppreciationReport(studentName, generalRating, adviceLines);
+      showSingleImageModal(appCanvas, 'شهادة_تقييم_' + studentName + '.jpg');
+    } catch (e) {
+      customAlert('حدث خطأ أثناء إعداد الشهادة: ' + e.message);
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  };
+</script>
+
 <script>
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 
-// ذاكرة تخزين مؤقتة (Cache) لعدم تحميل السورة أكثر من مرة من الإنترنت
 var SURAS_CACHE = {}; 
 var counters={};
 var activeErrorInputId = null;
 var currentQuranRowId = null;
 var currentQuranIsQ = false;
+
+var SECTIONS = [
+  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
+  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
+  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
+  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
+  {key:'sj', title:'السراج', icon:'💡', isQ:false},
+  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
+];
 
 function customAlert(msg) {
   var m=document.createElement('div');
@@ -354,13 +452,12 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
     if (action === 'plus') {
       openQuranModal(errorInpId, rowId, isQ);
     } else {
-      // يحذف آخر عنصر فقط مضاف إلى القائمة بدلاً من التصفير الكامل (كما طلبت)
       var currentErrors = inp.value;
       if (currentErrors === '0' || currentErrors.trim() === '') return;
       
       var list = currentErrors.split('، ').filter(x => x.trim() !== '');
       if (list.length > 0) {
-        list.pop(); // حذف آخر خطأ
+        list.pop();
       }
       
       if (list.length === 0) {
@@ -372,7 +469,6 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
   }
 }
 
-// دالة جلب الآيات من الـ API الذكي وفتح المصحف
 async function openQuranModal(errorInpId, rowId, isQ) {
   var row = document.getElementById(rowId);
   if (!row) return;
@@ -422,15 +518,12 @@ async function openQuranModal(errorInpId, rowId, isQ) {
   document.getElementById('quran-modal').style.display = 'flex';
   var grid = document.getElementById('quran-modal-grid');
 
-  // جلب الآيات من الإنترنت إذا لم تكن مخزنة مسبقاً (للسور فقط وليس الأسئلة)
   if (!isQ) {
     var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
     if (surahIndex > 0) {
       if (!SURAS_CACHE[surahIndex]) {
-        // شاشة تحميل أنيقة أثناء استدعاء السورة
         grid.innerHTML = '<div style="text-align:center; padding: 50px 20px; color: var(--green-mid); font-weight: bold; font-size: 20px; grid-column: 1/-1;">جاري تحميل آيات سورة ' + surahName + ' بالرسم العثماني... ⏳</div>';
         try {
-          // رابط API رسمي ومجاني للقرآن الكريم (AlQuran.cloud)
           let res = await fetch(`https://api.alquran.cloud/v1/surah/${surahIndex}/quran-uthmani`);
           let json = await res.json();
           if (json && json.data && json.data.ayahs) {
@@ -441,18 +534,15 @@ async function openQuranModal(errorInpId, rowId, isQ) {
         }
       }
       
-      // إذا كانت السورة كاملة ومحملة بالفعل، حدد النهاية لتكون آخر آية في السورة
       if (typeSel !== 'range' && SURAS_CACHE[surahIndex]) {
         toNum = SURAS_CACHE[surahIndex].length;
       }
     }
   }
 
-  // رسم المصحف بعد التحميل
   renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel);
 }
 
-/* بناء وتحديث صفحة المصحف الواقعية بنصوص الآيات بدلاً من الأزرار الرقمية الجافة */
 function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
   var grid = document.getElementById('quran-modal-grid');
   grid.innerHTML = "";
@@ -471,7 +561,6 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
     });
   }
 
-  // تبدأ الصفحة من النطاق المحدد أو من آية ما بعد آخر خطأ مسجل لمنع العشوائية والرجوع للخلف
   var startRenderingFrom = Math.max(fromNum, maxPressedNum);
   
   if (startRenderingFrom > toNum) {
@@ -479,11 +568,9 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
       return;
   }
 
-  var labelPrefix = isQ ? "س " : "آية ";
   var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
   var ayahsData = SURAS_CACHE[surahIndex];
 
-  // تأمين إضافي لعدم تجاوز عدد آيات السورة الفعلي
   if (!isQ && ayahsData && toNum > ayahsData.length) {
       toNum = ayahsData.length;
   }
@@ -495,11 +582,9 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
     
     var displayTxt = "";
     if (!isQ && ayahsData) {
-      // سحب نص الآية الحقيقي من قاعدة البيانات
       let ayahObj = ayahsData.find(a => a.numberInSurah === i);
       if (ayahObj) {
         displayTxt = ayahObj.text + " ۝";
-        // إزالة البسملة من أول آية إلا في الفاتحة (ليكون التسميع مباشراً وواقعياً)
         if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
            displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
         }
@@ -509,7 +594,6 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
     } else if (isQ) {
       displayTxt = "السؤال أو التمرين التدريبي رقم " + i + " داخل المذكرة المعتمدة.";
     } else {
-      // في حالة عدم وجود إنترنت للتحميل
       displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
     }
 
@@ -519,7 +603,6 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
     card.onclick = function() {
       var clickedNum = parseInt(this.getAttribute('data-num'));
       toggleErrorState(clickedNum, isQ);
-      // إعادة الرسم فوراً لإخفاء ما تم تجاوزه وتثبيت الرصد
       renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel);
     };
     
@@ -546,7 +629,6 @@ function toggleErrorState(num, isQ) {
     list.push(itemStr);
   }
 
-  // فرز العناصر تصاعدياً لضمان مظهر احترافي ومطابق للمصحف بالتقرير
   list.sort((a, b) => parseInt(a.replace(/[^\d]/g, '')) - parseInt(b.replace(/[^\d]/g, '')));
 
   if (list.length === 0) {
@@ -560,11 +642,6 @@ function closeQuranModal() {
   document.getElementById('quran-modal').style.display = 'none';
   activeErrorInputId = null;
   currentQuranRowId = null;
-}
-
-function clearAllErrors(errorInpId) {
-  var inp = document.getElementById(errorInpId);
-  if (inp) inp.value = '0';
 }
 
 function addCurrentSurah(containerId, prefix){
@@ -671,7 +748,7 @@ function collectSectionData(prefix, isQ) {
 
 function getPersonalizedAdvice(data) {
   let low = []; let high = [];
-  if (typeof SECTIONS !== 'undefined' && Array.isArray(SECTIONS)) {
+  if (Array.isArray(SECTIONS)) {
     SECTIONS.forEach(sec => {
       let sectionData = data[sec.key];
       if (sectionData && Array.isArray(sectionData.currents)) {
@@ -693,25 +770,11 @@ function getPersonalizedAdvice(data) {
   return adviceLines;
 }
 
-/* محرك الـ Canvas الإخراجي */
-var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
-var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
-var SECTIONS = [
-  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
-  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
-  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
-  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
-  {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
-];
-
 function rr(ctx,x,y,w,h,r){
   ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
   ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
   ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
 }
-function hijriDate(){ try { return new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {weekday:'long', year:'numeric', month:'long', day:'numeric'}).format(new Date()); } catch(e) { return ''; } }
-function timeStamp(){ try { return new Intl.DateTimeFormat('ar-EG', {hour:'2-digit', minute:'2-digit'}).format(new Date()); } catch(e){ return ''; } }
 
 async function loadFonts(){
   try {
@@ -749,165 +812,11 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
   ctx.restore(); return w;
 }
 
-function ratingStyle(rating){
-  if(rating.indexOf('بارك الله')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
-  if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fefce8', color:'#854d0e', border:'#eab308'};
-  if(rating.indexOf('جيد')>-1) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
-  return {bg:'#fef2f2', color:'#991b1b', border:'#ef4444'};
-}
-
 function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
   function bracket(x, y, dx, dy){ ctx.beginPath(); ctx.moveTo(x, y + dy*len); ctx.lineTo(x, y); ctx.lineTo(x + dx*len, y); ctx.stroke(); }
   bracket(inset, inset, 1, 1); bracket(w-inset, inset, -1, 1); bracket(inset, h-inset, 1, -1); bracket(w-inset, h-inset, -1, -1);
   ctx.restore();
-}
-
-function drawSectionHeader(ctx, sec, rightX, y, draw){
-  var r = 32; var cx = rightX - r;
-  if(draw){
-    ctx.save(); var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r); g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
-    ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = PALETTE.goldLt; ctx.fillText(sec.icon, cx, y+r+2);
-    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
-  }
-  return 2*r + 26;
-}
-
-function renderItemCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var leftX  = x + CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var mainTxt, subTxt = null;
-  if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
-  else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
-  ctx.font = '700 26px Cairo, sans-serif'; var tagW = subTxt ? (ctx.measureText(subTxt).width + 65) : 0;
-  ctx.font = '900 44px Cairo, sans-serif'; var titleLines = wrapText(ctx, mainTxt, Math.max(innerW - tagW, innerW * 0.5));
-  var titleBlockH = titleLines.length * 52;
-  if(draw){
-    titleLines.forEach(function(line, i){
-      ctx.font = '900 44px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 36 + i*52);
-    });
-  }
-  if(subTxt){
-    var tagY = cy + Math.max(0, titleBlockH/2 - 25);
-    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 26px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:50, padX:20, align:'left', draw:draw});
-  }
-  cy += titleBlockH + 24;
-  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null && item.errors !== '0';
-  if(hasRating || hasErrors || item.errors === '0'){
-    if(hasRating){
-      var rs = ratingStyle(item.rating);
-      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 28px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:60, padX:26, align:'right', draw:draw});
-    }
-    if(item.errors !== '' && item.errors != null){
-      var isZero = (item.errors === '0'); 
-      var errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors + ' ❌') : ('عدد الأخطاء: ' + item.errors + ' ❌'));
-      var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      
-      var errorFont = item.errors.length > 20 ? '800 22px Cairo, sans-serif' : '800 28px Cairo, sans-serif';
-      drawRoyalPill(ctx, errTxt, leftX, cy, {font:errorFont, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:60, padX:26, align:'left', draw:draw});
-    }
-    cy += 82;
-  }
-  return cy - y;
-}
-
-function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var planTxt;
-  if(item.nextPlanSr){ planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); }
-  else { var u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT; }
-  ctx.font = '700 32px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
-  var boxH = 22 + 38 + planLines.length*44 + 22;
-  var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
-  if(draw){
-    rr(ctx, boxX, cy - 10, boxW, boxH, 16); ctx.fillStyle = '#fbf3d9'; ctx.fill();
-    ctx.save(); ctx.setLineDash([8,5]); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke(); ctx.restore();
-    ctx.font = '800 28px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 30);
-    planLines.forEach(function(line, i){
-      ctx.font = '700 32px Cairo, sans-serif'; ctx.fillStyle = '#5a4400';
-      ctx.fillText(line, rightX - 20, cy + 30 + 38 + 24 + i*44);
-    });
-  }
-  return boxH + CARD_PAD_Y*2 - 10;
-}
-
-function layoutReport(ctx, canvasH, nm, data, draw){
-  var y = 0;
-  if(draw){
-    ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, C_W, canvasH);
-    ctx.save(); ctx.strokeStyle = PALETTE.gold; ctx.globalAlpha = 0.045; ctx.lineWidth = 1.5;
-    for(let i = -canvasH; i < C_W*2; i += 44){ ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i - canvasH, canvasH); ctx.stroke(); }
-    ctx.restore();
-  }
-  var hH = 232;
-  if(draw){
-    var hG = ctx.createLinearGradient(0, 0, 0, hH); hG.addColorStop(0, PALETTE.deep); hG.addColorStop(1, PALETTE.mid);
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(C_W, 0); ctx.lineTo(C_W, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, 0, hH - 36); ctx.closePath(); ctx.fillStyle = hG; ctx.fill();
-    ctx.beginPath(); ctx.moveTo(0, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, C_W, hH - 36); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '58px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText('🕌', C_W/2, 22);
-    ctx.font = '900 54px Amiri, serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 90); ctx.shadowColor = 'transparent';
-    ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 152);
-  }
-  y = hH;
-  var by = y - 6; var bh = 96; ctx.font = '900 44px Cairo, sans-serif';
-  var nameTxt = 'بطلنا:  ' + nm + '  🏆'; var nmW = ctx.measureText(nameTxt).width;
-  var bw = Math.min(Math.max(nmW + 100, 460), C_W - PAD*2); var fontSize = 44;
-  if(nmW + 100 > C_W - PAD*2){ fontSize = Math.max(28, Math.floor(44 * (C_W - PAD*2 - 100) / nmW)); }
-  var bx = (C_W - bw) / 2;
-  if(draw){
-    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
-    var bG = ctx.createLinearGradient(bx, by, bx, by+bh); bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
-    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.restore();
-    ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
-  }
-  y = by + bh + 34;
-  if(draw){
-    var dateTxt = hijriDate(); ctx.font = '700 24px Cairo, sans-serif';
-    var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
-    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
-  }
-  y += 38;
-  var cardX = PAD; var cardW = C_W - PAD*2;
-  SECTIONS.forEach(function(sec){
-    var sData = data[sec.key]; if(!sData || (!sData.currents.length && !sData.nexts.length)) return;
-    y += 8; var headH = drawSectionHeader(ctx, sec, cardX + cardW, y, draw); y += headH + 4;
-    sData.currents.forEach(function(item){
-      var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
-      if(draw){
-        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.07)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6;
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
-        var rs = item.rating ? ratingStyle(item.rating) : {border: PALETTE.mid};
-        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = rs.border; ctx.fill(); ctx.restore();
-        renderItemCard(ctx, item, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-    sData.nexts.forEach(function(plan){
-      var h = renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, false);
-      if(draw){
-        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.04)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
-        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = PALETTE.gold; ctx.fill(); ctx.restore();
-        renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-    y += 12;
-  });
-  y += 14; var fH = 96;
-  if(draw){
-    ctx.fillStyle = PALETTE.deep; ctx.fillRect(0, y, C_W, fH);
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'transparent'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
-    ctx.font = '600 19px Cairo, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
-    drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
-  }
-  return y + fH;
 }
 
 async function drawAppreciationReport(nm, rating, adviceLines) {
@@ -970,14 +879,6 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   return canvas;
 }
 
-async function drawReport(nm, data){
-  await loadFonts(); var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
-  var totalH = layoutReport(tmp.getContext('2d'), 0, nm, data, false);
-  var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 700);
-  layoutReport(canvas.getContext('2d'), canvas.height, nm, data, true);
-  return canvas;
-}
-
 function showSingleImageModal(canvasElement, downloadName) {
   var modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
@@ -997,7 +898,7 @@ function showSingleImageModal(canvasElement, downloadName) {
   btnWrap.appendChild(closeBtn);
 
   var shareBtn = document.createElement('button');
-  shareBtn.innerHTML = '🔗 مشاركة التقرير مباشر';
+  shareBtn.innerHTML = '🔗 مشاركة الشهادة مباشرة';
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
@@ -1008,12 +909,12 @@ function showSingleImageModal(canvasElement, downloadName) {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'تقرير المتابعة',
-            text: 'تقرير بطل مركز خادم القرآن الكريم'
+            title: 'شهادة تقدير',
+            text: 'شهادة تقدير بطل مركز خادم القرآن الكريم'
           });
         } else {
           var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-          customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ الصورة في الجهاز بدلاً من ذلك.');
+          customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ الشهادة في الجهاز بدلاً من ذلك.');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
@@ -1024,23 +925,6 @@ function showSingleImageModal(canvasElement, downloadName) {
   btnWrap.appendChild(shareBtn);
   modal.appendChild(btnWrap);
   document.body.appendChild(modal);
-}
-
-async function generateAllOutputs() {
-  var nm = document.getElementById('inp-student').value.trim(); if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
-  var genRating = document.getElementById('inp-general-rating').value;
-  var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
-  
-  try {
-    var reportCanvas = await drawReport(nm, data);
-    var adviceLines = getPersonalizedAdvice(data);
-    var appCanvas = await drawAppreciationReport(nm, genRating, adviceLines);
-    
-    showSingleImageModal(reportCanvas, 'تقرير_متابعة_'+nm+'.jpg');
-    setTimeout(() => {
-      showSingleImageModal(appCanvas, 'شهادة_تقييم_'+nm+'.jpg');
-    }, 400);
-  } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message); }
 }
 
 SECTIONS.forEach(sec => {
