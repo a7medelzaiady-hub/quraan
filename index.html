@@ -5,63 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة خادم القرآن الكريم الرقمية</title>
 
-    <!-- الخطوط الروحانية والحديثة -->
+    <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
     <!-- الأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-base: #021612;
-            --bg-gradient: radial-gradient(circle at 50% 0%, #052e25 0%, #010f0c 100%);
-            --surface-glass: rgba(5, 46, 37, 0.6);
-            --border-glass: rgba(212, 175, 55, 0.15);
-            --border-hover: rgba(212, 175, 55, 0.4);
-            
-            --gold-primary: #d4af37;
-            --gold-light: #f3e5ab;
-            --gold-glow: rgba(212, 175, 55, 0.2);
-            
-            --emerald-accent: #00f5d4;
-            --text-primary: #f5f7f8;
-            --text-secondary: #a3bca9;
-            --text-muted: #5e7e68;
-            
-            --danger: #ff5e62;
-            --danger-bg: rgba(255, 94, 98, 0.1);
-            
-            --radius-xl: 20px;
-            --radius-lg: 14px;
-            --radius-sm: 8px;
+            /* هوية الزيادي: أسود فخم + ذهبي لامع + أخضر زمردي + أحمر صريح */
+            --germany-black: #000000;
+            --germany-black-soft: #0d0d0d;
+            --germany-gold: #FFCC00;
+            --gold-deep: #b08f26;
+            --italy-green: #178a4a;
+            --green-glow: rgba(23, 138, 74, 0.25);
+            --germany-red: #FF0000;
+            --red-bg: rgba(255, 0, 0, 0.1);
+
+            --surface-glass: rgba(20, 20, 20, 0.72);
+            --border-glass: rgba(255, 204, 0, 0.18);
+            --border-hover: rgba(255, 204, 0, 0.55);
+
+            --text-primary: #ffffff;
+            --text-secondary: #c9c9c9;
+            --text-muted: #7a7a7a;
+
+            --radius-xl: 22px;
+            --radius-lg: 15px;
+            --radius-sm: 9px;
             --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --perspective: 1200px;
         }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; /* تحسين استجابة اللمس على الهاتف */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         body {
             font-family: 'Tajawal', 'Cairo', sans-serif;
             color: var(--text-secondary);
-            background: var(--bg-base) var(--bg-gradient);
+            background: var(--germany-black);
+            background-image:
+                radial-gradient(circle at 15% 0%, rgba(255, 204, 0, 0.10), transparent 45%),
+                radial-gradient(circle at 90% 15%, rgba(23, 138, 74, 0.14), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(255, 0, 0, 0.06), transparent 55%),
+                linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
             background-attachment: fixed;
             overflow-x: hidden;
             line-height: 1.7;
             padding-bottom: 40px;
         }
 
-        /* ===== شاشة الترحيب الذكية للموبايل ===== */
+        /* ===== شاشة الترحيب ===== */
         #welcome-screen {
             position: fixed;
             inset: 0;
-            background: #010f0c;
+            background: #000000;
+            background-image: radial-gradient(circle at 50% 30%, rgba(255, 204, 0, 0.10), transparent 60%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -71,142 +78,158 @@
             padding: 20px;
         }
 
-        .welcome-center {
-            text-align: center;
-            width: 100%;
-        }
+        .welcome-center { text-align: center; width: 100%; perspective: var(--perspective); }
 
         .welcome-logo {
-            width: 110px;
-            height: 110px;
+            width: 116px;
+            height: 116px;
             margin: 0 auto 25px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, rgba(5, 46, 37, 0.7), rgba(212, 175, 55, 0.15));
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border: 1.5px solid var(--germany-gold);
             border-radius: 30px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px var(--gold-glow);
-            font-size: 2.7rem;
-            color: var(--gold-primary);
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.7),
+                0 0 30px rgba(255, 204, 0, 0.25),
+                inset 0 2px 6px rgba(255,255,255,0.08),
+                inset 0 -6px 14px rgba(0,0,0,0.6);
+            font-size: 2.8rem;
+            color: var(--germany-gold);
             animation: pulseGlow 3s infinite alternate;
+            transform-style: preserve-3d;
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.04); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 35px rgba(212, 175, 55, 0.3); }
+            0% { transform: scale(1) rotateY(0deg); }
+            100% { transform: scale(1.05) rotateY(8deg); box-shadow: 0 20px 45px rgba(0,0,0,0.75), 0 0 45px rgba(255, 204, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.1), inset 0 -6px 14px rgba(0,0,0,0.6); }
         }
 
         #welcome-screen h1 {
             color: var(--text-primary);
-            font-size: 2.1rem;
+            font-size: 2.15rem;
             font-weight: 900;
             margin-bottom: 8px;
+            font-family: 'Cairo', sans-serif;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
 
         .welcome-sub {
-            color: var(--gold-primary);
+            color: var(--germany-gold);
             font-size: 1.05rem;
-            margin-bottom: 35px;
+            margin-bottom: 38px;
+            font-weight: 700;
         }
 
         .btn-start {
-            background: linear-gradient(135deg, var(--gold-primary), #b08f26);
-            color: #010f0c;
+            background: linear-gradient(135deg, var(--germany-gold), var(--gold-deep));
+            color: #000000;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 40px;
             font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 800;
             border-radius: var(--radius-lg);
             width: 85%;
             max-width: 280px;
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 14px 28px rgba(255, 204, 0, 0.22), inset 0 -4px 8px rgba(0,0,0,0.15);
             transition: var(--transition-smooth);
+            font-family: 'Cairo', sans-serif;
         }
 
-        .btn-start:active {
-            transform: scale(0.98);
-        }
+        .btn-start:active { transform: scale(0.96) translateY(2px); box-shadow: 0 6px 14px rgba(255, 204, 0, 0.2); }
 
-        /* ===== الهيدر والوصف ===== */
+        /* ===== الهيدر ===== */
         header {
-            padding: 40px 20px 25px;
+            padding: 40px 20px 26px;
             text-align: center;
+            position: relative;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--germany-red), transparent);
+            opacity: 0.7;
         }
 
         .platform-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 6px 18px;
+            background: rgba(255, 204, 0, 0.07);
+            border: 1px solid rgba(255, 204, 0, 0.28);
+            padding: 7px 18px;
             border-radius: 100px;
-            color: var(--gold-primary);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+            color: var(--germany-gold);
+            font-size: 0.83rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 14px rgba(255, 204, 0, 0.08);
         }
 
         header h1 {
-            font-size: 2rem;
+            font-size: 2.05rem;
             font-weight: 900;
             color: var(--text-primary);
             font-family: 'Cairo', sans-serif;
+            text-shadow: 0 4px 16px rgba(0,0,0,0.7);
+            background: linear-gradient(180deg, #ffffff 30%, #d9d9d9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
         header p {
             color: var(--text-secondary);
             font-size: 1.05rem;
             margin-top: 8px;
+            font-weight: 600;
         }
 
         header p::after {
-            content: '\f684'; 
+            content: '\f684';
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
             display: block;
             font-size: 1.1rem;
-            color: var(--gold-primary);
-            margin-top: 8px;
+            color: var(--germany-gold);
+            margin-top: 10px;
             animation: prayMotion 3s infinite ease-in-out;
         }
 
         @keyframes prayMotion {
-            0%, 100% { transform: scaleY(1); opacity: 0.6; }
+            0%, 100% { transform: scaleY(1); opacity: 0.55; }
             50% { transform: scaleY(0.85); opacity: 1; }
         }
 
-        /* ===== شريط الإشراقات المتحرك والمسرّع ===== */
+        /* ===== شريط الإشراقات ===== */
         .ticker-container {
             margin: 0 16px 30px;
-            background: var(--surface-glass);
+            background: linear-gradient(135deg, rgba(20,20,20,0.85), rgba(5,5,5,0.85));
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            padding: 12px 16px;
+            padding: 13px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
         }
 
         .ticker-label {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: var(--gold-primary);
+            color: var(--germany-gold);
             font-size: 0.9rem;
-            font-weight: 700;
+            font-weight: 800;
             white-space: nowrap;
             padding-left: 12px;
-            border-left: 1px solid rgba(163, 188, 169, 0.2);
+            border-left: 1px solid rgba(255, 204, 0, 0.18);
         }
 
-        .ticker-wrap {
-            flex-grow: 1;
-            overflow: hidden;
-        }
+        .ticker-wrap { flex-grow: 1; overflow: hidden; }
 
         .ticker-track {
             display: flex;
@@ -222,36 +245,61 @@
             align-items: center;
             gap: 8px;
         }
+        .ticker-track span i { color: var(--italy-green); }
 
         @keyframes scrollText {
             from { transform: translateX(0); }
             to   { transform: translateX(-50%); }
         }
 
-        /* ===== شبكة الكروت المحسنة بالكامل للموبايل ===== */
+        /* ===== شبكة الكروت ثلاثية الأبعاد ===== */
         .cards-grid {
             display: grid;
-            grid-template-columns: 1fr; /* عمود واحد مريح على الهاتف */
-            gap: 20px;
-            padding: 0 16px;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            padding: 4px 16px;
+            perspective: var(--perspective);
         }
 
         .card {
-            background: var(--surface-glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            --rx: 0deg;
+            --ry: 0deg;
+            background:
+                linear-gradient(155deg, rgba(26,26,26,0.92) 0%, rgba(6,6,6,0.94) 60%);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-xl);
             padding: 24px;
             display: flex;
             flex-direction: column;
             position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(var(--perspective)) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+            box-shadow:
+                0 4px 8px rgba(0,0,0,0.35),
+                0 18px 34px rgba(0,0,0,0.55),
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                inset 0 -30px 40px -30px rgba(0,0,0,0.7);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
         }
 
-        /* استبدال الـ hover بـ تأثير active عند الضغط بالإصبع */
+        .card::before {
+            /* شريط ذهبي علوي كحافة معدنية */
+            content: '';
+            position: absolute;
+            top: 0; right: 18px; left: 18px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--germany-gold), transparent);
+            opacity: 0.55;
+            transform: translateZ(2px);
+        }
+
         .card:active {
             border-color: var(--border-hover);
-            background: rgba(5, 46, 37, 0.8);
+            box-shadow:
+                0 2px 6px rgba(0,0,0,0.4),
+                0 10px 20px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.06),
+                inset 0 -20px 30px -25px rgba(0,0,0,0.8);
         }
 
         .card-meta {
@@ -259,41 +307,46 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 16px;
+            transform: translateZ(30px);
         }
 
         .card-icon {
-            width: 48px; height: 48px;
-            background: rgba(212, 175, 55, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            width: 52px; height: 52px;
+            background: linear-gradient(150deg, rgba(255,204,0,0.14), rgba(255,204,0,0.02));
+            border: 1px solid rgba(255, 204, 0, 0.3);
             border-radius: var(--radius-lg);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.3rem;
-            color: var(--gold-primary);
+            font-size: 1.35rem;
+            color: var(--germany-gold);
+            box-shadow: 0 8px 16px rgba(255,204,0,0.10), inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
         .card-tag {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            padding: 5px 13px;
             border-radius: 100px;
-            background: rgba(255,255,255,0.05);
-            color: var(--text-secondary);
+            background: rgba(23, 138, 74, 0.14);
+            color: var(--italy-green);
+            border: 1px solid rgba(23, 138, 74, 0.3);
         }
 
         .card h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.32rem;
+            font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
+            transform: translateZ(26px);
         }
 
         .card p {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
+            font-size: 0.93rem;
+            margin-bottom: 22px;
+            transform: translateZ(18px);
         }
 
         .card-actions {
@@ -301,15 +354,16 @@
             align-items: center;
             gap: 10px;
             margin-top: auto;
+            transform: translateZ(34px);
         }
 
         .btn-action {
-            padding: 12px 20px;
+            padding: 13px 20px;
             border: none;
             border-radius: var(--radius-lg);
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 0.95rem;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             justify-content: center;
@@ -319,41 +373,44 @@
 
         .btn-main {
             flex-grow: 1;
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold-primary);
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            background: rgba(255, 204, 0, 0.08);
+            color: var(--germany-gold);
+            border: 1px solid rgba(255, 204, 0, 0.28);
         }
 
         .btn-main:active {
-            background: linear-gradient(135deg, var(--gold-primary), #b08f26);
-            color: #021612;
+            background: linear-gradient(135deg, var(--germany-gold), var(--gold-deep));
+            color: #000000;
+            transform: scale(0.97);
         }
 
         .btn-icon-only {
-            width: 46px; height: 46px;
+            width: 48px; height: 48px;
             padding: 0;
-            background: transparent;
-            border: 1px solid rgba(163, 188, 169, 0.2);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
             color: var(--text-muted);
         }
 
         .btn-icon-only:active {
-            border-color: var(--gold-primary);
-            color: var(--gold-primary);
+            border-color: var(--germany-gold);
+            color: var(--germany-gold);
+            transform: scale(0.92);
         }
 
-        /* كارت المشرفين المحمي للموبايل */
-        .card-secure { border-color: rgba(255, 94, 98, 0.2); }
-        .card-secure .card-icon { color: var(--danger); background: rgba(255, 94, 98, 0.05); }
-        .card-secure .card-tag { color: var(--danger); background: var(--danger-bg); }
-        .card-secure .btn-main { background: rgba(255, 94, 98, 0.08); color: var(--danger); border-color: rgba(255, 94, 98, 0.25); }
-        .card-secure .btn-main:active { background: var(--danger); color: #fff; }
+        /* كارت المشرفين المحمي (أحمر) */
+        .card-secure { border-color: rgba(255, 0, 0, 0.28); }
+        .card-secure::before { background: linear-gradient(90deg, transparent, var(--germany-red), transparent); }
+        .card-secure .card-icon { color: var(--germany-red); background: linear-gradient(150deg, rgba(255,0,0,0.16), rgba(255,0,0,0.02)); border-color: rgba(255,0,0,0.32); box-shadow: 0 8px 16px rgba(255,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.08); }
+        .card-secure .card-tag { color: var(--germany-red); background: var(--red-bg); border-color: rgba(255,0,0,0.3); }
+        .card-secure .btn-main { background: rgba(255, 0, 0, 0.08); color: var(--germany-red); border-color: rgba(255, 0, 0, 0.28); }
+        .card-secure .btn-main:active { background: var(--germany-red); color: #fff; }
 
-        /* ===== لوحة إدخال الرمز السري المخصصة للموبايل (PIN Pad) ===== */
+        /* ===== لوحة إدخال الرمز السري (PIN Pad) ===== */
         #password-modal {
             position: fixed;
             inset: 0;
-            background: rgba(1, 15, 12, 0.95);
+            background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             display: flex;
@@ -364,55 +421,53 @@
             visibility: hidden;
             transition: var(--transition-smooth);
         }
-        
+
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-box {
-            background: #04241e;
+            background: linear-gradient(160deg, #141414 0%, #000000 100%);
             border: 1px solid var(--border-glass);
-            padding: 30px 20px;
+            padding: 32px 22px;
             border-radius: var(--radius-xl);
             text-align: center;
             width: 92%;
             max-width: 340px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(255,204,0,0.08);
+            transition: var(--transition-smooth);
         }
 
         .modal-shield {
-            width: 55px; height: 55px;
-            background: rgba(212, 175, 55, 0.06);
-            color: var(--gold-primary);
+            width: 58px; height: 58px;
+            background: rgba(255, 204, 0, 0.08);
+            color: var(--germany-gold);
+            border: 1px solid rgba(255,204,0,0.25);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
-            margin: 0 auto 12px;
+            font-size: 1.55rem;
+            margin: 0 auto 14px;
+            transition: var(--transition-smooth);
         }
 
-        .modal-box h3 { color: var(--text-primary); font-size: 1.4rem; margin-bottom: 4px; }
-        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+        .modal-box h3 { color: var(--text-primary); font-size: 1.4rem; margin-bottom: 4px; font-family: 'Cairo', sans-serif; font-weight: 800; }
+        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 22px; }
 
-        .pin-display {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
+        .pin-display { display: flex; justify-content: center; gap: 12px; margin-bottom: 22px; }
 
         .pin-dot {
             width: 14px; height: 14px;
             border: 2px solid var(--text-muted);
             border-radius: 50%;
+            transition: 0.2s ease;
         }
 
         .pin-dot.active {
-            background: var(--gold-primary);
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 10px var(--gold-primary);
+            background: var(--germany-gold);
+            border-color: var(--germany-gold);
+            box-shadow: 0 0 10px var(--germany-gold);
         }
 
-        /* تصميم أزرار كبير ومريح لليد على شاشات الموبايل */
         .pin-pad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -422,32 +477,35 @@
 
         .pad-btn {
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
             color: var(--text-primary);
             font-size: 1.4rem;
             font-weight: 700;
-            padding: 12px 0;
+            padding: 13px 0;
             border-radius: var(--radius-lg);
             cursor: pointer;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .pad-btn:active {
-            background: rgba(212, 175, 55, 0.2);
-            color: var(--gold-primary);
+            background: rgba(255, 204, 0, 0.18);
+            color: var(--germany-gold);
+            transform: scale(0.94);
         }
 
         .modal-cancel-btn {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.95rem;
             padding: 5px;
         }
 
         .toast-error {
-            color: var(--danger);
-            background: var(--danger-bg);
+            color: var(--germany-red);
+            background: var(--red-bg);
+            border: 1px solid rgba(255,0,0,0.25);
             padding: 10px;
             border-radius: var(--radius-sm);
             font-size: 0.85rem;
@@ -458,12 +516,13 @@
         /* ===== الفوتر ===== */
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding: 25px;
+            margin-top: 42px;
+            padding: 26px;
             color: var(--text-muted);
             font-size: 0.85rem;
-            border-top: 1px solid rgba(163, 188, 169, 0.08);
+            border-top: 1px solid rgba(255, 204, 0, 0.08);
         }
+        footer span.brand { color: var(--germany-gold); font-weight: 800; }
     </style>
 </head>
 <body>
@@ -474,7 +533,7 @@
     <audio id="errorSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3" preload="auto"></audio>
     <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/1107/1107-preview.mp3" preload="auto"></audio>
 
-    <!-- شاشة الترحيب الذكية للموبايل -->
+    <!-- شاشة الترحيب -->
     <div id="welcome-screen">
         <div class="welcome-center">
             <div class="welcome-logo"><i class="fa-solid fa-kaaba"></i></div>
@@ -484,7 +543,7 @@
         </div>
     </div>
 
-    <!-- نافذة الحماية الذكية (PIN Pad) المتوافقة مع اللمس -->
+    <!-- نافذة الحماية الذكية (PIN Pad) -->
     <div id="password-modal">
         <div class="modal-box">
             <div class="modal-shield"><i class="fa-solid fa-user-shield"></i></div>
@@ -510,23 +569,23 @@
                 <button class="pad-btn" onclick="pressKey('7')">7</button>
                 <button class="pad-btn" onclick="pressKey('8')">8</button>
                 <button class="pad-btn" onclick="pressKey('9')">9</button>
-                <button class="pad-btn" style="color: var(--danger)" onclick="clearPin()"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="pad-btn" style="color: var(--germany-red)" onclick="clearPin()"><i class="fa-solid fa-trash-can"></i></button>
                 <button class="pad-btn" onclick="pressKey('0')">0</button>
-                <button class="pad-btn" style="color: var(--emerald-accent)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
+                <button class="pad-btn" style="color: var(--italy-green)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
             </div>
 
             <button class="modal-cancel-btn" onclick="closeModal()">إلغاء</button>
         </div>
     </div>
 
-    <!-- الهيدر برمز الكعبة المشرّفة -->
+    <!-- الهيدر -->
     <header>
         <div class="platform-badge"><i class="fa-solid fa-kaaba"></i> منصة خادم القرآن الرقمية</div>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ</h1>
         <p>بإشراف فضيلة الشيخ عبدالرحمن</p>
     </header>
 
-    <!-- شريط الإشراقات السريع (يدعم اللمس لإيقافه مؤقتاً) -->
+    <!-- شريط الإشراقات -->
     <div class="ticker-container" ontouchstart="pauseTicker()" ontouchend="resumeTicker()">
         <div class="ticker-label"><i class="fa-solid fa-heart-open"></i> إشراقات</div>
         <div class="ticker-wrap">
@@ -539,7 +598,7 @@
         </div>
     </div>
 
-    <!-- شبكة المحتوى الرقمي المتكاملة للهواتف الذكية -->
+    <!-- شبكة المحتوى -->
     <main class="cards-grid">
 
         <!-- كارت 1 -->
@@ -628,8 +687,8 @@
     </main>
 
     <footer>
-        رَبِّ زِدْنِي عِلْمًا • مركز خادم القرآن الكريم <br>
-        <span style="font-size: 0.75rem; opacity: 0.4; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
+        رَبِّ زِدْنِي عِلْمًا • <span class="brand">مركز خادم القرآن الكريم</span> <br>
+        <span style="font-size: 0.75rem; opacity: 0.45; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
     </footer>
 
     <script>
@@ -637,7 +696,7 @@
         const quranAudio = document.getElementById('quranAudio');
         const errorSound = document.getElementById('errorSound');
         const successSound = document.getElementById('successSound');
-        
+
         let targetProtectedUrl = '';
         let currentPin = '';
 
@@ -646,9 +705,9 @@
         track.innerHTML += track.innerHTML;
 
         function playSound(audioEl) {
-            if(audioEl) {
+            if (audioEl) {
                 audioEl.currentTime = 0;
-                audioEl.play().catch(()=>{});
+                audioEl.play().catch(() => {});
             }
         }
 
@@ -658,7 +717,7 @@
         function startPlatform() {
             playSound(clickSound);
             quranAudio.currentTime = 3.4;
-            quranAudio.play().catch(()=>{});
+            quranAudio.play().catch(() => {});
 
             const welcome = document.getElementById('welcome-screen');
             welcome.style.opacity = '0';
@@ -718,8 +777,9 @@
             if (currentPin === '7222') {
                 toastError.style.display = 'none';
                 playSound(successSound);
-                document.querySelector('.modal-box').style.borderColor = 'var(--emerald-accent)';
-                document.querySelector('.modal-shield').style.color = 'var(--emerald-accent)';
+                document.querySelector('.modal-box').style.borderColor = 'var(--italy-green)';
+                document.querySelector('.modal-shield').style.color = 'var(--italy-green)';
+                document.querySelector('.modal-shield').style.borderColor = 'rgba(23,138,74,0.4)';
                 setTimeout(() => { window.location.href = targetProtectedUrl; }, 600);
             } else {
                 playSound(errorSound);
@@ -750,6 +810,49 @@
                 });
             }
         }
+
+        /* ===== تأثير الإمالة ثلاثية الأبعاد للكروت (يعمل باللمس والماوس) ===== */
+        (function initTiltCards() {
+            const cards = document.querySelectorAll('.card');
+            const MAX_TILT = 9; // أقصى زاوية إمالة بالدرجات
+
+            function applyTilt(card, clientX, clientY) {
+                const rect = card.getBoundingClientRect();
+                const px = (clientX - rect.left) / rect.width;  // 0 -> 1
+                const py = (clientY - rect.top) / rect.height;  // 0 -> 1
+                const ry = (px - 0.5) * MAX_TILT * 2;   // دوران حول المحور الرأسي
+                const rx = (0.5 - py) * MAX_TILT * 2;   // دوران حول المحور الأفقي
+                card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+                card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+            }
+
+            function resetTilt(card) {
+                card.style.setProperty('--rx', '0deg');
+                card.style.setProperty('--ry', '0deg');
+            }
+
+            cards.forEach(card => {
+                // دعم اللمس على الهاتف
+                card.addEventListener('touchstart', function (e) {
+                    const t = e.touches[0];
+                    applyTilt(card, t.clientX, t.clientY);
+                }, { passive: true });
+
+                card.addEventListener('touchmove', function (e) {
+                    const t = e.touches[0];
+                    applyTilt(card, t.clientX, t.clientY);
+                }, { passive: true });
+
+                card.addEventListener('touchend', function () { resetTilt(card); });
+                card.addEventListener('touchcancel', function () { resetTilt(card); });
+
+                // دعم الماوس (للاختبار على الديسكتوب)
+                card.addEventListener('mousemove', function (e) {
+                    applyTilt(card, e.clientX, e.clientY);
+                });
+                card.addEventListener('mouseleave', function () { resetTilt(card); });
+            });
+        })();
     </script>
 </body>
 </html>
