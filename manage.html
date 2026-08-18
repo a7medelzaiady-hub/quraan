@@ -137,7 +137,7 @@
   .btn-ghost:hover{background:#dfe8dd;}
   .btn:disabled{opacity:.45; cursor:not-allowed;}
 
-  /* ---------- Timeline of dates (signature element) ---------- */
+  /* ---------- Timeline of dates ---------- */
   .timeline{position:relative; padding-inline-start:26px;}
   .timeline::before{
     content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px;
@@ -161,7 +161,7 @@
   .timeline-count{font-size:11.5px; color:var(--muted); background:var(--sage); padding:2px 9px; border-radius:999px; font-weight:700;}
   .timeline-item.selected .timeline-count{background:#fff;}
 
-  /* ---------- Data table (in-app view for the chosen date) ---------- */
+  /* ---------- Data table ---------- */
   .entry-row{
     display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; align-items:center;
     padding:12px 6px; border-bottom:1px solid #f0ece0;
@@ -362,9 +362,6 @@
   }
 
   // ---------- Date helpers ----------
-  // Assumes each transaction may carry tx.date as an ISO string ("YYYY-MM-DD") or
-  // a Firestore Timestamp in tx.createdAt. Falls back to "بدون تاريخ" if neither exists,
-  // so the page keeps working even before the entry form is updated to save a date.
   function getTxDateKey(tx) {
     if (tx.date) {
       const d = new Date(tx.date);
@@ -489,40 +486,60 @@
     wrap.innerHTML = html;
   }
 
-  // ---------- Report building (image export) ----------
+  // ---------- Report building (image export) - INDEX1 DESIGN MATCH ----------
   function buildReportCard(sName, subtitleText, groupedByDate) {
     // groupedByDate: [{ key, label, txs: [...] }]
     const card = document.createElement('div');
     card.style.cssText = `
-      width:460px; background:#fbf8f1; border:3px solid #10332b; border-radius:18px;
-      overflow:hidden; font-family:'Tajawal', sans-serif; direction:rtl; color:#26302b;
+      width: 480px;
+      background: #f6f2e8;
+      border: 1px solid #e1d9c4;
+      border-radius: 20px;
+      overflow: hidden;
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+      color: #26302b;
+      box-sizing: border-box;
+      padding-bottom: 0;
     `;
 
     let sectionsHtml = '';
     groupedByDate.forEach(group => {
       sectionsHtml += `
-        <div style="margin:14px 15px 4px; display:flex; align-items:center; gap:8px;">
-          <div style="width:8px;height:8px;border-radius:50%;background:#b8863a;"></div>
-          <div style="font-family:'Amiri',serif; font-weight:700; font-size:15.5px; color:#10332b;">${group.label}</div>
-          <div style="flex:1; height:1px; background:#e1d9c4;"></div>
+        <div style="margin: 18px 20px 8px; display: flex; align-items: center; gap: 8px;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: #b8863a;"></div>
+          <div style="font-family: 'Amiri', serif; font-weight: 700; font-size: 16px; color: #10332b;">${group.label}</div>
+          <div style="flex: 1; height: 1px; background: #e1d9c4;"></div>
         </div>`;
+      
       ['new', 'past', 'adhkar'].forEach(catKey => {
         const catTxs = group.txs.filter(tx => txCategory(tx) === catKey);
         if (catTxs.length === 0) return;
-        sectionsHtml += `<div style="margin:6px 15px; font-size:12px; font-weight:800; color:#72796f;">${CAT_LABELS[catKey]}</div>`;
+        
+        sectionsHtml += `
+          <div style="margin: 8px 20px 4px; font-size: 12px; font-weight: 800; color: #8f6423; display: flex; align-items: center; gap: 6px;">
+            <span>◆</span> ${CAT_LABELS[catKey]}
+          </div>`;
+
         catTxs.forEach(tx => {
           const borderColor = catKey === 'new' ? '#3f7a5e' : catKey === 'past' ? '#b8863a' : '#4c6f8a';
+          
           sectionsHtml += `
-            <div style="background:#fff; border:1px solid #e9e3d3; border-right:4px solid ${borderColor}; border-radius:10px; margin:6px 15px; padding:11px 13px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
-                <div style="font-weight:800; font-size:15px; color:#10332b;">${tx.surah || tx.type || 'بند'}</div>
-                ${tx.range ? `<div style="font-size:11.5px; font-weight:700; color:#8f6423; background:#f1e4c8; padding:2px 9px; border-radius:7px;">نطاق ${tx.range}</div>` : ''}
+            <div style="background: #ffffff; border: 1px solid #e1d9c4; border-right: 4px solid ${borderColor}; border-radius: 14px; margin: 6px 20px 10px; padding: 12px 15px; box-shadow: 0 2px 6px rgba(16,51,43,0.03);">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <div style="font-weight: 800; font-size: 15.5px; color: #10332b;">${tx.surah || tx.type || 'بند'}</div>
+                ${tx.range ? `<div style="font-size: 11.5px; font-weight: 700; color: #1c473b; background: #eaf0e9; padding: 3px 10px; border-radius: 8px;">نطاق: ${tx.range}</div>` : ''}
               </div>
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${tx.amount ? `<span style="font-size:11.5px; font-weight:700; color:#8f6423; background:#f1e4c8; padding:2px 9px; border-radius:7px;">⭐ ${tx.amount}</span>` : ''}
-                ${tx.desc ? `<span style="font-size:11.5px; font-weight:700; color:#9c4a3c; background:#f4e4e0; padding:2px 9px; border-radius:7px;">${tx.desc}</span>` : ''}
+              
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 6px;">
+                ${tx.amount ? `<span style="font-size: 11.5px; font-weight: 700; color: #8f6423; background: #f1e4c8; padding: 3px 10px; border-radius: 8px;">⭐ ${tx.amount}</span>` : ''}
+                ${tx.desc ? `<span style="font-size: 11.5px; font-weight: 700; color: #9c4a3c; background: #f4e4e0; padding: 3px 10px; border-radius: 8px;">⚠️ ${tx.desc}</span>` : ''}
               </div>
-              ${tx.nextPlan ? `<div style="margin-top:8px; font-size:12px; font-weight:700; color:#8f6423; background:#faf5e8; border:1px dashed #d9b877; border-radius:8px; padding:7px 10px;">الخطة القادمة: ${tx.nextPlan}</div>` : ''}
+
+              ${tx.nextPlan ? `
+                <div style="margin-top: 8px; font-size: 12px; font-weight: 700; color: #1c473b; background: #eaf0e9; border: 1px dashed #b8863a; border-radius: 8px; padding: 8px 11px;">
+                  📍 الخطة القادمة: ${tx.nextPlan}
+                </div>` : ''}
             </div>`;
         });
       });
@@ -531,21 +548,35 @@
     const nowStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     card.innerHTML = `
-      <div style="background:#10332b; color:#f4efe1; text-align:center; padding:22px 14px;">
-        <div style="font-family:'Amiri',serif; font-size:21px; font-weight:700;">مركز خادم القرآن الكريم</div>
-        <div style="font-size:11.5px; color:#cbd9d1; margin-top:4px;">تحت إشراف الشيخ عبدالرحمن</div>
+      <!-- Top Header -->
+      <div style="background: #10332b; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,.08), transparent 40%); color: #f4efe1; text-align: center; padding: 24px 16px; border-bottom: 3px solid #b8863a;">
+        <div style="font-family: 'Amiri', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">مركز خادم القرآن الكريم</div>
+        <div style="font-size: 12px; color: #cbd9d1; margin-top: 4px; font-family: 'Tajawal', sans-serif;">تحت إشراف الشيخ عبدالرحمن</div>
       </div>
-      <div style="text-align:center; margin:18px 15px 6px;">
-        <div style="display:inline-block; background:linear-gradient(180deg,#e9d9b8,#b8863a); color:#10332b; padding:8px 26px; border-radius:20px; font-family:'Amiri',serif; font-weight:700; font-size:18px;">
-          🏆 الطالب: ${sName}
-        </div>
-        <div style="margin-top:8px;">
-          <span style="background:#fff; border:1px solid #e1d9c4; color:#555; font-size:11.5px; font-weight:700; padding:4px 14px; border-radius:12px;">${subtitleText}</span>
+
+      <!-- Student Badge -->
+      <div style="text-align: center; margin: -18px 20px 10px; position: relative; z-index: 2;">
+        <div style="display: inline-block; background: #ffffff; border: 2px solid #b8863a; color: #10332b; padding: 8px 28px; border-radius: 50px; box-shadow: 0 4px 12px rgba(16,51,43,0.1);">
+          <span style="font-family: 'Amiri', serif; font-weight: 700; font-size: 19px;">🏆 الطالب: ${sName}</span>
         </div>
       </div>
-      ${sectionsHtml}
-      <div style="background:#10332b; color:#cbd9d1; text-align:center; padding:12px; font-size:10.5px; margin-top:16px;">
-        مركز خادم القرآن الكريم &middot; تقرير متابعة الحفظ<br>تم إصدار التقرير: ${nowStr}
+
+      <!-- Subtitle Tag -->
+      <div style="text-align: center; margin-bottom: 12px;">
+        <span style="background: #eaf0e9; border: 1px solid #e1d9c4; color: #1c473b; font-size: 11.5px; font-weight: 700; padding: 4px 14px; border-radius: 12px; display: inline-block;">
+          ${subtitleText}
+        </span>
+      </div>
+
+      <!-- Content Sections -->
+      <div style="padding-bottom: 10px;">
+        ${sectionsHtml}
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #10332b; color: #cbd9d1; text-align: center; padding: 14px; font-size: 11px; margin-top: 10px; border-top: 1px solid #b8863a;">
+        <div style="font-weight: 700; color: #f4efe1; margin-bottom: 2px;">مركز خادم القرآن الكريم &middot; تقرير متابعة الحفظ</div>
+        <div>تاريخ إصدار التقرير: ${nowStr}</div>
       </div>
     `;
     return card;
@@ -555,7 +586,6 @@
     const sandbox = document.getElementById('reportSandbox');
     sandbox.innerHTML = '';
     sandbox.appendChild(card);
-    // allow web fonts to apply before capture
     await new Promise(r => setTimeout(r, 60));
     const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#fbf8f1' });
     const link = document.createElement('a');
