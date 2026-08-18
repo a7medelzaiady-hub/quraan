@@ -24,8 +24,6 @@
     --gold-bg:#fcf8e3;
     --rose-bg:#fde8e8;
     --rose-text:#c0392b;
-    --green-bg:#e8f8f5;
-    --green-text:#16a085;
     --line:#e2ded4;
     --text:#222222;
     --muted:#666666;
@@ -42,61 +40,46 @@
 
   h1,h2,h3,.display{font-family:'Amiri', serif;}
 
-  /* ---------- Top bar ---------- */
+  /* Topbar */
   .topbar{
-    background:var(--ink);
-    color:#f4efe1;
-    border-radius:var(--radius);
-    padding:18px 20px;
-    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    margin-bottom:18px;
+    background:var(--ink); color:#f4efe1; border-radius:var(--radius); padding:18px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:18px;
   }
   .topbar h1{font-size:19px; font-weight:700;}
   .topbar .sub{font-size:11px; color:#cbd9d1; margin-top:2px; font-family:'Tajawal';}
   .topbtns{display:flex; gap:8px;}
   .pill-btn{
-    border:1px solid rgba(244,239,225,.35);
-    background:transparent; color:#f4efe1;
-    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:700;
-    cursor:pointer; transition:.2s; font-family:'Tajawal';
+    border:1px solid rgba(244,239,225,.35); background:transparent; color:#f4efe1;
+    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:700; cursor:pointer; transition:.2s; font-family:'Tajawal';
   }
   .pill-btn:hover{background:rgba(244,239,225,.12);}
   .pill-btn.danger{border-color:rgba(200,110,90,.5); color:#e7bdb2;}
   .pill-btn.danger:hover{background:rgba(156,74,60,.25);}
 
-  /* ---------- Panels ---------- */
-  .panel{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:20px;
-    margin-bottom:16px;
-  }
+  /* Panels */
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:16px; }
   .panel-title{
-    font-size:13px; font-weight:800; color:var(--ink);
-    text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px;
+    font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px;
     display:flex; align-items:center; gap:8px;
   }
   .panel-title::before{content:''; width:14px; height:3px; background:var(--gold); display:inline-block; border-radius:2px;}
 
-  /* ---------- Search ---------- */
+  /* Search */
   .search-wrap{position:relative;}
   .search-input{
     width:100%; padding:13px 16px; border:1.5px solid var(--line); border-radius:11px;
-    font-size:15px; font-family:'Tajawal'; outline:none; background:var(--parchment);
-    transition:.2s;
+    font-size:15px; font-family:'Tajawal'; outline:none; background:var(--parchment); transition:.2s;
   }
   .search-input:focus{border-color:var(--ink); background:#fff;}
   .dropdown-menu{
     position:absolute; top:calc(100% + 6px); left:0; right:0; background:#fff;
-    border:1px solid var(--line); border-radius:11px; max-height:230px; overflow-y:auto;
-    box-shadow:0 10px 24px rgba(0,0,0,.1); z-index:50; display:none;
+    border:1px solid var(--line); border-radius:11px; max-height:230px; overflow-y:auto; box-shadow:0 10px 24px rgba(0,0,0,.1); z-index:50; display:none;
   }
   .dropdown-item{padding:12px 15px; border-bottom:1px solid #f1ede0; cursor:pointer; font-weight:700; font-size:14px;}
   .dropdown-item:last-child{border-bottom:none;}
   .dropdown-item:hover{background:var(--sage); color:var(--ink);}
 
-  /* ---------- Student grid ---------- */
+  /* Student Grid */
   .students-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin-top:14px;}
   .student-card{
     background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:15px;
@@ -111,7 +94,7 @@
   .student-meta b{color:var(--ink-2);}
   .no-data{grid-column:1/-1; text-align:center; color:var(--muted); padding:20px; font-size:13.5px;}
 
-  /* ---------- Views ---------- */
+  /* Views */
   .view-section{display:none;}
   .view-section.active{display:block;}
   .back-btn{
@@ -135,11 +118,9 @@
   .btn-image:hover{background:var(--ink-2);}
   .btn:disabled{opacity:.45; cursor:not-allowed;}
 
-  /* ---------- Timeline ---------- */
+  /* Timeline */
   .timeline{position:relative; padding-inline-start:26px;}
-  .timeline::before{
-    content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px; background:var(--line);
-  }
+  .timeline::before{ content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px; background:var(--line); }
   .timeline-item{position:relative; padding:6px 0 14px;}
   .bead{
     position:absolute; right:0px; top:8px; width:18px; height:18px; border-radius:50%;
@@ -155,11 +136,8 @@
   .timeline-date{font-weight:800; font-size:14px; color:var(--ink);}
   .timeline-count{font-size:11.5px; color:var(--muted); background:var(--sage); padding:2px 9px; border-radius:999px; font-weight:700;}
 
-  /* ---------- Table ---------- */
-  .entry-row{
-    display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; align-items:center;
-    padding:12px 6px; border-bottom:1px solid #f0ece0;
-  }
+  /* Table */
+  .entry-row{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; align-items:center; padding:12px 6px; border-bottom:1px solid #f0ece0; }
   .entry-row:last-child{border-bottom:none;}
   .entry-row.head{font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase;}
   .entry-cat{display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:13.5px; color:var(--ink);}
@@ -217,8 +195,8 @@
         </div>
       </div>
       <div class="actions-row">
-        <button class="btn btn-image" id="btnFullImage" onclick="exportFullRecord('image')">تحميل السجل الكامل كصورة</button>
-        <button class="btn btn-whatsapp" id="btnFullWA" onclick="exportFullRecord('whatsapp')">مشاركة السجل الكامل كصورة</button>
+        <button class="btn btn-image" id="btnFullImage" onclick="exportFullRecord('image')">تحميل كامل الأيام (صور منفصلة)</button>
+        <button class="btn btn-whatsapp" id="btnFullWA" onclick="exportFullRecord('whatsapp')">مشاركة كامل الأيام (صور منفصلة)</button>
       </div>
     </div>
 
@@ -232,7 +210,7 @@
       <div id="dayTable"></div>
       <div class="actions-row">
         <button class="btn btn-image" id="btnDayImage" onclick="exportSelectedDay('image')" disabled>تحميل تقرير هذا اليوم</button>
-        <button class="btn btn-whatsapp" id="btnDayWA" onclick="exportSelectedDay('whatsapp')" disabled>مشاركة هذا اليوم كصورة</button>
+        <button class="btn btn-whatsapp" id="btnDayWA" onclick="exportSelectedDay('whatsapp')" disabled>مشاركة تقرير اليوم كصورة</button>
       </div>
     </div>
   </div>
@@ -263,7 +241,18 @@
     new: 'السور الجديدة', 
     past: 'ماضي السور', 
     adhkar: 'المذكرة الجديدة',
-    past_adhkar: 'ماضي المذكرة'
+    past_adhkar: 'ماضي المذكرة',
+    siraj: 'السراج',
+    hadith: 'الحديث والأذكار'
+  };
+
+  const CAT_ICONS = {
+    new: '📖',
+    past: '📚',
+    adhkar: '📝',
+    past_adhkar: '📋',
+    siraj: '💡',
+    hadith: '🗨️'
   };
 
   const searchInput = document.getElementById('studentSearchInput');
@@ -349,7 +338,7 @@
     }
   }
 
-  // ---------- Hijri Formatting Helpers ----------
+  // Hijri Helpers
   function getTxDateKey(tx) {
     if (tx.date) {
       const d = new Date(tx.date);
@@ -369,25 +358,12 @@
 
     try {
       return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
-        weekday: 'long',
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-      }).format(d);
+      }).format(d) + ' هـ';
     } catch (e) {
       return d.toLocaleDateString('ar-EG');
-    }
-  }
-
-  function getHijriTimeFormatted(dateObj) {
-    try {
-      return new Intl.DateTimeFormat('ar-EG', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      }).format(dateObj || new Date());
-    } catch (e) {
-      return '';
     }
   }
 
@@ -411,8 +387,10 @@
   }
 
   function txCategory(tx) {
+    if (tx.category === 'siraj' || (tx.type && tx.type.includes('سراج'))) return 'siraj';
+    if (tx.category === 'hadith' || (tx.type && tx.type.includes('حديث'))) return 'hadith';
     if (tx.category === 'past_adhkar') return 'past_adhkar';
-    if (tx.category === 'adhkar' || (tx.type && tx.type.includes('حديث'))) return 'adhkar';
+    if (tx.category === 'adhkar') return 'adhkar';
     if (tx.category === 'past' || (tx.type && tx.type.includes('مراجعة'))) return 'past';
     return 'new';
   }
@@ -488,7 +466,7 @@
       html += `<div class="entry-row">
         <div>
           <div class="entry-cat">${tx.surah || tx.type || 'بند'}</div>
-          <div class="entry-sub">${CAT_LABELS[cat]}${tx.range ? ' &middot; نطاق ' + tx.range : ''}</div>
+          <div class="entry-sub">${CAT_LABELS[cat] || 'السور الجديدة'}${tx.range ? ' &middot; نطاق ' + tx.range : ''}</div>
         </div>
         <div>${tx.amount ? `<span class="tag grade">${tx.amount}</span>` : ''}</div>
         <div>
@@ -500,15 +478,15 @@
     wrap.innerHTML = html;
   }
 
-  // ---------- Match Exact INDEX1 Template Report Card ----------
-  function buildReportCard(sName, dateLabelText, groupedByDate) {
+  /* ---------- Exact Reconstruction of INDEX1 Day Report (Image 2) ---------- */
+  function buildSingleDayReportCard(sName, dateKey, txs) {
     const card = document.createElement('div');
     card.style.cssText = `
-      width: 450px;
+      width: 480px;
       background: #fdfcf7;
-      border: 1px solid #e2ded4;
-      border-radius: 12px;
-      overflow: hidden;
+      border: 2px solid #0d3b2e;
+      border-radius: 20px;
+      padding: 12px;
       font-family: 'Tajawal', sans-serif;
       direction: rtl;
       color: #1a2922;
@@ -516,115 +494,87 @@
       position: relative;
     `;
 
-    let sectionsHtml = '';
-    const catIcons = {
-      new: '📖',
-      past: '📚',
-      adhkar: '📝',
-      past_adhkar: '📋'
-    };
+    const hijriDateStr = getHijriDateFormatted(dateKey);
 
-    groupedByDate.forEach(group => {
-      if (groupedByDate.length > 1) {
-        sectionsHtml += `
-          <div style="margin: 16px 18px 6px; font-weight: 800; font-size: 14px; color: #0d3b2e; border-bottom: 2px solid #d4af37; padding-bottom: 4px;">
-            🗓️ ${group.label}
-          </div>
-        `;
-      }
+    // Calculate General Grade
+    let overallGrade = "ممتاز بارك الله فيك";
+    const grades = txs.map(t => t.amount).filter(Boolean);
+    if (grades.some(g => g.includes('ممتاز'))) overallGrade = "مستوى ممتاز بارك الله فيك";
+    else if (grades.some(g => g.includes('جيد جداً'))) overallGrade = "مستوى جيد جداً بارك الله فيك";
 
-      ['new', 'past', 'adhkar', 'past_adhkar'].forEach(catKey => {
-        const catTxs = group.txs.filter(tx => txCategory(tx) === catKey);
-        if (catTxs.length === 0) return;
+    let categoriesHtml = '';
+    const categoriesOrder = ['new', 'past', 'adhkar', 'past_adhkar', 'siraj', 'hadith'];
 
-        sectionsHtml += `
-          <div style="margin: 14px 18px 6px; font-weight: 800; font-size: 15px; color: #0d3b2e; display: flex; align-items: center; gap: 8px;">
-            <span style="background: #0d3b2e; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px;">${catIcons[catKey] || '📖'}</span>
-            ${CAT_LABELS[catKey]}
-          </div>
-        `;
+    categoriesOrder.forEach(catKey => {
+      const catTxs = txs.filter(tx => txCategory(tx) === catKey);
+      if (catTxs.length === 0) return;
 
-        catTxs.forEach(tx => {
-          const hasError = tx.desc && tx.desc.trim() !== '';
-          
-          sectionsHtml += `
-            <div style="background: #ffffff; border: 1px solid #ebd8b0; border-radius: 16px; margin: 8px 18px 12px; padding: 12px 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <div style="font-weight: 800; font-size: 18px; color: #111;">
-                  ${tx.surah || tx.type || 'بند'}
-                </div>
-                ${tx.range ? `
-                  <div style="background: #fbf5e6; color: #8a6d3b; border: 1px solid #ebd8b0; font-size: 11.5px; font-weight: 800; padding: 3px 12px; border-radius: 12px;">
-                    ${tx.range}
-                  </div>` : ''}
-              </div>
+      categoriesHtml += `
+        <div style="background: #0d3b2e; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; margin-top: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; clip-path: polygon(0 0, 98% 0, 100% 100%, 0 100%);">
+          <span>${CAT_ICONS[catKey] || '📖'}</span>
+          <span>${CAT_LABELS[catKey] || 'التفاصيل'}</span>
+        </div>
+      `;
 
-              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px;">
-                ${tx.amount ? `
-                  <div style="background: #fdf1f0; border: 1px solid #f8d7da; color: #a94442; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px; display: flex; align-items: center; gap: 4px;">
-                    <span>📖</span> ${tx.amount}
-                  </div>` : ''}
+      catTxs.forEach(tx => {
+        const targetName = tx.surah || tx.type || 'البند';
+        const rangeText = tx.range ? ` (${tx.range})` : '';
+        const gradeText = tx.amount ? ` &middot; <span style="color:#d4af37; font-weight:bold;">${tx.amount}</span>` : '';
+        const errText = tx.desc ? ` <span style="color:#c0392b;">(${tx.desc})</span>` : '';
 
-                ${hasError ? `
-                  <div style="background: #fdf1f0; border: 1px solid #f5c6cb; color: #721c24; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 12px; width: 100%;">
-                    <span style="color: #d9534f; font-weight: bold;">❌ الأخطاء:</span> ${tx.desc}
-                  </div>` : `
-                  <div style="background: #e8f8f5; border: 1px solid #a3e4d7; color: #16a085; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px;">
-                    ✨ بلا أخطاء
-                  </div>`}
-              </div>
-
-              ${tx.nextPlan ? `
-                <div style="background: #fdfbe8; border: 1px dashed #d4af37; border-radius: 12px; padding: 8px 12px; margin-top: 8px;">
-                  <div style="font-size: 11px; font-weight: 800; color: #8a6d3b; display: flex; align-items: center; gap: 4px;">
-                    🎯 الخطة القادمة
-                  </div>
-                  <div style="font-size: 13px; font-weight: 800; color: #222; margin-top: 2px;">
-                    ${tx.nextPlan}
-                  </div>
-                </div>` : ''}
+        categoriesHtml += `
+          <div style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <div style="font-size: 13px; font-weight: 700; color: #222; margin-bottom: 6px; line-height: 1.5;">
+              <strong style="color:#0d3b2e;">الإنجاز الحالي:</strong> ${targetName}${rangeText} ${gradeText}${errText}
             </div>
-          `;
-        });
+
+            ${tx.nextPlan ? `
+              <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px;">
+                <span style="color: #c0392b;">🎯</span>
+                <div><strong style="color: #8a6d3b;">الخطة والواجب القادم:</strong> ${tx.nextPlan}</div>
+              </div>` : ''}
+          </div>
+        `;
       });
     });
 
-    const hijriNow = getHijriDateFormatted(new Date());
-    const timeNow = getHijriTimeFormatted(new Date());
-
     card.innerHTML = `
-      <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #d4af37, #0d3b2e, #d4af37);"></div>
-
-      <div style="background: #0d3b2e; color: #ffffff; text-align: center; padding: 22px 16px 28px; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);">
-        <div style="font-size: 20px; font-weight: 800; color: #d4af37; font-family: 'Amiri', serif;">🕌 مركز خادم القرآن الكريم</div>
-        <div style="font-size: 11px; color: #d1e2db; margin-top: 2px;">تحت إشراف الشيخ عبدالرحمن</div>
-      </div>
-
-      <div style="text-align: center; margin-top: -22px; margin-bottom: 8px; position: relative; z-index: 5;">
-        <div style="display: inline-block; background: linear-gradient(135deg, #d4af37, #b8863a); color: #0d3b2e; padding: 7px 32px; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: rotate(-1deg);">
-          <span style="font-family: 'Amiri', serif; font-weight: 800; font-size: 19px;">🏆 بطلنا: ${sName}</span>
+      <!-- Inner Gold Border Frame -->
+      <div style="border: 2px solid #d4af37; border-radius: 14px; padding: 10px; background: #fdfcf7;">
+        
+        <!-- Header Green Box -->
+        <div style="background: #0d3b2e; color: #ffffff; text-align: center; padding: 14px; border-radius: 10px; border: 1px solid #d4af37;">
+          <div style="font-size: 18px; font-weight: 800; color: #d4af37; font-family: 'Amiri', serif;">🕌 مركز خادم القرآن الكريم 🕌</div>
+          <div style="font-size: 11px; color: #eaf0e9; margin-top: 2px;">بطاقة متابعة وتقييم المستوى - إشراف الشيخ عبدالرحمن</div>
+          <div style="font-size: 10.5px; color: #d4af37; margin-top: 4px;">التاريخ: ${hijriDateStr}</div>
         </div>
-      </div>
 
-      <div style="text-align: center; margin-bottom: 12px;">
-        <span style="background: #fff; border: 1px solid #d4af37; color: #0d3b2e; font-size: 11px; font-weight: 800; padding: 3px 16px; border-radius: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
-          📅 ${dateLabelText}
-        </span>
-      </div>
+        <!-- Student Title -->
+        <div style="text-align: center; margin-top: 12px; margin-bottom: 10px;">
+          <div style="font-size: 16px; font-weight: 800; color: #0d3b2e;">
+            اسم البطل الكريم: <span style="color: #111;">${sName}</span>
+          </div>
+          <div style="font-size: 12px; font-weight: 700; color: #8a6d3b; margin-top: 2px;">
+            👑 التقييم العام: ${overallGrade}
+          </div>
+        </div>
 
-      <div style="padding-bottom: 10px;">
-        ${sectionsHtml}
-      </div>
+        <!-- Dynamic Categories -->
+        <div>
+          ${categoriesHtml}
+        </div>
 
-      <div style="background: #0d3b2e; color: #d1e2db; text-align: center; padding: 12px; font-size: 10.5px; border-top: 2px solid #d4af37;">
-        <div style="font-weight: 800; color: #ffffff; margin-bottom: 2px;">مركز خادم القرآن الكريم | تقرير متابعة الحفظ</div>
-        <div>تم إصدار التقرير: ${hijriNow} - ${timeNow}</div>
+        <!-- Footer -->
+        <div style="text-align: center; font-size: 10px; color: #777; margin-top: 14px; border-top: 1px dashed #d4af37; padding-top: 8px;">
+          مركز خادم القرآن الكريم — تطوير وتصميم النظام
+        </div>
+
       </div>
     `;
     return card;
   }
 
-  // ---------- Image Generation & Universal Image Share ----------
+  // Canvas Generation
   async function generateCanvasFromCard(card) {
     const sandbox = document.getElementById('reportSandbox');
     sandbox.innerHTML = '';
@@ -635,7 +585,8 @@
     return canvas;
   }
 
-  async function processReportExport(card, filename, mode, phone) {
+  // Export process for single file
+  async function processSingleExport(card, filename, mode, phone) {
     const canvas = await generateCanvasFromCard(card);
 
     if (mode === 'image') {
@@ -648,7 +599,6 @@
         if (!blob) return;
         const file = new File([blob], filename, { type: 'image/png' });
 
-        // Try Web Share API for direct image share
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({
@@ -656,11 +606,8 @@
               title: 'تقرير متابعة الحفظ',
               text: `تقرير الطالب من مركز خادم القرآن الكريم`
             });
-          } catch (e) {
-            console.log('مشاركة ملغاة أو غير مدعومة');
-          }
+          } catch (e) { console.log('إلغاء المشاركة'); }
         } else {
-          // Fallback: Download image and open WhatsApp
           const link = document.createElement('a');
           link.download = filename;
           link.href = URL.createObjectURL(blob);
@@ -668,7 +615,7 @@
 
           setTimeout(() => {
             const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
-            const msg = encodeURIComponent(`السلام عليكم، مرفق صورة تقرير الطالب من مركز خادم القرآن الكريم.`);
+            const msg = encodeURIComponent(`السلام عليكم، مرفق تقرير الطالب من مركز خادم القرآن الكريم.`);
             const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
             window.open(url, '_blank');
           }, 600);
@@ -677,26 +624,35 @@
     }
   }
 
-  // ---------- Export Actions ----------
+  // Export Selected Day
   function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const txs = getTxsForDate(currentSelectedStudent, currentSelectedDateKey);
-    const hijriLabel = getHijriDateFormatted(currentSelectedDateKey);
-    const group = { key: currentSelectedDateKey, label: hijriLabel, txs };
 
-    const card = buildReportCard(sName, hijriLabel, [group]);
-    processReportExport(card, `تقرير_${sName}_${currentSelectedDateKey}.png`, mode, currentSelectedStudent.phone);
+    const card = buildSingleDayReportCard(sName, currentSelectedDateKey, txs);
+    processSingleExport(card, `تقرير_${sName}_${currentSelectedDateKey}.png`, mode, currentSelectedStudent.phone);
   }
 
-  function exportFullRecord(mode) {
+  // Export FULL RECORD as SEPARATE IMAGES
+  async function exportFullRecord(mode) {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
-    const groups = dates.map(key => ({ key, label: getHijriDateFormatted(key), txs: getTxsForDate(currentSelectedStudent, key) }));
 
-    const card = buildReportCard(sName, `السجل الكامل (${dates.length} أيام)`, groups);
-    processReportExport(card, `السجل_الكامل_${sName}.png`, mode, currentSelectedStudent.phone);
+    if (dates.length === 0) return;
+
+    alert(`سيتم استخراج وتصدير عدد (${dates.length}) تقرير بصور منفصلة الآن...`);
+
+    for (let i = 0; i < dates.length; i++) {
+      const dateKey = dates[i];
+      const txs = getTxsForDate(currentSelectedStudent, dateKey);
+      const card = buildSingleDayReportCard(sName, dateKey, txs);
+
+      await processSingleExport(card, `تقرير_${sName}_يوم_${dateKey}.png`, mode, currentSelectedStudent.phone);
+      // Small delay between multiple downloads
+      await new Promise(r => setTimeout(r, 600));
+    }
   }
 
   function showView(viewId) {
