@@ -896,7 +896,7 @@ async function loadFonts(){
   } catch(e) {}
 }
 
-// دالة رسم تقرير المتابعة بالتعديلات الجديدة
+// دالة رسم تقرير المتابعة مع كافة التعديلات المطلوبة
 async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
   await loadFonts();
   
@@ -928,7 +928,7 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // الهيدر الرئيسي (بدون اسم المركز)
+  // الهيدر الرئيسي (مسح اسم المركز)
   rr(ctx, 35, 35, canvas.width - 70, 150, 18);
   var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
   hdrGradient.addColorStop(0, '#04201a');
@@ -952,11 +952,12 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.fillStyle = '#ffffff';
   ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 125);
 
+  // التاريخ الهجري الصريح عند السهم
   ctx.font = '600 18px Cairo, sans-serif';
   ctx.fillStyle = '#d4af37';
   ctx.fillText('التاريخ: ' + hijriDateStr, 540, 155);
 
-  // كارت اسم البطل والتقييم العام (منتصف السطر)
+  // كارت اسم البطل والتقييم العام
   var curY = 215;
   rr(ctx, 40, curY, canvas.width - 80, 120, 16);
   ctx.fillStyle = '#ffffff';
@@ -965,13 +966,13 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // تعديل اسم البطل وتوسيطه
+  // اسم البطل (تغيير النص وتوسيطه)
   ctx.font = '800 28px Cairo, sans-serif';
   ctx.fillStyle = '#04201a';
   ctx.textAlign = 'center';
   ctx.fillText('اسم البطل: ' + studentName, 540, curY + 48);
 
-  // تعديل التقييم العام وتوسيطه في السطر التابع له
+  // التقييم العام (توسيطه في السطر التابع له)
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#725304';
   ctx.textAlign = 'center';
@@ -1016,19 +1017,20 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // النص
+            // 1. عنوان الإنجاز الحالي
             ctx.font = '700 20px Cairo, sans-serif';
             ctx.fillStyle = '#111827';
             ctx.textAlign = 'right';
             ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 960, curY + 32);
 
-            // التقييم والأخطاء
+            // 2. وضع التقييم والأخطاء في مكان الدوائر (في الجانب الأيمن أسفل العنوان)
             let rateTxt = item.rating ? item.rating : 'تم التسميع';
             let errTxt = (item.errors && item.errors !== '0') ? ` (الأخطاء: ${item.errors})` : ' (بدون أخطاء ✨)';
 
             ctx.font = '600 18px Cairo, sans-serif';
             ctx.fillStyle = (item.errors && item.errors !== '0') ? '#b91c1c' : '#15803d';
-            ctx.fillText(rateTxt + errTxt, 960, curY + 60);
+            ctx.textAlign = 'right';
+            ctx.fillText(rateTxt + errTxt, 940, curY + 60);
 
             curY += 85;
           }
@@ -1068,7 +1070,7 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
     }
   });
 
-  // التوقيع السفلي للتقرير (مسح كلمة "مشرف المسار والتقييم")
+  // التوقيع السفلي للتقرير (حذف مشرف المسار)
   var footerY = canvas.height - 80;
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#0b3d2e';
