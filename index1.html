@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن - نظام المتابعة الذكي</title>
+<title>نظام المتابعة الذكي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 
@@ -208,8 +208,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="hdr">
   <div class="hdr-emblem">🕌</div>
-  <div class="hdr-title">مركز خادم القرآن الكريم</div>
-  <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
+  <div class="hdr-title">نظام المتابعة والتقييم</div>
+  <div class="hdr-subtitle">إشراف الشيخ عبدالرحمن</div>
   
   <div class="nav-actions">
     <a href="manage.html" class="btn-nav-action"><i class="ti ti-settings"></i> صفحة الإدارة (manage.html)</a>
@@ -232,7 +232,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow">
-        <div class="flbl">اسم البطل الكريم</div>
+        <div class="flbl">اسم البطل</div>
         <div style="display: flex; gap: 8px;">
           <div class="ac-wrap" style="flex: 1;">
             <input class="inp" id="inp-student" placeholder="اكتب اسم البطل أو اختر من القائمة..." autocomplete="off">
@@ -368,16 +368,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   let existingStudentsList = [];
 
-  // دالة تحويل التاريخ إلى هجري بكل احترافية
+  // دالة تحويل التاريخ إلى هجري خالص بنسبة 100%
   function getHijriDateString() {
     try {
       const now = new Date();
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+      return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-      });
-      return formatter.format(now) + ' هـ';
+      }).format(now) + ' هـ';
     } catch(e) {
       return new Date().toLocaleDateString('ar-EG');
     }
@@ -425,7 +424,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   // إضافة طالب جديد مباشرة مع عدم التكرار
   async function addNewStudentPrompt() {
-    const name = prompt("أدخل اسم الطالب الجديد:");
+    const name = prompt("أدخل اسم البطل الجديد:");
     if (!name || !name.trim()) return;
     const cleanName = name.trim();
 
@@ -897,11 +896,11 @@ async function loadFonts(){
   } catch(e) {}
 }
 
-// دالة رسم تقرير المتابعة مع التاريخ الهجري وإلغاء توجيهات ولي الأمر
+// دالة رسم تقرير المتابعة بالتعديلات الجديدة
 async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
   await loadFonts();
   
-  // حساب الارتفاع المطلوب ديناميكياً بحسب عدد العناصر المدخلة
+  // حساب الارتفاع المطلوب ديناميكياً
   let totalRowsCount = 0;
   SECTIONS.forEach(sec => {
     let sData = data[sec.key];
@@ -916,21 +915,21 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   canvas.height = Math.max(1400, 600 + (totalRowsCount * 95));
   var ctx = canvas.getContext('2d');
 
-  // الخلفية الإبداعية للتقرير
+  // الخلفية
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
   bgG.addColorStop(0, '#fbfaf5'); 
   bgG.addColorStop(1, '#f3eee0'); 
   ctx.fillStyle = bgG; 
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // إطار خارجي فخم
+  // إطار خارجي
   rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
   ctx.strokeStyle = '#0b3d2e';
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // الهيدر الرئيسي بالصورة
-  rr(ctx, 35, 35, canvas.width - 70, 190, 18);
+  // الهيدر الرئيسي (بدون اسم المركز)
+  rr(ctx, 35, 35, canvas.width - 70, 150, 18);
   var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
   hdrGradient.addColorStop(0, '#04201a');
   hdrGradient.addColorStop(1, '#0b3d2e');
@@ -938,44 +937,47 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.fill();
 
   // إطار ذهبي داخلي للهيدر
-  rr(ctx, 40, 40, canvas.width - 80, 180, 14);
+  rr(ctx, 40, 40, canvas.width - 80, 140, 14);
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.stroke();
 
   // نصوص الهيدر
-  ctx.font = '800 36px Cairo, sans-serif';
+  ctx.font = '800 32px Cairo, sans-serif';
   ctx.fillStyle = '#fef08a';
   ctx.textAlign = 'center';
-  ctx.fillText('🕌 مركز خادم القرآن الكريم 🕌', 540, 90);
+  ctx.fillText('بطاقة متابعة وتقييم المستوى', 540, 90);
 
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#ffffff';
-  ctx.fillText('بطاقة متابعة وتقييم المستوى - إشراف الشيخ عبدالرحمن', 540, 135);
+  ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 125);
 
   ctx.font = '600 18px Cairo, sans-serif';
   ctx.fillStyle = '#d4af37';
-  ctx.fillText('التاريخ: ' + hijriDateStr, 540, 175);
+  ctx.fillText('التاريخ: ' + hijriDateStr, 540, 155);
 
-  // كارت بيانات الطالب والتقييم العام
-  var curY = 250;
-  rr(ctx, 40, curY, canvas.width - 80, 110, 16);
+  // كارت اسم البطل والتقييم العام (منتصف السطر)
+  var curY = 215;
+  rr(ctx, 40, curY, canvas.width - 80, 120, 16);
   ctx.fillStyle = '#ffffff';
   ctx.fill();
   ctx.strokeStyle = '#e5e7eb';
   ctx.lineWidth = 2;
   ctx.stroke();
 
+  // تعديل اسم البطل وتوسيطه
   ctx.font = '800 28px Cairo, sans-serif';
   ctx.fillStyle = '#04201a';
-  ctx.textAlign = 'right';
-  ctx.fillText('اسم البطل الكريم: ' + studentName, 980, curY + 45);
+  ctx.textAlign = 'center';
+  ctx.fillText('اسم البطل: ' + studentName, 540, curY + 48);
 
+  // تعديل التقييم العام وتوسيطه في السطر التابع له
   ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#725304';
-  ctx.fillText('التقييم العام: ' + generalRating, 980, curY + 85);
+  ctx.textAlign = 'center';
+  ctx.fillText('التقييم العام: ' + generalRating, 540, curY + 92);
 
-  curY += 135;
+  curY += 145;
 
   // رسم الأقسام والبنود
   SECTIONS.forEach(sec => {
@@ -1066,16 +1068,16 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
     }
   });
 
-  // التوقيع السفلي للتقرير
+  // التوقيع السفلي للتقرير (مسح كلمة "مشرف المسار والتقييم")
   var footerY = canvas.height - 80;
-  ctx.font = '700 20px Cairo, sans-serif';
+  ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#0b3d2e';
   ctx.textAlign = 'center';
-  ctx.fillText('مشرف المسار والتقييم: الشيخ عبدالرحمن', 540, footerY);
+  ctx.fillText('الشيخ عبدالرحمن', 540, footerY);
 
   ctx.font = '600 16px Cairo, sans-serif';
   ctx.fillStyle = '#64748b';
-  ctx.fillText('مركز خادم القرآن الكريم - تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 30);
+  ctx.fillText('تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 30);
 
   return canvas;
 }
@@ -1111,7 +1113,7 @@ function showSingleImageModal(canvasElement, downloadName) {
           await navigator.share({
             files: [file],
             title: 'تقرير متابعة',
-            text: 'تقرير متابعة وتقييم بطل مركز خادم القرآن الكريم'
+            text: 'تقرير متابعة وتقييم بطل'
           });
         } else {
           var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
