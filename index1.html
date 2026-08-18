@@ -169,6 +169,33 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 .quran-footer { padding: 14px; background: #fff; border-top: 1px solid var(--border); text-align: center; }
 .quran-close { padding: 12px 50px; background: var(--green-deep); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; box-shadow: 0 4px 10px rgba(4, 32, 38, 0.2); }
+
+/* ===== أزرار وواجهات إدارة الطلاب (جديد) ===== */
+.student-actions { display:flex; gap:8px; margin-top:10px; }
+.mini-btn { flex:1; padding:11px 8px; border-radius:10px; border:2px solid var(--green-mid); background:#fff; color:var(--green-mid); font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-family:'Cairo',sans-serif; transition:0.2s; }
+.mini-btn:active { background: var(--green-mid); color:#fff; transform: scale(0.97); }
+.mini-btn.gold { border-color:var(--gold); color:#8a6d0a; }
+.mini-btn.gold:active { background:var(--gold); color:#fff; }
+.mini-btn.solid { background:var(--green-mid); color:#fff; }
+.mini-btn.solid:active { opacity:0.85; }
+#student-status-hint { font-size:11.5px; font-weight:700; display:block; margin-top:6px; }
+
+.simple-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.7); z-index:99998; align-items:center; justify-content:center; padding:14px; }
+.simple-box { background:#fff; border-radius:18px; width:100%; max-width:480px; max-height:88vh; overflow:hidden; display:flex; flex-direction:column; border:3px solid var(--green-mid); box-shadow:0 12px 30px rgba(0,0,0,0.4); }
+.simple-head { background:var(--green-mid); color:var(--gold-light); padding:14px 16px; font-weight:800; font-size:16px; display:flex; justify-content:space-between; align-items:center; }
+.simple-head .x-close { cursor:pointer; font-size:20px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(255,255,255,0.1); }
+.simple-body { padding:16px; overflow-y:auto; }
+.simple-foot { padding:12px 16px; border-top:1px solid var(--border); display:flex; gap:10px; }
+
+.hist-item { background:#fdfcf7; border:1px solid #e2decb; border-radius:12px; padding:12px 14px; margin-bottom:10px; cursor:pointer; transition:0.2s; }
+.hist-item:hover { border-color:var(--green-light); }
+.hist-date { font-weight:800; color:var(--green-mid); font-size:14px; }
+.hist-rating { font-size:12px; font-weight:700; margin-top:6px; display:inline-block; padding:4px 12px; border-radius:8px; }
+.hist-detail-box { display:none; margin-top:14px; padding:14px; background:#f7faf8; border-radius:12px; border:1px solid var(--border); }
+.hist-sec-title { font-weight:800; color:var(--green-mid); font-size:13px; margin:10px 0 6px; }
+.hist-line { font-size:13px; color:var(--text); padding:6px 0; border-bottom:1px dashed var(--border); }
+.hist-empty { text-align:center; color:var(--sub); padding:24px 10px; font-size:13px; }
+.hist-loading { text-align:center; padding:30px; color:var(--green-mid); font-weight:800; }
 </style>
 </head>
 <body>
@@ -195,7 +222,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-body">
       <div class="frow">
         <div class="flbl">اسم البطل الكريم</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل">
+        <div class="ac-wrap">
+          <input class="inp" id="inp-student" placeholder="اكتب اسم البطل واختر من القائمة أو أضف طالباً جديداً" autocomplete="off">
+          <div class="ac-drop" id="drop-student"></div>
+        </div>
+        <span id="student-status-hint"></span>
+        <div class="student-actions">
+          <button type="button" class="mini-btn" onclick="openAddStudentModal()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
+          <button type="button" class="mini-btn gold" onclick="openHistoryModal()"><i class="ti ti-history"></i> سجل الطالب السابق</button>
+        </div>
       </div>
       <div class="frow">
         <div class="flbl">التقييم العام للمسار</div>
@@ -304,6 +339,46 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="quran-grid" id="quran-modal-grid"></div>
     <div class="quran-footer">
       <button class="quran-close" onclick="closeQuranModal()">تم الانتهاء واحتساب الأخطاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة إضافة طالب جديد -->
+<div class="simple-modal" id="add-student-modal">
+  <div class="simple-box">
+    <div class="simple-head">➕ إضافة طالب جديد <span class="x-close" onclick="closeModal('add-student-modal')">✕</span></div>
+    <div class="simple-body">
+      <div class="frow">
+        <div class="flbl">اسم الطالب الكامل</div>
+        <input class="inp" id="new-student-name" placeholder="اكتب اسم الطالب">
+      </div>
+      <div class="frow">
+        <div class="flbl">ملاحظات (اختياري)</div>
+        <input class="inp" id="new-student-notes" placeholder="مثال: الصف الدراسي / رقم ولي الأمر...">
+      </div>
+    </div>
+    <div class="simple-foot">
+      <button class="mini-btn" style="flex:1;" onclick="closeModal('add-student-modal')">إلغاء</button>
+      <button class="mini-btn solid" style="flex:2;" onclick="saveNewStudent()"><i class="ti ti-device-floppy"></i> حفظ الطالب</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة سجل الطالب السابق -->
+<div class="simple-modal" id="history-modal">
+  <div class="simple-box">
+    <div class="simple-head">📜 سجل الطالب السابق <span class="x-close" onclick="closeModal('history-modal')">✕</span></div>
+    <div class="simple-body">
+      <div class="frow">
+        <div class="flbl">اختر الطالب</div>
+        <div class="ac-wrap">
+          <input class="inp" id="hist-student-search" placeholder="اكتب اسم الطالب للبحث..." autocomplete="off">
+          <div class="ac-drop" id="drop-hist-student"></div>
+        </div>
+      </div>
+      <div id="hist-list-wrap">
+        <div class="hist-empty">اختر طالباً من القائمة لعرض سجل متابعته السابق بكل الأيام الماضية.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -500,17 +575,17 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
       if (ayahObj) {
         displayTxt = ayahObj.text + " ۝";
         // إزالة البسملة من أول آية إلا في الفاتحة (ليكون التسميع مباشراً وواقعياً)
-        if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
-           displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
+        if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
+           displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
         }
       } else {
-        displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
+        displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
       }
     } else if (isQ) {
       displayTxt = "السؤال أو التمرين التدريبي رقم " + i + " داخل المذكرة المعتمدة.";
     } else {
       // في حالة عدم وجود إنترنت للتحميل
-      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
+      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
     }
 
     card.innerHTML = '<span class="ayah-num-badge">' + i + '</span>' +
@@ -930,7 +1005,7 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   var textY = 440; ctx.font = '700 36px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
   var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ)؛';
   var p2 = 'سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
-  var p3 = 'تَفَضَّلُوا تَقْرِيرَ الْبَطَلِ الْكَرِيمِ الَّذِي أَبْدَعَ وَأَظْهَرَ تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا الْحَصَادَ الْمُفَصَّلَ، نُوصِيهِ بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ لِيَبْقَى كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ.';
+  var p3 = 'تَفَضَّلُوا تَقْرِيرَ الْبَطَلِ الْكَرِيمِ الَّذِي أَبْدَعَ وَأَظْهَرَ تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا الْحَصَادَ الْمُفَصَّلَ، نُوصِيهِ بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ لِيَبْقَى كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ.';
   var p4 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ.';
   var maxW = 900;
   var allParagraphs = [wrapText(ctx, p1, maxW), wrapText(ctx, p2, maxW), wrapText(ctx, p3, maxW), wrapText(ctx, p4, maxW)];
@@ -1047,6 +1122,259 @@ SECTIONS.forEach(sec => {
   if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
 });
+</script>
+
+<!-- ============ إدارة الطلاب وسجلاتهم عبر Firebase ============ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    initializeFirestore, persistentLocalCache, persistentSingleTabManager, getFirestore,
+    collection, getDocs, addDoc, doc, setDoc, getDoc, query, where, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+    authDomain: "ahmedelzaiady.firebaseapp.com",
+    projectId: "ahmedelzaiady",
+    storageBucket: "ahmedelzaiady.firebasestorage.app",
+    messagingSenderId: "300306825071",
+    appId: "1:300306825071:web:0426ddde56280fa090329a",
+    measurementId: "G-WE04GK5XZZ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  let db;
+  try {
+    db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentSingleTabManager() }) });
+  } catch (e) {
+    db = getFirestore(app);
+  }
+
+  // ---------- الحالة العامة ----------
+  let allStudents = [];      // كل الطلاب المسجلين { id, name, notes }
+  let selectedStudentId = null; // الطالب المختار حالياً في نموذج الرصد الرئيسي
+  let sessionsCache = {};    // كاش لجلسات الطالب المعروضة في نافذة السجل
+
+  async function loadAllStudents() {
+    try {
+      const snap = await getDocs(collection(db, 'students'));
+      allStudents = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+      console.log('تعذر تحميل قائمة الطلاب:', e);
+    }
+  }
+
+  // ---------- الإكمال التلقائي بالاسم (Autocomplete) ----------
+  function setupStudentAC(inputEl, dropEl, onPick) {
+    if (!inputEl || !dropEl) return;
+    inputEl.addEventListener('input', function () {
+      const val = inputEl.value.trim();
+      if (!val) { dropEl.style.display = 'none'; return; }
+      const matches = allStudents.filter(s => s.name && s.name.includes(val)).slice(0, 6);
+      if (!matches.length) { dropEl.style.display = 'none'; return; }
+      dropEl.innerHTML = matches.map(s => '<div class="ac-item" data-id="' + s.id + '">' + s.name + '</div>').join('');
+      dropEl.style.display = 'block';
+      dropEl.querySelectorAll('.ac-item').forEach(function (item) {
+        item.onclick = function () {
+          const st = allStudents.find(s => s.id === this.getAttribute('data-id'));
+          if (st) onPick(st);
+          dropEl.style.display = 'none';
+        };
+      });
+    });
+    inputEl.addEventListener('blur', function () {
+      setTimeout(() => { dropEl.style.display = 'none'; }, 180);
+    });
+  }
+
+  const inpStudent = document.getElementById('inp-student');
+  const dropStudent = document.getElementById('drop-student');
+  const statusHint = document.getElementById('student-status-hint');
+
+  function refreshStudentHint() {
+    const val = inpStudent.value.trim();
+    if (!val) { statusHint.textContent = ''; return; }
+    const exists = allStudents.find(s => s.name === val);
+    if (exists) {
+      statusHint.textContent = '✅ طالب مسجل مسبقاً — ستُضاف هذه الجلسة إلى سجله التاريخي.';
+      statusHint.style.color = '#166534';
+    } else {
+      statusHint.textContent = '🆕 اسم جديد — سيتم تسجيله تلقائياً كطالب جديد عند حفظ الجلسة.';
+      statusHint.style.color = '#8a6d0a';
+    }
+  }
+
+  setupStudentAC(inpStudent, dropStudent, function (st) {
+    inpStudent.value = st.name;
+    selectedStudentId = st.id;
+    refreshStudentHint();
+  });
+  inpStudent.addEventListener('input', function () {
+    selectedStudentId = null;
+    refreshStudentHint();
+  });
+
+  setupStudentAC(
+    document.getElementById('hist-student-search'),
+    document.getElementById('drop-hist-student'),
+    function (st) {
+      document.getElementById('hist-student-search').value = st.name;
+      loadStudentHistory(st.name);
+    }
+  );
+
+  // ---------- نافذتا إضافة الطالب والسجل ----------
+  window.openAddStudentModal = function () {
+    document.getElementById('add-student-modal').style.display = 'flex';
+  };
+  window.closeModal = function (id) {
+    document.getElementById(id).style.display = 'none';
+  };
+  window.openHistoryModal = function () {
+    document.getElementById('history-modal').style.display = 'flex';
+    document.getElementById('hist-student-search').value = '';
+    document.getElementById('hist-list-wrap').innerHTML =
+      '<div class="hist-empty">اختر طالباً من القائمة لعرض سجل متابعته السابق بكل الأيام الماضية.</div>';
+  };
+
+  window.saveNewStudent = async function () {
+    const nameInp = document.getElementById('new-student-name');
+    const notesInp = document.getElementById('new-student-notes');
+    const name = nameInp.value.trim();
+    if (!name) { customAlert('⚠️ يرجى كتابة اسم الطالب أولاً.'); return; }
+    if (allStudents.find(s => s.name === name)) {
+      customAlert('⚠️ هذا الاسم مسجل بالفعل ضمن قائمة الطلاب، يمكنك اختياره مباشرة من قائمة الاقتراحات.');
+      return;
+    }
+    const notes = notesInp.value.trim();
+    try {
+      const ref = await addDoc(collection(db, 'students'), {
+        name: name, notes: notes, createdAt: serverTimestamp(), createdAtMillis: Date.now()
+      });
+      allStudents.push({ id: ref.id, name: name, notes: notes });
+      inpStudent.value = name;
+      selectedStudentId = ref.id;
+      refreshStudentHint();
+      nameInp.value = ''; notesInp.value = '';
+      closeModal('add-student-modal');
+      customAlert('✅ تم تسجيل الطالب "' + name + '" بنجاح، ويمكنك الآن رصد متابعته اليومية.');
+    } catch (e) {
+      customAlert('حدث خطأ أثناء الحفظ: ' + e.message);
+    }
+  };
+
+  async function ensureStudentExists(name) {
+    let st = allStudents.find(s => s.name === name);
+    if (st) return st.id;
+    try {
+      const ref = await addDoc(collection(db, 'students'), {
+        name: name, notes: '', createdAt: serverTimestamp(), createdAtMillis: Date.now()
+      });
+      allStudents.push({ id: ref.id, name: name, notes: '' });
+      return ref.id;
+    } catch (e) {
+      console.log('تعذر تسجيل الطالب تلقائياً:', e);
+      return null;
+    }
+  }
+
+  // ---------- حفظ جلسة متابعة (تُستدعى تلقائياً عند توليد التقرير) ----------
+  async function saveSessionRecord(nm, genRating, data) {
+    try {
+      const sid = selectedStudentId || await ensureStudentExists(nm);
+      await addDoc(collection(db, 'sessions'), {
+        studentId: sid || null,
+        studentName: nm,
+        generalRating: genRating,
+        sectionsData: data,
+        hijriDateStr: (typeof hijriDate === 'function') ? hijriDate() : '',
+        createdAt: serverTimestamp(),
+        createdAtMillis: Date.now()
+      });
+    } catch (e) {
+      console.log('تعذر حفظ سجل الجلسة:', e);
+    }
+  }
+
+  // ---------- عرض سجل الطالب السابق ----------
+  window.loadStudentHistory = async function (name) {
+    const wrap = document.getElementById('hist-list-wrap');
+    wrap.innerHTML = '<div class="hist-loading">جاري تحميل السجل... ⏳</div>';
+    try {
+      const q = query(collection(db, 'sessions'), where('studentName', '==', name));
+      const snap = await getDocs(q);
+      let sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      sessions.sort((a, b) => (b.createdAtMillis || 0) - (a.createdAtMillis || 0));
+
+      if (!sessions.length) {
+        wrap.innerHTML = '<div class="hist-empty">لا يوجد سجل متابعة سابق مسجّل لهذا الطالب بعد.</div>';
+        return;
+      }
+
+      sessionsCache = {};
+      sessions.forEach(s => { sessionsCache[s.id] = s; });
+
+      wrap.innerHTML = sessions.map(function (sess) {
+        const dateStr = sess.hijriDateStr || (sess.createdAtMillis ? new Date(sess.createdAtMillis).toLocaleDateString('ar-EG') : '—');
+        const rs = ratingStyle(sess.generalRating || '');
+        return '<div class="hist-item" onclick="toggleHistDetail(\'' + sess.id + '\')">' +
+          '<div class="hist-date">📅 ' + dateStr + '</div>' +
+          '<span class="hist-rating" style="background:' + rs.bg + ';color:' + rs.color + ';border:1px solid ' + rs.border + ';">' + (sess.generalRating || '—') + '</span>' +
+          '<div class="hist-detail-box" id="hist-detail-' + sess.id + '"></div>' +
+          '</div>';
+      }).join('');
+    } catch (e) {
+      wrap.innerHTML = '<div class="hist-empty" style="color:#b91c1c;">تعذر تحميل السجل: ' + e.message + '</div>';
+    }
+  };
+
+  window.toggleHistDetail = function (sessId) {
+    const box = document.getElementById('hist-detail-' + sessId);
+    if (!box) return;
+    const willOpen = box.style.display !== 'block';
+    document.querySelectorAll('.hist-detail-box').forEach(b => b.style.display = 'none');
+    if (!willOpen) return;
+
+    const sess = sessionsCache[sessId];
+    if (!sess) return;
+    let html = '';
+    SECTIONS.forEach(function (sec) {
+      const sData = sess.sectionsData && sess.sectionsData[sec.key];
+      if (!sData || (!sData.currents.length && !sData.nexts.length)) return;
+      html += '<div class="hist-sec-title">' + sec.icon + ' ' + sec.title + '</div>';
+      sData.currents.forEach(function (item) {
+        let mainTxt;
+        if (item.sr) { mainTxt = item.sr + (item.type === 'range' ? (' (من ' + item.f + ' إلى ' + item.t + ')') : ' كاملةً'); }
+        else { const u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
+        const errTxt = (item.errors && item.errors !== '0') ? (' — أخطاء: ' + item.errors) : ' — بلا أخطاء ✨';
+        html += '<div class="hist-line">• ' + mainTxt + (item.rating ? (' — ' + item.rating) : '') + errTxt + '</div>';
+      });
+      sData.nexts.forEach(function (plan) {
+        let planTxt;
+        if (plan.nextPlanSr) { planTxt = plan.nextPlanSr + (plan.nextPlanType === 'range' ? (' (من ' + plan.nextPlanF + ' إلى ' + plan.nextPlanT + ')') : ' كاملةً'); }
+        else { const u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + plan.nextPlanF + ' إلى ' + plan.nextPlanT; }
+        html += '<div class="hist-line">🎯 الخطة القادمة: ' + planTxt + '</div>';
+      });
+    });
+    if (!html) html = '<div style="color:var(--sub); font-size:13px;">لا توجد تفاصيل مسجلة لهذه الجلسة.</div>';
+    box.innerHTML = html;
+    box.style.display = 'block';
+  };
+
+  // ---------- ربط الحفظ التلقائي للسجل عند توليد التقرير والشهادة ----------
+  const originalGenerateAllOutputs = window.generateAllOutputs;
+  window.generateAllOutputs = async function () {
+    const nm = document.getElementById('inp-student').value.trim();
+    if (nm) {
+      const genRating = document.getElementById('inp-general-rating').value;
+      const data = {};
+      SECTIONS.forEach(function (sec) { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+      saveSessionRecord(nm, genRating, data);
+    }
+    return originalGenerateAllOutputs();
+  };
+
+  loadAllStudents();
 </script>
 </body>
 </html>
