@@ -386,7 +386,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 
 var SURAS_CACHE = {}; 
 var counters={};
@@ -913,13 +913,14 @@ function showSingleImageModal(canvasElement, downloadName) {
   document.body.appendChild(modal);
 }
 
-/* حفظ البيانات في سيرفر Firestore + الذاكرة المحلية */
+/* حفظ البيانات لصفحة الإدارة manage.html في سيرفر Firestore + LocalStorage */
 async function saveRecordToDatabase(studentName, rating, data, advice) {
   var timestamp = firebase.firestore.FieldValue.serverTimestamp();
   var dateStr = hijriDate() + ' - ' + new Date().toLocaleDateString('ar-EG');
 
-  // 1. التخزين المباشر في Firebase Firestore
+  // 1. التخزين المباشر في Firebase Firestore (ليظهر في manage.html)
   try {
+    // حفظ التقييم التفصيلي
     await db.collection("students_records").add({
       studentName: studentName,
       rating: rating,
@@ -928,7 +929,16 @@ async function saveRecordToDatabase(studentName, rating, data, advice) {
       dateString: dateStr,
       createdAt: timestamp
     });
-    console.log("تم حفظ بيانات التقييم على السيرفر بنجاح.");
+
+    // تحديث الطالب في قائمة الطلاب الرئيسية لصفحة manage.html
+    await db.collection("students").doc(studentName).set({
+      name: studentName,
+      lastRating: rating,
+      lastUpdated: timestamp,
+      date: dateStr
+    }, { merge: true });
+
+    console.log("تم حفظ بيانات التقييم وقائمة الطلاب لصفحة manage.html بنجاح.");
   } catch (e) {
     console.error("خطأ أثناء الحفظ على السيرفر: ", e);
   }
@@ -953,7 +963,7 @@ async function saveRecordToDatabase(studentName, rating, data, advice) {
   } catch(e) { console.error(e); }
 }
 
-/* استخراج شهادة التقدير فقط */
+/* استخراج شهادة التقدير والحفظ في manage.html */
 async function generateCertificate() {
   var nm = document.getElementById('inp-student').value.trim();
   if (!nm) {
@@ -971,7 +981,7 @@ async function generateCertificate() {
 
   var loadingBox = document.createElement('div');
   loadingBox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:bold;font-family:Cairo,sans-serif;text-align:center;padding:20px;';
-  loadingBox.innerHTML = 'جاري حفظ البيانات على السيرفر وإنشاء الشهادة... ⏳';
+  loadingBox.innerHTML = 'جاري حفظ البيانات لصفحة manage.html وإنشاء الشهادة... ⏳';
   document.body.appendChild(loadingBox);
 
   try {
@@ -1003,25 +1013,47 @@ function getSavedStudents() {
   }
 }
 
-function saveNewStudent() {
+/* حفظ طالب جديد لتظهر مباشرة داخل manage.html */
+async function saveNewStudent() {
   var nameInp = document.getElementById('new-student-name');
   var notesInp = document.getElementById('new-student-notes');
   var name = nameInp.value.trim();
+  var notes = notesInp.value.trim();
+
   if (!name) {
     customAlert('يرجى كتابة اسم الطالب.');
     return;
   }
+
+  var dateStr = new Date().toLocaleDateString('ar-EG');
+
+  // 1. الحفظ المباشر في Firebase Firestore لصفحة الإدارة manage.html
+  try {
+    await db.collection("students").doc(name).set({
+      name: name,
+      notes: notes,
+      date: dateStr,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+  } catch(e) {
+    console.error("خطأ أثناء حفظ الطالب في السيرفر:", e);
+  }
+
+  // 2. الحفظ المحلي LocalStorage
   var list = getSavedStudents();
   if (!list.some(s => s.name === name)) {
-    list.push({ name: name, notes: notesInp.value.trim(), date: new Date().toLocaleDateString('ar-EG') });
-    localStorage.setItem('quran_center_students', JSON.stringify(list));
+    list.push({ name: name, notes: notes, date: dateStr });
+  } else {
+    list = list.map(s => s.name === name ? { name: name, notes: notes, date: dateStr } : s);
   }
+  localStorage.setItem('quran_center_students', JSON.stringify(list));
+
   document.getElementById('inp-student').value = name;
   document.getElementById('student-status-hint').innerText = '✅ تم اختيار الطالب: ' + name;
   nameInp.value = '';
   notesInp.value = '';
   closeModal('add-student-modal');
-  customAlert('تم حفظ الطالب بنجاح! 🌟');
+  customAlert('تم حفظ الطالب بنجاح وربطه بصفحة الإدارة (manage.html)! 🌟');
 }
 
 function openHistoryModal() {
