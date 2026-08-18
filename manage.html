@@ -15,19 +15,20 @@
 
 <style>
   :root{
-    --ink:#10332b;
-    --ink-2:#1c473b;
-    --parchment:#f6f2e8;
+    --ink:#0d3b2e;
+    --ink-2:#155241;
+    --parchment:#f8f6f0;
     --panel:#ffffff;
     --sage:#eaf0e9;
-    --gold:#b8863a;
-    --gold-deep:#8f6423;
-    --gold-soft:#f1e4c8;
-    --rose:#9c4a3c;
-    --rose-soft:#f4e4e0;
-    --line:#e1d9c4;
-    --text:#26302b;
-    --muted:#72796f;
+    --gold:#d4af37;
+    --gold-bg:#fcf8e3;
+    --rose-bg:#fde8e8;
+    --rose-text:#c0392b;
+    --green-bg:#e8f8f5;
+    --green-text:#16a085;
+    --line:#e2ded4;
+    --text:#222222;
+    --muted:#666666;
     --radius:16px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -44,14 +45,13 @@
   /* ---------- Top bar ---------- */
   .topbar{
     background:var(--ink);
-    background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,.05), transparent 40%);
     color:#f4efe1;
     border-radius:var(--radius);
     padding:18px 20px;
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
     margin-bottom:18px;
   }
-  .topbar h1{font-size:19px; font-weight:700; letter-spacing:.2px;}
+  .topbar h1{font-size:19px; font-weight:700;}
   .topbar .sub{font-size:11px; color:#cbd9d1; margin-top:2px; font-family:'Tajawal';}
   .topbtns{display:flex; gap:8px;}
   .pill-btn{
@@ -73,11 +73,11 @@
     margin-bottom:16px;
   }
   .panel-title{
-    font-size:13px; font-weight:800; color:var(--gold-deep);
+    font-size:13px; font-weight:800; color:var(--ink);
     text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px;
     display:flex; align-items:center; gap:8px;
   }
-  .panel-title::before{content:''; width:14px; height:2px; background:var(--gold); display:inline-block;}
+  .panel-title::before{content:''; width:14px; height:3px; background:var(--gold); display:inline-block; border-radius:2px;}
 
   /* ---------- Search ---------- */
   .search-wrap{position:relative;}
@@ -86,11 +86,11 @@
     font-size:15px; font-family:'Tajawal'; outline:none; background:var(--parchment);
     transition:.2s;
   }
-  .search-input:focus{border-color:var(--ink-2); background:#fff;}
+  .search-input:focus{border-color:var(--ink); background:#fff;}
   .dropdown-menu{
     position:absolute; top:calc(100% + 6px); left:0; right:0; background:#fff;
     border:1px solid var(--line); border-radius:11px; max-height:230px; overflow-y:auto;
-    box-shadow:0 10px 24px rgba(16,51,43,.14); z-index:50; display:none;
+    box-shadow:0 10px 24px rgba(0,0,0,.1); z-index:50; display:none;
   }
   .dropdown-item{padding:12px 15px; border-bottom:1px solid #f1ede0; cursor:pointer; font-weight:700; font-size:14px;}
   .dropdown-item:last-child{border-bottom:none;}
@@ -102,11 +102,11 @@
     background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:15px;
     cursor:pointer; transition:.2s; display:flex; flex-direction:column; gap:8px;
   }
-  .student-card:hover{border-color:var(--gold); box-shadow:0 6px 16px rgba(16,51,43,.08); transform:translateY(-2px);}
+  .student-card:hover{border-color:var(--gold); box-shadow:0 6px 16px rgba(0,0,0,.06); transform:translateY(-2px);}
   .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
   .student-name{font-weight:800; font-size:15.5px; color:var(--ink);}
-  .del-btn{background:var(--rose-soft); color:var(--rose); border:1px solid #e6c3ba; padding:4px 9px; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer;}
-  .del-btn:hover{background:var(--rose); color:#fff;}
+  .del-btn{background:var(--rose-bg); color:var(--rose-text); border:1px solid #f5c6cb; padding:4px 9px; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer;}
+  .del-btn:hover{background:var(--rose-text); color:#fff;}
   .student-meta{font-size:12.5px; color:var(--muted);}
   .student-meta b{color:var(--ink-2);}
   .no-data{grid-column:1/-1; text-align:center; color:var(--muted); padding:20px; font-size:13.5px;}
@@ -133,60 +133,44 @@
   .btn-whatsapp:hover{background:#186f49;}
   .btn-image{background:var(--ink); color:#f4efe1;}
   .btn-image:hover{background:var(--ink-2);}
-  .btn-ghost{background:var(--sage); color:var(--ink-2); border:1px solid var(--line);}
-  .btn-ghost:hover{background:#dfe8dd;}
   .btn:disabled{opacity:.45; cursor:not-allowed;}
 
-  /* ---------- Timeline of dates ---------- */
+  /* ---------- Timeline ---------- */
   .timeline{position:relative; padding-inline-start:26px;}
   .timeline::before{
-    content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px;
-    background:linear-gradient(var(--gold-soft), var(--line));
+    content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px; background:var(--line);
   }
   .timeline-item{position:relative; padding:6px 0 14px;}
-  .timeline-item:last-child{padding-bottom:0;}
   .bead{
     position:absolute; right:0px; top:8px; width:18px; height:18px; border-radius:50%;
-    background:#fff; border:2.5px solid var(--gold-soft); transition:.2s;
+    background:#fff; border:2.5px solid #d1c7b7; transition:.2s;
   }
-  .timeline-item.selected .bead{background:var(--gold); border-color:var(--gold-deep);}
+  .timeline-item.selected .bead{background:var(--gold); border-color:var(--ink);}
   .timeline-btn{
     width:100%; text-align:right; background:var(--panel); border:1px solid var(--line);
     border-radius:12px; padding:11px 15px; cursor:pointer; transition:.2s; font-family:'Tajawal';
     display:flex; justify-content:space-between; align-items:center; gap:8px;
   }
-  .timeline-item.selected .timeline-btn{border-color:var(--gold); background:var(--gold-soft); box-shadow:0 3px 10px rgba(184,134,58,.15);}
-  .timeline-btn:hover{border-color:var(--gold);}
+  .timeline-item.selected .timeline-btn{border-color:var(--gold); background:var(--gold-bg);}
   .timeline-date{font-weight:800; font-size:14px; color:var(--ink);}
   .timeline-count{font-size:11.5px; color:var(--muted); background:var(--sage); padding:2px 9px; border-radius:999px; font-weight:700;}
-  .timeline-item.selected .timeline-count{background:#fff;}
 
-  /* ---------- Data table ---------- */
+  /* ---------- Table ---------- */
   .entry-row{
     display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; align-items:center;
     padding:12px 6px; border-bottom:1px solid #f0ece0;
   }
   .entry-row:last-child{border-bottom:none;}
-  .entry-row.head{font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
+  .entry-row.head{font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase;}
   .entry-cat{display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:13.5px; color:var(--ink);}
-  .entry-cat .dot{width:8px; height:8px; border-radius:50%;}
-  .dot.new{background:#3f7a5e;}
-  .dot.past{background:var(--gold);}
-  .dot.adhkar{background:#4c6f8a;}
   .entry-sub{font-size:11.5px; color:var(--muted); margin-top:2px;}
   .tag{display:inline-block; font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:7px; margin-inline-end:5px; margin-top:3px;}
-  .tag.grade{background:var(--gold-soft); color:var(--gold-deep);}
-  .tag.error{background:var(--rose-soft); color:var(--rose);}
+  .tag.grade{background:var(--gold-bg); color:#8a6d3b;}
+  .tag.error{background:var(--rose-bg); color:var(--rose-text);}
   .tag.plan{background:var(--sage); color:var(--ink-2); display:block; margin-top:6px;}
-  @media (max-width:520px){
-    .entry-row{grid-template-columns:1fr; gap:4px;}
-    .entry-row.head{display:none;}
-  }
 
   .empty-state{text-align:center; padding:30px 10px; color:var(--muted); font-size:13.5px;}
-  .empty-state .icon{font-size:26px; display:block; margin-bottom:8px;}
 
-  /* ---------- Off-screen report render target ---------- */
   #reportSandbox{position:fixed; top:0; left:-99999px; z-index:-1;}
 </style>
 </head>
@@ -275,8 +259,12 @@
   let currentSelectedStudent = null;
   let currentSelectedDateKey = null;
 
-  const CAT_LABELS = { new: 'سور جديدة', past: 'ماضي السور', adhkar: 'حديث وأذكار' };
-  const CAT_DOT = { new: 'new', past: 'past', adhkar: 'adhkar' };
+  const CAT_LABELS = { 
+    new: 'السور الجديدة', 
+    past: 'ماضي السور', 
+    adhkar: 'المذكرة الجديدة',
+    past_adhkar: 'ماضي المذكرة'
+  };
 
   const searchInput = document.getElementById('studentSearchInput');
   const dropdown = document.getElementById('customDropdown');
@@ -290,7 +278,7 @@
       const updated = studentsData.find(s => s.id === currentSelectedStudent.id);
       if (updated) openStudentProfile(updated.id, currentSelectedDateKey);
     }
-  }, (error) => console.error("خطأ في الفايربيس:", error));
+  }, (error) => console.error("خطأ الفايربيس:", error));
 
   searchInput.addEventListener('input', function () {
     const query = this.value.trim().toLowerCase();
@@ -342,15 +330,15 @@
     event.stopPropagation();
     const student = studentsData.find(s => s.id === studentId);
     const sName = student ? (student.name || student.studentName) : '';
-    if (student && confirm(`هل أنت متأكد من مسح بيانات الطالب (${sName}) وكافة تقاريره؟`)) {
+    if (student && confirm(`هل أنت متأكد من مسح الطالب (${sName})؟`)) {
       try { await studentsCollection.doc(String(studentId)).delete(); }
       catch (err) { alert("حدث خطأ أثناء المسح: " + err.message); }
     }
   }
 
   async function deleteAllStudents() {
-    if (studentsData.length === 0) { alert("قائمة الطلاب فارغة بالفعل!"); return; }
-    if (confirm("تحذير: هل أنت متأكد من مسح جميع الطلاب المسجلين وكافة تقاريرهم؟")) {
+    if (studentsData.length === 0) { alert("القائمة فارغة!"); return; }
+    if (confirm("تحذير: هل أنت متأكد من مسح جميع الطلاب؟")) {
       try {
         const batch = db.batch();
         const snapshot = await studentsCollection.get();
@@ -361,7 +349,7 @@
     }
   }
 
-  // ---------- Date helpers ----------
+  // ---------- Date & Hijri Conversion Helpers ----------
   function getTxDateKey(tx) {
     if (tx.date) {
       const d = new Date(tx.date);
@@ -374,11 +362,37 @@
     return 'undated';
   }
 
+  function getHijriDateFormatted(dateObjOrString) {
+    if (!dateObjOrString || dateObjOrString === 'undated') return 'تاريخ غير محدد';
+    const d = new Date(dateObjOrString);
+    if (isNaN(d.getTime())) return dateObjOrString;
+
+    try {
+      return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(d);
+    } catch (e) {
+      return d.toLocaleDateString('ar-EG');
+    }
+  }
+
+  function getHijriTimeFormatted(dateObj) {
+    try {
+      return new Intl.DateTimeFormat('ar-EG', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }).format(dateObj || new Date());
+    } catch (e) {
+      return '';
+    }
+  }
+
   function formatDateKey(key) {
-    if (key === 'undated') return 'بدون تاريخ';
-    const d = new Date(key);
-    if (isNaN(d)) return key;
-    return d.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return getHijriDateFormatted(key);
   }
 
   function getStudentDates(student) {
@@ -397,12 +411,12 @@
   }
 
   function txCategory(tx) {
-    if (tx.category === 'past' || (tx.type && tx.type.includes('مراجعة'))) return 'past';
+    if (tx.category === 'past_adhkar') return 'past_adhkar';
     if (tx.category === 'adhkar' || (tx.type && tx.type.includes('حديث'))) return 'adhkar';
+    if (tx.category === 'past' || (tx.type && tx.type.includes('مراجعة'))) return 'past';
     return 'new';
   }
 
-  // ---------- Profile / timeline / table ----------
   function openStudentProfile(studentId, dateKeyToSelect) {
     const student = studentsData.find(s => s.id === studentId);
     if (!student) return;
@@ -421,7 +435,7 @@
     document.getElementById('btnFullWA').disabled = !hasFull;
 
     if (dates.length === 0) {
-      timelineList.innerHTML = '<div class="empty-state"><span class="icon">📅</span>لا توجد تقارير مسجلة لهذا الطالب بعد.</div>';
+      timelineList.innerHTML = '<div class="empty-state">لا توجد تقارير مسجلة لهذا الطالب بعد.</div>';
     } else {
       let selectKey = dateKeyToSelect && dates.includes(dateKeyToSelect) ? dateKeyToSelect : dates[0];
       dates.forEach(key => {
@@ -462,7 +476,7 @@
     document.getElementById('btnDayWA').disabled = txs.length === 0;
 
     if (txs.length === 0) {
-      wrap.innerHTML = '<div class="empty-state"><span class="icon">📖</span>لا توجد بيانات لهذا اليوم.</div>';
+      wrap.innerHTML = '<div class="empty-state">لا توجد بيانات لهذا اليوم.</div>';
       return;
     }
 
@@ -473,7 +487,7 @@
       const cat = txCategory(tx);
       html += `<div class="entry-row">
         <div>
-          <div class="entry-cat"><span class="dot ${CAT_DOT[cat]}"></span>${tx.surah || tx.type || 'بند'}</div>
+          <div class="entry-cat">${tx.surah || tx.type || 'بند'}</div>
           <div class="entry-sub">${CAT_LABELS[cat]}${tx.range ? ' &middot; نطاق ' + tx.range : ''}</div>
         </div>
         <div>${tx.amount ? `<span class="tag grade">${tx.amount}</span>` : ''}</div>
@@ -486,97 +500,137 @@
     wrap.innerHTML = html;
   }
 
-  // ---------- Report building (image export) - INDEX1 DESIGN MATCH ----------
-  function buildReportCard(sName, subtitleText, groupedByDate) {
-    // groupedByDate: [{ key, label, txs: [...] }]
+  // ---------- Exact Template Image Generator Matching design 54420_2.jpg ----------
+  function buildReportCard(sName, dateLabelText, groupedByDate) {
     const card = document.createElement('div');
     card.style.cssText = `
-      width: 480px;
-      background: #f6f2e8;
-      border: 1px solid #e1d9c4;
-      border-radius: 20px;
+      width: 450px;
+      background: #fdfcf7;
+      border: 1px solid #e2ded4;
+      border-radius: 12px;
       overflow: hidden;
       font-family: 'Tajawal', sans-serif;
       direction: rtl;
-      color: #26302b;
+      color: #1a2922;
       box-sizing: border-box;
-      padding-bottom: 0;
+      position: relative;
     `;
 
+    // Flatten items or group them
     let sectionsHtml = '';
+
+    const catIcons = {
+      new: '📖',
+      past: '📚',
+      adhkar: '📝',
+      past_adhkar: '📋'
+    };
+
     groupedByDate.forEach(group => {
-      sectionsHtml += `
-        <div style="margin: 18px 20px 8px; display: flex; align-items: center; gap: 8px;">
-          <div style="width: 8px; height: 8px; border-radius: 50%; background: #b8863a;"></div>
-          <div style="font-family: 'Amiri', serif; font-weight: 700; font-size: 16px; color: #10332b;">${group.label}</div>
-          <div style="flex: 1; height: 1px; background: #e1d9c4;"></div>
-        </div>`;
-      
-      ['new', 'past', 'adhkar'].forEach(catKey => {
+      // Print date if full record, or header
+      if (groupedByDate.length > 1) {
+        sectionsHtml += `
+          <div style="margin: 16px 18px 6px; font-weight: 800; font-size: 14px; color: #0d3b2e; border-bottom: 2px solid #d4af37; padding-bottom: 4px;">
+            🗓️ ${group.label}
+          </div>
+        `;
+      }
+
+      ['new', 'past', 'adhkar', 'past_adhkar'].forEach(catKey => {
         const catTxs = group.txs.filter(tx => txCategory(tx) === catKey);
         if (catTxs.length === 0) return;
-        
+
         sectionsHtml += `
-          <div style="margin: 8px 20px 4px; font-size: 12px; font-weight: 800; color: #8f6423; display: flex; align-items: center; gap: 6px;">
-            <span>◆</span> ${CAT_LABELS[catKey]}
-          </div>`;
+          <div style="margin: 14px 18px 6px; font-weight: 800; font-size: 15px; color: #0d3b2e; display: flex; align-items: center; gap: 8px;">
+            <span style="background: #0d3b2e; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px;">${catIcons[catKey] || '📖'}</span>
+            ${CAT_LABELS[catKey]}
+          </div>
+        `;
 
         catTxs.forEach(tx => {
-          const borderColor = catKey === 'new' ? '#3f7a5e' : catKey === 'past' ? '#b8863a' : '#4c6f8a';
+          const hasError = tx.desc && tx.desc.trim() !== '';
           
           sectionsHtml += `
-            <div style="background: #ffffff; border: 1px solid #e1d9c4; border-right: 4px solid ${borderColor}; border-radius: 14px; margin: 6px 20px 10px; padding: 12px 15px; box-shadow: 0 2px 6px rgba(16,51,43,0.03);">
-              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
-                <div style="font-weight: 800; font-size: 15.5px; color: #10332b;">${tx.surah || tx.type || 'بند'}</div>
-                ${tx.range ? `<div style="font-size: 11.5px; font-weight: 700; color: #1c473b; background: #eaf0e9; padding: 3px 10px; border-radius: 8px;">نطاق: ${tx.range}</div>` : ''}
-              </div>
-              
-              <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 6px;">
-                ${tx.amount ? `<span style="font-size: 11.5px; font-weight: 700; color: #8f6423; background: #f1e4c8; padding: 3px 10px; border-radius: 8px;">⭐ ${tx.amount}</span>` : ''}
-                ${tx.desc ? `<span style="font-size: 11.5px; font-weight: 700; color: #9c4a3c; background: #f4e4e0; padding: 3px 10px; border-radius: 8px;">⚠️ ${tx.desc}</span>` : ''}
+            <div style="background: #ffffff; border: 1px solid #ebd8b0; border-radius: 16px; margin: 8px 18px 12px; padding: 12px 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+              <!-- Top Surah Name & Evaluation/Range -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div style="font-weight: 800; font-size: 18px; color: #111;">
+                  ${tx.surah || tx.type || 'بند'}
+                </div>
+                ${tx.range ? `
+                  <div style="background: #fbf5e6; color: #8a6d3b; border: 1px solid #ebd8b0; font-size: 11.5px; font-weight: 800; padding: 3px 12px; border-radius: 12px;">
+                    ${tx.range}
+                  </div>` : ''}
               </div>
 
+              <!-- Badges Row (Evaluation or Error or No Error) -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px;">
+                ${tx.amount ? `
+                  <div style="background: #fdf1f0; border: 1px solid #f8d7da; color: #a94442; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px; display: flex; align-items: center; gap: 4px;">
+                    <span>📖</span> ${tx.amount}
+                  </div>` : ''}
+
+                ${hasError ? `
+                  <div style="background: #fdf1f0; border: 1px solid #f5c6cb; color: #721c24; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 12px; width: 100%;">
+                    <span style="color: #d9534f; font-weight: bold;">❌ الأخطاء:</span> ${tx.desc}
+                  </div>` : `
+                  <div style="background: #e8f8f5; border: 1px solid #a3e4d7; color: #16a085; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px;">
+                    ✨ بلا أخطاء
+                  </div>`}
+              </div>
+
+              <!-- Next Plan Box if present -->
               ${tx.nextPlan ? `
-                <div style="margin-top: 8px; font-size: 12px; font-weight: 700; color: #1c473b; background: #eaf0e9; border: 1px dashed #b8863a; border-radius: 8px; padding: 8px 11px;">
-                  📍 الخطة القادمة: ${tx.nextPlan}
+                <div style="background: #fdfbe8; border: 1px dashed #d4af37; border-radius: 12px; padding: 8px 12px; margin-top: 8px;">
+                  <div style="font-size: 11px; font-weight: 800; color: #8a6d3b; display: flex; align-items: center; gap: 4px;">
+                    🎯 الخطة القادمة
+                  </div>
+                  <div style="font-size: 13px; font-weight: 800; color: #222; margin-top: 2px;">
+                    ${tx.nextPlan}
+                  </div>
                 </div>` : ''}
-            </div>`;
+            </div>
+          `;
         });
       });
     });
 
-    const nowStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const hijriNow = getHijriDateFormatted(new Date());
+    const timeNow = getHijriTimeFormatted(new Date());
 
     card.innerHTML = `
-      <!-- Top Header -->
-      <div style="background: #10332b; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,.08), transparent 40%); color: #f4efe1; text-align: center; padding: 24px 16px; border-bottom: 3px solid #b8863a;">
-        <div style="font-family: 'Amiri', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">مركز خادم القرآن الكريم</div>
-        <div style="font-size: 12px; color: #cbd9d1; margin-top: 4px; font-family: 'Tajawal', sans-serif;">تحت إشراف الشيخ عبدالرحمن</div>
+      <!-- Upper Decorative Border -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #d4af37, #0d3b2e, #d4af37);"></div>
+
+      <!-- Header Section -->
+      <div style="background: #0d3b2e; color: #ffffff; text-align: center; padding: 22px 16px 28px; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);">
+        <div style="font-size: 20px; font-weight: 800; color: #d4af37; font-family: 'Amiri', serif;">🕌 مركز خادم القرآن الكريم</div>
+        <div style="font-size: 11px; color: #d1e2db; margin-top: 2px;">تحت إشراف الشيخ عبدالرحمن</div>
       </div>
 
-      <!-- Student Badge -->
-      <div style="text-align: center; margin: -18px 20px 10px; position: relative; z-index: 2;">
-        <div style="display: inline-block; background: #ffffff; border: 2px solid #b8863a; color: #10332b; padding: 8px 28px; border-radius: 50px; box-shadow: 0 4px 12px rgba(16,51,43,0.1);">
-          <span style="font-family: 'Amiri', serif; font-weight: 700; font-size: 19px;">🏆 الطالب: ${sName}</span>
+      <!-- Hero Badge: Student Name -->
+      <div style="text-align: center; margin-top: -22px; margin-bottom: 8px; position: relative; z-index: 5;">
+        <div style="display: inline-block; background: linear-gradient(135deg, #d4af37, #b8863a); color: #0d3b2e; padding: 7px 32px; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: rotate(-1deg);">
+          <span style="font-family: 'Amiri', serif; font-weight: 800; font-size: 19px;">🏆 بطلنا: ${sName}</span>
         </div>
       </div>
 
-      <!-- Subtitle Tag -->
+      <!-- Subtitle Hijri Date Pill -->
       <div style="text-align: center; margin-bottom: 12px;">
-        <span style="background: #eaf0e9; border: 1px solid #e1d9c4; color: #1c473b; font-size: 11.5px; font-weight: 700; padding: 4px 14px; border-radius: 12px; display: inline-block;">
-          ${subtitleText}
+        <span style="background: #fff; border: 1px solid #d4af37; color: #0d3b2e; font-size: 11px; font-weight: 800; padding: 3px 16px; border-radius: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+          📅 ${dateLabelText}
         </span>
       </div>
 
-      <!-- Content Sections -->
+      <!-- Main Body Items -->
       <div style="padding-bottom: 10px;">
         ${sectionsHtml}
       </div>
 
-      <!-- Footer -->
-      <div style="background: #10332b; color: #cbd9d1; text-align: center; padding: 14px; font-size: 11px; margin-top: 10px; border-top: 1px solid #b8863a;">
-        <div style="font-weight: 700; color: #f4efe1; margin-bottom: 2px;">مركز خادم القرآن الكريم &middot; تقرير متابعة الحفظ</div>
-        <div>تاريخ إصدار التقرير: ${nowStr}</div>
+      <!-- Footer Section -->
+      <div style="background: #0d3b2e; color: #d1e2db; text-align: center; padding: 12px; font-size: 10.5px; border-top: 2px solid #d4af37;">
+        <div style="font-weight: 800; color: #ffffff; margin-bottom: 2px;">مركز خادم القرآن الكريم | تقرير متابعة الحفظ</div>
+        <div>تم إصدار التقرير: ${hijriNow} - ${timeNow}</div>
       </div>
     `;
     return card;
@@ -586,8 +640,8 @@
     const sandbox = document.getElementById('reportSandbox');
     sandbox.innerHTML = '';
     sandbox.appendChild(card);
-    await new Promise(r => setTimeout(r, 60));
-    const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#fbf8f1' });
+    await new Promise(r => setTimeout(r, 80));
+    const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#fdfcf7' });
     const link = document.createElement('a');
     link.download = filename;
     link.href = canvas.toDataURL('image/png');
@@ -596,14 +650,30 @@
   }
 
   function buildWhatsappText(sName, groups) {
-    let text = `📋 *تقرير متابعة الطالب:* ${sName}\n-----------------------------------\n`;
+    let text = `📋 *تقرير متابعة الحفظ — مركز خادم القرآن الكريم*\n`;
+    text += `🏆 *بطلنا:* ${sName}\n`;
+    text += `-----------------------------------\n`;
+
     groups.forEach(group => {
-      text += `\n🗓️ *${group.label}*\n`;
+      text += `\n📅 *تاريخ:* ${group.label}\n`;
       if (group.txs.length === 0) { text += `لا توجد بيانات.\n`; return; }
-      group.txs.forEach((tx, idx) => {
-        text += `${idx + 1}. *${tx.surah || tx.type || 'بند'}*${tx.range ? ' (نطاق ' + tx.range + ')' : ''}\n   التقييم: ${tx.amount || '—'}\n   الملاحظات: ${tx.desc || 'لا يوجد'}\n${tx.nextPlan ? '   الخطة القادمة: ' + tx.nextPlan + '\n' : ''}`;
+
+      ['new', 'past', 'adhkar', 'past_adhkar'].forEach(catKey => {
+        const catTxs = group.txs.filter(tx => txCategory(tx) === catKey);
+        if (catTxs.length === 0) return;
+
+        text += `\n*🔸 ${CAT_LABELS[catKey]}:*\n`;
+        catTxs.forEach((tx) => {
+          text += `• *${tx.surah || tx.type || 'بند'}*${tx.range ? ' (' + tx.range + ')' : ''}\n`;
+          if (tx.amount) text += `   - التقييم: ${tx.amount}\n`;
+          text += `   - الأخطاء: ${tx.desc ? tx.desc : '✨ بلا أخطاء'}\n`;
+          if (tx.nextPlan) text += `   - 🎯 الخطة القادمة: ${tx.nextPlan}\n`;
+        });
       });
     });
+
+    text += `\n-----------------------------------\n`;
+    text += `تم الإصدار: ${getHijriDateFormatted(new Date())}`;
     return text;
   }
 
@@ -614,30 +684,31 @@
     window.open(url, '_blank');
   }
 
-  // ---------- Export actions: single selected day ----------
+  // ---------- Export Single Selected Day ----------
   function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const txs = getTxsForDate(currentSelectedStudent, currentSelectedDateKey);
-    const group = { key: currentSelectedDateKey, label: formatDateKey(currentSelectedDateKey), txs };
+    const hijriLabel = getHijriDateFormatted(currentSelectedDateKey);
+    const group = { key: currentSelectedDateKey, label: hijriLabel, txs };
 
     if (mode === 'image') {
-      const card = buildReportCard(sName, formatDateKey(currentSelectedDateKey), [group]);
+      const card = buildReportCard(sName, hijriLabel, [group]);
       renderCardToImage(card, `تقرير_${sName}_${currentSelectedDateKey}.png`);
     } else {
       openWhatsapp(currentSelectedStudent, buildWhatsappText(sName, [group]));
     }
   }
 
-  // ---------- Export actions: full record (all dates) ----------
+  // ---------- Export Full Record (All Dates) ----------
   function exportFullRecord(mode) {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
-    const groups = dates.map(key => ({ key, label: formatDateKey(key), txs: getTxsForDate(currentSelectedStudent, key) }));
+    const groups = dates.map(key => ({ key, label: getHijriDateFormatted(key), txs: getTxsForDate(currentSelectedStudent, key) }));
 
     if (mode === 'image') {
-      const card = buildReportCard(sName, `السجل الكامل &middot; ${dates.length} تاريخ`, groups);
+      const card = buildReportCard(sName, `السجل الكامل (${dates.length} أيام)`, groups);
       renderCardToImage(card, `السجل_الكامل_${sName}.png`);
     } else {
       openWhatsapp(currentSelectedStudent, buildWhatsappText(sName, groups));
