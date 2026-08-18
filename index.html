@@ -15,28 +15,32 @@
 
     <style>
         :root {
-            /* هوية الزيادي: أسود فخم + ذهبي لامع + أخضر زمردي + أحمر صريح */
-            --germany-black: #000000;
-            --germany-black-soft: #0d0d0d;
-            --germany-gold: #FFCC00;
-            --gold-deep: #b08f26;
-            --italy-green: #178a4a;
-            --green-glow: rgba(23, 138, 74, 0.25);
-            --germany-red: #FF0000;
-            --red-bg: rgba(255, 0, 0, 0.1);
+            /* لوحة ألوان مستوحاة من تصميم الصورة */
+            --brand-green: #054a36;        /* الأخضر الأزهري العميق */
+            --brand-green-light: #0d6e52;  /* أخضر متوسط للأزرار */
+            --brand-green-subtle: #e8f3ef; /* أخضر فاتح جداً للخلفيات الصغيرة */
+            
+            --brand-gold: #c88e38;         /* الذهبي الدافئ */
+            --brand-gold-dark: #a06e23;    /* ذهبي غامق للحدود والتفاصيل */
+            --brand-gold-light: #f7ede0;   /* ذهبي فاتح/بيج خلفي */
 
-            --surface-glass: rgba(20, 20, 20, 0.72);
-            --border-glass: rgba(255, 204, 0, 0.18);
-            --border-hover: rgba(255, 204, 0, 0.55);
+            --bg-cream: #f8f5ee;           /* الخلفية العامة (كريمي دافئ) */
+            --surface-white: #ffffff;      /* أبيض ناصع للكروت والنوافذ */
+            
+            --text-dark: #12231c;          /* داكن نصوص رئيسية */
+            --text-body: #3c5248;          /* أخضر غامق للنصوص الفرعية */
+            --text-muted: #72877d;         /* رمادي مخضر هادئ */
 
-            --text-primary: #ffffff;
-            --text-secondary: #c9c9c9;
-            --text-muted: #7a7a7a;
+            --danger-red: #c0392b;         /* أحمر للإنذار والمناطق المقفلة */
+            --danger-bg: #fdf2f2;
+
+            --border-subtle: rgba(5, 74, 54, 0.12);
+            --border-gold: rgba(200, 142, 56, 0.35);
 
             --radius-xl: 22px;
             --radius-lg: 15px;
             --radius-sm: 9px;
-            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             --perspective: 1200px;
         }
 
@@ -50,13 +54,12 @@
 
         body {
             font-family: 'Tajawal', 'Cairo', sans-serif;
-            color: var(--text-secondary);
-            background: var(--germany-black);
+            color: var(--text-body);
+            background: var(--bg-cream);
             background-image:
-                radial-gradient(circle at 15% 0%, rgba(255, 204, 0, 0.10), transparent 45%),
-                radial-gradient(circle at 90% 15%, rgba(23, 138, 74, 0.14), transparent 50%),
-                radial-gradient(circle at 50% 100%, rgba(255, 0, 0, 0.06), transparent 55%),
-                linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+                radial-gradient(circle at 10% 0%, rgba(200, 142, 56, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(5, 74, 54, 0.06), transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(200, 142, 56, 0.05), transparent 50%);
             background-attachment: fixed;
             overflow-x: hidden;
             line-height: 1.7;
@@ -67,8 +70,8 @@
         #welcome-screen {
             position: fixed;
             inset: 0;
-            background: #000000;
-            background-image: radial-gradient(circle at 50% 30%, rgba(255, 204, 0, 0.10), transparent 60%);
+            background: var(--bg-cream);
+            background-image: radial-gradient(circle at 50% 30%, rgba(200, 142, 56, 0.12), transparent 60%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -87,103 +90,97 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            border: 1.5px solid var(--germany-gold);
+            background: linear-gradient(135deg, var(--brand-green) 0%, #022b1f 100%);
+            border: 2px solid var(--brand-gold);
             border-radius: 30px;
             box-shadow:
-                0 20px 40px rgba(0,0,0,0.7),
-                0 0 30px rgba(255, 204, 0, 0.25),
-                inset 0 2px 6px rgba(255,255,255,0.08),
-                inset 0 -6px 14px rgba(0,0,0,0.6);
+                0 18px 36px rgba(5, 74, 54, 0.25),
+                0 0 25px rgba(200, 142, 56, 0.2);
             font-size: 2.8rem;
-            color: var(--germany-gold);
+            color: var(--brand-gold);
             animation: pulseGlow 3s infinite alternate;
             transform-style: preserve-3d;
         }
 
         @keyframes pulseGlow {
             0% { transform: scale(1) rotateY(0deg); }
-            100% { transform: scale(1.05) rotateY(8deg); box-shadow: 0 20px 45px rgba(0,0,0,0.75), 0 0 45px rgba(255, 204, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.1), inset 0 -6px 14px rgba(0,0,0,0.6); }
+            100% { transform: scale(1.05) rotateY(8deg); box-shadow: 0 20px 45px rgba(5, 74, 54, 0.3), 0 0 35px rgba(200, 142, 56, 0.35); }
         }
 
         #welcome-screen h1 {
-            color: var(--text-primary);
+            color: var(--brand-green);
             font-size: 2.15rem;
             font-weight: 900;
             margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
 
         .welcome-sub {
-            color: var(--germany-gold);
+            color: var(--brand-gold-dark);
             font-size: 1.05rem;
             margin-bottom: 38px;
             font-weight: 700;
         }
 
         .btn-start {
-            background: linear-gradient(135deg, var(--germany-gold), var(--gold-deep));
-            color: #000000;
-            border: none;
+            background: linear-gradient(135deg, var(--brand-green), var(--brand-green-light));
+            color: #ffffff;
+            border: 1px solid var(--brand-gold);
             padding: 16px 40px;
             font-size: 1.1rem;
             font-weight: 800;
             border-radius: var(--radius-lg);
             width: 85%;
             max-width: 280px;
-            box-shadow: 0 14px 28px rgba(255, 204, 0, 0.22), inset 0 -4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 24px rgba(5, 74, 54, 0.25);
             transition: var(--transition-smooth);
             font-family: 'Cairo', sans-serif;
+            cursor: pointer;
         }
 
-        .btn-start:active { transform: scale(0.96) translateY(2px); box-shadow: 0 6px 14px rgba(255, 204, 0, 0.2); }
+        .btn-start:active { transform: scale(0.96) translateY(2px); }
 
         /* ===== الهيدر ===== */
         header {
-            padding: 40px 20px 26px;
+            padding: 35px 20px 22px;
             text-align: center;
             position: relative;
         }
         header::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, transparent, var(--germany-red), transparent);
-            opacity: 0.7;
+            top: 0; left: 10%; right: 10%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
+            opacity: 0.8;
         }
 
         .platform-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 204, 0, 0.07);
-            border: 1px solid rgba(255, 204, 0, 0.28);
+            background: var(--brand-gold-light);
+            border: 1px solid var(--border-gold);
             padding: 7px 18px;
             border-radius: 100px;
-            color: var(--germany-gold);
-            font-size: 0.83rem;
+            color: var(--brand-gold-dark);
+            font-size: 0.85rem;
             font-weight: 800;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 14px rgba(255, 204, 0, 0.08);
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(200, 142, 56, 0.1);
         }
 
         header h1 {
-            font-size: 2.05rem;
+            font-size: 2.1rem;
             font-weight: 900;
-            color: var(--text-primary);
+            color: var(--brand-green);
             font-family: 'Cairo', sans-serif;
-            text-shadow: 0 4px 16px rgba(0,0,0,0.7);
-            background: linear-gradient(180deg, #ffffff 30%, #d9d9d9 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
         }
 
         header p {
-            color: var(--text-secondary);
+            color: var(--text-body);
             font-size: 1.05rem;
-            margin-top: 8px;
-            font-weight: 600;
+            margin-top: 6px;
+            font-weight: 700;
         }
 
         header p::after {
@@ -192,41 +189,39 @@
             font-weight: 900;
             display: block;
             font-size: 1.1rem;
-            color: var(--germany-gold);
+            color: var(--brand-gold);
             margin-top: 10px;
             animation: prayMotion 3s infinite ease-in-out;
         }
 
         @keyframes prayMotion {
-            0%, 100% { transform: scaleY(1); opacity: 0.55; }
+            0%, 100% { transform: scaleY(1); opacity: 0.6; }
             50% { transform: scaleY(0.85); opacity: 1; }
         }
 
         /* ===== شريط الإشراقات ===== */
         .ticker-container {
-            margin: 0 16px 30px;
-            background: linear-gradient(135deg, rgba(20,20,20,0.85), rgba(5,5,5,0.85));
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glass);
+            margin: 0 16px 28px;
+            background: var(--surface-white);
+            border: 1px solid var(--border-gold);
             border-radius: var(--radius-lg);
-            padding: 13px 16px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+            box-shadow: 0 8px 20px rgba(5, 74, 54, 0.05);
         }
 
         .ticker-label {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: var(--germany-gold);
+            color: var(--brand-green);
             font-size: 0.9rem;
             font-weight: 800;
             white-space: nowrap;
             padding-left: 12px;
-            border-left: 1px solid rgba(255, 204, 0, 0.18);
+            border-left: 1px solid var(--border-subtle);
         }
 
         .ticker-wrap { flex-grow: 1; overflow: hidden; }
@@ -234,18 +229,19 @@
         .ticker-track {
             display: flex;
             white-space: nowrap;
-            animation: scrollText 15s linear infinite;
+            animation: scrollText 16s linear infinite;
         }
 
         .ticker-track span {
-            color: var(--text-primary);
+            color: var(--text-dark);
             font-size: 0.95rem;
+            font-weight: 600;
             margin-left: 50px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .ticker-track span i { color: var(--italy-green); }
+        .ticker-track span i { color: var(--brand-gold); }
 
         @keyframes scrollText {
             from { transform: translateX(0); }
@@ -256,7 +252,7 @@
         .cards-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 24px;
+            gap: 22px;
             padding: 4px 16px;
             perspective: var(--perspective);
         }
@@ -264,9 +260,8 @@
         .card {
             --rx: 0deg;
             --ry: 0deg;
-            background:
-                linear-gradient(155deg, rgba(26,26,26,0.92) 0%, rgba(6,6,6,0.94) 60%);
-            border: 1px solid var(--border-glass);
+            background: var(--surface-white);
+            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-xl);
             padding: 24px;
             display: flex;
@@ -275,31 +270,26 @@
             transform-style: preserve-3d;
             transform: perspective(var(--perspective)) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
             box-shadow:
-                0 4px 8px rgba(0,0,0,0.35),
-                0 18px 34px rgba(0,0,0,0.55),
-                inset 0 1px 0 rgba(255,255,255,0.05),
-                inset 0 -30px 40px -30px rgba(0,0,0,0.7);
+                0 4px 12px rgba(0,0,0,0.03),
+                0 12px 28px rgba(5, 74, 54, 0.06);
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
             will-change: transform;
         }
 
         .card::before {
-            /* شريط ذهبي علوي كحافة معدنية */
+            /* شريط علوي ذهبي دافئ */
             content: '';
             position: absolute;
-            top: 0; right: 18px; left: 18px; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--germany-gold), transparent);
-            opacity: 0.55;
+            top: 0; right: 20px; left: 20px; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
+            opacity: 0.7;
             transform: translateZ(2px);
+            border-radius: 3px;
         }
 
         .card:active {
-            border-color: var(--border-hover);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.4),
-                0 10px 20px rgba(0,0,0,0.6),
-                inset 0 1px 0 rgba(255,255,255,0.06),
-                inset 0 -20px 30px -25px rgba(0,0,0,0.8);
+            border-color: var(--brand-gold);
+            box-shadow: 0 6px 16px rgba(5, 74, 54, 0.12);
         }
 
         .card-meta {
@@ -312,39 +302,39 @@
 
         .card-icon {
             width: 52px; height: 52px;
-            background: linear-gradient(150deg, rgba(255,204,0,0.14), rgba(255,204,0,0.02));
-            border: 1px solid rgba(255, 204, 0, 0.3);
+            background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-green-light) 100%);
+            border: 1px solid var(--brand-gold);
             border-radius: var(--radius-lg);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 1.35rem;
-            color: var(--germany-gold);
-            box-shadow: 0 8px 16px rgba(255,204,0,0.10), inset 0 1px 0 rgba(255,255,255,0.08);
+            color: #ffffff;
+            box-shadow: 0 6px 14px rgba(5, 74, 54, 0.2);
         }
 
         .card-tag {
-            font-size: 0.74rem;
+            font-size: 0.76rem;
             font-weight: 800;
             padding: 5px 13px;
             border-radius: 100px;
-            background: rgba(23, 138, 74, 0.14);
-            color: var(--italy-green);
-            border: 1px solid rgba(23, 138, 74, 0.3);
+            background: var(--brand-green-subtle);
+            color: var(--brand-green);
+            border: 1px solid rgba(5, 74, 54, 0.15);
         }
 
         .card h3 {
-            font-size: 1.32rem;
+            font-size: 1.35rem;
             font-weight: 800;
-            color: var(--text-primary);
+            color: var(--brand-green);
             margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
             transform: translateZ(26px);
         }
 
         .card p {
-            color: var(--text-secondary);
-            font-size: 0.93rem;
+            color: var(--text-body);
+            font-size: 0.95rem;
             margin-bottom: 22px;
             transform: translateZ(18px);
         }
@@ -373,46 +363,47 @@
 
         .btn-main {
             flex-grow: 1;
-            background: rgba(255, 204, 0, 0.08);
-            color: var(--germany-gold);
-            border: 1px solid rgba(255, 204, 0, 0.28);
+            background: var(--brand-green);
+            color: #ffffff;
+            border: 1px solid var(--brand-green);
+            box-shadow: 0 4px 12px rgba(5, 74, 54, 0.15);
         }
 
         .btn-main:active {
-            background: linear-gradient(135deg, var(--germany-gold), var(--gold-deep));
-            color: #000000;
+            background: var(--brand-gold-dark);
+            border-color: var(--brand-gold-dark);
             transform: scale(0.97);
         }
 
         .btn-icon-only {
             width: 48px; height: 48px;
             padding: 0;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted);
+            background: var(--bg-cream);
+            border: 1px solid var(--border-subtle);
+            color: var(--brand-green);
         }
 
         .btn-icon-only:active {
-            border-color: var(--germany-gold);
-            color: var(--germany-gold);
+            border-color: var(--brand-gold);
+            color: var(--brand-gold-dark);
             transform: scale(0.92);
         }
 
-        /* كارت المشرفين المحمي (أحمر) */
-        .card-secure { border-color: rgba(255, 0, 0, 0.28); }
-        .card-secure::before { background: linear-gradient(90deg, transparent, var(--germany-red), transparent); }
-        .card-secure .card-icon { color: var(--germany-red); background: linear-gradient(150deg, rgba(255,0,0,0.16), rgba(255,0,0,0.02)); border-color: rgba(255,0,0,0.32); box-shadow: 0 8px 16px rgba(255,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.08); }
-        .card-secure .card-tag { color: var(--germany-red); background: var(--red-bg); border-color: rgba(255,0,0,0.3); }
-        .card-secure .btn-main { background: rgba(255, 0, 0, 0.08); color: var(--germany-red); border-color: rgba(255, 0, 0, 0.28); }
-        .card-secure .btn-main:active { background: var(--germany-red); color: #fff; }
+        /* كارت المشرفين المحمي (أحمر تنبيهي) */
+        .card-secure { border-color: rgba(192, 57, 43, 0.25); }
+        .card-secure::before { background: linear-gradient(90deg, transparent, var(--danger-red), transparent); }
+        .card-secure .card-icon { background: linear-gradient(135deg, var(--danger-red) 0%, #962d22 100%); border-color: rgba(192, 57, 43, 0.4); box-shadow: 0 6px 14px rgba(192, 57, 43, 0.2); }
+        .card-secure .card-tag { color: var(--danger-red); background: var(--danger-bg); border-color: rgba(192, 57, 43, 0.2); }
+        .card-secure .btn-main { background: var(--danger-red); border-color: var(--danger-red); box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2); }
+        .card-secure .btn-main:active { background: #962d22; }
 
         /* ===== لوحة إدخال الرمز السري (PIN Pad) ===== */
         #password-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(12, 35, 28, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -425,22 +416,22 @@
         #password-modal.active { opacity: 1; visibility: visible; }
 
         .modal-box {
-            background: linear-gradient(160deg, #141414 0%, #000000 100%);
-            border: 1px solid var(--border-glass);
+            background: var(--surface-white);
+            border: 1px solid var(--border-gold);
             padding: 32px 22px;
             border-radius: var(--radius-xl);
             text-align: center;
             width: 92%;
             max-width: 340px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(255,204,0,0.08);
+            box-shadow: 0 20px 50px rgba(5, 74, 54, 0.25);
             transition: var(--transition-smooth);
         }
 
         .modal-shield {
             width: 58px; height: 58px;
-            background: rgba(255, 204, 0, 0.08);
-            color: var(--germany-gold);
-            border: 1px solid rgba(255,204,0,0.25);
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-dark);
+            border: 1px solid var(--border-gold);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -450,7 +441,7 @@
             transition: var(--transition-smooth);
         }
 
-        .modal-box h3 { color: var(--text-primary); font-size: 1.4rem; margin-bottom: 4px; font-family: 'Cairo', sans-serif; font-weight: 800; }
+        .modal-box h3 { color: var(--brand-green); font-size: 1.4rem; margin-bottom: 4px; font-family: 'Cairo', sans-serif; font-weight: 800; }
         .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 22px; }
 
         .pin-display { display: flex; justify-content: center; gap: 12px; margin-bottom: 22px; }
@@ -463,9 +454,9 @@
         }
 
         .pin-dot.active {
-            background: var(--germany-gold);
-            border-color: var(--germany-gold);
-            box-shadow: 0 0 10px var(--germany-gold);
+            background: var(--brand-gold);
+            border-color: var(--brand-gold-dark);
+            box-shadow: 0 0 10px rgba(200, 142, 56, 0.5);
         }
 
         .pin-pad {
@@ -476,20 +467,20 @@
         }
 
         .pad-btn {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: var(--text-primary);
+            background: var(--bg-cream);
+            border: 1px solid var(--border-subtle);
+            color: var(--brand-green);
             font-size: 1.4rem;
             font-weight: 700;
             padding: 13px 0;
             border-radius: var(--radius-lg);
             cursor: pointer;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
         }
 
         .pad-btn:active {
-            background: rgba(255, 204, 0, 0.18);
-            color: var(--germany-gold);
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-dark);
             transform: scale(0.94);
         }
 
@@ -500,12 +491,13 @@
             font-weight: 700;
             font-size: 0.95rem;
             padding: 5px;
+            cursor: pointer;
         }
 
         .toast-error {
-            color: var(--germany-red);
-            background: var(--red-bg);
-            border: 1px solid rgba(255,0,0,0.25);
+            color: var(--danger-red);
+            background: var(--danger-bg);
+            border: 1px solid rgba(192,57,43,0.25);
             padding: 10px;
             border-radius: var(--radius-sm);
             font-size: 0.85rem;
@@ -519,10 +511,10 @@
             margin-top: 42px;
             padding: 26px;
             color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid rgba(255, 204, 0, 0.08);
+            font-size: 0.88rem;
+            border-top: 1px solid var(--border-subtle);
         }
-        footer span.brand { color: var(--germany-gold); font-weight: 800; }
+        footer span.brand { color: var(--brand-green); font-weight: 800; }
     </style>
 </head>
 <body>
@@ -569,9 +561,9 @@
                 <button class="pad-btn" onclick="pressKey('7')">7</button>
                 <button class="pad-btn" onclick="pressKey('8')">8</button>
                 <button class="pad-btn" onclick="pressKey('9')">9</button>
-                <button class="pad-btn" style="color: var(--germany-red)" onclick="clearPin()"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="pad-btn" style="color: var(--danger-red)" onclick="clearPin()"><i class="fa-solid fa-trash-can"></i></button>
                 <button class="pad-btn" onclick="pressKey('0')">0</button>
-                <button class="pad-btn" style="color: var(--italy-green)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
+                <button class="pad-btn" style="color: var(--brand-green)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
             </div>
 
             <button class="modal-cancel-btn" onclick="closeModal()">إلغاء</button>
@@ -688,7 +680,7 @@
 
     <footer>
         رَبِّ زِدْنِي عِلْمًا • <span class="brand">مركز خادم القرآن الكريم</span> <br>
-        <span style="font-size: 0.75rem; opacity: 0.45; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
+        <span style="font-size: 0.75rem; opacity: 0.7; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
     </footer>
 
     <script>
@@ -777,9 +769,9 @@
             if (currentPin === '7222') {
                 toastError.style.display = 'none';
                 playSound(successSound);
-                document.querySelector('.modal-box').style.borderColor = 'var(--italy-green)';
-                document.querySelector('.modal-shield').style.color = 'var(--italy-green)';
-                document.querySelector('.modal-shield').style.borderColor = 'rgba(23,138,74,0.4)';
+                document.querySelector('.modal-box').style.borderColor = 'var(--brand-green)';
+                document.querySelector('.modal-shield').style.color = 'var(--brand-green)';
+                document.querySelector('.modal-shield').style.borderColor = 'rgba(5,74,54,0.4)';
                 setTimeout(() => { window.location.href = targetProtectedUrl; }, 600);
             } else {
                 playSound(errorSound);
@@ -811,17 +803,17 @@
             }
         }
 
-        /* ===== تأثير الإمالة ثلاثية الأبعاد للكروت (يعمل باللمس والماوس) ===== */
+        /* ===== تأثير الإمالة ثلاثية الأبعاد للكروت ===== */
         (function initTiltCards() {
             const cards = document.querySelectorAll('.card');
-            const MAX_TILT = 9; // أقصى زاوية إمالة بالدرجات
+            const MAX_TILT = 7;
 
             function applyTilt(card, clientX, clientY) {
                 const rect = card.getBoundingClientRect();
-                const px = (clientX - rect.left) / rect.width;  // 0 -> 1
-                const py = (clientY - rect.top) / rect.height;  // 0 -> 1
-                const ry = (px - 0.5) * MAX_TILT * 2;   // دوران حول المحور الرأسي
-                const rx = (0.5 - py) * MAX_TILT * 2;   // دوران حول المحور الأفقي
+                const px = (clientX - rect.left) / rect.width;
+                const py = (clientY - rect.top) / rect.height;
+                const ry = (px - 0.5) * MAX_TILT * 2;
+                const rx = (0.5 - py) * MAX_TILT * 2;
                 card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
                 card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
             }
@@ -832,7 +824,6 @@
             }
 
             cards.forEach(card => {
-                // دعم اللمس على الهاتف
                 card.addEventListener('touchstart', function (e) {
                     const t = e.touches[0];
                     applyTilt(card, t.clientX, t.clientY);
@@ -846,7 +837,6 @@
                 card.addEventListener('touchend', function () { resetTilt(card); });
                 card.addEventListener('touchcancel', function () { resetTilt(card); });
 
-                // دعم الماوس (للاختبار على الديسكتوب)
                 card.addEventListener('mousemove', function (e) {
                     applyTilt(card, e.clientX, e.clientY);
                 });
