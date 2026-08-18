@@ -41,7 +41,6 @@
 
   h1,h2,h3,.display{font-family:'Amiri', serif;}
 
-  /* Topbar */
   .topbar{
     background:var(--ink); color:#f4efe1; border-radius:var(--radius); padding:18px 20px;
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:18px;
@@ -57,7 +56,6 @@
   .pill-btn.danger{border-color:rgba(200,110,90,.5); color:#e7bdb2;}
   .pill-btn.danger:hover{background:rgba(156,74,60,.25);}
 
-  /* Panels */
   .panel{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:16px; }
   .panel-title{
     font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.6px; margin-bottom:14px;
@@ -65,7 +63,6 @@
   }
   .panel-title::before{content:''; width:14px; height:3px; background:var(--gold); display:inline-block; border-radius:2px;}
 
-  /* Search */
   .search-wrap{position:relative;}
   .search-input{
     width:100%; padding:13px 16px; border:1.5px solid var(--line); border-radius:11px;
@@ -80,7 +77,6 @@
   .dropdown-item:last-child{border-bottom:none;}
   .dropdown-item:hover{background:var(--sage); color:var(--ink);}
 
-  /* Student Grid */
   .students-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin-top:14px;}
   .student-card{
     background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:15px;
@@ -95,7 +91,6 @@
   .student-meta b{color:var(--ink-2);}
   .no-data{grid-column:1/-1; text-align:center; color:var(--muted); padding:20px; font-size:13.5px;}
 
-  /* Views */
   .view-section{display:none;}
   .view-section.active{display:block;}
   .back-btn{
@@ -119,7 +114,6 @@
   .btn-image:hover{background:var(--ink-2);}
   .btn:disabled{opacity:.45; cursor:not-allowed;}
 
-  /* Timeline */
   .timeline{position:relative; padding-inline-start:26px;}
   .timeline::before{ content:''; position:absolute; right:8px; top:4px; bottom:4px; width:2px; background:var(--line); }
   .timeline-item{position:relative; padding:6px 0 14px;}
@@ -137,7 +131,6 @@
   .timeline-date{font-weight:800; font-size:14px; color:var(--ink);}
   .timeline-count{font-size:11.5px; color:var(--muted); background:var(--sage); padding:2px 9px; border-radius:999px; font-weight:700;}
 
-  /* Table */
   .entry-row{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; align-items:center; padding:12px 6px; border-bottom:1px solid #f0ece0; }
   .entry-row:last-child{border-bottom:none;}
   .entry-row.head{font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase;}
@@ -168,7 +161,6 @@
     </div>
   </div>
 
-  <!-- MAIN VIEW -->
   <div id="main-view" class="view-section active">
     <div class="panel">
       <div class="panel-title">بحث سريع</div>
@@ -184,7 +176,6 @@
     </div>
   </div>
 
-  <!-- STUDENT DETAIL VIEW -->
   <div id="student-detail-view" class="view-section">
     <button class="back-btn" onclick="showView('main-view')">→ العودة لقائمة الطلاب</button>
 
@@ -478,7 +469,41 @@
     wrap.innerHTML = html;
   }
 
-  /* ---------- بناء بطاقة التقرير لليوم الواحد (طابق تصميم الصورة الثانية تماماً) ---------- */
+  /* ---------- تفكيك وفصل البيانات القديمة لو وجدت داخلها شرطة | ---------- */
+  function getFlattenedItemsForCard(txs) {
+    let items = [];
+    txs.forEach(tx => {
+      let rawText = tx.surah || tx.type || '';
+      // لو النص القديم مخزن جواه شرطة | نقوم بفتحه وتقسيمه لقطع مستقلة
+      if (rawText.includes('|')) {
+        let parts = rawText.split('|');
+        parts.forEach(p => {
+          let cleanP = p.trim();
+          if(cleanP) {
+            items.push({
+              title: cleanP,
+              range: tx.range || '',
+              amount: tx.amount || '',
+              desc: tx.desc || '',
+              nextPlan: tx.nextPlan || '',
+              category: tx.category || 'new'
+            });
+          }
+        });
+      } else {
+        items.push({
+          title: rawText,
+          range: tx.range || '',
+          amount: tx.amount || '',
+          desc: tx.desc || '',
+          nextPlan: tx.nextPlan || '',
+          category: tx.category || 'new'
+        });
+      }
+    });
+    return items;
+  }
+
   function buildSingleDayReportCard(sName, dateKey, txs) {
     const card = document.createElement('div');
     card.style.cssText = `
@@ -503,10 +528,11 @@
 
     let categoriesHtml = '';
     const categoriesOrder = ['new', 'past', 'adhkar', 'past_adhkar', 'siraj', 'hadith'];
+    const flattenedItems = getFlattenedItemsForCard(txs);
 
     categoriesOrder.forEach(catKey => {
-      const catTxs = txs.filter(tx => txCategory(tx) === catKey);
-      if (catTxs.length === 0) return;
+      const catItems = flattenedItems.filter(item => txCategory({category: item.category, type: item.title}) === catKey);
+      if (catItems.length === 0) return;
 
       categoriesHtml += `
         <div style="background: #0d3b2e; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; margin-top: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
@@ -515,26 +541,24 @@
         </div>
       `;
 
-      // جعل كل بند في صندوق أبيض مستقل بذاته متطابق مع الصورة الثانية
-      catTxs.forEach(tx => {
-        const targetName = tx.surah || tx.type || 'البند';
-        const rangeText = tx.range ? ` (${tx.range})` : '';
-        const gradeMarkup = tx.amount ? `<span style="background: #fcf8e3; color: #8a6d3b; padding: 2px 8px; border-radius: 6px; border: 1px solid #f3e8be; font-size: 11.5px; font-weight: bold; margin-right: 6px;">${tx.amount}</span>` : '';
-        const errMarkup = tx.desc ? `<span style="color: #c0392b; font-weight: bold; margin-right: 6px;">(${tx.desc})</span>` : '';
+      // كل عنصر في صندوق أبيض مستقل تماماً عن الآخر
+      catItems.forEach(item => {
+        const targetName = item.title;
+        const rangeText = item.range ? ` (${item.range})` : '';
+        const gradeMarkup = item.amount ? `<span style="background: #fcf8e3; color: #8a6d3b; padding: 2px 8px; border-radius: 6px; border: 1px solid #f3e8be; font-size: 11.5px; font-weight: bold; margin-right: 6px;">${item.amount}</span>` : '';
+        const errMarkup = item.desc ? `<span style="color: #c0392b; font-weight: bold; margin-right: 6px;">(${item.desc})</span>` : '';
 
         categoriesHtml += `
           <div style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
             
-            <!-- الإنجاز والتقييم في بند مستقل -->
             <div style="font-size: 13px; font-weight: 800; color: #222; margin-bottom: 6px; line-height: 1.6;">
               <strong style="color: #0d3b2e;">الإنجاز الحالي:</strong> ${targetName}${rangeText} ${gradeMarkup}${errMarkup}
             </div>
 
-            <!-- الخطة القادمة في صندوق أصفر أسفله مباشره -->
-            ${tx.nextPlan ? `
+            ${item.nextPlan ? `
               <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px;">
                 <span style="color: #c0392b;">🎯</span>
-                <div><strong style="color: #8a6d3b;">الخطة والواجب القادم:</strong> ${tx.nextPlan}</div>
+                <div><strong style="color: #8a6d3b;">الخطة والواجب القادم:</strong> ${item.nextPlan}</div>
               </div>` : ''}
           </div>
         `;
@@ -582,7 +606,6 @@
     return canvas;
   }
 
-  // تصدير تقرير اليوم المختار فقط
   async function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
@@ -625,17 +648,14 @@
     }
   }
 
-  /* ---------------- الحل الناجع لتنزيل السجل الكامل بنقرة واحدة (ZIP File) ---------------- */
   async function downloadAllAsZip() {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
-
     if (dates.length === 0) return;
 
     const zip = new JSZip();
     const folder = zip.folder(`تقارير_${sName}`);
-
     alert(`جاري ضغط وحزم (${dates.length}) تقرير في ملف واحد... انتظر لحظات.`);
 
     for (let i = 0; i < dates.length; i++) {
@@ -643,7 +663,6 @@
       const txs = getTxsForDate(currentSelectedStudent, dateKey);
       const card = buildSingleDayReportCard(sName, dateKey, txs);
       const canvas = await generateCanvasFromCard(card);
-
       const base64Data = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, "");
       folder.file(`تقرير_${sName}_${dateKey}.png`, base64Data, { base64: true });
     }
@@ -656,17 +675,14 @@
     });
   }
 
-  /* ---------------- الحل الناجع للمشاركة عبر الواتساب (دمج كافة الأيام في صورة طولية موحدة) ---------------- */
   async function shareAllInOneImage() {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
-
     if (dates.length === 0) return;
 
     alert(`جاري تجميع السجل الكامل للطالب في صورة طويلة موحدة لسهولة مشاركتها عبر الواتساب...`);
 
-    // Container Wrapper for All Days
     const fullContainer = document.createElement('div');
     fullContainer.style.cssText = `
       width: 500px;
@@ -700,10 +716,9 @@
             text: `السجل الكامل لمتابعة الطالب ${sName} من مركز خادم القرآن الكريم`
           });
           return;
-        } catch (e) { console.log('مشاركة مكنسلة'); }
+        } catch (e) {}
       }
 
-      // Fallback: Download Image & Open Whatsapp
       const link = document.createElement('a');
       link.download = file.name;
       link.href = URL.createObjectURL(blob);
