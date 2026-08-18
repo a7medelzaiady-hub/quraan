@@ -6,6 +6,11 @@
 <title>مركز خادم القرآن - نظام المتابعة الذكي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+
+<!-- Firebase SDK (v10 Compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
 <style>
 :root {
   --green-deep: #04201a;
@@ -120,7 +125,7 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .ac-wrap { position: relative; }
 .ac-drop { display: none; position: absolute; top: calc(100% + 4px); right: 0; left: 0; background: #fff; border: 2px solid var(--green-mid); border-radius: 10px; overflow: hidden; z-index: 100; box-shadow: 0 8px 25px rgba(0,0,0,0.2); max-height: 200px; overflow-y: auto; }
-.ac-item { padding: 10px 14px; font-size: 14px; font-family: 'Amiri', serif; cursor: pointer; border-bottom: 1px solid #eef4f0; }
+.ac-item { padding: 10px 14px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #eef4f0; }
 .ac-item:hover { background: var(--green-light); color: white; }
 .surah-row, .q-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 12px; background: var(--cream); border-radius: 12px; padding: 12px; border: 1px solid var(--border); position: relative; }
 .q-row { grid-template-columns: 1fr 1fr; }
@@ -200,6 +205,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 </style>
 </head>
 <body>
+
 <div class="hdr">
   <div class="hdr-emblem">🕌</div>
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
@@ -227,7 +233,13 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-body">
       <div class="frow">
         <div class="flbl">اسم البطل الكريم</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل">
+        <div style="display: flex; gap: 8px;">
+          <div class="ac-wrap" style="flex: 1;">
+            <input class="inp" id="inp-student" placeholder="اكتب اسم البطل أو اختر من القائمة..." autocomplete="off">
+            <div class="ac-drop" id="drop-students-list"></div>
+          </div>
+          <button type="button" onclick="addNewStudentPrompt()" style="background: var(--gold); color: var(--green-deep); border: none; padding: 0 16px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; font-family: 'Cairo', sans-serif; font-size: 13px; display: flex; align-items: center; gap: 4px;">➕ طالب جديد</button>
+        </div>
       </div>
       <div class="frow">
         <div class="flbl">التقييم العام للمسار</div>
@@ -338,11 +350,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+<script>
+  // تهيئة الفايربيس
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
     authDomain: "ahmedelzaiady.firebaseapp.com",
@@ -353,11 +362,86 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     measurementId: "G-WE04GK5XZZ"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getFirestore(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const studentsCollection = db.collection('students');
 
-  window.saveAndGenerateCertificate = async function() {
+  let existingStudentsList = [];
+
+  // الاستماع للطلاب من قاعدة البيانات لإمكانية الإكمال التلقائي في خانة الاسم
+  studentsCollection.onSnapshot(snapshot => {
+    existingStudentsList = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.name) existingStudentsList.push(data.name);
+    });
+  });
+
+  // التحكم بالإكمال التلقائي لاسم الطالب
+  const studentInp = document.getElementById('inp-student');
+  const studentDrop = document.getElementById('drop-students-list');
+
+  studentInp.addEventListener('input', function() {
+    const val = this.value.trim().toLowerCase();
+    studentDrop.innerHTML = '';
+    if (!val) { studentDrop.style.display = 'none'; return; }
+
+    const matches = existingStudentsList.filter(s => s.toLowerCase().includes(val));
+    if (matches.length > 0) {
+      matches.forEach(name => {
+        const item = document.createElement('div');
+        item.className = 'ac-item';
+        item.textContent = name;
+        item.onclick = function() {
+          studentInp.value = name;
+          studentDrop.style.display = 'none';
+        };
+        studentDrop.appendChild(item);
+      });
+      studentDrop.style.display = 'block';
+    } else {
+      studentDrop.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.ac-wrap')) { studentDrop.style.display = 'none'; }
+  });
+
+  // إضافة طالب جديد مباشرة مع عدم التكرار
+  async function addNewStudentPrompt() {
+    const name = prompt("أدخل اسم الطالب الجديد:");
+    if (!name || !name.trim()) return;
+    const cleanName = name.trim();
+
+    try {
+      // التحقق من التكرار
+      const snapshot = await studentsCollection.where('name', '==', cleanName).get();
+      if (!snapshot.empty) {
+        customAlert("⚠️ الطالب (" + cleanName + ") مسجل بالفعل في قاعدة البيانات!");
+        return;
+      }
+
+      const phone = prompt("أدخل رقم هاتف ولي الأمر (اختياري):") || "";
+
+      await studentsCollection.add({
+        name: cleanName,
+        phone: phone.trim(),
+        balance: 0,
+        transactions: [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      document.getElementById('inp-student').value = cleanName;
+      customAlert("✅ تم إضافة الطالب (" + cleanName + ") بنجاح إلى قاعدة البيانات!");
+    } catch(e) {
+      console.error(e);
+      customAlert("حدث خطأ أثناء إضافة الطالب: " + e.message);
+    }
+  }
+
+  // الحفظ واستخراج الشهادة وحفظ التقرير في قاعدة البيانات
+  async function saveAndGenerateCertificate() {
     var studentName = document.getElementById('inp-student').value.trim();
     if (!studentName) {
       customAlert('⚠️ يرجى إدخال اسم البطل أولاً.');
@@ -373,14 +457,56 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     var data = {};
     SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
 
+    // تجهيز نص التقرير المختصر للجدول
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
+    
+    let descParts = [`التقييم العام: ${generalRating}`];
+    SECTIONS.forEach(sec => {
+      let secData = data[sec.key];
+      if (secData && secData.currents && secData.currents.length > 0) {
+        secData.currents.forEach(item => {
+          let title = item.sr ? `سورة ${item.sr}` : (item.f ? `نطاق ${item.f}-${item.t}` : '');
+          if (title) {
+            let errTxt = (item.errors && item.errors !== '0') ? ` (أخطاء: ${item.errors})` : ' (بلا أخطاء ✨)';
+            let rateTxt = item.rating ? ` - ${item.rating}` : '';
+            descParts.push(`${sec.title}: ${title}${rateTxt}${errTxt}`);
+          }
+        });
+      }
+    });
+
+    const newReportTx = {
+      date: dateStr,
+      type: 'تقرير تقييم',
+      desc: descParts.join(' | '),
+      amount: generalRating,
+      isPay: true,
+      academicData: data
+    };
+
     try {
-      await addDoc(collection(db, "students"), {
-        studentName: studentName,
-        generalRating: generalRating,
-        academicData: data,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
+      // البحث عن الطالب في قاعدة البيانات أو إنشائه إن لم يكن موجوداً
+      const snapshot = await studentsCollection.where('name', '==', studentName).get();
+
+      if (!snapshot.empty) {
+        // إرفاق التقرير بالطالب الموجود
+        const docRef = snapshot.docs[0].ref;
+        await docRef.update({
+          transactions: firebase.firestore.FieldValue.arrayUnion(newReportTx),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } else {
+        // إضافة طالب جديد مع التقرير
+        await studentsCollection.add({
+          name: studentName,
+          phone: '',
+          balance: 0,
+          transactions: [newReportTx],
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
     } catch (e) {
       console.error("Firebase Save Error:", e);
     }
@@ -395,7 +521,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
-  };
+  }
 </script>
 
 <script>
@@ -918,7 +1044,7 @@ function showSingleImageModal(canvasElement, downloadName) {
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
-      var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+      var a = document.href = imgPreview.src; a.download = downloadName; a.click();
     }
   };
   
