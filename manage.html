@@ -218,7 +218,7 @@
       </div>
       <div class="actions-row">
         <button class="btn btn-image" id="btnFullImage" onclick="exportFullRecord('image')">تحميل السجل الكامل كصورة</button>
-        <button class="btn btn-whatsapp" id="btnFullWA" onclick="exportFullRecord('whatsapp')">مشاركة السجل الكامل واتساب</button>
+        <button class="btn btn-whatsapp" id="btnFullWA" onclick="exportFullRecord('whatsapp')">مشاركة السجل الكامل كصورة</button>
       </div>
     </div>
 
@@ -232,7 +232,7 @@
       <div id="dayTable"></div>
       <div class="actions-row">
         <button class="btn btn-image" id="btnDayImage" onclick="exportSelectedDay('image')" disabled>تحميل تقرير هذا اليوم</button>
-        <button class="btn btn-whatsapp" id="btnDayWA" onclick="exportSelectedDay('whatsapp')" disabled>مشاركة هذا اليوم واتساب</button>
+        <button class="btn btn-whatsapp" id="btnDayWA" onclick="exportSelectedDay('whatsapp')" disabled>مشاركة هذا اليوم كصورة</button>
       </div>
     </div>
   </div>
@@ -349,7 +349,7 @@
     }
   }
 
-  // ---------- Date & Hijri Conversion Helpers ----------
+  // ---------- Hijri Formatting Helpers ----------
   function getTxDateKey(tx) {
     if (tx.date) {
       const d = new Date(tx.date);
@@ -500,7 +500,7 @@
     wrap.innerHTML = html;
   }
 
-  // ---------- Exact Template Image Generator Matching design 54420_2.jpg ----------
+  // ---------- Match Exact INDEX1 Template Report Card ----------
   function buildReportCard(sName, dateLabelText, groupedByDate) {
     const card = document.createElement('div');
     card.style.cssText = `
@@ -516,9 +516,7 @@
       position: relative;
     `;
 
-    // Flatten items or group them
     let sectionsHtml = '';
-
     const catIcons = {
       new: '📖',
       past: '📚',
@@ -527,7 +525,6 @@
     };
 
     groupedByDate.forEach(group => {
-      // Print date if full record, or header
       if (groupedByDate.length > 1) {
         sectionsHtml += `
           <div style="margin: 16px 18px 6px; font-weight: 800; font-size: 14px; color: #0d3b2e; border-bottom: 2px solid #d4af37; padding-bottom: 4px;">
@@ -552,7 +549,6 @@
           
           sectionsHtml += `
             <div style="background: #ffffff; border: 1px solid #ebd8b0; border-radius: 16px; margin: 8px 18px 12px; padding: 12px 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-              <!-- Top Surah Name & Evaluation/Range -->
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <div style="font-weight: 800; font-size: 18px; color: #111;">
                   ${tx.surah || tx.type || 'بند'}
@@ -563,7 +559,6 @@
                   </div>` : ''}
               </div>
 
-              <!-- Badges Row (Evaluation or Error or No Error) -->
               <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px;">
                 ${tx.amount ? `
                   <div style="background: #fdf1f0; border: 1px solid #f8d7da; color: #a94442; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 12px; display: flex; align-items: center; gap: 4px;">
@@ -579,7 +574,6 @@
                   </div>`}
               </div>
 
-              <!-- Next Plan Box if present -->
               ${tx.nextPlan ? `
                 <div style="background: #fdfbe8; border: 1px dashed #d4af37; border-radius: 12px; padding: 8px 12px; margin-top: 8px;">
                   <div style="font-size: 11px; font-weight: 800; color: #8a6d3b; display: flex; align-items: center; gap: 4px;">
@@ -599,35 +593,29 @@
     const timeNow = getHijriTimeFormatted(new Date());
 
     card.innerHTML = `
-      <!-- Upper Decorative Border -->
       <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #d4af37, #0d3b2e, #d4af37);"></div>
 
-      <!-- Header Section -->
       <div style="background: #0d3b2e; color: #ffffff; text-align: center; padding: 22px 16px 28px; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);">
         <div style="font-size: 20px; font-weight: 800; color: #d4af37; font-family: 'Amiri', serif;">🕌 مركز خادم القرآن الكريم</div>
         <div style="font-size: 11px; color: #d1e2db; margin-top: 2px;">تحت إشراف الشيخ عبدالرحمن</div>
       </div>
 
-      <!-- Hero Badge: Student Name -->
       <div style="text-align: center; margin-top: -22px; margin-bottom: 8px; position: relative; z-index: 5;">
         <div style="display: inline-block; background: linear-gradient(135deg, #d4af37, #b8863a); color: #0d3b2e; padding: 7px 32px; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: rotate(-1deg);">
           <span style="font-family: 'Amiri', serif; font-weight: 800; font-size: 19px;">🏆 بطلنا: ${sName}</span>
         </div>
       </div>
 
-      <!-- Subtitle Hijri Date Pill -->
       <div style="text-align: center; margin-bottom: 12px;">
         <span style="background: #fff; border: 1px solid #d4af37; color: #0d3b2e; font-size: 11px; font-weight: 800; padding: 3px 16px; border-radius: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
           📅 ${dateLabelText}
         </span>
       </div>
 
-      <!-- Main Body Items -->
       <div style="padding-bottom: 10px;">
         ${sectionsHtml}
       </div>
 
-      <!-- Footer Section -->
       <div style="background: #0d3b2e; color: #d1e2db; text-align: center; padding: 12px; font-size: 10.5px; border-top: 2px solid #d4af37;">
         <div style="font-weight: 800; color: #ffffff; margin-bottom: 2px;">مركز خادم القرآن الكريم | تقرير متابعة الحفظ</div>
         <div>تم إصدار التقرير: ${hijriNow} - ${timeNow}</div>
@@ -636,55 +624,60 @@
     return card;
   }
 
-  async function renderCardToImage(card, filename) {
+  // ---------- Image Generation & Universal Image Share ----------
+  async function generateCanvasFromCard(card) {
     const sandbox = document.getElementById('reportSandbox');
     sandbox.innerHTML = '';
     sandbox.appendChild(card);
     await new Promise(r => setTimeout(r, 80));
     const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#fdfcf7' });
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
     sandbox.innerHTML = '';
+    return canvas;
   }
 
-  function buildWhatsappText(sName, groups) {
-    let text = `📋 *تقرير متابعة الحفظ — مركز خادم القرآن الكريم*\n`;
-    text += `🏆 *بطلنا:* ${sName}\n`;
-    text += `-----------------------------------\n`;
+  async function processReportExport(card, filename, mode, phone) {
+    const canvas = await generateCanvasFromCard(card);
 
-    groups.forEach(group => {
-      text += `\n📅 *تاريخ:* ${group.label}\n`;
-      if (group.txs.length === 0) { text += `لا توجد بيانات.\n`; return; }
+    if (mode === 'image') {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } else if (mode === 'whatsapp') {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], filename, { type: 'image/png' });
 
-      ['new', 'past', 'adhkar', 'past_adhkar'].forEach(catKey => {
-        const catTxs = group.txs.filter(tx => txCategory(tx) === catKey);
-        if (catTxs.length === 0) return;
+        // Try Web Share API for direct image share
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: 'تقرير متابعة الحفظ',
+              text: `تقرير الطالب من مركز خادم القرآن الكريم`
+            });
+          } catch (e) {
+            console.log('مشاركة ملغاة أو غير مدعومة');
+          }
+        } else {
+          // Fallback: Download image and open WhatsApp
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = URL.createObjectURL(blob);
+          link.click();
 
-        text += `\n*🔸 ${CAT_LABELS[catKey]}:*\n`;
-        catTxs.forEach((tx) => {
-          text += `• *${tx.surah || tx.type || 'بند'}*${tx.range ? ' (' + tx.range + ')' : ''}\n`;
-          if (tx.amount) text += `   - التقييم: ${tx.amount}\n`;
-          text += `   - الأخطاء: ${tx.desc ? tx.desc : '✨ بلا أخطاء'}\n`;
-          if (tx.nextPlan) text += `   - 🎯 الخطة القادمة: ${tx.nextPlan}\n`;
-        });
-      });
-    });
-
-    text += `\n-----------------------------------\n`;
-    text += `تم الإصدار: ${getHijriDateFormatted(new Date())}`;
-    return text;
+          setTimeout(() => {
+            const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
+            const msg = encodeURIComponent(`السلام عليكم، مرفق صورة تقرير الطالب من مركز خادم القرآن الكريم.`);
+            const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
+            window.open(url, '_blank');
+          }, 600);
+        }
+      }, 'image/png');
+    }
   }
 
-  function openWhatsapp(student, text) {
-    const phone = student.phone ? student.phone.replace(/[^0-9]/g, '') : '';
-    const encodedText = encodeURIComponent(text);
-    const url = phone ? `https://wa.me/2${phone}?text=${encodedText}` : `https://api.whatsapp.com/send?text=${encodedText}`;
-    window.open(url, '_blank');
-  }
-
-  // ---------- Export Single Selected Day ----------
+  // ---------- Export Actions ----------
   function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
@@ -692,27 +685,18 @@
     const hijriLabel = getHijriDateFormatted(currentSelectedDateKey);
     const group = { key: currentSelectedDateKey, label: hijriLabel, txs };
 
-    if (mode === 'image') {
-      const card = buildReportCard(sName, hijriLabel, [group]);
-      renderCardToImage(card, `تقرير_${sName}_${currentSelectedDateKey}.png`);
-    } else {
-      openWhatsapp(currentSelectedStudent, buildWhatsappText(sName, [group]));
-    }
+    const card = buildReportCard(sName, hijriLabel, [group]);
+    processReportExport(card, `تقرير_${sName}_${currentSelectedDateKey}.png`, mode, currentSelectedStudent.phone);
   }
 
-  // ---------- Export Full Record (All Dates) ----------
   function exportFullRecord(mode) {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
     const groups = dates.map(key => ({ key, label: getHijriDateFormatted(key), txs: getTxsForDate(currentSelectedStudent, key) }));
 
-    if (mode === 'image') {
-      const card = buildReportCard(sName, `السجل الكامل (${dates.length} أيام)`, groups);
-      renderCardToImage(card, `السجل_الكامل_${sName}.png`);
-    } else {
-      openWhatsapp(currentSelectedStudent, buildWhatsappText(sName, groups));
-    }
+    const card = buildReportCard(sName, `السجل الكامل (${dates.length} أيام)`, groups);
+    processReportExport(card, `السجل_الكامل_${sName}.png`, mode, currentSelectedStudent.phone);
   }
 
   function showView(viewId) {
