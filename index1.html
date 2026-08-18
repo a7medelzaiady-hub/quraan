@@ -40,7 +40,7 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* زر الانتقال لصفحة الطلاب */
+/* زر الانتقال لصفحة الإدارة */
 .manage-nav-btn {
   display: inline-flex;
   align-items: center;
@@ -114,7 +114,7 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .ac-wrap { position: relative; }
 .ac-drop { display: none; position: absolute; top: calc(100% + 4px); right: 0; left: 0; background: #fff; border: 2px solid var(--green-mid); border-radius: 10px; overflow: hidden; z-index: 100; box-shadow: 0 8px 25px rgba(0,0,0,0.2); max-height: 200px; overflow-y: auto; }
-.ac-item { padding: 10px 14px; font-size: 14px; font-family: 'Cairo', sans-serif; cursor: pointer; border-bottom: 1px solid #eef4f0; display: flex; justify-content: space-between; align-items: center; }
+.ac-item { padding: 10px 14px; font-size: 14px; font-family: 'Amiri', serif; cursor: pointer; border-bottom: 1px solid #eef4f0; }
 .ac-item:hover { background: var(--green-light); color: white; }
 .surah-row, .q-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 12px; background: var(--cream); border-radius: 12px; padding: 12px; border: 1px solid var(--border); position: relative; }
 .q-row { grid-template-columns: 1fr 1fr; }
@@ -194,7 +194,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
   
-  <a href="manage.html" class="manage-nav-btn"><i class="ti ti-users"></i> صفحة الطلاب</a>
+  <a href="manage.html" class="manage-nav-btn"><i class="ti ti-settings"></i> صفحة إدارة النظام (manage.html)</a>
 
   <div class="system-selector-wrap">
     <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
@@ -215,7 +215,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       <div class="frow">
         <div class="flbl">اسم البطل الكريم</div>
         <div class="ac-wrap">
-          <input class="inp" id="inp-student" placeholder="اكتب اسم البطل أو رقم الهاتف واختر من القائمة..." autocomplete="off">
+          <input class="inp" id="inp-student" placeholder="اكتب اسم البطل واختر من القائمة أو أضف طالباً جديداً" autocomplete="off">
           <div class="ac-drop" id="drop-student"></div>
         </div>
         <span id="student-status-hint"></span>
@@ -319,7 +319,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
-    <button class="submit-btn btn-combined" onclick="generateCertificate()">📜 حفظ واستخراج الشهادة</button>
+    <button class="submit-btn btn-combined" onclick="generateCertificate()">📜 استخراج وتصدير شهادة التقدير والحفظ</button>
   </div>
 </div>
 
@@ -342,12 +342,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
         <input class="inp" id="new-student-name" placeholder="اكتب اسم الطالب">
       </div>
       <div class="frow">
-        <div class="flbl">رقم الهاتف (ولي الأمر)</div>
-        <input class="inp" id="new-student-phone" type="tel" placeholder="أدخل رقم الهاتف">
-      </div>
-      <div class="frow">
         <div class="flbl">ملاحظات (اختياري)</div>
-        <input class="inp" id="new-student-notes" placeholder="مثال: الصف الدراسي...">
+        <input class="inp" id="new-student-notes" placeholder="مثال: الصف الدراسي / رقم ولي الأمر...">
       </div>
     </div>
     <div class="simple-foot">
@@ -364,7 +360,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
       <div class="frow">
         <div class="flbl">اختر الطالب</div>
         <div class="ac-wrap">
-          <input class="inp" id="hist-student-search" placeholder="اكتب اسم الطالب أو رقم الهاتف..." autocomplete="off">
+          <input class="inp" id="hist-student-search" placeholder="اكتب اسم الطالب للبحث..." autocomplete="off">
           <div class="ac-drop" id="drop-hist-student"></div>
         </div>
       </div>
@@ -390,7 +386,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
+var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 
 var SURAS_CACHE = {}; 
 var counters={};
@@ -689,7 +685,7 @@ function setupAC(inp,drop){
     if(!val.trim()){drop.style.display='none';return;}
     var matches=SURAS_PLAIN.filter(s=>s.includes(val)).slice(0,5);
     if(!matches.length){drop.style.display='none';return;}
-    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')"><span>'+m+'</span></div>').join('');
+    drop.innerHTML=matches.map(m=>'<div class="ac-item" onclick="pickAC(\''+inp.id+'\',\''+drop.id+'\',\''+m+'\')">'+m+'</div>').join('');
     drop.style.display='block';
   });
 }
@@ -794,6 +790,7 @@ function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.restore();
 }
 
+/* رسم ونمذجة الشهادة بالأبعاد العالية */
 async function drawAppreciationReport(nm, rating, adviceLines) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1950;
@@ -916,43 +913,27 @@ function showSingleImageModal(canvasElement, downloadName) {
   document.body.appendChild(modal);
 }
 
-function getSavedStudents() {
-  try {
-    return JSON.parse(localStorage.getItem('quran_center_students')) || [];
-  } catch(e) {
-    return [];
-  }
-}
-
+/* حفظ البيانات في سيرفر Firestore + الذاكرة المحلية */
 async function saveRecordToDatabase(studentName, rating, data, advice) {
   var timestamp = firebase.firestore.FieldValue.serverTimestamp();
   var dateStr = hijriDate() + ' - ' + new Date().toLocaleDateString('ar-EG');
-  var list = getSavedStudents();
-  var currentStudent = list.find(s => s.name === studentName) || {};
 
+  // 1. التخزين المباشر في Firebase Firestore
   try {
     await db.collection("students_records").add({
       studentName: studentName,
-      phone: currentStudent.phone || '',
       rating: rating,
       data: data,
       advice: advice,
       dateString: dateStr,
       createdAt: timestamp
     });
-
-    await db.collection("students").doc(studentName).set({
-      name: studentName,
-      phone: currentStudent.phone || '',
-      lastRating: rating,
-      lastUpdated: timestamp,
-      date: dateStr
-    }, { merge: true });
-
+    console.log("تم حفظ بيانات التقييم على السيرفر بنجاح.");
   } catch (e) {
     console.error("خطأ أثناء الحفظ على السيرفر: ", e);
   }
 
+  // 2. التخزين المحلي في LocalStorage
   try {
     var key = 'quran_hist_' + studentName;
     var history = JSON.parse(localStorage.getItem(key)) || [];
@@ -964,13 +945,15 @@ async function saveRecordToDatabase(studentName, rating, data, advice) {
     });
     localStorage.setItem(key, JSON.stringify(history));
     
+    var list = getSavedStudents();
     if (!list.some(s => s.name === studentName)) {
-      list.push({ name: studentName, phone: currentStudent.phone || '', notes: '', date: dateStr });
+      list.push({ name: studentName, notes: '', date: dateStr });
       localStorage.setItem('quran_center_students', JSON.stringify(list));
     }
   } catch(e) { console.error(e); }
 }
 
+/* استخراج شهادة التقدير فقط */
 async function generateCertificate() {
   var nm = document.getElementById('inp-student').value.trim();
   if (!nm) {
@@ -988,7 +971,7 @@ async function generateCertificate() {
 
   var loadingBox = document.createElement('div');
   loadingBox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:bold;font-family:Cairo,sans-serif;text-align:center;padding:20px;';
-  loadingBox.innerHTML = 'جاري حفظ البيانات وإنشاء الشهادة... ⏳';
+  loadingBox.innerHTML = 'جاري حفظ البيانات على السيرفر وإنشاء الشهادة... ⏳';
   document.body.appendChild(loadingBox);
 
   try {
@@ -1012,51 +995,33 @@ function closeModal(id) {
   document.getElementById(id).style.display = 'none';
 }
 
-async function saveNewStudent() {
-  var nameInp = document.getElementById('new-student-name');
-  var phoneInp = document.getElementById('new-student-phone');
-  var notesInp = document.getElementById('new-student-notes');
-  
-  var name = nameInp.value.trim();
-  var phone = phoneInp ? phoneInp.value.trim() : '';
-  var notes = notesInp ? notesInp.value.trim() : '';
+function getSavedStudents() {
+  try {
+    return JSON.parse(localStorage.getItem('quran_center_students')) || [];
+  } catch(e) {
+    return [];
+  }
+}
 
+function saveNewStudent() {
+  var nameInp = document.getElementById('new-student-name');
+  var notesInp = document.getElementById('new-student-notes');
+  var name = nameInp.value.trim();
   if (!name) {
     customAlert('يرجى كتابة اسم الطالب.');
     return;
   }
-
-  var dateStr = new Date().toLocaleDateString('ar-EG');
-
-  try {
-    await db.collection("students").doc(name).set({
-      name: name,
-      phone: phone,
-      notes: notes,
-      date: dateStr,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
-  } catch(e) {
-    console.error("خطأ أثناء حفظ الطالب في السيرفر:", e);
-  }
-
   var list = getSavedStudents();
-  var existingIdx = list.findIndex(s => s.name === name);
-  if (existingIdx > -1) {
-    list[existingIdx] = { name: name, phone: phone, notes: notes, date: dateStr };
-  } else {
-    list.push({ name: name, phone: phone, notes: notes, date: dateStr });
+  if (!list.some(s => s.name === name)) {
+    list.push({ name: name, notes: notesInp.value.trim(), date: new Date().toLocaleDateString('ar-EG') });
+    localStorage.setItem('quran_center_students', JSON.stringify(list));
   }
-  localStorage.setItem('quran_center_students', JSON.stringify(list));
-
   document.getElementById('inp-student').value = name;
-  document.getElementById('student-status-hint').innerText = '✅ تم اختيار الطالب: ' + name + (phone ? ' (📱 ' + phone + ')' : '');
-  
+  document.getElementById('student-status-hint').innerText = '✅ تم اختيار الطالب: ' + name;
   nameInp.value = '';
-  if (phoneInp) phoneInp.value = '';
-  if (notesInp) notesInp.value = '';
+  notesInp.value = '';
   closeModal('add-student-modal');
-  customAlert('تم حفظ الطالب بنجاح ورقم الهاتف! 🌟');
+  customAlert('تم حفظ الطالب بنجاح! 🌟');
 }
 
 function openHistoryModal() {
@@ -1072,9 +1037,9 @@ function setupStudentAutoComplete() {
     var val = inp.value.trim();
     if (!val) { drop.style.display = 'none'; return; }
     var list = getSavedStudents();
-    var matches = list.filter(s => s.name.includes(val) || (s.phone && s.phone.includes(val))).slice(0, 5);
+    var matches = list.filter(s => s.name.includes(val)).slice(0, 5);
     if (!matches.length) { drop.style.display = 'none'; return; }
-    drop.innerHTML = matches.map(s => '<div class="ac-item" onclick="selectStudent(\'' + s.name + '\')"><span>' + s.name + '</span>' + (s.phone ? '<span style="font-size:12px; color:var(--sub); dir:ltr;">' + s.phone + '</span>' : '') + '</div>').join('');
+    drop.innerHTML = matches.map(s => '<div class="ac-item" onclick="selectStudent(\'' + s.name + '\')">' + s.name + '</div>').join('');
     drop.style.display = 'block';
   });
 }
@@ -1082,10 +1047,7 @@ function setupStudentAutoComplete() {
 function selectStudent(name) {
   document.getElementById('inp-student').value = name;
   document.getElementById('drop-student').style.display = 'none';
-  var list = getSavedStudents();
-  var st = list.find(s => s.name === name);
-  var phoneTxt = (st && st.phone) ? ' (📱 ' + st.phone + ')' : '';
-  document.getElementById('student-status-hint').innerText = '✅ تم اختيار الطالب: ' + name + phoneTxt;
+  document.getElementById('student-status-hint').innerText = '✅ تم اختيار الطالب: ' + name;
 }
 
 function setupHistoryAutoComplete() {
@@ -1096,9 +1058,9 @@ function setupHistoryAutoComplete() {
     var val = inp.value.trim();
     if (!val) { drop.style.display = 'none'; return; }
     var list = getSavedStudents();
-    var matches = list.filter(s => s.name.includes(val) || (s.phone && s.phone.includes(val))).slice(0, 5);
+    var matches = list.filter(s => s.name.includes(val)).slice(0, 5);
     if (!matches.length) { drop.style.display = 'none'; return; }
-    drop.innerHTML = matches.map(s => '<div class="ac-item" onclick="loadStudentHistory(\'' + s.name + '\')"><span>' + s.name + '</span>' + (s.phone ? '<span style="font-size:12px; color:var(--sub); dir:ltr;">' + s.phone + '</span>' : '') + '</div>').join('');
+    drop.innerHTML = matches.map(s => '<div class="ac-item" onclick="loadStudentHistory(\'' + s.name + '\')">' + s.name + '</div>').join('');
     drop.style.display = 'block';
   });
 }
