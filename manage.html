@@ -12,6 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <style>
   :root{
@@ -195,8 +196,8 @@
         </div>
       </div>
       <div class="actions-row">
-        <button class="btn btn-image" id="btnFullImage" onclick="exportFullRecord('image')">تحميل كامل الأيام (صور منفصلة)</button>
-        <button class="btn btn-whatsapp" id="btnFullWA" onclick="exportFullRecord('whatsapp')">مشاركة كامل الأيام (صور منفصلة)</button>
+        <button class="btn btn-image" id="btnFullImage" onclick="downloadAllAsZip()">تحميل السجل الكامل (ملف مضغوط ZIP)</button>
+        <button class="btn btn-whatsapp" id="btnFullWA" onclick="shareAllInOneImage()">مشاركة السجل الكامل كصورة واحدة</button>
       </div>
     </div>
 
@@ -477,7 +478,7 @@
     wrap.innerHTML = html;
   }
 
-  /* ---------- Exact Reconstruction of INDEX1 Day Report (Image 2) ---------- */
+  /* ---------- بناء بطاقة التقرير لليوم الواحد (طابق تصميم الصورة الثانية تماماً) ---------- */
   function buildSingleDayReportCard(sName, dateKey, txs) {
     const card = document.createElement('div');
     card.style.cssText = `
@@ -514,38 +515,24 @@
         </div>
       `;
 
+      // جعل كل بند في صندوق أبيض مستقل بذاته متطابق مع الصورة الثانية
       catTxs.forEach(tx => {
         const targetName = tx.surah || tx.type || 'البند';
         const rangeText = tx.range ? ` (${tx.range})` : '';
+        const gradeMarkup = tx.amount ? `<span style="background: #fcf8e3; color: #8a6d3b; padding: 2px 8px; border-radius: 6px; border: 1px solid #f3e8be; font-size: 11.5px; font-weight: bold; margin-right: 6px;">${tx.amount}</span>` : '';
+        const errMarkup = tx.desc ? `<span style="color: #c0392b; font-weight: bold; margin-right: 6px;">(${tx.desc})</span>` : '';
 
-        // Separate Line Layout as Requested
         categoriesHtml += `
           <div style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
             
-            <!-- السطر الأول: الإنجاز والنطاق -->
-            <div style="font-size: 13.5px; font-weight: 800; color: #0d3b2e; margin-bottom: 4px;">
-              الإنجاز الحالي: <span style="color: #222; font-weight: 700;">${targetName}${rangeText}</span>
+            <!-- الإنجاز والتقييم في بند مستقل -->
+            <div style="font-size: 13px; font-weight: 800; color: #222; margin-bottom: 6px; line-height: 1.6;">
+              <strong style="color: #0d3b2e;">الإنجاز الحالي:</strong> ${targetName}${rangeText} ${gradeMarkup}${errMarkup}
             </div>
 
-            <!-- السطر الثاني: التقييم في سطر لوحده -->
-            ${tx.amount ? `
-              <div style="font-size: 12.5px; font-weight: 700; color: #8a6d3b; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;">
-                <span>⭐ التقييم:</span>
-                <span style="background: #fcf8e3; padding: 2px 8px; border-radius: 6px; border: 1px solid #f3e8be;">${tx.amount}</span>
-              </div>
-            ` : ''}
-
-            <!-- السطر الثالث: الأخطاء أو الملاحظات إن وجدت -->
-            ${tx.desc ? `
-              <div style="font-size: 12px; font-weight: 700; color: #c0392b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">
-                <span>⚠️ الملاحظات/الأخطاء:</span>
-                <span>${tx.desc}</span>
-              </div>
-            ` : ''}
-
-            <!-- السطر الرابع: الخطة والواجب القادم -->
+            <!-- الخطة القادمة في صندوق أصفر أسفله مباشره -->
             ${tx.nextPlan ? `
-              <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+              <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px;">
                 <span style="color: #c0392b;">🎯</span>
                 <div><strong style="color: #8a6d3b;">الخطة والواجب القادم:</strong> ${tx.nextPlan}</div>
               </div>` : ''}
@@ -595,7 +582,7 @@
     return canvas;
   }
 
-  // Single Day Export
+  // تصدير تقرير اليوم المختار فقط
   async function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
@@ -638,70 +625,97 @@
     }
   }
 
-  // FULL RECORD Export (Fixes Single File Restriction)
-  async function exportFullRecord(mode) {
+  /* ---------------- الحل الناجع لتنزيل السجل الكامل بنقرة واحدة (ZIP File) ---------------- */
+  async function downloadAllAsZip() {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const dates = getStudentDates(currentSelectedStudent);
 
     if (dates.length === 0) return;
 
-    alert(`جاري تجهيز (${dates.length}) صور لجميع الأيام... الرجاء الانتظار لحين الاكتفاء.`);
+    const zip = new JSZip();
+    const folder = zip.folder(`تقارير_${sName}`);
 
-    const filesArray = [];
+    alert(`جاري ضغط وحزم (${dates.length}) تقرير في ملف واحد... انتظر لحظات.`);
 
-    // Render all canvases into files
     for (let i = 0; i < dates.length; i++) {
       const dateKey = dates[i];
       const txs = getTxsForDate(currentSelectedStudent, dateKey);
       const card = buildSingleDayReportCard(sName, dateKey, txs);
       const canvas = await generateCanvasFromCard(card);
 
-      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-      const file = new File([blob], `تقرير_${sName}_${dateKey}.png`, { type: 'image/png' });
-      filesArray.push({ file, dataUrl: canvas.toDataURL('image/png') });
+      const base64Data = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, "");
+      folder.file(`تقرير_${sName}_${dateKey}.png`, base64Data, { base64: true });
     }
 
-    if (mode === 'whatsapp') {
-      const pureFiles = filesArray.map(f => f.file);
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      const link = document.createElement('a');
+      link.download = `سجل_تقارير_${sName}.zip`;
+      link.href = URL.createObjectURL(content);
+      link.click();
+    });
+  }
 
-      // Web Share API multi-file
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: pureFiles })) {
+  /* ---------------- الحل الناجع للمشاركة عبر الواتساب (دمج كافة الأيام في صورة طولية موحدة) ---------------- */
+  async function shareAllInOneImage() {
+    if (!currentSelectedStudent) return;
+    const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
+    const dates = getStudentDates(currentSelectedStudent);
+
+    if (dates.length === 0) return;
+
+    alert(`جاري تجميع السجل الكامل للطالب في صورة طويلة موحدة لسهولة مشاركتها عبر الواتساب...`);
+
+    // Container Wrapper for All Days
+    const fullContainer = document.createElement('div');
+    fullContainer.style.cssText = `
+      width: 500px;
+      background: #fdfcf7;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+      box-sizing: border-box;
+    `;
+
+    dates.forEach(dateKey => {
+      const txs = getTxsForDate(currentSelectedStudent, dateKey);
+      const singleCard = buildSingleDayReportCard(sName, dateKey, txs);
+      fullContainer.appendChild(singleCard);
+    });
+
+    const canvas = await generateCanvasFromCard(fullContainer);
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], `السجل_الكامل_${sName}.png`, { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
-            files: pureFiles,
-            title: `تقارير الطالب ${sName}`,
-            text: `جميع تقارير متابعة الطالب ${sName}`
+            files: [file],
+            title: `السجل الكامل للطالب ${sName}`,
+            text: `السجل الكامل لمتابعة الطالب ${sName} من مركز خادم القرآن الكريم`
           });
           return;
         } catch (e) { console.log('مشاركة مكنسلة'); }
       }
 
-      // Fallback if browser blocks multi-share
-      alert("سيتم تنزيل الصور أولاً ثم فتح الواتساب للتسهيل.");
-      for (let i = 0; i < filesArray.length; i++) {
-        const link = document.createElement('a');
-        link.download = filesArray[i].file.name;
-        link.href = filesArray[i].dataUrl;
-        link.click();
-        await new Promise(r => setTimeout(r, 1200));
-      }
+      // Fallback: Download Image & Open Whatsapp
+      const link = document.createElement('a');
+      link.download = file.name;
+      link.href = URL.createObjectURL(blob);
+      link.click();
 
-      const cleanPhone = currentSelectedStudent.phone ? currentSelectedStudent.phone.replace(/[^0-9]/g, '') : '';
-      const msg = encodeURIComponent(`السلام عليكم، مرفق جميع تقارير المتابعة للرصيد الكامل للطالب ${sName}.`);
-      const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
-      window.open(url, '_blank');
-
-    } else if (mode === 'image') {
-      // Multiple image downloads with safety delay to prevent browser block
-      for (let i = 0; i < filesArray.length; i++) {
-        const link = document.createElement('a');
-        link.download = filesArray[i].file.name;
-        link.href = filesArray[i].dataUrl;
-        link.click();
-        await new Promise(r => setTimeout(r, 1000));
-      }
-    }
+      setTimeout(() => {
+        const cleanPhone = currentSelectedStudent.phone ? currentSelectedStudent.phone.replace(/[^0-9]/g, '') : '';
+        const msg = encodeURIComponent(`السلام عليكم، مرفق صورة السجل الكامل لمتابعة الطالب ${sName}.`);
+        const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
+        window.open(url, '_blank');
+      }, 600);
+    }, 'image/png');
   }
 
   function showView(viewId) {
