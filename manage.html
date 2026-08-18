@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام إدارة الطلاب والحركات</title>
+  <title>نظام إدارة الطلاب والحركات والتقارير</title>
   <style>
     :root {
       --primary-color: #0e6251;
       --secondary-color: #117a65;
+      --danger-color: #c0392b;
+      --danger-hover: #e74c3c;
       --bg-color: #f4f6f7;
       --card-bg: #ffffff;
       --text-color: #2c3e50;
@@ -19,14 +21,20 @@
     .container { max-width: 900px; margin: 0 auto; }
 
     /* Header Styling */
-    .header { background: var(--primary-color); color: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header { background: var(--primary-color); color: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
     .header h2 { font-size: 18px; }
-    .btn-main { background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .header-btns { display: flex; gap: 10px; }
+    
+    .btn-main { background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-main:hover { background: #d68910; }
+
+    .btn-danger-all { background: var(--danger-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-danger-all:hover { background: var(--danger-hover); }
 
     /* Card Box */
     .card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border-color); }
 
-    /* Custom Dropdown Input (مثل الصورة) */
+    /* Custom Dropdown Input */
     .autocomplete-container { position: relative; width: 100%; margin-bottom: 15px; }
     .input-label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #555; }
     .search-input { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 16px; outline: none; transition: 0.3s; }
@@ -52,23 +60,36 @@
     .dropdown-item:hover { background-color: #e8f8f5; color: var(--primary-color); }
 
     /* Student List Cards */
-    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
-    .student-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; cursor: pointer; transition: 0.2s; }
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 15px; }
+    
+    .student-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; cursor: pointer; transition: 0.2s; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
     .student-card:hover { transform: translateY(-3px); border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-    .student-name { font-weight: bold; font-size: 16px; color: var(--primary-color); }
-    .student-info { font-size: 13px; color: #7f8c8d; margin-top: 5px; }
+    
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .student-name { font-weight: bold; font-size: 16px; color: var(--primary-color); word-break: break-word; }
+    
+    .btn-delete-single { background: #fadbd8; color: var(--danger-color); border: 1px solid #f5b7b1; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-delete-single:hover { background: var(--danger-color); color: white; }
 
-    /* Transactions Table (كشف الحركات) */
+    .student-info { font-size: 13px; color: #7f8c8d; margin-top: 8px; }
+
+    /* Transactions Table & Details */
     .view-section { display: none; }
     .view-section.active { display: block; }
-    .back-btn { background: #7f8c8d; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
+    .back-btn { background: #7f8c8d; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; font-weight: bold; }
+    .back-btn:hover { background: #626567; }
     
+    .btn-whatsapp { background: #25d366; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
+    .btn-whatsapp:hover { background: #1eb854; }
+
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
     th, td { text-align: right; padding: 12px; border-bottom: 1px solid var(--border-color); }
     th { background-color: #e8f8f5; color: var(--primary-color); }
-    .badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; color: white; }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; color: white; font-weight: bold; }
     .badge-pay { background-color: #27ae60; }
     .badge-fee { background-color: #e74c3c; }
+
+    .no-data { text-align: center; color: #95a5a6; padding: 20px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -78,7 +99,10 @@
   <!-- Header -->
   <div class="header">
     <h2 id="page-title">صفحة الطلاب</h2>
-    <button class="btn-main" onclick="showView('main-view')">الرئيسية</button>
+    <div class="header-btns">
+      <button class="btn-main" onclick="showView('main-view')">الرئيسية</button>
+      <button class="btn-danger-all" onclick="deleteAllStudents()">🗑️ مسح الكل</button>
+    </div>
   </div>
 
   <!-- MAIN VIEW: القائمة وحقل البحث المنسدل -->
@@ -86,55 +110,63 @@
     
     <div class="card">
       <div class="autocomplete-container">
-        <label class="input-label">بحث سريع عن طالب (مثل تصميم العملاء):</label>
+        <label class="input-label">بحث سريع عن طالب بالاسم:</label>
         <input type="text" id="studentSearchInput" class="search-input" placeholder="اكتب اسم الطالب..." autocomplete="off">
         <div id="customDropdown" class="dropdown-menu"></div>
       </div>
     </div>
 
     <div class="card">
-      <h3>جميع الطلاب</h3>
+      <h3>جميع الطلاب المسجلين</h3>
       <div id="studentsGrid" class="students-grid"></div>
     </div>
 
   </div>
 
-  <!-- STUDENT DETAIL VIEW: ملف الطالب وكشف الحركات -->
+  <!-- STUDENT DETAIL VIEW: ملف الطالب واستعراض التقارير -->
   <div id="student-detail-view" class="view-section">
     <button class="back-btn" onclick="showView('main-view')">← العودة لقائمة الطلاب</button>
     
     <div class="card">
       <h2 id="detailName" style="color: var(--primary-color);">اسم الطالب</h2>
       <p id="detailPhone" style="color: #666; margin-top: 5px;"></p>
-      <div style="display: flex; gap: 20px; margin-top: 15px; background: #e8f8f5; padding: 15px; border-radius: 8px;">
-        <div><strong>إجمالي الحركات:</strong> <span id="detailTotalOps">0</span></div>
-        <div><strong>الرصيد / المتبقي:</strong> <span id="detailBalance" style="color: #e74c3c; font-weight: bold;">0 ج.م</span></div>
+      
+      <div style="display: flex; gap: 20px; margin-top: 15px; background: #e8f8f5; padding: 15px; border-radius: 8px; flex-wrap: wrap;">
+        <div><strong>إجمالي العمليات:</strong> <span id="detailTotalOps">0</span></div>
+        <div><strong>المتبقي / الحساب:</strong> <span id="detailBalance" style="color: #e74c3c; font-weight: bold;">0 ج.م</span></div>
       </div>
+
+      <!-- زر مشاركة التقرير مع ولي الأمر -->
+      <button class="btn-whatsapp" onclick="shareReportWithGuardian()">
+        📲 مشاركة التقرير المحفوظ مع ولي الأمر (واتساب)
+      </button>
     </div>
 
     <div class="card">
-      <h3>سِجل الحركات والعمليات</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>التاريخ والوقت</th>
-            <th>نوع الحركة</th>
-            <th>البيان / التفاصيل</th>
-            <th>المبلغ</th>
-          </tr>
-        </thead>
-        <tbody id="transactionsBody">
-          <!-- الحركات تظهر هنا -->
-        </tbody>
-      </table>
+      <h3>سِجل التقارير والعمليات المحفوظة</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>التاريخ والوقت</th>
+              <th>نوع الحركة / التقرير</th>
+              <th>البيان والتفاصيل</th>
+              <th>المبلغ</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody">
+            <!-- التقارير تظهر هنا -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
 </div>
 
 <script>
-  // بيانات افتراضية للطلاب وحركاتهم
-  const studentsData = [
+  // بيانات الطلاب المحفوظة
+  let studentsData = [
     {
       id: 1,
       name: "ضياء بلطيم شارع المستشفى",
@@ -181,11 +213,13 @@
     }
   ];
 
+  let currentSelectedStudent = null;
+
   const searchInput = document.getElementById('studentSearchInput');
   const dropdown = document.getElementById('customDropdown');
   const studentsGrid = document.getElementById('studentsGrid');
 
-  // 1. تشغيل قائمة البحث المنسدلة الذكية (Auto-complete)
+  // 1. تشغيل قائمة البحث المنسدلة (Auto-complete)
   searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     dropdown.innerHTML = '';
@@ -215,22 +249,31 @@
     }
   });
 
-  // إخفاء القائمة عند النقر خارجها
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.autocomplete-container')) {
       dropdown.style.display = 'none';
     }
   });
 
-  // 2. عرض كروت جميع الطلاب في الصفحة الرئيسية
+  // 2. عرض كروت الطلاب مع زر المسح الخاص بكل طالب
   function renderStudentsList() {
     studentsGrid.innerHTML = '';
+
+    if (studentsData.length === 0) {
+      studentsGrid.innerHTML = '<div class="no-data" style="grid-column: 1/-1;">لا يوجد طلاب مسجلون حاليًا.</div>';
+      return;
+    }
+
     studentsData.forEach(student => {
       const card = document.createElement('div');
       card.className = 'student-card';
       card.onclick = () => openStudentProfile(student.id);
+
       card.innerHTML = `
-        <div class="student-name">${student.name}</div>
+        <div class="card-top">
+          <div class="student-name">${student.name}</div>
+          <button class="btn-delete-single" onclick="deleteStudent(${student.id}, event)" title="مسح الطالب">مسح 🗑️</button>
+        </div>
         <div class="student-info">الهاتف: ${student.phone}</div>
         <div class="student-info" style="margin-top:8px; font-weight:bold; color:#e74c3c;">المتبقي: ${student.balance}</div>
       `;
@@ -238,10 +281,37 @@
     });
   }
 
-  // 3. فتح صفحة الطالب الخاصة واستعراض حركاته
+  // 3. مسح طالب واحد
+  function deleteStudent(studentId, event) {
+    event.stopPropagation(); // منع فتح كارت الطالب عند الضغط على زر المسح
+    
+    const student = studentsData.find(s => s.id === studentId);
+    if (student && confirm(`هل أنت تأكد من مسح بيانات الطالب (${student.name})؟`)) {
+      studentsData = studentsData.filter(s => s.id !== studentId);
+      renderStudentsList();
+    }
+  }
+
+  // 4. مسح جميع الطلاب دفعة واحدة
+  function deleteAllStudents() {
+    if (studentsData.length === 0) {
+      alert("قائمة الطلاب فارغة بالفعل!");
+      return;
+    }
+
+    if (confirm("⚠️ تحذير: هل أنت متأكد من مسح جميع الطلاب المسجلين وكافة تقاريرهم دفعة واحدة؟")) {
+      studentsData = [];
+      renderStudentsList();
+      showView('main-view');
+    }
+  }
+
+  // 5. فتح تقارير وحركات الطالب المحفوظة
   function openStudentProfile(studentId) {
     const student = studentsData.find(s => s.id === studentId);
     if (!student) return;
+
+    currentSelectedStudent = student;
 
     document.getElementById('detailName').textContent = student.name;
     document.getElementById('detailPhone').textContent = "رقم الهاتف: " + student.phone;
@@ -252,7 +322,7 @@
     tbody.innerHTML = '';
 
     if (student.transactions.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">لا توجد حركات مسجلة لهذا الطالب</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="no-data">لا توجد حركات أو تقارير مسجلة لهذا الطالب حتى الآن</td></tr>';
     } else {
       student.transactions.forEach(tx => {
         const tr = document.createElement('tr');
@@ -270,6 +340,32 @@
     showView('student-detail-view');
   }
 
+  // 6. مشاركة التقرير المحفوظ مع ولي الأمر عبر الواتساب
+  function shareReportWithGuardian() {
+    if (!currentSelectedStudent) return;
+
+    let reportText = `📋 *تقرير الطالب:* ${currentSelectedStudent.name}\n`;
+    reportText += `📞 *رقم التواصل:* ${currentSelectedStudent.phone}\n`;
+    reportText += `💰 *المتبقي / الحساب:* ${currentSelectedStudent.balance}\n`;
+    reportText += `-----------------------------------\n`;
+    reportText += `📑 *سجل العمليات والتقارير المحفوظة:*\n`;
+
+    if (currentSelectedStudent.transactions.length === 0) {
+      reportText += `لا توجد عمليات مسجلة حاليًا.\n`;
+    } else {
+      currentSelectedStudent.transactions.forEach((tx, idx) => {
+        reportText += `\n${idx + 1}- *${tx.type}* (${tx.date})\n   البيان: ${tx.desc}\n   المبلغ: ${tx.amount}\n`;
+      });
+    }
+
+    // فتح تطبيق الواتساب برابط جهة الاتصال
+    const phone = currentSelectedStudent.phone.replace(/[^0-9]/g, '');
+    const encodedText = encodeURIComponent(reportText);
+    const whatsappUrl = phone ? `https://wa.me/2${phone}?text=${encodedText}` : `https://api.whatsapp.com/send?text=${encodedText}`;
+
+    window.open(whatsappUrl, '_blank');
+  }
+
   // التنقل بين الصفحات
   function showView(viewId) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -278,11 +374,11 @@
       document.getElementById('page-title').textContent = "صفحة الطلاب";
       searchInput.value = '';
     } else {
-      document.getElementById('page-title').textContent = "ملف الطالب / كشف حركات";
+      document.getElementById('page-title').textContent = "ملف الطالب / استعراض التقرير";
     }
   }
 
-  // تهيئة الصفحة
+  // تهيئة عرض القائمة لأول مرة
   renderStudentsList();
 </script>
 
