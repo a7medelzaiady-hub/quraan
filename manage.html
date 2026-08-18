@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>نظام إدارة الطلاب والحركات والتقارير</title>
+  
+  <!-- Firebase SDK (v10 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     /* ألوان مستوحاة بدقة من تصميم EdNova Academy */
     :root {
@@ -40,7 +45,7 @@
     .header h2 { font-size: 20px; font-weight: bold; }
     .header-btns { display: flex; gap: 10px; }
     
-    /* أزرار ذهبية وحمراء بتصميم عصري */
+    /* أزرار تصميم عصري */
     .btn-main { 
       background: var(--accent-gold); 
       color: white; 
@@ -177,7 +182,6 @@
   <div class="header">
     <h2 id="page-title">صفحة الطلاب</h2>
     <div class="header-btns">
-      <!-- الزر يفتح صفحة index1.html مباشرة -->
       <button class="btn-main" onclick="window.location.href='index1.html'">الرئيسية 🏠</button>
       <button class="btn-danger-all" onclick="deleteAllStudents()">🗑️ مسح الكل</button>
     </div>
@@ -214,7 +218,6 @@
         <div><strong>المتبقي / الحساب:</strong> <span id="detailBalance" style="color: var(--danger-color); font-weight: bold;">0 ج.م</span></div>
       </div>
 
-      <!-- زر مشاركة التقرير مع ولي الأمر -->
       <button class="btn-whatsapp" onclick="shareReportWithGuardian()">
         📲 مشاركة التقرير المحفوظ مع ولي الأمر (واتساب)
       </button>
@@ -243,16 +246,46 @@
 </div>
 
 <script>
-  // تم إفراغ المصفوفة بالكامل لتصبح جاهزة لإضافة بياناتك
-  let studentsData = [];
+  // إعدادات مشروع الفايربيس الخاص بك
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+    authDomain: "ahmedelzaiady.firebaseapp.com",
+    projectId: "ahmedelzaiady",
+    storageBucket: "ahmedelzaiady.firebasestorage.app",
+    messagingSenderId: "300306825071",
+    appId: "1:300306825071:web:0426ddde56280fa090329a",
+    measurementId: "G-WE04GK5XZZ"
+  };
 
+  // تهيئة الفايربيس وقاعدة البيانات
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const studentsCollection = db.collection('students');
+
+  let studentsData = [];
   let currentSelectedStudent = null;
 
   const searchInput = document.getElementById('studentSearchInput');
   const dropdown = document.getElementById('customDropdown');
   const studentsGrid = document.getElementById('studentsGrid');
 
-  // 1. تشغيل قائمة البحث المنسدلة (Auto-complete)
+  // الاستماع للبيانات لحظياً من Firestore (Real-time Sync)
+  studentsCollection.onSnapshot((snapshot) => {
+    studentsData = [];
+    snapshot.forEach((doc) => {
+      studentsData.push({ id: doc.id, ...doc.data() });
+    });
+    renderStudentsList();
+
+    if (currentSelectedStudent) {
+      const updated = studentsData.find(s => s.id === currentSelectedStudent.id);
+      if (updated) openStudentProfile(updated.id);
+    }
+  }, (error) => {
+    console.error("خطأ في جلب البيانات من الفايربيس:", error);
+  });
+
+  // قائمة البحث المنسدلة (Auto-complete)
   searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     dropdown.innerHTML = '';
@@ -262,7 +295,7 @@
       return;
     }
 
-    const filtered = studentsData.filter(s => s.name.toLowerCase().includes(query));
+    const filtered = studentsData.filter(s => s.name && s.name.toLowerCase().includes(query));
 
     if (filtered.length > 0) {
       filtered.forEach(student => {
@@ -288,7 +321,7 @@
     }
   });
 
-  // 2. عرض كروت الطلاب مع زر المسح الخاص بكل طالب
+  // عرض كروت الطلاب
   function renderStudentsList() {
     studentsGrid.innerHTML = '';
 
@@ -304,42 +337,51 @@
 
       card.innerHTML = `
         <div class="card-top">
-          <div class="student-name">${student.name}</div>
-          <button class="btn-delete-single" onclick="deleteStudent(${student.id}, event)" title="مسح الطالب">مسح 🗑️</button>
+          <div class="student-name">${student.name || 'بدون اسم'}</div>
+          <button class="btn-delete-single" onclick="deleteStudent('${student.id}', event)" title="مسح الطالب">مسح 🗑️</button>
         </div>
-        <div class="student-info">الهاتف: ${student.phone}</div>
-        <div class="student-info" style="margin-top:8px; font-weight:bold; color:var(--danger-color);">المتبقي: ${student.balance}</div>
+        <div class="student-info">الهاتف: ${student.phone || 'غير مسجل'}</div>
+        <div class="student-info" style="margin-top:8px; font-weight:bold; color:var(--danger-color);">المتبقي: ${student.balance || 0} ج.م</div>
       `;
       studentsGrid.appendChild(card);
     });
   }
 
-  // 3. مسح طالب واحد
-  function deleteStudent(studentId, event) {
+  // مسح طالب واحد من Firestore
+  async function deleteStudent(studentId, event) {
     event.stopPropagation();
-    
     const student = studentsData.find(s => s.id === studentId);
-    if (student && confirm(`هل أنت تأكد من مسح بيانات الطالب (${student.name})؟`)) {
-      studentsData = studentsData.filter(s => s.id !== studentId);
-      renderStudentsList();
+    
+    if (student && confirm(`هل أنت متأكد من مسح بيانات الطالب (${student.name})؟`)) {
+      try {
+        await studentsCollection.doc(String(studentId)).delete();
+      } catch (err) {
+        alert("حدث خطأ أثناء المسح: " + err.message);
+      }
     }
   }
 
-  // 4. مسح جميع الطلاب دفعة واحدة
-  function deleteAllStudents() {
+  // مسح جميع الطلاب دفعة واحدة
+  async function deleteAllStudents() {
     if (studentsData.length === 0) {
       alert("قائمة الطلاب فارغة بالفعل!");
       return;
     }
 
-    if (confirm("⚠️ تحذير: هل أنت متأكد من مسح جميع الطلاب المسجلين وكافة تقاريرهم دفعة واحدة؟")) {
-      studentsData = [];
-      renderStudentsList();
-      showView('main-view');
+    if (confirm("⚠️ تحذير: هل أنت متأكد من مسح جميع الطلاب المسجلين وكافة تقاريرهم من قاعدة البيانات؟")) {
+      try {
+        const batch = db.batch();
+        const snapshot = await studentsCollection.get();
+        snapshot.docs.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+        showView('main-view');
+      } catch (err) {
+        alert("حدث خطأ أثناء مسح الكل: " + err.message);
+      }
     }
   }
 
-  // 5. فتح تقارير وحركات الطالب المحفوظة
+  // فتح ملف الطالب واستعراض التقرير
   function openStudentProfile(studentId) {
     const student = studentsData.find(s => s.id === studentId);
     if (!student) return;
@@ -347,9 +389,9 @@
     currentSelectedStudent = student;
 
     document.getElementById('detailName').textContent = student.name;
-    document.getElementById('detailPhone').textContent = "رقم الهاتف: " + student.phone;
+    document.getElementById('detailPhone').textContent = "رقم الهاتف: " + (student.phone || 'غير مسجل');
     document.getElementById('detailTotalOps').textContent = student.transactions ? student.transactions.length : 0;
-    document.getElementById('detailBalance').textContent = student.balance;
+    document.getElementById('detailBalance').textContent = (student.balance || 0) + " ج.م";
 
     const tbody = document.getElementById('transactionsBody');
     tbody.innerHTML = '';
@@ -361,10 +403,10 @@
         const tr = document.createElement('tr');
         const badgeClass = tx.isPay ? 'badge-pay' : 'badge-fee';
         tr.innerHTML = `
-          <td>${tx.date}</td>
-          <td><span class="badge ${badgeClass}">${tx.type}</span></td>
-          <td>${tx.desc}</td>
-          <td style="font-weight:bold;">${tx.amount}</td>
+          <td>${tx.date || '-'}</td>
+          <td><span class="badge ${badgeClass}">${tx.type || 'حركة'}</span></td>
+          <td>${tx.desc || '-'}</td>
+          <td style="font-weight:bold;">${tx.amount || 0}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -373,13 +415,13 @@
     showView('student-detail-view');
   }
 
-  // 6. مشاركة التقرير المحفوظ مع ولي الأمر عبر الواتساب
+  // مشاركة التقرير مع ولي الأمر عبر الواتساب
   function shareReportWithGuardian() {
     if (!currentSelectedStudent) return;
 
     let reportText = `📋 *تقرير الطالب:* ${currentSelectedStudent.name}\n`;
-    reportText += `📞 *رقم التواصل:* ${currentSelectedStudent.phone}\n`;
-    reportText += `💰 *المتبقي / الحساب:* ${currentSelectedStudent.balance}\n`;
+    reportText += `📞 *رقم التواصل:* ${currentSelectedStudent.phone || 'غير مسجل'}\n`;
+    reportText += `💰 *المتبقي / الحساب:* ${currentSelectedStudent.balance || 0} ج.م\n`;
     reportText += `-----------------------------------\n`;
     reportText += `📑 *سجل العمليات والتقارير المحفوظة:*\n`;
 
@@ -409,9 +451,6 @@
       document.getElementById('page-title').textContent = "ملف الطالب / استعراض التقرير";
     }
   }
-
-  // تهيئة عرض القائمة
-  renderStudentsList();
 </script>
 
 </body>
