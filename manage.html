@@ -214,8 +214,7 @@
       <p id="detailPhone" style="color: #5a6e67; margin-top: 5px;"></p>
       
       <div style="display: flex; gap: 20px; margin-top: 15px; background: #eaf2ef; padding: 15px; border-radius: 10px; flex-wrap: wrap; border: 1px solid #d4e2dd;">
-        <div><strong>إجمالي العمليات:</strong> <span id="detailTotalOps">0</span></div>
-        <div><strong>المتبقي / الحساب:</strong> <span id="detailBalance" style="color: var(--danger-color); font-weight: bold;">0 ج.م</span></div>
+        <div><strong>إجمالي التقارير والعمليات:</strong> <span id="detailTotalOps" style="color: var(--primary-color); font-weight: bold;">0</span></div>
       </div>
 
       <button class="btn-whatsapp" onclick="shareReportWithGuardian()">
@@ -232,7 +231,7 @@
               <th>التاريخ والوقت</th>
               <th>نوع الحركة / التقرير</th>
               <th>البيان والتفاصيل</th>
-              <th>المبلغ</th>
+              <th>التقييم / المبلغ</th>
             </tr>
           </thead>
           <tbody id="transactionsBody">
@@ -246,7 +245,7 @@
 </div>
 
 <script>
-  // إعدادات مشروع الفايربيس الخاص بك
+  // إعدادات مشروع الفايربيس
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
     authDomain: "ahmedelzaiady.firebaseapp.com",
@@ -295,15 +294,15 @@
       return;
     }
 
-    const filtered = studentsData.filter(s => s.name && s.name.toLowerCase().includes(query));
+    const filtered = studentsData.filter(s => (s.name || s.studentName) && (s.name || s.studentName).toLowerCase().includes(query));
 
     if (filtered.length > 0) {
       filtered.forEach(student => {
         const item = document.createElement('div');
         item.className = 'dropdown-item';
-        item.textContent = student.name;
+        item.textContent = student.name || student.studentName;
         item.onclick = () => {
-          searchInput.value = student.name;
+          searchInput.value = student.name || student.studentName;
           dropdown.style.display = 'none';
           openStudentProfile(student.id);
         };
@@ -335,13 +334,16 @@
       card.className = 'student-card';
       card.onclick = () => openStudentProfile(student.id);
 
+      const studentName = student.name || student.studentName || 'بدون اسم';
+      const txCount = student.transactions ? student.transactions.length : 0;
+
       card.innerHTML = `
         <div class="card-top">
-          <div class="student-name">${student.name || 'بدون اسم'}</div>
+          <div class="student-name">${studentName}</div>
           <button class="btn-delete-single" onclick="deleteStudent('${student.id}', event)" title="مسح الطالب">مسح 🗑️</button>
         </div>
         <div class="student-info">الهاتف: ${student.phone || 'غير مسجل'}</div>
-        <div class="student-info" style="margin-top:8px; font-weight:bold; color:var(--danger-color);">المتبقي: ${student.balance || 0} ج.م</div>
+        <div class="student-info" style="margin-top:8px; font-weight:bold; color:var(--primary-color);">عدد التقارير: ${txCount}</div>
       `;
       studentsGrid.appendChild(card);
     });
@@ -351,8 +353,9 @@
   async function deleteStudent(studentId, event) {
     event.stopPropagation();
     const student = studentsData.find(s => s.id === studentId);
+    const sName = student ? (student.name || student.studentName) : '';
     
-    if (student && confirm(`هل أنت متأكد من مسح بيانات الطالب (${student.name})؟`)) {
+    if (student && confirm(`هل أنت متأكد من مسح بيانات الطالب (${sName}) وكافة تقاريره؟`)) {
       try {
         await studentsCollection.doc(String(studentId)).delete();
       } catch (err) {
@@ -381,17 +384,17 @@
     }
   }
 
-  // فتح ملف الطالب واستعراض التقرير
+  // فتح ملف الطالب واستعراض تقاريره
   function openStudentProfile(studentId) {
     const student = studentsData.find(s => s.id === studentId);
     if (!student) return;
 
     currentSelectedStudent = student;
+    const sName = student.name || student.studentName || 'بدون اسم';
 
-    document.getElementById('detailName').textContent = student.name;
+    document.getElementById('detailName').textContent = sName;
     document.getElementById('detailPhone').textContent = "رقم الهاتف: " + (student.phone || 'غير مسجل');
     document.getElementById('detailTotalOps').textContent = student.transactions ? student.transactions.length : 0;
-    document.getElementById('detailBalance').textContent = (student.balance || 0) + " ج.م";
 
     const tbody = document.getElementById('transactionsBody');
     tbody.innerHTML = '';
@@ -401,12 +404,12 @@
     } else {
       student.transactions.forEach(tx => {
         const tr = document.createElement('tr');
-        const badgeClass = tx.isPay ? 'badge-pay' : 'badge-fee';
+        const badgeClass = tx.isPay !== false ? 'badge-pay' : 'badge-fee';
         tr.innerHTML = `
           <td>${tx.date || '-'}</td>
-          <td><span class="badge ${badgeClass}">${tx.type || 'حركة'}</span></td>
-          <td>${tx.desc || '-'}</td>
-          <td style="font-weight:bold;">${tx.amount || 0}</td>
+          <td><span class="badge ${badgeClass}">${tx.type || 'تقرير تقييم'}</span></td>
+          <td style="max-width: 350px; line-height: 1.6;">${tx.desc || '-'}</td>
+          <td style="font-weight:bold; color: var(--primary-color);">${tx.amount || '-'}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -419,9 +422,9 @@
   function shareReportWithGuardian() {
     if (!currentSelectedStudent) return;
 
-    let reportText = `📋 *تقرير الطالب:* ${currentSelectedStudent.name}\n`;
+    const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'البطل الكريم';
+    let reportText = `📋 *تقرير متابعة الطالب:* ${sName}\n`;
     reportText += `📞 *رقم التواصل:* ${currentSelectedStudent.phone || 'غير مسجل'}\n`;
-    reportText += `💰 *المتبقي / الحساب:* ${currentSelectedStudent.balance || 0} ج.م\n`;
     reportText += `-----------------------------------\n`;
     reportText += `📑 *سجل العمليات والتقارير المحفوظة:*\n`;
 
@@ -429,7 +432,7 @@
       reportText += `لا توجد عمليات مسجلة حاليًا.\n`;
     } else {
       currentSelectedStudent.transactions.forEach((tx, idx) => {
-        reportText += `\n${idx + 1}- *${tx.type}* (${tx.date})\n   البيان: ${tx.desc}\n   المبلغ: ${tx.amount}\n`;
+        reportText += `\n${idx + 1}- *${tx.type || 'تقرير'}* (${tx.date})\n   البيان: ${tx.desc}\n   التقييم: ${tx.amount}\n`;
       });
     }
 
