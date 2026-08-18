@@ -147,7 +147,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .counter-btn.minus:active { background: #e5e7eb; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* زر التثبيت السفلي الرئيسي */
+/* زر الحفظ السفلي الرئيسي */
 .submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; }
 .submit-btn { width: 100%; padding: 16px 8px; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; box-shadow: 0 4px 15px rgba(11, 61, 46, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; border: none; background: linear-gradient(135deg, #0b3d2e, #14795c); color: var(--gold-light); border: 2px solid var(--gold); }
@@ -245,10 +245,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
         <div class="flbl">التقييم العام للمسار</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
-            <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
-            <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
-            <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
+            <option value="مستوى بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
+            <option value="مستوى جيد جداً ⭐">مستوى جيد جداً ⭐</option>
+            <option value="مستوى جيد 👍">مستوى جيد 👍</option>
+            <option value="يحتاج مراجعة دقيقة 📖">يحتاج مراجعة دقيقة 📖</option>
           </select>
         </div>
       </div>
@@ -336,7 +336,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
-    <button class="submit-btn" id="btn-save-cert" onclick="saveAndGenerateCertificate()">✨ الحفظ واستخراج الشهادة</button>
+    <button class="submit-btn" id="btn-save-report" onclick="saveAndGenerateReport()">💾 حفظ وإصدار تقرير المتابعة لولي الأمر</button>
   </div>
 </div>
 
@@ -415,7 +415,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     const cleanName = name.trim();
 
     try {
-      // التحقق من التكرار
       const snapshot = await studentsCollection.where('name', '==', cleanName).get();
       if (!snapshot.empty) {
         customAlert("⚠️ الطالب (" + cleanName + ") مسجل بالفعل في قاعدة البيانات!");
@@ -440,24 +439,24 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   }
 
-  // الحفظ واستخراج الشهادة وحفظ التقرير في قاعدة البيانات
-  async function saveAndGenerateCertificate() {
+  // الحفظ واستخراج تقرير المتابعة وحفظ البيانات في قاعدة البيانات
+  async function saveAndGenerateReport() {
     var studentName = document.getElementById('inp-student').value.trim();
     if (!studentName) {
       customAlert('⚠️ يرجى إدخال اسم البطل أولاً.');
       return;
     }
 
-    var btn = document.getElementById('btn-save-cert');
+    var btn = document.getElementById('btn-save-report');
     var originalText = btn.innerHTML;
-    btn.innerHTML = 'جاري الحفظ واستخراج الشهادة... ⏳';
+    btn.innerHTML = 'جاري الحفظ وإعداد التقرير... ⏳';
     btn.disabled = true;
 
     var generalRating = document.getElementById('inp-general-rating').value;
     var data = {};
     SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
 
-    // تجهيز نص التقرير المختصر للجدول
+    // تجهيز نص التقرير للفايربيس
     const now = new Date();
     const dateStr = now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
     
@@ -478,7 +477,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
     const newReportTx = {
       date: dateStr,
-      type: 'تقرير تقييم',
+      type: 'تقرير متابعة',
       desc: descParts.join(' | '),
       amount: generalRating,
       isPay: true,
@@ -486,18 +485,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     };
 
     try {
-      // البحث عن الطالب في قاعدة البيانات أو إنشائه إن لم يكن موجوداً
       const snapshot = await studentsCollection.where('name', '==', studentName).get();
 
       if (!snapshot.empty) {
-        // إرفاق التقرير بالطالب الموجود
         const docRef = snapshot.docs[0].ref;
         await docRef.update({
           transactions: firebase.firestore.FieldValue.arrayUnion(newReportTx),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       } else {
-        // إضافة طالب جديد مع التقرير
         await studentsCollection.add({
           name: studentName,
           phone: '',
@@ -513,10 +509,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
     try {
       var adviceLines = getPersonalizedAdvice(data);
-      var appCanvas = await drawAppreciationReport(studentName, generalRating, adviceLines);
-      showSingleImageModal(appCanvas, 'شهادة_تقييم_' + studentName + '.jpg');
+      var reportCanvas = await drawDetailedFollowUpReport(studentName, generalRating, data, adviceLines, dateStr);
+      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg');
     } catch (e) {
-      customAlert('حدث خطأ أثناء إعداد الشهادة: ' + e.message);
+      customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message);
     } finally {
       btn.innerHTML = originalText;
       btn.disabled = false;
@@ -890,9 +886,9 @@ function getPersonalizedAdvice(data) {
     });
   }
   let adviceLines = [];
-  if (low.length > 0) { adviceLines.push("توجيه لولي الأمر: نوصي بشدة بالتركيز والمتابعة المنزلية المكثفة في ( " + low.join('، ') + " ) لتثبيت المادة وتجاوز الصعوبات الحالية."); }
-  if (high.length > 0) { adviceLines.push("نقاط القوة والمواطن المتميزة: ما شاء الله تبارك الله، أظهر البطل إتقاناً مبهراً وسرعة استجابة في ( " + high.join('، ') + " )، استمروا في تعزيزه وتحفيزه!"); }
-  if (adviceLines.length === 0) { adviceLines.push("نوصي بالمداومة المستمرة على مراجعة المحفوظات اليومية بانتظام لضمان المحافظة على ثبات هذا المستوى المبارك."); }
+  if (low.length > 0) { adviceLines.push("توجيه لولي الأمر: نوصي بالتركيز والمتابعة المكثفة في ( " + low.join('، ') + " ) لتثبيت المادة بشكل أفضل."); }
+  if (high.length > 0) { adviceLines.push("نقاط القوة والمواطن المتميزة: ما شاء الله، أظهر البطل إتقاناً راقياً في ( " + high.join('، ') + " )، استمروا في تشجيعه!"); }
+  if (adviceLines.length === 0) { adviceLines.push("نوصي بالمداومة المستمرة على مراجعة المحفوظات اليومية بانتظام لضمان ثبات هذا المستوى المبارك."); }
   return adviceLines;
 }
 
@@ -907,7 +903,7 @@ async function loadFonts(){
     await Promise.all([
       document.fonts.load('900 46px Cairo'), document.fonts.load('800 32px Cairo'), document.fonts.load('700 28px Cairo'),
       document.fonts.load('700 24px Cairo'), document.fonts.load('600 22px Cairo'), document.fonts.load('400 20px Cairo'),
-      document.fonts.load('700 44px Amiri'), document.fonts.load('italic 700 44px Amiri'), document.fonts.load('700 36px Amiri')
+      document.fonts.load('700 44px Amiri'), document.fonts.load('700 36px Amiri')
     ]);
   } catch(e) {}
 }
@@ -921,87 +917,215 @@ function wrapText(ctx, text, maxWidth){
   if(cur) lines.push(cur); return lines.length ? lines : [''];
 }
 
-function drawRoyalPill(ctx, text, anchorX, y, opts){
-  opts = opts || {}; ctx.save(); ctx.font = opts.font || '800 24px Cairo, sans-serif';
-  var padX = opts.padX != null ? opts.padX : 28; var h = opts.h || 48;
-  var w = ctx.measureText(text).width + padX * 2.5;
-  var left = opts.align === 'left' ? anchorX : (opts.align === 'center' ? anchorX - w/2 : anchorX - w);
-  if(opts.draw !== false){
-    ctx.beginPath(); ctx.moveTo(left + 15, y); ctx.lineTo(left + w - 15, y);
-    ctx.quadraticCurveTo(left + w, y, left + w, y + h/2); ctx.quadraticCurveTo(left + w, y + h, left + w - 15, y + h);
-    ctx.lineTo(left + 15, y + h); ctx.quadraticCurveTo(left, y + h, left, y + h/2); ctx.quadraticCurveTo(left, y, left + 15, y); ctx.closePath();
-    ctx.fillStyle = opts.bg || '#ffffff'; ctx.fill();
-    if(opts.border){ ctx.lineWidth = opts.borderWidth || 2; ctx.strokeStyle = opts.border; ctx.stroke(); }
-    ctx.fillStyle = opts.color || '#111827'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(text, left + w/2, y + h/2 + 2);
-  }
-  ctx.restore(); return w;
-}
+// دالة رسم تقرير المتابعة الجديد المصور الشامل
+async function drawDetailedFollowUpReport(studentName, generalRating, data, adviceLines, dateStr) {
+  await loadFonts();
+  
+  // حساب الارتفاع المطلوب ديناميكياً بحسب عدد العناصر المدخلة
+  let totalRowsCount = 0;
+  SECTIONS.forEach(sec => {
+    let sData = data[sec.key];
+    if (sData) {
+      if (sData.currents && sData.currents.length) totalRowsCount += sData.currents.length;
+      if (sData.nexts && sData.nexts.length) totalRowsCount += sData.nexts.length;
+    }
+  });
 
-function drawCornerBrackets(ctx, w, h, inset, len, color){
-  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
-  function bracket(x, y, dx, dy){ ctx.beginPath(); ctx.moveTo(x, y + dy*len); ctx.lineTo(x, y); ctx.lineTo(x + dx*len, y); ctx.stroke(); }
-  bracket(inset, inset, 1, 1); bracket(w-inset, inset, -1, 1); bracket(inset, h-inset, 1, -1); bracket(w-inset, h-inset, -1, -1);
-  ctx.restore();
-}
-
-async function drawAppreciationReport(nm, rating, adviceLines) {
-  await loadFonts(); 
-  var canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1950;
+  var canvas = document.createElement('canvas'); 
+  canvas.width = 1080; 
+  canvas.height = Math.max(1600, 750 + (totalRowsCount * 95) + (adviceLines.length * 100));
   var ctx = canvas.getContext('2d');
-  var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); bgG.addColorStop(0, '#ebdcb9'); bgG.addColorStop(1, '#dfce9f'); 
-  ctx.fillStyle = bgG; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawCornerBrackets(ctx, canvas.width, canvas.height, 24, 50, '#8a6d0a');
-  
-  ctx.save(); ctx.beginPath(); ctx.arc(540, 110, 52, 0, Math.PI * 2); ctx.fillStyle = '#601212'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = '#d4af37'; ctx.stroke();
-  ctx.font = '46px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#d4af37'; ctx.fillText('🌙', 540, 112); ctx.restore();
-  
-  ctx.font = '700 46px Amiri, serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 540, 230);
-  ctx.beginPath(); ctx.moveTo(380, 270); ctx.lineTo(700, 270); ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2.5; ctx.stroke();
-  
-  var exactRating = rating.replace("مستوى ", "").trim();
-  drawRoyalPill(ctx, 'مستوى ' + exactRating, 540, 310, { font: '800 32px Cairo, sans-serif', bg: '#fdf8e6', color: '#725304', border: '#d4af37', borderWidth: 2.5, h: 64, padX: 40, align: 'center' });
-  
-  var textY = 440; ctx.font = '700 36px Amiri, serif'; ctx.fillStyle = '#111827'; ctx.textAlign = 'right';
-  var p1 = 'مِنْ مَرْكَزِ خَادِمِ الْقُرْآنِ الْكَرِيمِ، إِلَى وَلِيِّ أَمْرِ الْبَطَلِ الْمُبَارَكِ: ' + nm + ' (حَفِظَهُ اللَّهُ)؛';
-  var p2 = 'سَلَامٌ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ؛ أَمَّا بَعْدُ:';
-  var p3 = 'تَفَضَّلُوا تَقْرِيرَ الْبَطَلِ الْكَرِيمِ الَّذِي أَبْدَعَ وَأَظْهَرَ تَفَوُّقاً مَلْحُوظاً فِي مَسَارِ التَّلَقِّي وَالْإِتْقَانِ، وَنَحْنُ إِذْ نُقَدِّمُ لَكُمْ هَذَا الْحَصَادَ الْمُفَصَّلَ، نُوصِيهِ بِالْمُدَاوَمَةِ عَلَى هَذَا النَّهْجِ الرَّائِعِ لِيَبْقَى كِتَابُ اللَّهِ رَاسِخاً عَمِيقاً فِي قَلْبِهِ.';
-  var p4 = 'فَنَسْأَلُ اللَّهَ الْعَلِيَّ الْقَدِيرَ أَنْ يَجْعَلَهُ مِنْ حَمَلَةِ كِتَابِهِ الْعَامِلِينَ بِهِ، وَأَنْ يُقِرَّ بِهِ عُيُونَ وَالِدَيْهِ.';
-  var maxW = 900;
-  var allParagraphs = [wrapText(ctx, p1, maxW), wrapText(ctx, p2, maxW), wrapText(ctx, p3, maxW), wrapText(ctx, p4, maxW)];
-  ctx.textBaseline = 'top';
-  allParagraphs.forEach(function(lines) {
-    lines.forEach(function(line) { ctx.fillText(line, 990, textY); textY += 54; }); textY += 34;
-  });
-  
-  var boxY = textY + 10; var boxW = 900; var boxX = 90;
-  var calculatedBoxH = 80; ctx.font = '600 28px Cairo, sans-serif';
-  adviceLines.forEach(function(line) { var linesCount = wrapText(ctx, line, 820).length; calculatedBoxH += (linesCount * 48) + 28; });
-  calculatedBoxH = Math.max(calculatedBoxH, 320);
 
-  rr(ctx, boxX, boxY, boxW, calculatedBoxH, 24); ctx.fillStyle = 'rgba(4, 32, 26, 0.05)'; ctx.fill(); ctx.strokeStyle = '#0b3d2e'; ctx.lineWidth = 2.5; ctx.stroke();
-  ctx.font = '800 32px Cairo, sans-serif'; ctx.fillStyle = '#04201a'; ctx.textAlign = 'right';
-  ctx.fillText('📊 التوجيهات التربوية والنصائح المخصصة لولي الأمر:', 940, boxY + 38);
+  // الخلفية الإبداعية للتقرير
+  var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
+  bgG.addColorStop(0, '#fbfaf5'); 
+  bgG.addColorStop(1, '#f3eee0'); 
+  ctx.fillStyle = bgG; 
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  var insideTextY = boxY + 105;
-  adviceLines.forEach(function(line) {
-    ctx.textAlign = 'right';
-    if (line.startsWith("توجيه")) { ctx.fillStyle = '#b91c1c'; ctx.font = '700 28px Cairo, sans-serif'; } 
-    else if (line.startsWith("نقاط")) { ctx.fillStyle = '#15803d'; ctx.font = '700 28px Cairo, sans-serif'; } 
-    else { ctx.fillStyle = '#111827'; ctx.font = '600 28px Cairo, sans-serif'; }
-    var wrapped = wrapText(ctx, line, 820);
-    wrapped.forEach(function(l) { ctx.fillText(l, 940, insideTextY); insideTextY += 48; });
-    insideTextY += 16;
+  // إطار خارجي فخم
+  rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
+  ctx.strokeStyle = '#0b3d2e';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  // الهيدر الرئيسي بالصورة
+  rr(ctx, 35, 35, canvas.width - 70, 190, 18);
+  var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  hdrGradient.addColorStop(0, '#04201a');
+  hdrGradient.addColorStop(1, '#0b3d2e');
+  ctx.fillStyle = hdrGradient;
+  ctx.fill();
+
+  // إطار ذهبي داخلي للهيدر
+  rr(ctx, 40, 40, canvas.width - 80, 180, 14);
+  ctx.strokeStyle = '#d4af37';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // نصوص الهيدر
+  ctx.font = '800 36px Cairo, sans-serif';
+  ctx.fillStyle = '#fef08a';
+  ctx.textAlign = 'center';
+  ctx.fillText('🕌 مركز خادم القرآن الكريم 🕌', 540, 90);
+
+  ctx.font = '700 22px Cairo, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('بطاقة متابعة وتقييم المستوى - إشراف الشيخ عبدالرحمن', 540, 135);
+
+  ctx.font = '600 18px Cairo, sans-serif';
+  ctx.fillStyle = '#d4af37';
+  ctx.fillText('التاريخ: ' + dateStr, 540, 175);
+
+  // كارت بيانات الطالب والتقييم العام
+  var curY = 250;
+  rr(ctx, 40, curY, canvas.width - 80, 110, 16);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = '800 28px Cairo, sans-serif';
+  ctx.fillStyle = '#04201a';
+  ctx.textAlign = 'right';
+  ctx.fillText('اسم البطل الكريم: ' + studentName, 980, curY + 45);
+
+  ctx.font = '700 22px Cairo, sans-serif';
+  ctx.fillStyle = '#725304';
+  ctx.fillText('التقييم العام: ' + generalRating, 980, curY + 85);
+
+  curY += 135;
+
+  // رسم الأقسام والبنود
+  SECTIONS.forEach(sec => {
+    let sData = data[sec.key];
+    let hasCurrents = sData && sData.currents && sData.currents.length > 0;
+    let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
+
+    if (hasCurrents || hasNexts) {
+      // عنوان القسم الرئيسي
+      rr(ctx, 40, curY, canvas.width - 80, 50, 10);
+      ctx.fillStyle = '#0b3d2e';
+      ctx.fill();
+
+      ctx.font = '800 22px Cairo, sans-serif';
+      ctx.fillStyle = '#fef08a';
+      ctx.textAlign = 'right';
+      ctx.fillText(sec.icon + ' ' + sec.title, 980, curY + 34);
+      curY += 65;
+
+      // رسم الحفظ والماضي الحالي
+      if (hasCurrents) {
+        sData.currents.forEach(item => {
+          let itemTitle = "";
+          if (item.sr) {
+            itemTitle = "سورة " + item.sr + (item.type === 'range' ? ` (من آية ${item.f} إلى ${item.t})` : ' (كاملة)');
+          } else if (item.f && item.t) {
+            let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
+            itemTitle = `${unit} من ${item.f} إلى ${item.t}`;
+          }
+
+          if (itemTitle) {
+            rr(ctx, 55, curY, canvas.width - 110, 75, 12);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // النص
+            ctx.font = '700 20px Cairo, sans-serif';
+            ctx.fillStyle = '#111827';
+            ctx.textAlign = 'right';
+            ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 960, curY + 32);
+
+            // التقييم والأخطاء
+            let rateTxt = item.rating ? item.rating : 'تم التسميع';
+            let errTxt = (item.errors && item.errors !== '0') ? ` (الأخطاء: ${item.errors})` : ' (بدون أخطاء ✨)';
+
+            ctx.font = '600 18px Cairo, sans-serif';
+            ctx.fillStyle = (item.errors && item.errors !== '0') ? '#b91c1c' : '#15803d';
+            ctx.fillText(rateTxt + errTxt, 960, curY + 60);
+
+            curY += 85;
+          }
+        });
+      }
+
+      // رسم الخطة القادمة
+      if (hasNexts) {
+        sData.nexts.forEach(item => {
+          let planTitle = "";
+          if (item.nextPlanSr) {
+            planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (من آية ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
+          } else if (item.nextPlanF && item.nextPlanT) {
+            let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
+            planTitle = `${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
+          }
+
+          if (planTitle) {
+            rr(ctx, 55, curY, canvas.width - 110, 50, 10);
+            ctx.fillStyle = '#fffbe2';
+            ctx.fill();
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            ctx.font = '700 19px Cairo, sans-serif';
+            ctx.fillStyle = '#854d0e';
+            ctx.textAlign = 'right';
+            ctx.fillText('🎯 الخطة والواجب القادم: ' + planTitle, 960, curY + 32);
+
+            curY += 60;
+          }
+        });
+      }
+
+      curY += 10;
+    }
   });
-  
-  var sigY = boxY + calculatedBoxH + 90;
-  ctx.save(); ctx.beginPath(); ctx.arc(220, sigY + 50, 65, 0, Math.PI*2); ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)'; ctx.lineWidth = 3; ctx.stroke();
-  ctx.beginPath(); ctx.arc(220, sigY + 50, 58, 0, Math.PI*2); ctx.setLineDash([4, 3]); ctx.stroke();
-  ctx.font = '700 16px Cairo, sans-serif'; ctx.fillStyle = 'rgba(138, 109, 10, 0.6)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('مركز خادم القرآن', 220, sigY + 38); ctx.fillText('مُعتمد 🛡️', 220, sigY + 62); ctx.restore();
-  
-  ctx.font = '700 28px Cairo, sans-serif'; ctx.fillStyle = '#601212'; ctx.textAlign = 'center'; ctx.fillText('✍️ مُشْرِفُ مَسَارِ الْحِفْظِ وَالتَّقْيِيمِ', 250, sigY);
-  ctx.font = 'italic 700 44px Amiri, serif'; ctx.fillStyle = '#0b3d2e'; ctx.fillText('الشيخ عبد الرحمن', 250, sigY + 65);
+
+  // كارت التوجيهات والملاحظات المخصصة لولي الأمر
+  curY += 10;
+  rr(ctx, 40, curY, canvas.width - 80, 60 + (adviceLines.length * 45), 16);
+  ctx.fillStyle = '#f8fafc';
+  ctx.fill();
+  ctx.strokeStyle = '#0b3d2e';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = '800 22px Cairo, sans-serif';
+  ctx.fillStyle = '#04201a';
+  ctx.textAlign = 'right';
+  ctx.fillText('💡 توجيهات وملاحظات لولي الأمر الكريم:', 980, curY + 40);
+
+  let advY = curY + 75;
+  adviceLines.forEach(line => {
+    ctx.font = '600 18px Cairo, sans-serif';
+    if (line.startsWith("توجيه")) ctx.fillStyle = '#b91c1c';
+    else if (line.startsWith("نقاط")) ctx.fillStyle = '#15803d';
+    else ctx.fillStyle = '#111827';
+
+    var wrapped = wrapText(ctx, line, 900);
+    wrapped.forEach(l => {
+      ctx.fillText(l, 960, advY);
+      advY += 32;
+    });
+    advY += 10;
+  });
+
+  // التوقيع السفلي للتقرير
+  var footerY = canvas.height - 90;
+  ctx.font = '700 20px Cairo, sans-serif';
+  ctx.fillStyle = '#0b3d2e';
+  ctx.textAlign = 'center';
+  ctx.fillText('مشرف المسار والتقييم: الشيخ عبدالرحمن', 540, footerY);
+
+  ctx.font = '600 16px Cairo, sans-serif';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText('مركز خادم القرآن الكريم - تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 30);
+
   return canvas;
 }
 
@@ -1024,7 +1148,7 @@ function showSingleImageModal(canvasElement, downloadName) {
   btnWrap.appendChild(closeBtn);
 
   var shareBtn = document.createElement('button');
-  shareBtn.innerHTML = '🔗 مشاركة الشهادة مباشرة';
+  shareBtn.innerHTML = '📲 مشاركة التقرير مع ولي الأمر';
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
@@ -1035,16 +1159,16 @@ function showSingleImageModal(canvasElement, downloadName) {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'شهادة تقدير',
-            text: 'شهادة تقدير بطل مركز خادم القرآن الكريم'
+            title: 'تقرير متابعة',
+            text: 'تقرير متابعة وتقييم بطل مركز خادم القرآن الكريم'
           });
         } else {
           var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-          customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ الشهادة في الجهاز بدلاً من ذلك.');
+          customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ التقرير على جهازك بدلاً من ذلك.');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
-      var a = document.href = imgPreview.src; a.download = downloadName; a.click();
+      var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
     }
   };
   
