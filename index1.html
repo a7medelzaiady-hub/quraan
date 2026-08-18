@@ -3,9 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن - نظام المتابعة الذكي</title>
+<title>مركز خادم القرآن - نظام المتابعة والشهادات</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+
+<!-- مكتبات Firebase JS SDK (Compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
 <style>
 :root {
   --green-deep: #04201a;
@@ -29,10 +34,29 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
   padding: 24px 16px; 
   text-align: center; 
   border-bottom: 4px solid var(--gold); 
+  position: relative;
 }
 .hdr-emblem { width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(212, 175, 55, 0.15); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
+
+/* زر الانتقال لصفحة الإدارة */
+.manage-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: var(--green-deep);
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 13.5px;
+  text-decoration: none;
+  margin-top: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
+.manage-nav-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
 
 /* شريط نظام الأخطاء العلوي */
 .system-selector-wrap {
@@ -103,7 +127,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* تنسيق عداد الأخطاء التفاعلي */
+/* عداد الأخطاء التفاعلي */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
@@ -119,58 +143,24 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
 .submit-btn:active { transform: scale(0.98); }
 
-/* نافذة مصحف التسميع الفعلي المتجاوب وعرض الآيات نصاً */
+/* مصحف التسميع الفعلي */
 .quran-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 99999; align-items: center; justify-content: center; padding: 12px; }
 .quran-box { background: #fff; border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--green-mid); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
 .quran-header { background: var(--green-mid); color: var(--gold-light); padding: 16px; text-align: center; font-weight: 700; font-size: 16px; border-bottom: 2px solid var(--gold); }
 .quran-grid { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #fdfcf7; flex: 1; }
 
-/* بطاقات الآيات المقروءة والواقعية */
-.ayah-text-card { 
-  background: #ffffff; 
-  border: 1px solid #e2decb; 
-  border-radius: 12px; 
-  padding: 16px; 
-  cursor: pointer; 
-  transition: 0.2s; 
-  text-align: right; 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-  position: relative;
-  line-height: 2.2;
-}
+.ayah-text-card { background: #ffffff; border: 1px solid #e2decb; border-radius: 12px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.02); position: relative; line-height: 2.2; }
 .ayah-text-card:hover { border-color: var(--green-light); background: #faf9f2; }
-.ayah-text-card .ayah-num-badge {
-  display: inline-block;
-  background: var(--green-deep);
-  color: var(--gold-light);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 32px;
-  font-size: 13px;
-  font-weight: bold;
-  margin-left: 12px;
-  vertical-align: middle;
-}
-.ayah-text-card .ayah-content {
-  font-family: 'Amiri', serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--green-deep);
-  vertical-align: middle;
-}
-.ayah-text-card.active {
-  background: #fee2e2;
-  border-color: var(--red);
-}
+.ayah-text-card .ayah-num-badge { display: inline-block; background: var(--green-deep); color: var(--gold-light); width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-size: 13px; font-weight: bold; margin-left: 12px; vertical-align: middle; }
+.ayah-text-card .ayah-content { font-family: 'Amiri', serif; font-size: 24px; font-weight: 700; color: var(--green-deep); vertical-align: middle; }
+.ayah-text-card.active { background: #fee2e2; border-color: var(--red); }
 .ayah-text-card.active .ayah-content { color: #b91c1c; }
 .ayah-text-card.active .ayah-num-badge { background: var(--red); color: #fff; }
 
 .quran-footer { padding: 14px; background: #fff; border-top: 1px solid var(--border); text-align: center; }
 .quran-close { padding: 12px 50px; background: var(--green-deep); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; box-shadow: 0 4px 10px rgba(4, 32, 38, 0.2); }
 
-/* أزرار وواجهات إدارة الطلاب */
+/* أزرار إدارة الطلاب */
 .student-actions { display:flex; gap:8px; margin-top:10px; }
 .mini-btn { flex:1; padding:11px 8px; border-radius:10px; border:2px solid var(--green-mid); background:#fff; color:var(--green-mid); font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; font-family:'Cairo',sans-serif; transition:0.2s; }
 .mini-btn:active { background: var(--green-mid); color:#fff; transform: scale(0.97); }
@@ -204,6 +194,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
   
+  <a href="manage.html" class="manage-nav-btn"><i class="ti ti-settings"></i> صفحة إدارة النظام (manage.html)</a>
+
   <div class="system-selector-wrap">
     <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
     <div class="system-grid">
@@ -236,10 +228,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
         <div class="flbl">التقييم العام للمسار</div>
         <div class="sel-wrap">
           <select class="inp" id="inp-general-rating">
-            <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
-            <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
-            <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
+            <option value="مستوى بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
+            <option value="مستوى جيد جداً ⭐">مستوى جيد جداً ⭐</option>
+            <option value="مستوى جيد 👍">مستوى جيد 👍</option>
+            <option value="يحتاج مراجعة دقيقة 📖">يحتاج مراجعة دقيقة 📖</option>
           </select>
         </div>
       </div>
@@ -327,7 +319,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
-    <button class="submit-btn btn-combined" onclick="generateAllOutputs()">✨ استخراج التقرير والشهادة معاً</button>
+    <button class="submit-btn btn-combined" onclick="generateCertificate()">📜 استخراج وتصدير شهادة التقدير والحفظ</button>
   </div>
 </div>
 
@@ -380,6 +372,20 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 </div>
 
 <script>
+// تهيئة Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+  authDomain: "ahmedelzaiady.firebaseapp.com",
+  projectId: "ahmedelzaiady",
+  storageBucket: "ahmedelzaiady.firebasestorage.app",
+  messagingSenderId: "300306825071",
+  appId: "1:300306825071:web:0426ddde56280fa090329a",
+  measurementId: "G-WE04GK5XZZ"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 var SURAS_PLAIN=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
 
 var SURAS_CACHE = {}; 
@@ -387,6 +393,15 @@ var counters={};
 var activeErrorInputId = null;
 var currentQuranRowId = null;
 var currentQuranIsQ = false;
+
+var SECTIONS = [
+  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
+  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
+  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
+  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
+  {key:'sj', title:'السراج', icon:'💡', isQ:false},
+  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
+];
 
 function customAlert(msg) {
   var m=document.createElement('div');
@@ -426,15 +441,9 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
     } else {
       var currentErrors = inp.value;
       if (currentErrors === '0' || currentErrors.trim() === '') return;
-      
       var list = currentErrors.split('، ').filter(x => x.trim() !== '');
       if (list.length > 0) { list.pop(); }
-      
-      if (list.length === 0) {
-        inp.value = '0';
-      } else {
-        inp.value = list.join('، ');
-      }
+      inp.value = list.length === 0 ? '0' : list.join('، ');
     }
   }
 }
@@ -454,7 +463,6 @@ async function openQuranModal(errorInpId, rowId, isQ) {
       customAlert("⚠️ لا يمكن رصد الأخطاء؛ يرجى كتابة اسم السورة أولاً ثُم اختيار النطاق.");
       return;
     }
-
     typeSel = row.querySelector('.main-sel')?.value;
     title = "مصحف تسميع: سورة " + surahName;
 
@@ -567,8 +575,7 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
       displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
     }
 
-    card.innerHTML = '<span class="ayah-num-badge">' + i + '</span>' +
-                     '<span class="ayah-content">' + displayTxt + '</span>';
+    card.innerHTML = '<span class="ayah-num-badge">' + i + '</span><span class="ayah-content">' + displayTxt + '</span>';
     
     card.onclick = function() {
       var clickedNum = parseInt(this.getAttribute('data-num'));
@@ -600,12 +607,7 @@ function toggleErrorState(num, isQ) {
   }
 
   list.sort((a, b) => parseInt(a.replace(/[^\d]/g, '')) - parseInt(b.replace(/[^\d]/g, '')));
-
-  if (list.length === 0) {
-    inp.value = '0';
-  } else {
-    inp.value = list.join('، ');
-  }
+  inp.value = list.length === 0 ? '0' : list.join('، ');
 }
 
 function closeQuranModal() {
@@ -624,7 +626,7 @@ function addCurrentSurah(containerId, prefix){
     '<div class="sel-wrap"><select class="inp main-sel" id="sel-'+prefix+'-c-'+idx+'" onchange="toggleRange(\'rng-'+prefix+'-c-'+idx+'\',this.value)"><option value="full">كاملةً</option><option value="range">من/إلى</option></select></div>'+
     '<div class="range-row hidden" id="rng-'+prefix+'-c-'+idx+'" style="grid-column:1/-1;"><div class="frow"><input class="inp num main-f" type="number" placeholder="من آية"></div><div class="frow"><input class="inp num main-t" type="number" placeholder="إلى آية"></div></div>'+
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
-      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
+      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="مستوى بارك الله فيك 👑">بارك الله فيك 👑</option><option value="مستوى جيد جداً ⭐">جيد جداً ⭐</option><option value="مستوى جيد 👍">جيد 👍</option><option value="يحتاج مراجعة دقيقة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
         '<button class="counter-btn minus" type="button" onclick="handleCounterAction(\'minus\', \''+inpErrorId+'\', \''+rowId+'\', false)">-</button>'+
         '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="عدد الأخطاء ❌" value="0" readonly style="pointer-events:none;">'+
@@ -656,7 +658,7 @@ function addCurrentQuestion(containerId, prefix){
     '<div class="frow"><input class="inp num main-qf" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num main-qt" type="number" placeholder="'+pTo+'"></div>'+
     '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
-      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option></select></div>'+
+      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="مستوى بارك الله فيك 👑">بارك الله فيك 👑</option><option value="مستوى جيد جداً ⭐">جيد جداً ⭐</option><option value="مستوى جيد 👍">جيد 👍</option><option value="يحتاج مراجعة دقيقة 📖">يحتاج مراجعة 📖</option></select></div>'+
       '<div class="counter-box">'+
         '<button class="counter-btn minus" type="button" onclick="handleCounterAction(\'minus\', \''+inpErrorId+'\', \''+rowId+'\', true)">-</button>'+
         '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="عدد الأخطاء ❌" value="0" readonly style="pointer-events:none;">'+
@@ -718,38 +720,25 @@ function collectSectionData(prefix, isQ) {
 
 function getPersonalizedAdvice(data) {
   let low = []; let high = [];
-  if (typeof SECTIONS !== 'undefined' && Array.isArray(SECTIONS)) {
-    SECTIONS.forEach(sec => {
-      let sectionData = data[sec.key];
-      if (sectionData && Array.isArray(sectionData.currents)) {
-        sectionData.currents.forEach(item => {
-          let name = "";
-          if (item.sr) { name = "سورة " + item.sr; } 
-          else if (item.f && item.t) { var unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال'; name = sec.title + " (" + unit + " " + item.f + " إلى " + item.t + ")"; } 
-          else { name = sec.title; }
-          if (item.rating === 'يحتاج مراجعة 📖' || item.rating === 'جيد 👍' || (item.rating && item.rating.includes('جيد'))) { low.push(name); } 
-          else if (item.rating === 'بارك الله فيك 👑' || (item.rating && item.rating.includes('بارك الله'))) { high.push(name); }
-        });
-      }
-    });
-  }
+  SECTIONS.forEach(sec => {
+    let sectionData = data[sec.key];
+    if (sectionData && Array.isArray(sectionData.currents)) {
+      sectionData.currents.forEach(item => {
+        let name = "";
+        if (item.sr) { name = "سورة " + item.sr; } 
+        else if (item.f && item.t) { var unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال'; name = sec.title + " (" + unit + " " + item.f + " إلى " + item.t + ")"; } 
+        else { name = sec.title; }
+        if (item.rating.includes('يحتاج') || item.rating.includes('جيد 👍')) { low.push(name); } 
+        else if (item.rating.includes('بارك الله')) { high.push(name); }
+      });
+    }
+  });
   let adviceLines = [];
   if (low.length > 0) { adviceLines.push("توجيه لولي الأمر: نوصي بشدة بالتركيز والمتابعة المنزلية المكثفة في ( " + low.join('، ') + " ) لتثبيت المادة وتجاوز الصعوبات الحالية."); }
   if (high.length > 0) { adviceLines.push("نقاط القوة والمواطن المتميزة: ما شاء الله تبارك الله، أظهر البطل إتقاناً مبهراً وسرعة استجابة في ( " + high.join('، ') + " )، استمروا في تعزيزه وتحفيزه!"); }
   if (adviceLines.length === 0) { adviceLines.push("نوصي بالمداومة المستمرة على مراجعة المحفوظات اليومية بانتظام لضمان المحافظة على ثبات هذا المستوى المبارك."); }
   return adviceLines;
 }
-
-var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
-var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
-var SECTIONS = [
-  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
-  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
-  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
-  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
-  {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
-];
 
 function rr(ctx,x,y,w,h,r){
   ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
@@ -763,8 +752,7 @@ async function loadFonts(){
   try {
     await Promise.all([
       document.fonts.load('900 46px Cairo'), document.fonts.load('800 32px Cairo'), document.fonts.load('700 28px Cairo'),
-      document.fonts.load('700 24px Cairo'), document.fonts.load('600 22px Cairo'), document.fonts.load('400 20px Cairo'),
-      document.fonts.load('700 44px Amiri'), document.fonts.load('italic 700 44px Amiri'), document.fonts.load('700 36px Amiri')
+      document.fonts.load('700 44px Amiri'), document.fonts.load('italic 700 44px Amiri')
     ]);
   } catch(e) {}
 }
@@ -795,13 +783,6 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
   ctx.restore(); return w;
 }
 
-function ratingStyle(rating){
-  if(rating.indexOf('بارك الله')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
-  if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fefce8', color:'#854d0e', border:'#eab308'};
-  if(rating.indexOf('جيد')>-1) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
-  return {bg:'#fef2f2', color:'#991b1b', border:'#ef4444'};
-}
-
 function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
   function bracket(x, y, dx, dy){ ctx.beginPath(); ctx.moveTo(x, y + dy*len); ctx.lineTo(x, y); ctx.lineTo(x + dx*len, y); ctx.stroke(); }
@@ -809,153 +790,7 @@ function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.restore();
 }
 
-function drawSectionHeader(ctx, sec, rightX, y, draw){
-  var r = 32; var cx = rightX - r;
-  if(draw){
-    ctx.save(); var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r); g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
-    ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = PALETTE.goldLt; ctx.fillText(sec.icon, cx, y+r+2);
-    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
-  }
-  return 2*r + 26;
-}
-
-function renderItemCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var leftX  = x + CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var mainTxt, subTxt = null;
-  if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
-  else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
-  ctx.font = '700 26px Cairo, sans-serif'; var tagW = subTxt ? (ctx.measureText(subTxt).width + 65) : 0;
-  ctx.font = '900 44px Cairo, sans-serif'; var titleLines = wrapText(ctx, mainTxt, Math.max(innerW - tagW, innerW * 0.5));
-  var titleBlockH = titleLines.length * 52;
-  if(draw){
-    titleLines.forEach(function(line, i){
-      ctx.font = '900 44px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 36 + i*52);
-    });
-  }
-  if(subTxt){
-    var tagY = cy + Math.max(0, titleBlockH/2 - 25);
-    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 26px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:50, padX:20, align:'left', draw:draw});
-  }
-  cy += titleBlockH + 24;
-  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null && item.errors !== '0';
-  if(hasRating || hasErrors || item.errors === '0'){
-    if(hasRating){
-      var rs = ratingStyle(item.rating);
-      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 28px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:60, padX:26, align:'right', draw:draw});
-    }
-    if(item.errors !== '' && item.errors != null){
-      var isZero = (item.errors === '0'); 
-      var errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors + ' ❌') : ('عدد الأخطاء: ' + item.errors + ' ❌'));
-      var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      
-      var errorFont = item.errors.length > 20 ? '800 22px Cairo, sans-serif' : '800 28px Cairo, sans-serif';
-      drawRoyalPill(ctx, errTxt, leftX, cy, {font:errorFont, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:60, padX:26, align:'left', draw:draw});
-    }
-    cy += 82;
-  }
-  return cy - y;
-}
-
-function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var planTxt;
-  if(item.nextPlanSr){ planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); }
-  else { var u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT; }
-  ctx.font = '700 32px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
-  var boxH = 22 + 38 + planLines.length*44 + 22;
-  var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
-  if(draw){
-    rr(ctx, boxX, cy - 10, boxW, boxH, 16); ctx.fillStyle = '#fbf3d9'; ctx.fill();
-    ctx.save(); ctx.setLineDash([8,5]); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke(); ctx.restore();
-    ctx.font = '800 28px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 30);
-    planLines.forEach(function(line, i){
-      ctx.font = '700 32px Cairo, sans-serif'; ctx.fillStyle = '#5a4400';
-      ctx.fillText(line, rightX - 20, cy + 30 + 38 + 24 + i*44);
-    });
-  }
-  return boxH + CARD_PAD_Y*2 - 10;
-}
-
-function layoutReport(ctx, canvasH, nm, data, draw){
-  var y = 0;
-  if(draw){
-    ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, C_W, canvasH);
-    ctx.save(); ctx.strokeStyle = PALETTE.gold; ctx.globalAlpha = 0.045; ctx.lineWidth = 1.5;
-    for(let i = -canvasH; i < C_W*2; i += 44){ ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i - canvasH, canvasH); ctx.stroke(); }
-    ctx.restore();
-  }
-  var hH = 232;
-  if(draw){
-    var hG = ctx.createLinearGradient(0, 0, 0, hH); hG.addColorStop(0, PALETTE.deep); hG.addColorStop(1, PALETTE.mid);
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(C_W, 0); ctx.lineTo(C_W, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, 0, hH - 36); ctx.closePath(); ctx.fillStyle = hG; ctx.fill();
-    ctx.beginPath(); ctx.moveTo(0, hH - 36); ctx.quadraticCurveTo(C_W/2, hH + 36, C_W, hH - 36); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '58px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillText('🕌', C_W/2, 22);
-    ctx.font = '900 54px Amiri, serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 90); ctx.shadowColor = 'transparent';
-    ctx.font = '700 26px Cairo, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText('تحت إشراف الشيخ عبدالرحمن', C_W/2, 152);
-  }
-  y = hH;
-  var by = y - 6; var bh = 96; ctx.font = '900 44px Cairo, sans-serif';
-  var nameTxt = 'بطلنا:  ' + nm + '  🏆'; var nmW = ctx.measureText(nameTxt).width;
-  var bw = Math.min(Math.max(nmW + 100, 460), C_W - PAD*2); var fontSize = 44;
-  if(nmW + 100 > C_W - PAD*2){ fontSize = Math.max(28, Math.floor(44 * (C_W - PAD*2 - 100) / nmW)); }
-  var bx = (C_W - bw) / 2;
-  if(draw){
-    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 22; ctx.shadowOffsetY = 8;
-    var bG = ctx.createLinearGradient(bx, by, bx, by+bh); bG.addColorStop(0, PALETTE.goldLt); bG.addColorStop(0.5, PALETTE.gold); bG.addColorStop(1, '#a9800c');
-    rr(ctx, bx, by, bw, bh, 42); ctx.fillStyle = bG; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#ffffff'; ctx.stroke(); ctx.restore();
-    ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
-  }
-  y = by + bh + 34;
-  if(draw){
-    var dateTxt = hijriDate(); ctx.font = '700 24px Cairo, sans-serif';
-    var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
-    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
-  }
-  y += 38;
-  var cardX = PAD; var cardW = C_W - PAD*2;
-  SECTIONS.forEach(function(sec){
-    var sData = data[sec.key]; if(!sData || (!sData.currents.length && !sData.nexts.length)) return;
-    y += 8; var headH = drawSectionHeader(ctx, sec, cardX + cardW, y, draw); y += headH + 4;
-    sData.currents.forEach(function(item){
-      var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
-      if(draw){
-        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.07)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 6;
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
-        var rs = item.rating ? ratingStyle(item.rating) : {border: PALETTE.mid};
-        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = rs.border; ctx.fill(); ctx.restore();
-        renderItemCard(ctx, item, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-    sData.nexts.forEach(function(plan){
-      var h = renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, false);
-      if(draw){
-        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.04)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = '#e8e6df'; ctx.stroke();
-        ctx.save(); rr(ctx, cardX, y, 8, h, 4); ctx.fillStyle = PALETTE.gold; ctx.fill(); ctx.restore();
-        renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-    y += 12;
-  });
-  y += 14; var fH = 96;
-  if(draw){
-    ctx.fillStyle = PALETTE.deep; ctx.fillRect(0, y, C_W, fH);
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'transparent'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
-    ctx.font = '600 19px Cairo, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
-    drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
-  }
-  return y + fH;
-}
-
+/* رسم ونمذجة الشهادة بالأبعاد العالية */
 async function drawAppreciationReport(nm, rating, adviceLines) {
   await loadFonts(); 
   var canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 1950;
@@ -1016,14 +851,6 @@ async function drawAppreciationReport(nm, rating, adviceLines) {
   return canvas;
 }
 
-async function drawReport(nm, data){
-  await loadFonts(); var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
-  var totalH = layoutReport(tmp.getContext('2d'), 0, nm, data, false);
-  var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 700);
-  layoutReport(canvas.getContext('2d'), canvas.height, nm, data, true);
-  return canvas;
-}
-
 function showSingleImageModal(canvasElement, downloadName) {
   var modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
@@ -1043,7 +870,7 @@ function showSingleImageModal(canvasElement, downloadName) {
   btnWrap.appendChild(closeBtn);
 
   var shareBtn = document.createElement('button');
-  shareBtn.innerHTML = '🔗 مشاركة التقرير مباشر';
+  shareBtn.innerHTML = '🔗 مشاركة الشهادة مباشرة';
   shareBtn.style.cssText = 'padding:12px 24px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
@@ -1054,7 +881,7 @@ function showSingleImageModal(canvasElement, downloadName) {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             title: 'مركز خادم القرآن الكريم',
-            text: 'تقرير المتابعة والتقييم للقرآن الكريم',
+            text: 'شهادة التقدير والتقييم للقرآن الكريم',
             files: [file]
           });
         } else {
@@ -1072,7 +899,7 @@ function showSingleImageModal(canvasElement, downloadName) {
   btnWrap.appendChild(shareBtn);
 
   var downloadBtn = document.createElement('button');
-  downloadBtn.innerHTML = '⬇️ تحميل الصورة';
+  downloadBtn.innerHTML = '⬇️ تحميل الشهادة';
   downloadBtn.style.cssText = 'padding:12px 24px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
   downloadBtn.onclick = function() {
     var a = document.createElement('a');
@@ -1086,11 +913,51 @@ function showSingleImageModal(canvasElement, downloadName) {
   document.body.appendChild(modal);
 }
 
-/* ===== الدوال الإضافية لاستخراج التقرير وإدارة الحفظ المحلي ===== */
-async function generateAllOutputs() {
+/* حفظ البيانات في سيرفر Firestore + الذاكرة المحلية */
+async function saveRecordToDatabase(studentName, rating, data, advice) {
+  var timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  var dateStr = hijriDate() + ' - ' + new Date().toLocaleDateString('ar-EG');
+
+  // 1. التخزين المباشر في Firebase Firestore
+  try {
+    await db.collection("students_records").add({
+      studentName: studentName,
+      rating: rating,
+      data: data,
+      advice: advice,
+      dateString: dateStr,
+      createdAt: timestamp
+    });
+    console.log("تم حفظ بيانات التقييم على السيرفر بنجاح.");
+  } catch (e) {
+    console.error("خطأ أثناء الحفظ على السيرفر: ", e);
+  }
+
+  // 2. التخزين المحلي في LocalStorage
+  try {
+    var key = 'quran_hist_' + studentName;
+    var history = JSON.parse(localStorage.getItem(key)) || [];
+    history.unshift({
+      date: dateStr,
+      rating: rating,
+      data: data,
+      advice: advice
+    });
+    localStorage.setItem(key, JSON.stringify(history));
+    
+    var list = getSavedStudents();
+    if (!list.some(s => s.name === studentName)) {
+      list.push({ name: studentName, notes: '', date: dateStr });
+      localStorage.setItem('quran_center_students', JSON.stringify(list));
+    }
+  } catch(e) { console.error(e); }
+}
+
+/* استخراج شهادة التقدير فقط */
+async function generateCertificate() {
   var nm = document.getElementById('inp-student').value.trim();
   if (!nm) {
-    customAlert('⚠️ يرجى كتابة أو اختيار اسم البطل أولاً قبل استخراج التقرير.');
+    customAlert('⚠️ يرجى كتابة أو اختيار اسم البطل أولاً قبل استخراج الشهادة.');
     return;
   }
 
@@ -1104,25 +971,19 @@ async function generateAllOutputs() {
 
   var loadingBox = document.createElement('div');
   loadingBox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:bold;font-family:Cairo,sans-serif;text-align:center;padding:20px;';
-  loadingBox.innerHTML = 'جاري إعداد التقرير والشهادة بالرسم العالي... ⏳';
+  loadingBox.innerHTML = 'جاري حفظ البيانات على السيرفر وإنشاء الشهادة... ⏳';
   document.body.appendChild(loadingBox);
 
   try {
-    var reportCanvas = await drawReport(nm, data);
+    await saveRecordToDatabase(nm, rating, data, adviceLines);
     var certCanvas = await drawAppreciationReport(nm, rating, adviceLines);
 
-    saveRecordToHistory(nm, rating, data, adviceLines);
-
     loadingBox.remove();
-
-    showSingleImageModal(reportCanvas, 'تقرير_' + nm + '.jpg');
-    setTimeout(function() {
-      showSingleImageModal(certCanvas, 'شهادة_تقدير_' + nm + '.jpg');
-    }, 600);
+    showSingleImageModal(certCanvas, 'شهادة_تقدير_' + nm + '.jpg');
   } catch (err) {
     console.error(err);
     loadingBox.remove();
-    customAlert('حدث خطأ أثناء إنشاء التقرير.');
+    customAlert('حدث خطأ أثناء إنشاء الشهادة.');
   }
 }
 
@@ -1204,20 +1065,6 @@ function setupHistoryAutoComplete() {
   });
 }
 
-function saveRecordToHistory(studentName, rating, data, advice) {
-  try {
-    var key = 'quran_hist_' + studentName;
-    var history = JSON.parse(localStorage.getItem(key)) || [];
-    history.unshift({
-      date: hijriDate() + ' - ' + new Date().toLocaleDateString('ar-EG'),
-      rating: rating,
-      data: data,
-      advice: advice
-    });
-    localStorage.setItem(key, JSON.stringify(history));
-  } catch(e) { console.error(e); }
-}
-
 function loadStudentHistory(studentName) {
   document.getElementById('hist-student-search').value = studentName;
   document.getElementById('drop-hist-student').style.display = 'none';
@@ -1232,10 +1079,9 @@ function loadStudentHistory(studentName) {
   }
 
   wrap.innerHTML = history.map(function(item, idx) {
-    var rs = ratingStyle(item.rating);
     return '<div class="hist-item" onclick="toggleHistDetail(' + idx + ')">' +
       '<div class="hist-date">🗓️ ' + item.date + '</div>' +
-      '<div class="hist-rating" style="background:' + rs.bg + '; color:' + rs.color + '; border:1px solid ' + rs.border + ';">' + item.rating + '</div>' +
+      '<div class="hist-rating" style="background:#fef8e6; color:#725304; border:1px solid #d4af37;">' + item.rating + '</div>' +
       '<div class="hist-detail-box" id="hist-detail-' + idx + '">' +
         '<div class="hist-sec-title">💡 التوجيهات التربوية:</div>' +
         '<div class="hist-line">' + (item.advice ? item.advice.join('<br>') : 'لا توجد ملاحظات') + '</div>' +
