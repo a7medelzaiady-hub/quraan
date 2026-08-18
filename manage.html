@@ -338,7 +338,6 @@
     }
   }
 
-  // Hijri Helpers
   function getTxDateKey(tx) {
     if (tx.date) {
       const d = new Date(tx.date);
@@ -496,7 +495,6 @@
 
     const hijriDateStr = getHijriDateFormatted(dateKey);
 
-    // Calculate General Grade
     let overallGrade = "ممتاز بارك الله فيك";
     const grades = txs.map(t => t.amount).filter(Boolean);
     if (grades.some(g => g.includes('ممتاز'))) overallGrade = "مستوى ممتاز بارك الله فيك";
@@ -510,7 +508,7 @@
       if (catTxs.length === 0) return;
 
       categoriesHtml += `
-        <div style="background: #0d3b2e; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; margin-top: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; clip-path: polygon(0 0, 98% 0, 100% 100%, 0 100%);">
+        <div style="background: #0d3b2e; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-weight: 800; font-size: 14px; margin-top: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
           <span>${CAT_ICONS[catKey] || '📖'}</span>
           <span>${CAT_LABELS[catKey] || 'التفاصيل'}</span>
         </div>
@@ -519,17 +517,35 @@
       catTxs.forEach(tx => {
         const targetName = tx.surah || tx.type || 'البند';
         const rangeText = tx.range ? ` (${tx.range})` : '';
-        const gradeText = tx.amount ? ` &middot; <span style="color:#d4af37; font-weight:bold;">${tx.amount}</span>` : '';
-        const errText = tx.desc ? ` <span style="color:#c0392b;">(${tx.desc})</span>` : '';
 
+        // Separate Line Layout as Requested
         categoriesHtml += `
           <div style="background: #ffffff; border: 1px solid #e2ded4; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-            <div style="font-size: 13px; font-weight: 700; color: #222; margin-bottom: 6px; line-height: 1.5;">
-              <strong style="color:#0d3b2e;">الإنجاز الحالي:</strong> ${targetName}${rangeText} ${gradeText}${errText}
+            
+            <!-- السطر الأول: الإنجاز والنطاق -->
+            <div style="font-size: 13.5px; font-weight: 800; color: #0d3b2e; margin-bottom: 4px;">
+              الإنجاز الحالي: <span style="color: #222; font-weight: 700;">${targetName}${rangeText}</span>
             </div>
 
+            <!-- السطر الثاني: التقييم في سطر لوحده -->
+            ${tx.amount ? `
+              <div style="font-size: 12.5px; font-weight: 700; color: #8a6d3b; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;">
+                <span>⭐ التقييم:</span>
+                <span style="background: #fcf8e3; padding: 2px 8px; border-radius: 6px; border: 1px solid #f3e8be;">${tx.amount}</span>
+              </div>
+            ` : ''}
+
+            <!-- السطر الثالث: الأخطاء أو الملاحظات إن وجدت -->
+            ${tx.desc ? `
+              <div style="font-size: 12px; font-weight: 700; color: #c0392b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px;">
+                <span>⚠️ الملاحظات/الأخطاء:</span>
+                <span>${tx.desc}</span>
+              </div>
+            ` : ''}
+
+            <!-- السطر الرابع: الخطة والواجب القادم -->
             ${tx.nextPlan ? `
-              <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px;">
+              <div style="background: #fffdf0; border: 1px solid #f3e8be; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
                 <span style="color: #c0392b;">🎯</span>
                 <div><strong style="color: #8a6d3b;">الخطة والواجب القادم:</strong> ${tx.nextPlan}</div>
               </div>` : ''}
@@ -539,17 +555,14 @@
     });
 
     card.innerHTML = `
-      <!-- Inner Gold Border Frame -->
       <div style="border: 2px solid #d4af37; border-radius: 14px; padding: 10px; background: #fdfcf7;">
         
-        <!-- Header Green Box -->
         <div style="background: #0d3b2e; color: #ffffff; text-align: center; padding: 14px; border-radius: 10px; border: 1px solid #d4af37;">
           <div style="font-size: 18px; font-weight: 800; color: #d4af37; font-family: 'Amiri', serif;">🕌 مركز خادم القرآن الكريم 🕌</div>
           <div style="font-size: 11px; color: #eaf0e9; margin-top: 2px;">بطاقة متابعة وتقييم المستوى - إشراف الشيخ عبدالرحمن</div>
           <div style="font-size: 10.5px; color: #d4af37; margin-top: 4px;">التاريخ: ${hijriDateStr}</div>
         </div>
 
-        <!-- Student Title -->
         <div style="text-align: center; margin-top: 12px; margin-bottom: 10px;">
           <div style="font-size: 16px; font-weight: 800; color: #0d3b2e;">
             اسم البطل الكريم: <span style="color: #111;">${sName}</span>
@@ -559,12 +572,10 @@
           </div>
         </div>
 
-        <!-- Dynamic Categories -->
         <div>
           ${categoriesHtml}
         </div>
 
-        <!-- Footer -->
         <div style="text-align: center; font-size: 10px; color: #777; margin-top: 14px; border-top: 1px dashed #d4af37; padding-top: 8px;">
           مركز خادم القرآن الكريم — تطوير وتصميم النظام
         </div>
@@ -574,7 +585,6 @@
     return card;
   }
 
-  // Canvas Generation
   async function generateCanvasFromCard(card) {
     const sandbox = document.getElementById('reportSandbox');
     sandbox.innerHTML = '';
@@ -585,56 +595,50 @@
     return canvas;
   }
 
-  // Export process for single file
-  async function processSingleExport(card, filename, mode, phone) {
-    const canvas = await generateCanvasFromCard(card);
-
-    if (mode === 'image') {
-      const link = document.createElement('a');
-      link.download = filename;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } else if (mode === 'whatsapp') {
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        const file = new File([blob], filename, { type: 'image/png' });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: 'تقرير متابعة الحفظ',
-              text: `تقرير الطالب من مركز خادم القرآن الكريم`
-            });
-          } catch (e) { console.log('إلغاء المشاركة'); }
-        } else {
-          const link = document.createElement('a');
-          link.download = filename;
-          link.href = URL.createObjectURL(blob);
-          link.click();
-
-          setTimeout(() => {
-            const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
-            const msg = encodeURIComponent(`السلام عليكم، مرفق تقرير الطالب من مركز خادم القرآن الكريم.`);
-            const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
-            window.open(url, '_blank');
-          }, 600);
-        }
-      }, 'image/png');
-    }
-  }
-
-  // Export Selected Day
-  function exportSelectedDay(mode) {
+  // Single Day Export
+  async function exportSelectedDay(mode) {
     if (!currentSelectedStudent || !currentSelectedDateKey) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
     const txs = getTxsForDate(currentSelectedStudent, currentSelectedDateKey);
 
     const card = buildSingleDayReportCard(sName, currentSelectedDateKey, txs);
-    processSingleExport(card, `تقرير_${sName}_${currentSelectedDateKey}.png`, mode, currentSelectedStudent.phone);
+    const canvas = await generateCanvasFromCard(card);
+
+    if (mode === 'image') {
+      const link = document.createElement('a');
+      link.download = `تقرير_${sName}_${currentSelectedDateKey}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } else if (mode === 'whatsapp') {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], `تقرير_${sName}_${currentSelectedDateKey}.png`, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: 'تقرير متابعة الحفظ',
+              text: `تقرير الطالب ${sName}`
+            });
+          } catch (e) {}
+        } else {
+          const link = document.createElement('a');
+          link.download = file.name;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+
+          setTimeout(() => {
+            const cleanPhone = currentSelectedStudent.phone ? currentSelectedStudent.phone.replace(/[^0-9]/g, '') : '';
+            const msg = encodeURIComponent(`السلام عليكم، مرفق تقرير الطالب ${sName} من مركز خادم القرآن الكريم.`);
+            const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
+            window.open(url, '_blank');
+          }, 500);
+        }
+      }, 'image/png');
+    }
   }
 
-  // Export FULL RECORD as SEPARATE IMAGES
+  // FULL RECORD Export (Fixes Single File Restriction)
   async function exportFullRecord(mode) {
     if (!currentSelectedStudent) return;
     const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'الطالب';
@@ -642,16 +646,61 @@
 
     if (dates.length === 0) return;
 
-    alert(`سيتم استخراج وتصدير عدد (${dates.length}) تقرير بصور منفصلة الآن...`);
+    alert(`جاري تجهيز (${dates.length}) صور لجميع الأيام... الرجاء الانتظار لحين الاكتفاء.`);
 
+    const filesArray = [];
+
+    // Render all canvases into files
     for (let i = 0; i < dates.length; i++) {
       const dateKey = dates[i];
       const txs = getTxsForDate(currentSelectedStudent, dateKey);
       const card = buildSingleDayReportCard(sName, dateKey, txs);
+      const canvas = await generateCanvasFromCard(card);
 
-      await processSingleExport(card, `تقرير_${sName}_يوم_${dateKey}.png`, mode, currentSelectedStudent.phone);
-      // Small delay between multiple downloads
-      await new Promise(r => setTimeout(r, 600));
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      const file = new File([blob], `تقرير_${sName}_${dateKey}.png`, { type: 'image/png' });
+      filesArray.push({ file, dataUrl: canvas.toDataURL('image/png') });
+    }
+
+    if (mode === 'whatsapp') {
+      const pureFiles = filesArray.map(f => f.file);
+
+      // Web Share API multi-file
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: pureFiles })) {
+        try {
+          await navigator.share({
+            files: pureFiles,
+            title: `تقارير الطالب ${sName}`,
+            text: `جميع تقارير متابعة الطالب ${sName}`
+          });
+          return;
+        } catch (e) { console.log('مشاركة مكنسلة'); }
+      }
+
+      // Fallback if browser blocks multi-share
+      alert("سيتم تنزيل الصور أولاً ثم فتح الواتساب للتسهيل.");
+      for (let i = 0; i < filesArray.length; i++) {
+        const link = document.createElement('a');
+        link.download = filesArray[i].file.name;
+        link.href = filesArray[i].dataUrl;
+        link.click();
+        await new Promise(r => setTimeout(r, 1200));
+      }
+
+      const cleanPhone = currentSelectedStudent.phone ? currentSelectedStudent.phone.replace(/[^0-9]/g, '') : '';
+      const msg = encodeURIComponent(`السلام عليكم، مرفق جميع تقارير المتابعة للرصيد الكامل للطالب ${sName}.`);
+      const url = cleanPhone ? `https://wa.me/2${cleanPhone}?text=${msg}` : `https://api.whatsapp.com/send?text=${msg}`;
+      window.open(url, '_blank');
+
+    } else if (mode === 'image') {
+      // Multiple image downloads with safety delay to prevent browser block
+      for (let i = 0; i < filesArray.length; i++) {
+        const link = document.createElement('a');
+        link.download = filesArray[i].file.name;
+        link.href = filesArray[i].dataUrl;
+        link.click();
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
   }
 
