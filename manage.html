@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة الطلاب والحركات</title>
+  <style>
+    :root {
+      --primary-color: #0e6251;
+      --secondary-color: #117a65;
+      --bg-color: #f4f6f7;
+      --card-bg: #ffffff;
+      --text-color: #2c3e50;
+      --border-color: #d5dbdb;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-color); color: var(--text-color); padding: 15px; }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* Header Styling */
+    .header { background: var(--primary-color); color: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header h2 { font-size: 18px; }
+    .btn-main { background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+    /* Card Box */
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border-color); }
+
+    /* Custom Dropdown Input (مثل الصورة) */
+    .autocomplete-container { position: relative; width: 100%; margin-bottom: 15px; }
+    .input-label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #555; }
+    .search-input { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 16px; outline: none; transition: 0.3s; }
+    .search-input:focus { border-color: var(--primary-color); }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-top: 4px;
+      max-height: 220px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      z-index: 1000;
+      display: none;
+    }
+    .dropdown-item { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background-color: #e8f8f5; color: var(--primary-color); }
+
+    /* Student List Cards */
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
+    .student-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; cursor: pointer; transition: 0.2s; }
+    .student-card:hover { transform: translateY(-3px); border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .student-name { font-weight: bold; font-size: 16px; color: var(--primary-color); }
+    .student-info { font-size: 13px; color: #7f8c8d; margin-top: 5px; }
+
+    /* Transactions Table (كشف الحركات) */
+    .view-section { display: none; }
+    .view-section.active { display: block; }
+    .back-btn { background: #7f8c8d; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+    th, td { text-align: right; padding: 12px; border-bottom: 1px solid var(--border-color); }
+    th { background-color: #e8f8f5; color: var(--primary-color); }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; color: white; }
+    .badge-pay { background-color: #27ae60; }
+    .badge-fee { background-color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- Header -->
+  <div class="header">
+    <h2 id="page-title">صفحة الطلاب</h2>
+    <button class="btn-main" onclick="showView('main-view')">الرئيسية</button>
+  </div>
+
+  <!-- MAIN VIEW: القائمة وحقل البحث المنسدل -->
+  <div id="main-view" class="view-section active">
+    
+    <div class="card">
+      <div class="autocomplete-container">
+        <label class="input-label">بحث سريع عن طالب (مثل تصميم العملاء):</label>
+        <input type="text" id="studentSearchInput" class="search-input" placeholder="اكتب اسم الطالب..." autocomplete="off">
+        <div id="customDropdown" class="dropdown-menu"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>جميع الطلاب</h3>
+      <div id="studentsGrid" class="students-grid"></div>
+    </div>
+
+  </div>
+
+  <!-- STUDENT DETAIL VIEW: ملف الطالب وكشف الحركات -->
+  <div id="student-detail-view" class="view-section">
+    <button class="back-btn" onclick="showView('main-view')">← العودة لقائمة الطلاب</button>
+    
+    <div class="card">
+      <h2 id="detailName" style="color: var(--primary-color);">اسم الطالب</h2>
+      <p id="detailPhone" style="color: #666; margin-top: 5px;"></p>
+      <div style="display: flex; gap: 20px; margin-top: 15px; background: #e8f8f5; padding: 15px; border-radius: 8px;">
+        <div><strong>إجمالي الحركات:</strong> <span id="detailTotalOps">0</span></div>
+        <div><strong>الرصيد / المتبقي:</strong> <span id="detailBalance" style="color: #e74c3c; font-weight: bold;">0 ج.م</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>سِجل الحركات والعمليات</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>التاريخ والوقت</th>
+            <th>نوع الحركة</th>
+            <th>البيان / التفاصيل</th>
+            <th>المبلغ</th>
+          </tr>
+        </thead>
+        <tbody id="transactionsBody">
+          <!-- الحركات تظهر هنا -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // بيانات افتراضية للطلاب وحركاتهم
+  const studentsData = [
+    {
+      id: 1,
+      name: "ضياء بلطيم شارع المستشفى",
+      phone: "01012345678",
+      balance: "150 ج.م",
+      transactions: [
+        { date: "2026/08/18 03:00 م", type: "رسوم درس", desc: "مصاريف شهر أغسطس", amount: "-200 ج.م", isPay: false },
+        { date: "2026/08/18 03:05 م", type: "تحصيل نقدًا", desc: "دفعة من المصاريف", amount: "+50 ج.م", isPay: true }
+      ]
+    },
+    {
+      id: 2,
+      name: "علاء غانم الحلافي",
+      phone: "01123456789",
+      balance: "0 ج.م",
+      transactions: [
+        { date: "2026/08/15 10:15 ص", type: "تحصيل نقدًا", desc: "سداد كامل المستحقات", amount: "+300 ج.م", isPay: true }
+      ]
+    },
+    {
+      id: 3,
+      name: "محمد بهوت",
+      phone: "01234567890",
+      balance: "100 ج.م",
+      transactions: [
+        { date: "2026/08/10 01:20 م", type: "كتب ومذكرات", desc: "شراء مذكرة المراجعة", amount: "-100 ج.م", isPay: false }
+      ]
+    },
+    {
+      id: 4,
+      name: "رزق المنشيه الشرقيه",
+      phone: "01543216789",
+      balance: "0 ج.م",
+      transactions: []
+    },
+    {
+      id: 5,
+      name: "محمد زغلول",
+      phone: "01098765432",
+      balance: "50 ج.م",
+      transactions: [
+        { date: "2026/08/01 11:00 ص", type: "رسوم درس", desc: "حصص مراجعة", amount: "-50 ج.م", isPay: false }
+      ]
+    }
+  ];
+
+  const searchInput = document.getElementById('studentSearchInput');
+  const dropdown = document.getElementById('customDropdown');
+  const studentsGrid = document.getElementById('studentsGrid');
+
+  // 1. تشغيل قائمة البحث المنسدلة الذكية (Auto-complete)
+  searchInput.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    dropdown.innerHTML = '';
+
+    if (query === '') {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    const filtered = studentsData.filter(s => s.name.toLowerCase().includes(query));
+
+    if (filtered.length > 0) {
+      filtered.forEach(student => {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item';
+        item.textContent = student.name;
+        item.onclick = () => {
+          searchInput.value = student.name;
+          dropdown.style.display = 'none';
+          openStudentProfile(student.id);
+        };
+        dropdown.appendChild(item);
+      });
+      dropdown.style.display = 'block';
+    } else {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // إخفاء القائمة عند النقر خارجها
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.autocomplete-container')) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // 2. عرض كروت جميع الطلاب في الصفحة الرئيسية
+  function renderStudentsList() {
+    studentsGrid.innerHTML = '';
+    studentsData.forEach(student => {
+      const card = document.createElement('div');
+      card.className = 'student-card';
+      card.onclick = () => openStudentProfile(student.id);
+      card.innerHTML = `
+        <div class="student-name">${student.name}</div>
+        <div class="student-info">الهاتف: ${student.phone}</div>
+        <div class="student-info" style="margin-top:8px; font-weight:bold; color:#e74c3c;">المتبقي: ${student.balance}</div>
+      `;
+      studentsGrid.appendChild(card);
+    });
+  }
+
+  // 3. فتح صفحة الطالب الخاصة واستعراض حركاته
+  function openStudentProfile(studentId) {
+    const student = studentsData.find(s => s.id === studentId);
+    if (!student) return;
+
+    document.getElementById('detailName').textContent = student.name;
+    document.getElementById('detailPhone').textContent = "رقم الهاتف: " + student.phone;
+    document.getElementById('detailTotalOps').textContent = student.transactions.length;
+    document.getElementById('detailBalance').textContent = student.balance;
+
+    const tbody = document.getElementById('transactionsBody');
+    tbody.innerHTML = '';
+
+    if (student.transactions.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">لا توجد حركات مسجلة لهذا الطالب</td></tr>';
+    } else {
+      student.transactions.forEach(tx => {
+        const tr = document.createElement('tr');
+        const badgeClass = tx.isPay ? 'badge-pay' : 'badge-fee';
+        tr.innerHTML = `
+          <td>${tx.date}</td>
+          <td><span class="badge ${badgeClass}">${tx.type}</span></td>
+          <td>${tx.desc}</td>
+          <td style="font-weight:bold;">${tx.amount}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    showView('student-detail-view');
+  }
+
+  // التنقل بين الصفحات
+  function showView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    if(viewId === 'main-view') {
+      document.getElementById('page-title').textContent = "صفحة الطلاب";
+      searchInput.value = '';
+    } else {
+      document.getElementById('page-title').textContent = "ملف الطالب / كشف حركات";
+    }
+  }
+
+  // تهيئة الصفحة
+  renderStudentsList();
+</script>
+
+</body>
+</html>
