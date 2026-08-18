@@ -368,6 +368,21 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   let existingStudentsList = [];
 
+  // دالة تحويل التاريخ إلى هجري بكل احترافية
+  function getHijriDateString() {
+    try {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      return formatter.format(now) + ' هـ';
+    } catch(e) {
+      return new Date().toLocaleDateString('ar-EG');
+    }
+  }
+
   // الاستماع للطلاب من قاعدة البيانات لإمكانية الإكمال التلقائي في خانة الاسم
   studentsCollection.onSnapshot(snapshot => {
     existingStudentsList = [];
@@ -439,7 +454,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   }
 
-  // الحفظ واستخراج تقرير المتابعة وحفظ البيانات في قاعدة البيانات
+  // الحفظ واستخرج تقرير المتابعة وحفظ البيانات في قاعدة البيانات
   async function saveAndGenerateReport() {
     var studentName = document.getElementById('inp-student').value.trim();
     if (!studentName) {
@@ -456,9 +471,8 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     var data = {};
     SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
 
-    // تجهيز نص التقرير للفايربيس
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
+    // التاريخ الهجري
+    const hijriDateStr = getHijriDateString();
     
     let descParts = [`التقييم العام: ${generalRating}`];
     SECTIONS.forEach(sec => {
@@ -476,7 +490,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     });
 
     const newReportTx = {
-      date: dateStr,
+      date: hijriDateStr,
       type: 'تقرير متابعة',
       desc: descParts.join(' | '),
       amount: generalRating,
@@ -508,8 +522,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
 
     try {
-      var adviceLines = getPersonalizedAdvice(data);
-      var reportCanvas = await drawDetailedFollowUpReport(studentName, generalRating, data, adviceLines, dateStr);
+      var reportCanvas = await drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr);
       showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg');
     } catch (e) {
       customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message);
@@ -868,30 +881,6 @@ function collectSectionData(prefix, isQ) {
   return { currents: currents, nexts: nexts };
 }
 
-function getPersonalizedAdvice(data) {
-  let low = []; let high = [];
-  if (Array.isArray(SECTIONS)) {
-    SECTIONS.forEach(sec => {
-      let sectionData = data[sec.key];
-      if (sectionData && Array.isArray(sectionData.currents)) {
-        sectionData.currents.forEach(item => {
-          let name = "";
-          if (item.sr) { name = "سورة " + item.sr; } 
-          else if (item.f && item.t) { var unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال'; name = sec.title + " (" + unit + " " + item.f + " إلى " + item.t + ")"; } 
-          else { name = sec.title; }
-          if (item.rating === 'يحتاج مراجعة 📖' || item.rating === 'جيد 👍' || (item.rating && item.rating.includes('جيد'))) { low.push(name); } 
-          else if (item.rating === 'بارك الله فيك 👑' || (item.rating && item.rating.includes('بارك الله'))) { high.push(name); }
-        });
-      }
-    });
-  }
-  let adviceLines = [];
-  if (low.length > 0) { adviceLines.push("توجيه لولي الأمر: نوصي بالتركيز والمتابعة المكثفة في ( " + low.join('، ') + " ) لتثبيت المادة بشكل أفضل."); }
-  if (high.length > 0) { adviceLines.push("نقاط القوة والمواطن المتميزة: ما شاء الله، أظهر البطل إتقاناً راقياً في ( " + high.join('، ') + " )، استمروا في تشجيعه!"); }
-  if (adviceLines.length === 0) { adviceLines.push("نوصي بالمداومة المستمرة على مراجعة المحفوظات اليومية بانتظام لضمان ثبات هذا المستوى المبارك."); }
-  return adviceLines;
-}
-
 function rr(ctx,x,y,w,h,r){
   ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
   ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
@@ -908,17 +897,8 @@ async function loadFonts(){
   } catch(e) {}
 }
 
-function wrapText(ctx, text, maxWidth){
-  var words = String(text).split(' '); var lines = []; var cur = '';
-  words.forEach(function(w){
-    var test = cur ? cur + ' ' + w : w;
-    if(ctx.measureText(test).width > maxWidth && cur){ lines.push(cur); cur = w; } else { cur = test; }
-  });
-  if(cur) lines.push(cur); return lines.length ? lines : [''];
-}
-
-// دالة رسم تقرير المتابعة الجديد المصور الشامل
-async function drawDetailedFollowUpReport(studentName, generalRating, data, adviceLines, dateStr) {
+// دالة رسم تقرير المتابعة مع التاريخ الهجري وإلغاء توجيهات ولي الأمر
+async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
   await loadFonts();
   
   // حساب الارتفاع المطلوب ديناميكياً بحسب عدد العناصر المدخلة
@@ -933,7 +913,7 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, advi
 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = Math.max(1600, 750 + (totalRowsCount * 95) + (adviceLines.length * 100));
+  canvas.height = Math.max(1400, 600 + (totalRowsCount * 95));
   var ctx = canvas.getContext('2d');
 
   // الخلفية الإبداعية للتقرير
@@ -975,7 +955,7 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, advi
 
   ctx.font = '600 18px Cairo, sans-serif';
   ctx.fillStyle = '#d4af37';
-  ctx.fillText('التاريخ: ' + dateStr, 540, 175);
+  ctx.fillText('التاريخ: ' + hijriDateStr, 540, 175);
 
   // كارت بيانات الطالب والتقييم العام
   var curY = 250;
@@ -1086,37 +1066,8 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, advi
     }
   });
 
-  // كارت التوجيهات والملاحظات المخصصة لولي الأمر
-  curY += 10;
-  rr(ctx, 40, curY, canvas.width - 80, 60 + (adviceLines.length * 45), 16);
-  ctx.fillStyle = '#f8fafc';
-  ctx.fill();
-  ctx.strokeStyle = '#0b3d2e';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  ctx.font = '800 22px Cairo, sans-serif';
-  ctx.fillStyle = '#04201a';
-  ctx.textAlign = 'right';
-  ctx.fillText('💡 توجيهات وملاحظات لولي الأمر الكريم:', 980, curY + 40);
-
-  let advY = curY + 75;
-  adviceLines.forEach(line => {
-    ctx.font = '600 18px Cairo, sans-serif';
-    if (line.startsWith("توجيه")) ctx.fillStyle = '#b91c1c';
-    else if (line.startsWith("نقاط")) ctx.fillStyle = '#15803d';
-    else ctx.fillStyle = '#111827';
-
-    var wrapped = wrapText(ctx, line, 900);
-    wrapped.forEach(l => {
-      ctx.fillText(l, 960, advY);
-      advY += 32;
-    });
-    advY += 10;
-  });
-
   // التوقيع السفلي للتقرير
-  var footerY = canvas.height - 90;
+  var footerY = canvas.height - 80;
   ctx.font = '700 20px Cairo, sans-serif';
   ctx.fillStyle = '#0b3d2e';
   ctx.textAlign = 'center';
