@@ -396,6 +396,8 @@ body {
           }
           d = new Date(year, month, day);
         }
+      } else if (dateInput && dateInput.toDate) {
+        d = dateInput.toDate();
       } else if (dateInput) {
         d = new Date(dateInput);
       }
@@ -423,24 +425,81 @@ body {
     return '⭐';
   }
 
-  studentsCollection.onSnapshot(snapshot => {
-    allStudentsData = [];
-    snapshot.forEach(doc => {
-      let s = doc.data();
-      if (s.transactions && Array.isArray(s.transactions)) {
-        s.transactions.reverse();
-      }
-      allStudentsData.push({ id: doc.id, ...s });
-    });
+  // دالة توحيد النصوص والهمزات للبحث الذكي
+  function normalizeText(text) {
+    if (!text) return '';
+    return text.toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[أإآ]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/ى/g, 'ي');
+  }
 
-    allStudentsData.sort((a, b) => {
-      let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
-      let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
-      return tB - tA;
-    });
+  // دالة جلب بيانات الطلاب بنمط موحد ومباشر من السيرفر
+  async function loadStudentsData() {
+    const container = document.getElementById('students-list-container');
+    container.innerHTML = '<div class="empty-state">جاري تحميل سجلات الطلاب ... ⏳</div>';
 
-    renderStudents(allStudentsData);
-  });
+    try {
+      const snapshot = await studentsCollection.get();
+      allStudentsData = [];
+
+      snapshot.forEach(doc => {
+        let rawData = doc.data();
+        
+        // 1. دعم قراءة اسم الطالب سواء كـ name أو studentName
+        let resolvedName = rawData.name || rawData.studentName || 'طالب بدون اسم';
+
+        // 2. توحيد قراءة المصفوفات والأقسام (currents/current و nexts/next)
+        let rawTransactions = rawData.transactions || [];
+        
+        let normalizedTransactions = rawTransactions.map(tx => {
+          let academic = tx.academicData || {};
+          let normalizedAcademic = {};
+
+          if (typeof academic === 'object') {
+            Object.keys(academic).forEach(secKey => {
+              let sec = academic[secKey] || {};
+              normalizedAcademic[secKey] = {
+                ...sec,
+                currents: sec.currents || sec.current || [],
+                nexts: sec.nexts || sec.next || []
+              };
+            });
+          }
+
+          return {
+            ...tx,
+            date: tx.date || (tx.createdAt && tx.createdAt.toDate ? tx.createdAt.toDate().toISOString() : new Date().toISOString()),
+            academicData: normalizedAcademic
+          };
+        });
+
+        // ترتيب التقارير لكل طالب من الأحدث للأقدم
+        normalizedTransactions.reverse();
+
+        allStudentsData.push({
+          id: doc.id,
+          ...rawData,
+          name: resolvedName,
+          transactions: normalizedTransactions
+        });
+      });
+
+      // 3. ترتيب الطلاب حسب تاريخ أحدث حلقة/تقرير
+      allStudentsData.sort((a, b) => {
+        let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
+        let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
+        return tB - tA;
+      });
+
+      renderStudents(allStudentsData);
+    } catch (error) {
+      console.error("خطأ أثناء جلب البيانات:", error);
+      container.innerHTML = '<div class="empty-state">حدث خطأ أثناء تحميل البيانات من السيرفر.</div>';
+    }
+  }
 
   function renderStudents(list) {
     const container = document.getElementById('students-list-container');
@@ -522,8 +581,8 @@ body {
   }
 
   document.getElementById('search-student').addEventListener('input', function() {
-    const val = this.value.trim().toLowerCase();
-    const filtered = allStudentsData.filter(s => s.name.toLowerCase().includes(val));
+    const val = normalizeText(this.value);
+    const filtered = allStudentsData.filter(s => normalizeText(s.name).includes(val));
     renderStudents(filtered);
   });
 
@@ -566,9 +625,14 @@ body {
       const docSnap = await studentDocRef.get();
       if (docSnap.exists) {
         let txs = docSnap.data().transactions || [];
-        txs.splice(txIndex, 1);
-        await studentDocRef.update({ transactions: txs });
-        customAlert("✅ تم مسح التقرير بنجاح.");
+        // التراجع في الفهرس نظراً لأن التقارير معروضة في القائمة بشكل معكوس
+        let realIndex = txs.length - 1 - txIndex;
+        if (realIndex >= 0 && realIndex < txs.length) {
+          txs.splice(realIndex, 1);
+          await studentDocRef.update({ transactions: txs });
+          customAlert("✅ تم مسح التقرير بنجاح.");
+          await loadStudentsData();
+        }
       }
     } catch(e) {
       customAlert("حدث خطأ أثناء الحذف: " + e.message);
@@ -580,6 +644,7 @@ body {
     try {
       await studentsCollection.doc(docId).delete();
       customAlert("✅ تم حذف الطالب بنجاح.");
+      await loadStudentsData();
     } catch(e) {
       customAlert("حدث خطأ أثناء الحذف: " + e.message);
     }
@@ -593,6 +658,7 @@ body {
       snapshot.docs.forEach(doc => batch.delete(doc.ref));
       await batch.commit();
       customAlert("✅ تم مسح قاعدة البيانات بالكامل.");
+      await loadStudentsData();
     } catch(e) {
       customAlert("حدث خطأ: " + e.message);
     }
@@ -654,8 +720,10 @@ body {
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
       if (sData) {
-        if (sData.currents && sData.currents.length) totalRowsCount += sData.currents.length;
-        if (sData.nexts && sData.nexts.length) totalRowsCount += sData.nexts.length;
+        let currents = sData.currents || sData.current || [];
+        let nexts = sData.nexts || sData.next || [];
+        if (currents.length) totalRowsCount += currents.length;
+        if (nexts.length) totalRowsCount += nexts.length;
       }
     });
 
@@ -725,8 +793,11 @@ body {
 
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
-      let hasCurrents = sData && sData.currents && sData.currents.length > 0;
-      let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
+      let currents = sData ? (sData.currents || sData.current || []) : [];
+      let nexts = sData ? (sData.nexts || sData.next || []) : [];
+
+      let hasCurrents = currents.length > 0;
+      let hasNexts = nexts.length > 0;
 
       if (hasCurrents || hasNexts) {
         rr(ctx, 40, curY, canvas.width - 80, 68, 14);
@@ -740,7 +811,7 @@ body {
         curY += 85;
 
         if (hasCurrents) {
-          sData.currents.forEach(item => {
+          currents.forEach(item => {
             let itemTitle = "";
             let rangeBadge = "";
 
@@ -798,7 +869,7 @@ body {
         }
 
         if (hasNexts) {
-          sData.nexts.forEach(item => {
+          nexts.forEach(item => {
             let planTitle = "";
             if (item.nextPlanSr) {
               planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
@@ -909,6 +980,11 @@ body {
     modal.appendChild(btnWrap);
     document.body.appendChild(modal);
   }
+
+  // تشغيل طلب الجلب فور تحميل الصفحة
+  document.addEventListener('DOMContentLoaded', () => {
+    loadStudentsData();
+  });
 </script>
 </body>
 </html>
