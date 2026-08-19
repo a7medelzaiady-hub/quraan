@@ -461,51 +461,58 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   };
 
   // حفظ تقارير المتابعة
-  // عدّل الـ import في أعلى الملف:
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getFirestore, collection, addDoc, getDocs, query, where, 
-  serverTimestamp, doc, updateDoc, arrayUnion 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-// ... (باقي الكود زي ما هو) ...
-
-// استبدل دالة saveReportToFirebase بالكامل بهذه النسخة:
-window.saveReportToFirebase = async function(studentName, rating, reportData) {
+  window.saveReportToFirebase = async function saveReportToFirebase(studentName, reportData) {
   try {
-    var trimmedName = studentName.trim();
+    // 1. تنظيف اسم الطالب لضمان البحث الدقيق
+    const cleanName = studentName.trim();
+    if (!cleanName) {
+      customAlert("⚠️ يرجى إدخال اسم الطالب أولاً.");
+      return;
+    }
 
-    // ابحث عن مستند الطالب، أو أنشئه لو مش موجود
-    const q = query(collection(db, "students"), where("name", "==", trimmedName));
-    const querySnapshot = await getDocs(q);
-    let studentDocRef;
+    // 2. تجهيز كائن التقرير بالمسميات المتوافقة مع manage.html
+    const newTransaction = {
+      date: new Date().toISOString(),
+      generalRating: reportData.rating || reportData.generalRating || 'ممتاز',
+      academicData: reportData.data || reportData.academicData || {},
+      notes: reportData.notes || reportData.desc || '',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
 
-    if (!querySnapshot.empty) {
-      studentDocRef = querySnapshot.docs[0].ref;
+    // 3. البحث عن الطالب في مجموعة 'students' بنفس الاسم
+    const snapshot = await db.collection('students')
+      .where('name', '==', cleanName)
+      .limit(1)
+      .get();
+
+    if (!snapshot.empty) {
+      // الطالب موجود مسبقاً: يتم دمج التقرير الجديد داخل مصفوفة transactions
+      const studentDoc = snapshot.docs[0];
+      await studentDoc.ref.update({
+        studentName: cleanName, // توحيد المسمى
+        name: cleanName,
+        transactions: firebase.firestore.FieldValue.arrayUnion(newTransaction)
+      });
     } else {
-      studentDocRef = await addDoc(collection(db, "students"), {
-        name: trimmedName,
-        createdAt: serverTimestamp()
+      // الطالب غير موجود: إنشاء مستند جديد للطالب وإضافة أول تقرير له
+      await db.collection('students').add({
+        name: cleanName,
+        studentName: cleanName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        transactions: [newTransaction]
       });
     }
 
-    // التقرير الجديد بنفس الأسماء اللي صفحة manage.html بتتوقعها
-    const newTransaction = {
-      date: new Date().toISOString(),
-      generalRating: rating,
-      academicData: reportData
-    };
-
-    await updateDoc(studentDocRef, {
-      transactions: arrayUnion(newTransaction)
-    });
-
-    return true;
-  } catch (e) {
-    console.error("خطأ أثناء حفظ التقرير:", e);
-    return false;
+    customAlert("✅ تم حفظ التقرير بنجاح في سجل الطالب!");
+  } catch (error) {
+    console.error("خطأ أثناء حفظ التقرير:", error);
+    customAlert("❌ حدث خطأ أثناء الحفظ: " + error.message);
   }
-};
+}
+
+      return false;
+    }
+  };
 </script>
 
 <script>
