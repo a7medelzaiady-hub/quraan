@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سجلات الطالب - نظام المتابعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<style>
+:root {
+  --green-deep: #062b22;
+  --green-mid: #0b3d2e;
+  --green-card: #0f4c3a;
+  --green-light: #14795c;
+  --gold-primary: #d4af37;
+  --gold-shiny: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  --gold-light: #fef08a;
+  --cream: #f8f6f0;
+  --border-light: #e2e8f0;
+  --text-dark: #111827;
+  --sub: #4b5563;
+  --red: #ef4444;
+  --blue-btn: #0284c7;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { direction: rtl; font-family: 'Cairo', sans-serif; background-color: var(--cream); color: var(--text-dark); padding-bottom: 50px; }
+
+.hdr { 
+  background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
+  padding: 24px 16px; 
+  text-align: center; 
+  border-bottom: 4px solid;
+  border-image: var(--gold-shiny) 1;
+  color: #fff; 
+}
+.hdr h1 { font-size: 22px; font-weight: 800; color: var(--gold-light); margin-bottom: 6px; }
+
+.header-btn { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px; 
+  background: rgba(255, 255, 255, 0.08); 
+  color: var(--gold-light); 
+  border: 1.5px solid var(--gold-primary); 
+  padding: 8px 18px; 
+  border-radius: 20px; 
+  text-decoration: none; 
+  font-size: 13px; 
+  font-weight: 700; 
+  margin-top: 10px;
+}
+
+.container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
+
+.report-card { 
+  background: #fff; 
+  border: 1px solid var(--border-light); 
+  border-radius: 16px; 
+  padding: 16px; 
+  margin-bottom: 14px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--border-light);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.report-date { font-weight: 800; color: var(--green-deep); font-size: 15px; }
+.report-rating { font-weight: 700; color: #b45309; font-size: 13px; }
+
+.report-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.btn-action { 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  font-size: 12px; 
+  font-weight: 700; 
+  border: none; 
+  cursor: pointer; 
+  font-family: 'Cairo', sans-serif; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 4px; 
+}
+
+.btn-share { background: var(--green-light); color: #fff; }
+.btn-edit { background: var(--gold-primary); color: #fff; }
+.btn-restore { background: var(--blue-btn); color: #fff; }
+
+.empty-state { text-align: center; padding: 40px; background: #fff; border-radius: 16px; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1 id="student-title-hdr">جاري تحميل سجلات البطل...</h1>
+  <a href="reports.html" class="header-btn"><i class="ti ti-arrow-right"></i> العودة لقائمة الطلاب</a>
+</div>
+
+<div class="container" id="reports-list">
+  <div class="empty-state">جاري التحميل... ⏳</div>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+    authDomain: "ahmedelzaiady.firebaseapp.com",
+    projectId: "ahmedelzaiady",
+    storageBucket: "ahmedelzaiady.firebasestorage.app",
+    messagingSenderId: "300306825071",
+    appId: "1:300306825071:web:0426ddde56280fa090329a"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const studentId = urlParams.get('id');
+  let currentStudentData = null;
+
+  async function loadStudentHistory() {
+    if (!studentId) return;
+    try {
+      const doc = await db.collection('students').doc(studentId).get();
+      if (!doc.exists) return;
+
+      currentStudentData = doc.data();
+      let name = currentStudentData.studentName || currentStudentData.name || 'طالب بدون اسم';
+      document.getElementById('student-title-hdr').innerText = 'سجلات البطل: ' + name;
+
+      let targetKey = currentStudentData.transactions ? 'transactions' : 'reports';
+      let txs = currentStudentData[targetKey] || [];
+
+      const listContainer = document.getElementById('reports-list');
+      if (!txs.length) {
+        listContainer.innerHTML = '<div class="empty-state">لا توجد سجلات محفوظة لهذا الطالب.</div>';
+        return;
+      }
+
+      listContainer.innerHTML = '';
+      txs.reverse().forEach((tx, idx) => {
+        let realIndex = txs.length - 1 - idx;
+        let dateStr = tx.date ? new Date(tx.date).toLocaleDateString('ar-EG') : 'تاريخ غير محدد';
+
+        let card = document.createElement('div');
+        card.className = 'report-card';
+        card.innerHTML = `
+          <div class="report-header">
+            <span class="report-date">📅 حصة بتاريخ: ${dateStr}</span>
+            <span class="report-rating">التقييم: ${tx.generalRating || 'ممتاز'}</span>
+          </div>
+          <p style="font-size: 13px; color: var(--sub);">${tx.desc || tx.notes || 'لا توجد ملاحظات إضافية'}</p>
+          <div class="report-btns">
+            <button class="btn-action btn-restore" onclick="restoreSession(${realIndex})"><i class="ti ti-history"></i> استرجاع للحصة (index1.html)</button>
+            <button class="btn-action btn-edit" onclick="editSession(${realIndex})"><i class="ti ti-edit"></i> تعديل السجل (index1.html)</button>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function editSession(txIndex) {
+    let name = currentStudentData.studentName || currentStudentData.name;
+    let targetKey = currentStudentData.transactions ? 'transactions' : 'reports';
+    let tx = currentStudentData[targetKey][txIndex];
+
+    const sessionData = {
+      action: 'edit',
+      studentId: studentId,
+      studentName: name,
+      txIndex: txIndex,
+      data: tx
+    };
+    localStorage.setItem('pendingSessionAction', JSON.stringify(sessionData));
+    window.location.href = 'index1.html';
+  }
+
+  function restoreSession(txIndex) {
+    let name = currentStudentData.studentName || currentStudentData.name;
+    let targetKey = currentStudentData.transactions ? 'transactions' : 'reports';
+    let tx = currentStudentData[targetKey][txIndex];
+
+    const sessionData = {
+      action: 'restore',
+      studentId: studentId,
+      studentName: name,
+      txIndex: txIndex,
+      data: tx
+    };
+    localStorage.setItem('pendingSessionAction', JSON.stringify(sessionData));
+    window.location.href = 'index1.html';
+  }
+
+  document.addEventListener('DOMContentLoaded', loadStudentHistory);
+</script>
+</body>
+</html>
