@@ -23,10 +23,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
 
-/* الهيدر المحسّن */
+/* الهيدر */
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
-  padding: 24px 16px 18px; 
+  padding: 24px 16px; 
   text-align: center; 
   border-bottom: 4px solid var(--gold); 
   position: relative;
@@ -35,89 +35,70 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* أزرار التحكم العلوية بتصميم احترافي متطور */
+/* أزرار التحكم العلوية الإضافية */
 .top-nav-btns {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
-  margin: 16px auto 0;
-  max-width: 800px;
-  padding: 0 14px;
+  margin-top: 14px;
 }
 .nav-btn {
-  background: #ffffff;
-  color: var(--green-deep);
-  border: 2px solid rgba(212, 175, 55, 0.5);
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 800;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1px solid var(--gold);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
+  gap: 6px;
+  transition: 0.2s;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.06);
-  position: relative;
-  overflow: hidden;
 }
-.nav-btn:hover {
-  background: var(--green-mid);
-  color: var(--gold-light);
-  border-color: var(--gold);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(11, 61, 46, 0.25);
-}
-.nav-btn:active {
-  transform: translateY(0);
+.nav-btn:hover, .nav-btn:active {
+  background: var(--gold);
+  color: var(--green-deep);
 }
 
-/* شريط نظام الأخطاء الاحترافي */
+/* شريط نظام الأخطاء العلوي */
 .system-selector-wrap {
-  background: #ffffff;
-  padding: 14px;
-  border-radius: 16px;
-  max-width: 440px;
-  margin: 16px auto 0;
-  border: 1.5px solid var(--border);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 8px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 14px auto 0;
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 .system-label {
-  color: var(--green-deep);
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
   display: block;
-  text-align: center;
 }
 .system-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 .system-radio-btn { display: none; }
 .system-radio-label {
-  background: #f8faf9;
-  color: var(--sub);
-  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 4px;
   font-size: 13px;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  text-align: center;
-  border: 1.5px solid var(--border);
+  transition: 0.2s;
+  display: block;
 }
 .system-radio-btn:checked + .system-radio-label {
-  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
-  color: var(--gold-light);
-  border-color: var(--gold);
-  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.2);
+  background: var(--gold);
+  color: var(--green-deep);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
@@ -144,43 +125,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .del-btn { position: absolute; left: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--red); color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
 .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--border); }
 .range-row.hidden { display: none; }
-
-/* أزرار الإضافة بتصميم تفاعلي جذاب */
-.add-btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  margin-bottom: 14px;
-  border: 2px dashed var(--green-light);
-  border-radius: 12px;
-  background: rgba(20, 121, 92, 0.04);
-  color: var(--green-light);
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.25s ease;
-}
-.add-btn:hover {
-  background: var(--green-light);
-  color: #fff;
-  border-style: solid;
-  box-shadow: 0 4px 12px rgba(20, 121, 92, 0.2);
-}
-.add-btn.next-add {
-  border-color: #d97706;
-  color: #b45309;
-  background: rgba(217, 119, 6, 0.04);
-}
-.add-btn.next-add:hover {
-  background: #d97706;
-  color: #fff;
-  border-style: solid;
-  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
-}
+.add-btn { width: 100%; padding: 11px; margin-top: 4px; margin-bottom: 14px; border: 2px dashed var(--green-light); border-radius: 10px; background: rgba(20, 121, 92, 0.03); color: var(--green-light); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
+.add-btn:hover { background: rgba(20, 121, 92, 0.08); }
+.add-btn.next-add { border-color: #b45309; color: #b45309; background: rgba(180, 83, 9, 0.03); }
+.add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
 /* عداد الأخطاء */
@@ -189,23 +137,15 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
 .counter-btn.plus:active { background: #fee2e2; }
 .counter-btn.minus { background: #f3f4f6; color: var(--sub); border-left: 1px solid var(--border); }
-.counter-btn.minus:active { background: #e5e5e5; }
+.counter-btn.minus:active { background: #e5e7eb; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* زر التثبيت السفلي الملكي الفخم */
-.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); padding: 14px 16px; border-top: 1.5px solid var(--border); box-shadow: 0 -6px 24px rgba(0,0,0,0.08); z-index: 200; }
-.submit-grid { max-width: 800px; margin: 0 auto; display: block; }
-.submit-btn { width: 100%; padding: 15px 12px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; }
-.btn-combined { 
-  background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); 
-  color: var(--gold-light); 
-  border: 2px solid var(--gold); 
-  box-shadow: 0 6px 18px rgba(4, 32, 26, 0.3);
-}
-.btn-combined:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(4, 32, 26, 0.4);
-}
+/* أزرار التثبيت السفلي */
+.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
+.submit-grid { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.submit-btn { width: 100%; padding: 14px 8px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
+.btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
+.btn-new-student { background: #f3f4f6; color: var(--green-deep); border: 2px solid var(--border); }
 .submit-btn:active { transform: scale(0.98); }
 
 /* نافذة مصحف التسميع */
@@ -264,30 +204,30 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-emblem">🕌</div>
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
-</div>
+  
+  <div class="top-nav-btns">
+    <button class="nav-btn" onclick="addNewStudentAction()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
+    <a href="manage.html" class="nav-btn"><i class="ti ti-settings"></i> إدارة التقارير (manage.html)</a>
+  </div>
 
-<div class="top-nav-btns">
-  <button class="nav-btn" onclick="addNewStudentAction()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
-  <a href="manage.html" class="nav-btn"><i class="ti ti-address-book"></i> سجل الطلاب</a>
-</div>
-
-<div class="system-selector-wrap">
-  <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
-  <div class="system-grid">
-    <input type="radio" id="sys-count" name="error-system" class="system-radio-btn" value="count" checked onchange="handleSystemChange()">
-    <label for="sys-count" class="system-radio-label">بالعدد التلقائي (1، 2..) 🔢</label>
-    
-    <input type="radio" id="sys-ayah" name="error-system" class="system-radio-btn" value="ayah" onchange="handleSystemChange()">
-    <label for="sys-ayah" class="system-radio-label">برقم الآية / السؤال 🎯</label>
+  <div class="system-selector-wrap">
+    <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
+    <div class="system-grid">
+      <input type="radio" id="sys-count" name="error-system" class="system-radio-btn" value="count" checked onchange="handleSystemChange()">
+      <label for="sys-count" class="system-radio-label">بالعدد التلقائي (1، 2..) 🔢</label>
+      
+      <input type="radio" id="sys-ayah" name="error-system" class="system-radio-btn" value="ayah" onchange="handleSystemChange()">
+      <label for="sys-ayah" class="system-radio-label">برقم الآية / السؤال 🎯</label>
+    </div>
   </div>
 </div>
 
 <div class="body">
   <div class="section">
-    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات الطالب</div></div>
+    <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow ac-wrap">
-        <div class="flbl"> البطل </div>
+        <div class="flbl">اسم البطل الكريم</div>
         <input class="inp" id="inp-student" placeholder="اكتب أول حرف للبحث..." autocomplete="off">
         <div class="ac-drop" id="student-ac-drop"></div>
       </div>
@@ -298,7 +238,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
             <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة  📖</option>
+            <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
           </select>
         </div>
       </div>
@@ -374,11 +314,11 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="section" id="sec-hd">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿   الأذكار الحالية:</div>
+      <div class="sub-sec-title">📿 الحديث الشريف والأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة للاذكار:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للحديث:</div>
       <div id="hd-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
     </div>
@@ -387,6 +327,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
+    <button class="submit-btn btn-new-student" onclick="addNewStudentAction()">👤 طالب جديد</button>
     <button class="submit-btn btn-combined" onclick="generateAllOutputs()">✨ استخراج وحفظ التقرير</button>
   </div>
 </div>
@@ -435,81 +376,39 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // تسجيل طالب جديد بجدول الطلاب مع منع تكرار الاسم
+  // تسجيل طالب جديد بجدول الطلاب
   window.registerStudentInDb = async function(studentName) {
-    var trimmedName = studentName.trim();
-    if (!trimmedName) return { success: false, reason: 'empty' };
-    
+    if (!studentName.trim()) return false;
     try {
-      const q = query(collection(db, "students"), where("name", "==", trimmedName));
+      const q = query(collection(db, "students"), where("name", "==", studentName.trim()));
       const querySnapshot = await getDocs(q);
-      
-      // التحقق من وجود الاسم مسبقاً لمنع التكرار
-      if (!querySnapshot.empty) {
-        return { success: false, reason: 'exists' };
+      if (querySnapshot.empty) {
+        await addDoc(collection(db, "students"), {
+          name: studentName.trim(),
+          createdAt: serverTimestamp()
+        });
       }
-      
-      await addDoc(collection(db, "students"), {
-        name: trimmedName,
-        createdAt: serverTimestamp()
-      });
-      return { success: true };
+      return true;
     } catch (e) {
       console.error("خطأ أثناء تسجيل الطالب:", e);
-      return { success: false, reason: 'error', error: e };
+      return false;
     }
   };
 
   // حفظ تقارير المتابعة
-  window.saveReportToFirebase = async function saveReportToFirebase(studentName, reportData) {
-  try {
-    // 1. تنظيف اسم الطالب لضمان البحث الدقيق
-    const cleanName = studentName.trim();
-    if (!cleanName) {
-      customAlert("⚠️ يرجى إدخال اسم الطالب أولاً.");
-      return;
-    }
-
-    // 2. تجهيز كائن التقرير بالمسميات المتوافقة مع manage.html
-    const newTransaction = {
-      date: new Date().toISOString(),
-      generalRating: reportData.rating || reportData.generalRating || 'ممتاز',
-      academicData: reportData.data || reportData.academicData || {},
-      notes: reportData.notes || reportData.desc || '',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    // 3. البحث عن الطالب في مجموعة 'students' بنفس الاسم
-    const snapshot = await db.collection('students')
-      .where('name', '==', cleanName)
-      .limit(1)
-      .get();
-
-    if (!snapshot.empty) {
-      // الطالب موجود مسبقاً: يتم دمج التقرير الجديد داخل مصفوفة transactions
-      const studentDoc = snapshot.docs[0];
-      await studentDoc.ref.update({
-        studentName: cleanName, // توحيد المسمى
-        name: cleanName,
-        transactions: firebase.firestore.FieldValue.arrayUnion(newTransaction)
+  window.saveReportToFirebase = async function(studentName, rating, reportData) {
+    try {
+      await window.registerStudentInDb(studentName);
+      await addDoc(collection(db, "reports"), {
+        studentName: studentName.trim(),
+        rating: rating,
+        data: reportData,
+        createdAt: serverTimestamp(),
+        dateFormatted: new Date().toLocaleDateString('ar-EG')
       });
-    } else {
-      // الطالب غير موجود: إنشاء مستند جديد للطالب وإضافة أول تقرير له
-      await db.collection('students').add({
-        name: cleanName,
-        studentName: cleanName,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        transactions: [newTransaction]
-      });
-    }
-
-    customAlert("✅ تم حفظ التقرير بنجاح في سجل الطالب!");
-  } catch (error) {
-    console.error("خطأ أثناء حفظ التقرير:", error);
-    customAlert("❌ حدث خطأ أثناء الحفظ: " + error.message);
-  }
-}
-
+      return true;
+    } catch (e) {
+      console.error("خطأ أثناء حفظ التقرير:", e);
       return false;
     }
   };
@@ -694,7 +593,7 @@ function pickStudent(name) {
   document.getElementById('student-ac-drop').style.display = 'none';
 }
 
-// إضافة طالب جديد وتصفير الواجهة مع منع التكرار
+// إضافة طالب جديد وتصفير الواجهة مع التسجيل في قاعدة البيانات
 async function addNewStudentAction() {
   var studentName = document.getElementById('inp-student').value.trim();
   if (!studentName) {
@@ -703,19 +602,16 @@ async function addNewStudentAction() {
   }
 
   if (typeof window.registerStudentInDb === 'function') {
-    var result = await window.registerStudentInDb(studentName);
-    if (result.success) {
+    var success = await window.registerStudentInDb(studentName);
+    if (success) {
       if (!cachedStudentsList.includes(studentName)) {
         cachedStudentsList.push(studentName);
       }
       customAlert("تم تسجيل الطالب (" + studentName + ") بنجاح في قاعدة البيانات وتجهيز النظام لإدخال التقييمات.", "نجاح التسجيل ✨");
-      resetFormForNewStudent();
-    } else if (result.reason === 'exists') {
-      customAlert("الطالب (" + studentName + ") مسجل بالفعل في النظام مسبقاً، ولا يمكن تكراره.", "اسم مُكرّر ⚠️");
-    } else {
-      customAlert("حدث خطأ أثناء محاولة تسجيل الطالب، يرجى المحاولة لاحقاً.", "خطأ في التسجيل ❌");
     }
   }
+
+  resetFormForNewStudent();
 }
 
 function resetFormForNewStudent() {
@@ -1067,7 +963,7 @@ var SECTIONS = [
   {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
   {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
   {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:' الأذكار', icon:'📿', isQ:true}
+  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
 ];
 
 function rr(ctx,x,y,w,h,r){
@@ -1115,7 +1011,7 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
 }
 
 function ratingStyle(rating){
-  if(rating.indexOf(' بارك الله فيك')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
+  if(rating.indexOf('بارك الله')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
   if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fefce8', color:'#854d0e', border:'#eab308'};
   if(rating.indexOf('جيد')>-1) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
   return {bg:'#fef2f2', color:'#991b1b', border:'#ef4444'};
@@ -1283,10 +1179,9 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-function showSingleImageModal(canvasElement, downloadName, studentName, genRating, reportData) {
-  var modal = document.createElement('div');
-  modal.id = 'report-preview-modal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+function showSingleImageModal(canvasElement, downloadName) {
+  var modal=document.createElement('div');
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
   
   var imgPreview = document.createElement('img');
   imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.92);
@@ -1307,23 +1202,10 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
-    // 1. حفظ البيانات أولاً على Firebase Firestore قبل فتح شاشة المشاركة
-    shareBtn.innerText = '⏳ جاري الحفظ...';
-    shareBtn.disabled = true;
-
-    if (typeof window.saveReportToFirebase === 'function') {
-      await window.saveReportToFirebase(studentName, genRating, reportData);
-    }
-
-    // 2. إغلاق الـ Modal مباشرةً قبل إطلاق واجهة المشاركة الخاصة بالنظام
-    modal.remove();
-
-    // 3. تجهيز الملف وإطلاق نافذة المشاركة (Share API)
     try {
       canvasElement.toBlob(async function(blob) {
         if (!blob) { customAlert('تعذر إنشاء ملف الصورة', 'خطأ في النظام ❌'); return; }
         var file = new File([blob], downloadName, { type: 'image/jpeg' });
-        
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
@@ -1331,18 +1213,12 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
             text: 'تقرير بطل مركز خادم القرآن الكريم'
           });
         } else {
-          var a = document.createElement('a');
-          a.href = imgPreview.src;
-          a.download = downloadName;
-          a.click();
-          customAlert('المتصفح لا يدعم التشيير المباشر، تم تنزيل صورة التقرير وتأكيد الحفظ.', 'حفظ الصورة 📥');
+          var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+          customAlert('المتصفح لا يدعم التشيير التلقائي المباشر، تم تنزيل صورة التقرير إلى جهازك.', 'حفظ الصورة 📥');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
-      var a = document.createElement('a');
-      a.href = imgPreview.src;
-      a.download = downloadName;
-      a.click();
+      var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
     }
   };
   
@@ -1359,10 +1235,15 @@ async function generateAllOutputs() {
   
   try {
     var reportCanvas = await drawReport(nm, data);
-    showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + nm + '.jpg', nm, genRating, data);
-  } catch (e) { 
-    customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); 
-  }
+    showSingleImageModal(reportCanvas, 'تقرير_متابعة_'+nm+'.jpg');
+    
+    if (typeof window.saveReportToFirebase === 'function') {
+      let saved = await window.saveReportToFirebase(nm, genRating, data);
+      if(saved) {
+        console.log("تمت المزامنة بنجاح مع السيرفر.");
+      }
+    }
+  } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); }
 }
 
 // إنشاء الحقول الافتراضية عند أول تشغيل لصفحة فارغة
