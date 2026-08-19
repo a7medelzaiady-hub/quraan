@@ -1,457 +1,88 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام إدارة الطلاب والتقارير المصورة</title>
-  
-  <!-- Firebase SDK (v10 Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة تقارير الطلاب - نظام المتابعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 
-  <!-- HTML2Canvas لتحويل HTML إلى صورة -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-  <style>
-    :root {
-      --primary-color: #043e35;       /* الأخضر الداكن */
-      --secondary-color: #0b5e4c;     /* الأخضر الزيتي المتوسط */
-      --accent-gold: #e59829;         /* الذهبي / البرتقالي */
-      --accent-gold-hover: #cc831e;
-      --danger-color: #ba2d20;
-      --danger-hover: #d93829;
-      --bg-color: #f3f5f2;            /* الخلفية الفاتحة */
-      --card-bg: #ffffff;
-      --text-color: #1a2a26;
-      --border-color: #cfdad5;
-    }
+<style>
+:root {
+  --green-deep: #04201a;
+  --green-mid: #0b3d2e;
+  --green-light: #14795c;
+  --gold: #d4af37;
+  --gold-light: #fef08a;
+  --white: #ffffff;
+  --cream: #fdfbf5;
+  --border: #e5e7eb;
+  --text: #111827;
+  --sub: #4b5563;
+  --red: #ef4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; padding-bottom: 50px; }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-    body { background-color: var(--bg-color); color: var(--text-color); padding: 15px; }
-    .container { max-width: 900px; margin: 0 auto; }
+.hdr { background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); padding: 24px 16px; text-align: center; border-bottom: 4px solid var(--gold); color: #fff; }
+.hdr h1 { font-size: 24px; color: var(--gold-light); margin-bottom: 6px; }
+.back-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); color: var(--gold-light); border: 1px solid var(--gold); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; margin-top: 12px; }
 
-    /* Header Styling */
-    .header { 
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
-      color: white; 
-      padding: 18px 22px; 
-      border-radius: 14px; 
-      margin-bottom: 20px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      gap: 10px; 
-      flex-wrap: wrap;
-      box-shadow: 0 4px 12px rgba(4, 62, 53, 0.15);
-    }
-    .header h2 { font-size: 20px; font-weight: bold; }
-    .header-btns { display: flex; gap: 10px; }
-    
-    .btn-main { 
-      background: var(--accent-gold); 
-      color: white; 
-      border: none; 
-      padding: 9px 18px; 
-      border-radius: 8px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(229, 152, 41, 0.3);
-    }
-    .btn-main:hover { background: var(--accent-gold-hover); transform: translateY(-1px); }
+.container { max-width: 900px; margin: 20px auto; padding: 0 14px; }
 
-    .btn-danger-all { 
-      background: var(--danger-color); 
-      color: white; 
-      border: none; 
-      padding: 9px 18px; 
-      border-radius: 8px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      transition: all 0.2s ease;
-    }
-    .btn-danger-all:hover { background: var(--danger-hover); }
+.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.btn-danger-all { background: #fee2e2; color: var(--red); border: 2px solid var(--red); padding: 10px 18px; border-radius: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.btn-danger-all:hover { background: var(--red); color: #fff; }
 
-    /* Card Box */
-    .card { 
-      background: var(--card-bg); 
-      border-radius: 14px; 
-      padding: 22px; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.04); 
-      margin-bottom: 20px; 
-      border: 1px solid var(--border-color); 
-    }
-    .card h3 { color: var(--primary-color); margin-bottom: 12px; border-bottom: 2px solid #e8eeec; padding-bottom: 8px; }
+.search-box { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: 'Cairo', sans-serif; margin-bottom: 20px; outline: none; background: #fff; }
 
-    /* Custom Dropdown Input */
-    .autocomplete-container { position: relative; width: 100%; margin-bottom: 5px; }
-    .input-label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--primary-color); }
-    .search-input { 
-      width: 100%; 
-      padding: 12px 15px; 
-      border: 2px solid var(--border-color); 
-      border-radius: 10px; 
-      font-size: 15px; 
-      outline: none; 
-      transition: 0.3s; 
-    }
-    .search-input:focus { border-color: var(--secondary-color); box-shadow: 0 0 0 3px rgba(11, 94, 76, 0.1); }
+.student-card { background: #fff; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden; }
+.student-header { background: var(--green-mid); color: #fff; padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.student-name { font-size: 18px; font-weight: 800; color: var(--gold-light); display: flex; align-items: center; gap: 8px; }
+.student-actions { display: flex; gap: 8px; }
 
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      margin-top: 5px;
-      max-height: 220px;
-      overflow-y: auto;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-      z-index: 1000;
-      display: none;
-    }
-    .dropdown-item { padding: 12px 15px; border-bottom: 1px solid #f0f4f2; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-    .dropdown-item:last-child { border-bottom: none; }
-    .dropdown-item:hover { background-color: #eaf2ef; color: var(--primary-color); }
+.btn-action-sm { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; border: none; cursor: pointer; font-family: 'Cairo', sans-serif; display: inline-flex; align-items: center; gap: 4px; }
+.btn-del-student { background: #fee2e2; color: var(--red); }
+.btn-del-student:hover { background: var(--red); color: #fff; }
 
-    /* Student List Cards */
-    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 15px; }
-    .student-card { 
-      background: white; 
-      border: 1px solid var(--border-color); 
-      border-radius: 12px; 
-      padding: 16px; 
-      cursor: pointer; 
-      transition: all 0.2s ease; 
-      position: relative; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: space-between; 
-    }
-    .student-card:hover { transform: translateY(-3px); border-color: var(--secondary-color); box-shadow: 0 6px 14px rgba(4, 62, 53, 0.08); }
-    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-    .student-name { font-weight: bold; font-size: 16px; color: var(--primary-color); word-break: break-word; }
-    .btn-delete-single { background: #fceae8; color: var(--danger-color); border: 1px solid #f8cbad; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .btn-delete-single:hover { background: var(--danger-color); color: white; }
-    .student-info { font-size: 13px; color: #5a6e67; margin-top: 8px; }
+.reports-container { padding: 16px; background: #fafafa; display: none; }
+.reports-container.active { display: block; }
 
-    /* Views */
-    .view-section { display: none; }
-    .view-section.active { display: block; }
-    .back-btn { background: #5a6e67; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 15px; font-weight: bold; transition: 0.2s; }
-    .back-btn:hover { background: #43534e; }
-    
-    .btn-whatsapp { 
-      background: #25d366; 
-      color: white; 
-      border: none; 
-      padding: 11px 20px; 
-      border-radius: 9px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      font-size: 14px; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 8px; 
-      margin-top: 15px; 
-      transition: 0.2s; 
-      box-shadow: 0 3px 8px rgba(37, 211, 102, 0.2);
-    }
-    .btn-whatsapp:hover { background: #1eb854; transform: translateY(-1px); }
+.report-item { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.report-info h4 { font-size: 15px; color: var(--green-deep); font-weight: 800; margin-bottom: 4px; }
+.report-info p { font-size: 13px; color: var(--sub); line-height: 1.5; }
 
-    .btn-image { 
-      background: #0b5e4c; 
-      color: white; 
-      border: none; 
-      padding: 11px 20px; 
-      border-radius: 9px; 
-      font-weight: bold; 
-      cursor: pointer; 
-      font-size: 14px; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 8px; 
-      margin-top: 15px; 
-      transition: 0.2s; 
-      box-shadow: 0 3px 8px rgba(11, 94, 76, 0.2);
-    }
-    .btn-image:hover { background: #043e35; transform: translateY(-1px); }
+.report-btns { display: flex; gap: 8px; }
+.btn-share-rep { background: var(--green-light); color: #fff; }
+.btn-del-rep { background: #fef2f2; color: var(--red); border: 1px solid #fecaca; }
 
-    /* ==================================================== */
-    /* تصميم بطاقة التقرير المصورة (نفس تصميم الصورة بالضبط) */
-    /* ==================================================== */
-    .report-card-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    
-    .quran-report-card {
-      width: 100%;
-      max-width: 450px;
-      background: #fafaf7;
-      border: 3px solid var(--primary-color);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      direction: rtl;
-    }
-
-    .report-header {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 18px 10px;
-      position: relative;
-    }
-
-    .report-header h2 {
-      font-size: 22px;
-      margin-bottom: 4px;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .report-header p {
-      font-size: 12px;
-      color: #d0e3dd;
-    }
-
-    .hero-hero {
-      text-align: center;
-      margin: 15px;
-    }
-
-    .hero-badge {
-      background: linear-gradient(180deg, #fce072 0%, #e59829 100%);
-      color: var(--primary-color);
-      display: inline-block;
-      padding: 8px 30px;
-      border-radius: 20px;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    }
-
-    .date-badge {
-      margin-top: 8px;
-      background: #ffffff;
-      display: inline-block;
-      padding: 4px 15px;
-      border-radius: 12px;
-      font-size: 12px;
-      border: 1px solid #d4e2dd;
-      color: #555;
-      font-weight: bold;
-    }
-
-    .report-section-title {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      font-size: 17px;
-      font-weight: bold;
-      color: var(--primary-color);
-      padding: 5px 15px;
-      margin-top: 15px;
-    }
-
-    .report-section-title span.icon {
-      background: var(--primary-color);
-      color: white;
-      border-radius: 50%;
-      width: 26px;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-    }
-
-    .item-card {
-      background: #ffffff;
-      border: 1px solid #e2e8e5;
-      border-radius: 10px;
-      margin: 8px 15px;
-      padding: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      border-right: 4px solid var(--secondary-color);
-    }
-
-    .item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .item-title {
-      font-size: 17px;
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-
-    .badge-range {
-      background: #f4eee1;
-      color: #795548;
-      border: 1px solid #e0d0b8;
-      padding: 3px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .item-details {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .badge-grade {
-      background: #fff8e1;
-      color: #d9822b;
-      border: 1px solid #ffe082;
-      padding: 3px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .badge-error {
-      background: #fde8e8;
-      color: #c62828;
-      border: 1px solid #ef9a9a;
-      padding: 3px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .next-plan-card {
-      background: #fcf8ee;
-      border: 1px dashed #e5a93c;
-      border-radius: 10px;
-      margin: 8px 15px;
-      padding: 10px 12px;
-      color: #795548;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .report-footer {
-      background: var(--primary-color);
-      color: white;
-      text-align: center;
-      padding: 10px;
-      font-size: 11px;
-      margin-top: 20px;
-    }
-  </style>
+.empty-state { text-align: center; padding: 40px; color: var(--sub); font-size: 16px; font-weight: bold; }
+</style>
 </head>
 <body>
 
+<div class="hdr">
+  <h1>🗂️ سجل وتقارير الطلاب المحفوظة</h1>
+  <p>إدارة واستعراض ومشاركة التقارير السابقة من قاعدة البيانات</p>
+  <a href="index.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال والتقارير</a>
+</div>
+
 <div class="container">
-  
-  <!-- Header -->
-  <div class="header">
-    <h2 id="page-title">صفحة الطلاب</h2>
-    <div class="header-btns">
-      <button class="btn-main" onclick="window.location.href='index1.html'">الرئيسية 🏠</button>
-      <button class="btn-danger-all" onclick="deleteAllStudents()">🗑️ مسح الكل</button>
-    </div>
+  <div class="top-actions">
+    <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم البطل..." style="margin-bottom: 0; flex: 1;">
+    <button class="btn-danger-all" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح جميع بيانات الطلاب</button>
   </div>
 
-  <!-- MAIN VIEW -->
-  <div id="main-view" class="view-section active">
-    <div class="card">
-      <div class="autocomplete-container">
-        <label class="input-label">بحث سريع عن طالب بالاسم:</label>
-        <input type="text" id="studentSearchInput" class="search-input" placeholder="اكتب اسم الطالب للبحث..." autocomplete="off">
-        <div id="customDropdown" class="dropdown-menu"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>جميع الطلاب المسجلين</h3>
-      <div id="studentsGrid" class="students-grid"></div>
-    </div>
+  <div id="students-list-container">
+    <div class="empty-state">جاري تحميل سجلات الطلاب من قاعدة البيانات... ⏳</div>
   </div>
-
-  <!-- STUDENT DETAIL VIEW -->
-  <div id="student-detail-view" class="view-section">
-    <button class="back-btn" onclick="showView('main-view')">← العودة لقائمة الطلاب</button>
-    
-    <div class="card">
-      <h2 id="detailName" style="color: var(--primary-color);">اسم الطالب</h2>
-      <p id="detailPhone" style="color: #5a6e67; margin-top: 5px;"></p>
-      
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button class="btn-whatsapp" onclick="shareReportWithGuardian()">
-          📲 مشاركة نصية (واتساب)
-        </button>
-        <button class="btn-image" onclick="downloadReportAsImage()">
-          🖼️ تحميل التقرير كصورة
-        </button>
-      </div>
-    </div>
-
-    <!-- التقرير التفاعلي والمصمم كصورة -->
-    <div class="report-card-wrapper">
-      <div id="quranReportCard" class="quran-report-card">
-        
-        <div class="report-header">
-          <h2>🕌 مركز خادم القرآن الكريم</h2>
-          <p>تحت إشراف الشيخ عبدالرحمن</p>
-        </div>
-
-        <div class="hero-hero">
-          <div class="hero-badge">🏆 بطلنا: <span id="cardStudentName">--</span></div>
-          <div><span class="date-badge" id="cardReportDate">📅 --</span></div>
-        </div>
-
-        <!-- السور الجديدة -->
-        <div class="report-section-title">
-          <span class="icon">📖</span> السور الجديدة
-        </div>
-        <div id="newSurahsContainer">
-          <!-- تفاصيل السور الجديدة تُضاف هنا -->
-        </div>
-
-        <!-- ماضي السور -->
-        <div class="report-section-title">
-          <span class="icon">📚</span> ماضي السور
-        </div>
-        <div id="pastSurahsContainer">
-          <!-- تفاصيل مراجعة السور تُضاف هنا -->
-        </div>
-
-        <!-- الحديث والأذكار -->
-        <div class="report-section-title">
-          <span class="icon">🔍</span> الحديث والأذكار
-        </div>
-        <div id="adhkarContainer">
-          <!-- تفاصيل الأذكار تُضاف هنا -->
-        </div>
-
-        <div class="report-footer">
-          مركز خادم القرآن الكريم | تقرير متابعة الحفظ<br>
-          <span id="cardFooterTime"></span>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
 </div>
 
 <script>
-  // إعدادات الفايربيس
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
     authDomain: "ahmedelzaiady.firebaseapp.com",
@@ -466,234 +97,406 @@
   const db = firebase.firestore();
   const studentsCollection = db.collection('students');
 
-  let studentsData = [];
-  let currentSelectedStudent = null;
+  let allStudentsData = [];
 
-  const searchInput = document.getElementById('studentSearchInput');
-  const dropdown = document.getElementById('customDropdown');
-  const studentsGrid = document.getElementById('studentsGrid');
+  function customAlert(msg) {
+    var m=document.createElement('div');
+    m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    m.innerHTML='<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:400px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">'+
+      '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
+      '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حسناً</button>'+
+      '</div>';
+    document.body.appendChild(m);
+    document.getElementById('c-alert-close').onclick=function(){m.remove();};
+  }
 
-  studentsCollection.onSnapshot((snapshot) => {
-    studentsData = [];
-    snapshot.forEach((doc) => {
-      studentsData.push({ id: doc.id, ...doc.data() });
+  // الاستماع للبيانات بالوقت الفعلي
+  studentsCollection.onSnapshot(snapshot => {
+    allStudentsData = [];
+    snapshot.forEach(doc => {
+      allStudentsData.push({ id: doc.id, ...doc.data() });
     });
-    renderStudentsList();
-
-    if (currentSelectedStudent) {
-      const updated = studentsData.find(s => s.id === currentSelectedStudent.id);
-      if (updated) openStudentProfile(updated.id);
-    }
-  }, (error) => {
-    console.error("خطأ في الفايربيس:", error);
+    renderStudents(allStudentsData);
   });
 
-  searchInput.addEventListener('input', function() {
-    const query = this.value.trim().toLowerCase();
-    dropdown.innerHTML = '';
-
-    if (query === '') {
-      dropdown.style.display = 'none';
+  function renderStudents(list) {
+    const container = document.getElementById('students-list-container');
+    if (!list.length) {
+      container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حتى الآن.</div>';
       return;
     }
 
-    const filtered = studentsData.filter(s => (s.name || s.studentName) && (s.name || s.studentName).toLowerCase().includes(query));
-
-    if (filtered.length > 0) {
-      filtered.forEach(student => {
-        const item = document.createElement('div');
-        item.className = 'dropdown-item';
-        item.textContent = student.name || student.studentName;
-        item.onclick = () => {
-          searchInput.value = student.name || student.studentName;
-          dropdown.style.display = 'none';
-          openStudentProfile(student.id);
-        };
-        dropdown.appendChild(item);
-      });
-      dropdown.style.display = 'block';
-    } else {
-      dropdown.style.display = 'none';
-    }
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.autocomplete-container')) {
-      dropdown.style.display = 'none';
-    }
-  });
-
-  function renderStudentsList() {
-    studentsGrid.innerHTML = '';
-
-    if (studentsData.length === 0) {
-      studentsGrid.innerHTML = '<div class="no-data" style="grid-column: 1/-1; text-align:center;">لا يوجد طلاب مسجلون حاليًا.</div>';
-      return;
-    }
-
-    studentsData.forEach(student => {
+    container.innerHTML = '';
+    list.forEach(student => {
       const card = document.createElement('div');
       card.className = 'student-card';
-      card.onclick = () => openStudentProfile(student.id);
 
-      const studentName = student.name || student.studentName || 'بدون اسم';
-      const txCount = student.transactions ? student.transactions.length : 0;
+      let reportsHtml = '';
+      const transactions = student.transactions || [];
+
+      if (!transactions.length) {
+        reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
+      } else {
+        transactions.forEach((tx, idx) => {
+          reportsHtml += `
+            <div class="report-item">
+              <div class="report-info" style="flex: 1;">
+                <h4>📅 التاريخ: ${tx.date || 'بدون تاريخ'} - التقييم: ${tx.generalRating || 'ممتاز'}</h4>
+                <p>${tx.desc || ''}</p>
+              </div>
+              <div class="report-btns">
+                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.name}', ${idx})"><i class="ti ti-share"></i> عرض ومشاركة</button>
+                <button class="btn-action-sm btn-del-rep" onclick="deleteSingleReport('${student.id}', ${idx})"><i class="ti ti-trash"></i> مسح</button>
+              </div>
+            </div>
+          `;
+        });
+      }
 
       card.innerHTML = `
-        <div class="card-top">
-          <div class="student-name">${studentName}</div>
-          <button class="btn-delete-single" onclick="deleteStudent('${student.id}', event)" title="مسح الطالب">مسح 🗑️</button>
+        <div class="student-header" onclick="toggleStudentReports('${student.id}')">
+          <div class="student-name"><i class="ti ti-user-circle"></i> ${student.name} <span style="font-size: 13px; opacity: 0.8;">(${transactions.length} تقرير)</span></div>
+          <div class="student-actions" onclick="event.stopPropagation()">
+            <button class="btn-action-sm btn-del-student" onclick="deleteStudentDoc('${student.id}', '${student.name}')"><i class="ti ti-trash"></i> مسح الطالب بالكامل</button>
+            <i class="ti ti-chevron-down" id="chevron-${student.id}" style="font-size: 20px; transition: 0.3s;"></i>
+          </div>
         </div>
-        <div class="student-info">الهاتف: ${student.phone || 'غير مسجل'}</div>
-        <div class="student-info" style="margin-top:8px; font-weight:bold; color:var(--primary-color);">عدد التقارير: ${txCount}</div>
+        <div class="reports-container" id="reports-${student.id}">
+          ${reportsHtml}
+        </div>
       `;
-      studentsGrid.appendChild(card);
+      container.appendChild(card);
     });
   }
 
-  async function deleteStudent(studentId, event) {
-    event.stopPropagation();
-    const student = studentsData.find(s => s.id === studentId);
-    const sName = student ? (student.name || student.studentName) : '';
-    
-    if (student && confirm(`هل أنت متأكد من مسح بيانات الطالب (${sName}) وكافة تقاريره؟`)) {
-      try {
-        await studentsCollection.doc(String(studentId)).delete();
-      } catch (err) {
-        alert("حدث خطأ أثناء المسح: " + err.message);
+  function toggleStudentReports(studentId) {
+    const repDiv = document.getElementById('reports-' + studentId);
+    repDiv.classList.toggle('active');
+  }
+
+  // البحث الحي
+  document.getElementById('search-student').addEventListener('input', function() {
+    const val = this.value.trim().toLowerCase();
+    const filtered = allStudentsData.filter(s => s.name.toLowerCase().includes(val));
+    renderStudents(filtered);
+  });
+
+  // حذف تقرير محدد لطالب
+  async function deleteSingleReport(docId, txIndex) {
+    if (!confirm("هل أنت متأكد من مسح هذا التقرير نهائياً؟")) return;
+    try {
+      const studentDocRef = studentsCollection.doc(docId);
+      const docSnap = await studentDocRef.get();
+      if (docSnap.exists) {
+        let txs = docSnap.data().transactions || [];
+        txs.splice(txIndex, 1);
+        await studentDocRef.update({ transactions: txs });
+        customAlert("✅ تم مسح التقرير بنجاح.");
       }
+    } catch(e) {
+      customAlert("حدث خطأ أثناء الحذف: " + e.message);
     }
   }
 
-  async function deleteAllStudents() {
-    if (studentsData.length === 0) {
-      alert("قائمة الطلاب فارغة بالفعل!");
+  // حذف طالب بالكامل
+  async function deleteStudentDoc(docId, studentName) {
+    if (!confirm("⚠️ هل أنت متأكد من حذف الطالب (" + studentName + ") وجميع تقاريره من قاعدة البيانات؟")) return;
+    try {
+      await studentsCollection.doc(docId).delete();
+      customAlert("✅ تم حذف الطالب بنجاح.");
+    } catch(e) {
+      customAlert("حدث خطأ أثناء الحذف: " + e.message);
+    }
+  }
+
+  // مسح جميع الطلاب
+  async function deleteAllStudentsConfirm() {
+    if (!confirm("🚨 تحذير خطير: هل تريد حقاً مسح جميع الطلاب وكل التقارير المحفوظة في قاعدة البيانات بالكامل؟ لا يمكن التراجع عن هذا الإجراء!")) return;
+    try {
+      const snapshot = await studentsCollection.get();
+      const batch = db.batch();
+      snapshot.docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+      customAlert("✅ تم مسح قاعدة بيانات الطلاب بالكامل بنجاح.");
+    } catch(e) {
+      customAlert("حدث خطأ: " + e.message);
+    }
+  }
+
+  // إعادة رسم التقرير بنفس هوية ورسم index1.html
+  async function reprintAndShareReport(studentName, txIndex) {
+    const student = allStudentsData.find(s => s.name === studentName);
+    if (!student || !student.transactions || !student.transactions[txIndex]) {
+      customAlert("⚠️ لم يتم العثور على بيانات التقرير.");
       return;
     }
 
-    if (confirm("⚠️ تحذير: هل أنت متأكد من مسح جميع الطلاب المسجلين وكافة تقاريرهم؟")) {
-      try {
-        const batch = db.batch();
-        const snapshot = await studentsCollection.get();
-        snapshot.docs.forEach(doc => batch.delete(doc.ref));
-        await batch.commit();
-        showView('main-view');
-      } catch (err) {
-        alert("حدث خطأ أثناء مسح الكل: " + err.message);
+    const tx = student.transactions[txIndex];
+    if (!tx.academicData) {
+      customAlert("⚠️ عذراً، هذا التقرير قديم ولا يحتوي على الهيكل التفصيلي للرسم.");
+      return;
+    }
+
+    customAlert("جاري إعداد صورة التقرير للمشاركة... ⏳");
+
+    try {
+      var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, tx.date);
+      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg');
+    } catch(e) {
+      customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
+    }
+  }
+
+  // أجزاء وأقسام التقرير المعتمدة في index1.html
+  var SECTIONS = [
+    {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
+    {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
+    {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
+    {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
+    {key:'sj', title:'السراج', icon:'💡', isQ:false},
+    {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
+  ];
+
+  function rr(ctx,x,y,w,h,r){
+    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
+  }
+
+  async function loadFonts(){
+    try {
+      await Promise.all([
+        document.fonts.load('900 46px Cairo'), document.fonts.load('800 32px Cairo'), document.fonts.load('700 28px Cairo'),
+        document.fonts.load('700 24px Cairo'), document.fonts.load('600 22px Cairo'), document.fonts.load('400 20px Cairo')
+      ]);
+    } catch(e) {}
+  }
+
+  // رسم التقرير بنمط مطابق لـ index1.html
+  async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
+    await loadFonts();
+    
+    let totalRowsCount = 0;
+    SECTIONS.forEach(sec => {
+      let sData = data[sec.key];
+      if (sData) {
+        if (sData.currents && sData.currents.length) totalRowsCount += sData.currents.length;
+        if (sData.nexts && sData.nexts.length) totalRowsCount += sData.nexts.length;
       }
-    }
-  }
-
-  // فتح وإعداد التقرير المصور بنفس الهيكل المطلوب
-  function openStudentProfile(studentId) {
-    const student = studentsData.find(s => s.id === studentId);
-    if (!student) return;
-
-    currentSelectedStudent = student;
-    const sName = student.name || student.studentName || 'البطل الكريم';
-
-    document.getElementById('detailName').textContent = sName;
-    document.getElementById('detailPhone').textContent = "رقم الهاتف: " + (student.phone || 'غير مسجل');
-
-    // تعبئة بيانات البطاقة المصورة
-    document.getElementById('cardStudentName').textContent = sName;
-    
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('cardReportDate').textContent = dateStr;
-    document.getElementById('cardFooterTime').textContent = "تم إصدار التقرير: " + dateStr;
-
-    // تفكيك البيانات وتوزيعها داخل الأقسام
-    const newContainer = document.getElementById('newSurahsContainer');
-    const pastContainer = document.getElementById('pastSurahsContainer');
-    const adhkarContainer = document.getElementById('adhkarContainer');
-
-    newContainer.innerHTML = '';
-    pastContainer.innerHTML = '';
-    adhkarContainer.innerHTML = '';
-
-    const txs = student.transactions || [];
-
-    if (txs.length === 0) {
-      newContainer.innerHTML = '<div style="padding:10px; font-size:12px; color:#777; text-align:center;">لا توجد بيانات مسجلة</div>';
-    } else {
-      txs.forEach(tx => {
-        const itemHtml = `
-          <div class="item-card">
-            <div class="item-header">
-              <span class="item-title">${tx.surah || tx.type || 'حفظ جديد'}</span>
-              ${tx.range ? `<span class="badge-range">${tx.range}</span>` : ''}
-            </div>
-            <div class="item-details">
-              ${tx.amount ? `<span class="badge-grade">⭐ ${tx.amount}</span>` : ''}
-              ${tx.desc ? `<span class="badge-error">❌ ${tx.desc}</span>` : ''}
-            </div>
-          </div>
-          ${tx.nextPlan ? `<div class="next-plan-card">🎯 الخطة القادمة: ${tx.nextPlan}</div>` : ''}
-        `;
-
-        if (tx.category === 'past' || (tx.type && tx.type.includes('مراجعة'))) {
-          pastContainer.innerHTML += itemHtml;
-        } else if (tx.category === 'adhkar' || (tx.type && tx.type.includes('حديث'))) {
-          adhkarContainer.innerHTML += itemHtml;
-        } else {
-          newContainer.innerHTML += itemHtml;
-        }
-      });
-    }
-
-    showView('student-detail-view');
-  }
-
-  // تنزيل التقرير كصورة 
-  function downloadReportAsImage() {
-    const cardElement = document.getElementById('quranReportCard');
-    
-    html2canvas(cardElement, {
-      scale: 2, // جودة عالية
-      useCORS: true
-    }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `تقرير_${currentSelectedStudent ? (currentSelectedStudent.name || 'الطالب') : 'متابعة'}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
     });
+
+    var canvas = document.createElement('canvas'); 
+    canvas.width = 1080; 
+    canvas.height = Math.max(1600, 700 + (totalRowsCount * 120));
+    var ctx = canvas.getContext('2d');
+
+    // الخلفية والتأطير
+    var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
+    bgG.addColorStop(0, '#fbfaf5'); 
+    bgG.addColorStop(1, '#f3eee0'); 
+    ctx.fillStyle = bgG; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
+    ctx.strokeStyle = '#0b3d2e';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // رأس البطاقة
+    rr(ctx, 35, 35, canvas.width - 70, 160, 18);
+    var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    hdrGradient.addColorStop(0, '#04201a');
+    hdrGradient.addColorStop(1, '#0b3d2e');
+    ctx.fillStyle = hdrGradient;
+    ctx.fill();
+
+    rr(ctx, 40, 40, canvas.width - 80, 150, 14);
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.font = '800 38px Cairo, sans-serif';
+    ctx.fillStyle = '#fef08a';
+    ctx.textAlign = 'center';
+    ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 95);
+
+    ctx.font = '700 26px Cairo, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 135);
+
+    ctx.font = '700 22px Cairo, sans-serif';
+    ctx.fillStyle = '#d4af37';
+    ctx.fillText('التاريخ: ' + hijriDateStr, 540, 170);
+
+    // كارت اسم الطالب والتقييم
+    var curY = 225;
+    rr(ctx, 40, curY, canvas.width - 80, 130, 16);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.font = '900 34px Cairo, sans-serif';
+    ctx.fillStyle = '#04201a';
+    ctx.textAlign = 'center';
+    ctx.fillText('اسم البطل: ' + studentName, 540, curY + 52);
+
+    ctx.font = '800 26px Cairo, sans-serif';
+    ctx.fillStyle = '#b45309';
+    ctx.textAlign = 'center';
+    ctx.fillText('التقييم العام: ' + generalRating, 540, curY + 100);
+
+    curY += 155;
+
+    // طباعة أقسام المتابعة
+    SECTIONS.forEach(sec => {
+      let sData = data[sec.key];
+      let hasCurrents = sData && sData.currents && sData.currents.length > 0;
+      let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
+
+      if (hasCurrents || hasNexts) {
+        rr(ctx, 40, curY, canvas.width - 80, 55, 10);
+        ctx.fillStyle = '#0b3d2e';
+        ctx.fill();
+
+        ctx.font = '800 26px Cairo, sans-serif';
+        ctx.fillStyle = '#fef08a';
+        ctx.textAlign = 'right';
+        ctx.fillText(sec.icon + ' ' + sec.title, 970, curY + 38);
+        curY += 70;
+
+        if (hasCurrents) {
+          sData.currents.forEach(item => {
+            let itemTitle = "";
+            if (item.sr) {
+              itemTitle = "سورة " + item.sr + (item.type === 'range' ? ` (من آية ${item.f} إلى ${item.t})` : ' (كاملة)');
+            } else if (item.f && item.t) {
+              let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
+              itemTitle = `${unit} من ${item.f} إلى ${item.t}`;
+            }
+
+            if (itemTitle) {
+              rr(ctx, 55, curY, canvas.width - 110, 90, 12);
+              ctx.fillStyle = '#ffffff';
+              ctx.fill();
+              ctx.strokeStyle = '#cbd5e1';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+
+              ctx.font = '800 24px Cairo, sans-serif';
+              ctx.fillStyle = '#111827';
+              ctx.textAlign = 'right';
+              ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 950, curY + 36);
+
+              let rateTxt = item.rating ? item.rating : 'تم التسميع';
+              let errTxt = (item.errors && item.errors !== '0') ? ` (الأخطاء: ${item.errors})` : ' (بدون أخطاء ✨)';
+
+              ctx.font = '700 22px Cairo, sans-serif';
+              ctx.fillStyle = (item.errors && item.errors !== '0') ? '#b91c1c' : '#15803d';
+              ctx.textAlign = 'right';
+              ctx.fillText(rateTxt + errTxt, 930, curY + 70);
+
+              curY += 105;
+            }
+          });
+        }
+
+        if (hasNexts) {
+          sData.nexts.forEach(item => {
+            let planTitle = "";
+            if (item.nextPlanSr) {
+              planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (من آية ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
+            } else if (item.nextPlanF && item.nextPlanT) {
+              let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
+              planTitle = `${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
+            }
+
+            if (planTitle) {
+              rr(ctx, 55, curY, canvas.width - 110, 60, 10);
+              ctx.fillStyle = '#fffbe2';
+              ctx.fill();
+              ctx.strokeStyle = '#d4af37';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+
+              ctx.font = '800 22px Cairo, sans-serif';
+              ctx.fillStyle = '#854d0e';
+              ctx.textAlign = 'right';
+              ctx.fillText('🎯 الخطة والواجب القادم: ' + planTitle, 950, curY + 38);
+
+              curY += 75;
+            }
+          });
+        }
+
+        curY += 10;
+      }
+    });
+
+    // الذيل التذييلي
+    var footerY = canvas.height - 70;
+    ctx.font = '800 26px Cairo, sans-serif';
+    ctx.fillStyle = '#0b3d2e';
+    ctx.textAlign = 'center';
+    ctx.fillText('مركز خادم القرآن الكريم - الشيخ عبدالرحمن', 540, footerY);
+
+    ctx.font = '700 18px Cairo, sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 32);
+
+    return canvas;
   }
 
-  // مشاركة نصية عبر الواتساب
-  function shareReportWithGuardian() {
-    if (!currentSelectedStudent) return;
+  function showSingleImageModal(canvasElement, downloadName) {
+    var modal=document.createElement('div');
+    modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+    
+    var imgPreview = document.createElement('img');
+    imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.92);
+    imgPreview.style.cssText = 'max-width:95%;max-height:75vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.4);margin-bottom:20px;';
+    modal.appendChild(imgPreview);
 
-    const sName = currentSelectedStudent.name || currentSelectedStudent.studentName || 'البطل الكريم';
-    let reportText = `📋 *تقرير متابعة الطالب:* ${sName}\n`;
-    reportText += `-----------------------------------\n`;
+    var btnWrap = document.createElement('div');
+    btnWrap.style.cssText = 'display:flex;gap:12px;justify-content:center;width:100%;';
+    
+    var closeBtn = document.createElement('button');
+    closeBtn.innerText = 'إغلاق';
+    closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
+    closeBtn.onclick = function(){ modal.remove(); };
+    btnWrap.appendChild(closeBtn);
 
-    if (!currentSelectedStudent.transactions || currentSelectedStudent.transactions.length === 0) {
-      reportText += `لا توجد عمليات مسجلة حاليًا.\n`;
-    } else {
-      currentSelectedStudent.transactions.forEach((tx, idx) => {
-        reportText += `\n${idx + 1}- *${tx.type || 'تقرير'}*\n   البيان/الأخطاء: ${tx.desc || 'لا يوجد'}\n   التقييم: ${tx.amount || 'ممتاز'}\n`;
-      });
-    }
-
-    const phone = currentSelectedStudent.phone ? currentSelectedStudent.phone.replace(/[^0-9]/g, '') : '';
-    const encodedText = encodeURIComponent(reportText);
-    const whatsappUrl = phone ? `https://wa.me/2${phone}?text=${encodedText}` : `https://api.whatsapp.com/send?text=${encodedText}`;
-
-    window.open(whatsappUrl, '_blank');
-  }
-
-  function showView(viewId) {
-    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-    document.getElementById(viewId).classList.add('active');
-    if(viewId === 'main-view') {
-      document.getElementById('page-title').textContent = "صفحة الطلاب";
-      searchInput.value = '';
-    } else {
-      document.getElementById('page-title').textContent = "ملف الطالب / التقرير المصور";
-    }
+    var shareBtn = document.createElement('button');
+    shareBtn.innerHTML = '📲 مشاركة التقرير مع ولي الأمر';
+    shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    
+    shareBtn.onclick = async function() {
+      try {
+        canvasElement.toBlob(async function(blob) {
+          if (!blob) { customAlert('تعذر إنشاء ملف الصورة'); return; }
+          var file = new File([blob], downloadName, { type: 'image/jpeg' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'تقرير متابعة',
+              text: 'تقرير متابعة وتقييم بطل'
+            });
+          } else {
+            var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+            customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ التقرير على جهازك بدلاً من ذلك.');
+          }
+        }, 'image/jpeg', 0.95);
+      } catch (err) {
+        var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+      }
+    };
+    
+    btnWrap.appendChild(shareBtn);
+    modal.appendChild(btnWrap);
+    document.body.appendChild(modal);
   }
 </script>
-
 </body>
 </html>
