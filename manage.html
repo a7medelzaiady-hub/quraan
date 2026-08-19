@@ -231,7 +231,6 @@ body {
   const db = firebase.firestore();
 
   let allStudentsData = [];
-  let currentModalElement = null;
 
   function customAlert(msg) {
     var m = document.createElement('div');
@@ -278,15 +277,6 @@ body {
     }
   }
 
-  function getRatingStars(rating) {
-    if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
-    if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
-    if (rating.includes('جيد جداً') || rating.includes('جيد جدا')) return '⭐⭐⭐⭐';
-    if (rating.includes('جيد')) return '⭐⭐⭐';
-    if (rating.includes('مقبول')) return '⭐⭐';
-    return '⭐';
-  }
-
   function normalizeText(text) {
     if (!text) return '';
     return text.toString()
@@ -302,77 +292,68 @@ body {
     container.innerHTML = '<div class="empty-state">جاري تحميل سجلات الطلاب من قاعدة البيانات ... ⏳</div>';
 
     try {
-      // 1. جلب قائمة الطلاب الأساسية
       const studentsSnap = await db.collection('students').get();
-      // 2. جلب سجلات وتقارير المتابعة
       const recordsSnap = await db.collection('students_records').get();
 
-      let recordsMap = {};
-      recordsSnap.forEach(doc => {
-        recordsMap[doc.id] = doc.data();
-      });
+      // خريطة لتجميع الطلاب وحساب عدد التقارير بدقة دون تكرار
+      let studentsMap = {};
 
-      allStudentsData = [];
-
-      if (studentsSnap.empty && recordsSnap.empty) {
-        container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حالياً.</div>';
-        return;
-      }
-
+      // 1. معالجة وثائق الطلاب الأساسية
       studentsSnap.forEach(doc => {
         let rawData = doc.data() || {};
         let studentId = doc.id;
         let resolvedName = rawData.name || rawData.studentName || rawData.student_name || studentId;
 
-        // جلب سجل الطالب من سجلات الطلاب students_records
-        let studentRecord = recordsMap[studentId] || {};
-        
-        let txList = [];
-
-        // إذا كان هناك بيانات داخل data المعقدة
-        if (studentRecord.data || studentRecord.created || studentRecord.advice) {
-          txList.push({
-            date: studentRecord.created || rawData.date || new Date().toISOString(),
-            academicData: studentRecord.data || {},
-            advice: studentRecord.advice || [],
-            generalRating: rawData.generalRating || 'ممتاز'
-          });
-        }
-
-        // لو كان هناك مصفوفة تقارير تقليدية
-        if (rawData.transactions || rawData.reports) {
-          let extraTxs = rawData.transactions || rawData.reports || [];
-          txList = txList.concat(extraTxs);
-        }
-
-        allStudentsData.push({
+        studentsMap[studentId] = {
           id: studentId,
           name: resolvedName,
-          transactions: txList,
+          transactions: rawData.transactions || rawData.reports || [],
           rawStudent: rawData,
-          rawRecord: studentRecord
-        });
+          rawRecord: null
+        };
       });
 
-      // إدراج السجلات المتبقية في students_records والتي لا تملك ملفاً في students
+      // 2. دمج وتجميع سجلات المتابعة من students_records
       recordsSnap.forEach(doc => {
-        let exists = allStudentsData.some(s => s.id === doc.id);
-        if (!exists) {
-          let recData = doc.data() || {};
-          allStudentsData.push({
-            id: doc.id,
-            name: recData.studentName || recData.name || doc.id,
-            transactions: [{
-              date: recData.created || new Date().toISOString(),
-              academicData: recData.data || {},
-              advice: recData.advice || [],
-              generalRating: 'ممتاز'
-            }],
+        let recData = doc.data() || {};
+        let recName = recData.studentName || recData.name || doc.id;
+        let studentId = doc.id;
+
+        // البحث إذا كان الطالب موجوداً بالـ ID أو بالإصدار الموحد للاسم
+        let existingKey = Object.keys(studentsMap).find(k => 
+          k === studentId || normalizeText(studentsMap[k].name) === normalizeText(recName)
+        );
+
+        let reportItem = {
+          date: recData.created || recData.date || new Date().toISOString(),
+          academicData: recData.data || {},
+          advice: recData.advice || [],
+          generalRating: recData.generalRating || 'ممتاز'
+        };
+
+        if (existingKey) {
+          studentsMap[existingKey].rawRecord = recData;
+          // دمج التقرير إذا لم يكن مضافاً مسبقاً
+          if (!studentsMap[existingKey].transactions.some(t => t.date === reportItem.date)) {
+            studentsMap[existingKey].transactions.push(reportItem);
+          }
+        } else {
+          studentsMap[studentId] = {
+            id: studentId,
+            name: recName,
+            transactions: [reportItem],
             rawStudent: {},
             rawRecord: recData
-          });
+          };
         }
       });
+
+      allStudentsData = Object.values(studentsMap);
+
+      if (allStudentsData.length === 0) {
+        container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حالياً.</div>';
+        return;
+      }
 
       renderStudents(allStudentsData);
     } catch (error) {
@@ -384,7 +365,7 @@ body {
   function renderStudents(list) {
     const container = document.getElementById('students-list-container');
     if (!list.length) {
-      container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حتى الآن.</div>';
+      container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب مطابقة للبحث.</div>';
       return;
     }
 
@@ -396,8 +377,12 @@ body {
       const transactions = student.transactions || [];
       let lastDateText = "لا توجد حصص سابقة";
 
-      if (transactions.length > 0 && transactions[0].date) {
-        lastDateText = "الحصة الماضية بتاريخ: " + convertToHijri(transactions[0].date);
+      // رتب التقارير تنازلياً حسب التاريخ لعرض أحدث حصة
+      if (transactions.length > 0) {
+        transactions.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        if (transactions[0].date) {
+          lastDateText = "الحصة الماضية بتاريخ: " + convertToHijri(transactions[0].date);
+        }
       }
 
       rowWrapper.innerHTML = `
@@ -425,7 +410,7 @@ body {
   }
 
   function openStudentPage(studentId) {
-    window.location.href = `student_history.html?id=${studentId}`;
+    window.location.href = `student_history.html?id=${encodeURIComponent(studentId)}`;
   }
 
   document.getElementById('search-student').addEventListener('input', function() {
