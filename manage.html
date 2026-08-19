@@ -34,7 +34,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
 
 .container { max-width: 900px; margin: 20px auto; padding: 0 14px; }
 
-.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: gap; gap: 10px; }
+.top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
 .btn-danger-all { background: #fee2e2; color: var(--red); border: 2px solid var(--red); padding: 10px 18px; border-radius: 12px; font-weight: bold; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 14px; display: flex; align-items: center; gap: 6px; }
 .btn-danger-all:hover { background: var(--red); color: #fff; }
 
@@ -137,7 +137,6 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
       if (!transactions.length) {
         reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
       } else {
-        // ترتيب التقارير من الأحدث للأقدم حسب الحفظ
         transactions.forEach((tx, idx) => {
           reportsHtml += `
             <div class="report-item">
@@ -226,7 +225,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
     }
   }
 
-  // إعادة رسم التقرير ومشاركته عند النقر عليه من صفحة الإدارة
+  // إعادة رسم التقرير بنفس هوية ورسم index1.html
   async function reprintAndShareReport(studentName, txIndex) {
     const student = allStudentsData.find(s => s.name === studentName);
     if (!student || !student.transactions || !student.transactions[txIndex]) {
@@ -250,7 +249,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
     }
   }
 
-  // دوال الرسم المتطابقة تماماً لتوليد الصورة بنفس الجودة والوضوح العالي
+  // أجزاء وأقسام التقرير المعتمدة في index1.html
   var SECTIONS = [
     {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
     {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
@@ -275,6 +274,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
     } catch(e) {}
   }
 
+  // رسم التقرير بنمط مطابق لـ index1.html
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -292,6 +292,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
     canvas.height = Math.max(1600, 700 + (totalRowsCount * 120));
     var ctx = canvas.getContext('2d');
 
+    // الخلفية والتأطير
     var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
     bgG.addColorStop(0, '#fbfaf5'); 
     bgG.addColorStop(1, '#f3eee0'); 
@@ -303,6 +304,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
     ctx.lineWidth = 4;
     ctx.stroke();
 
+    // رأس البطاقة
     rr(ctx, 35, 35, canvas.width - 70, 160, 18);
     var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     hdrGradient.addColorStop(0, '#04201a');
@@ -322,12 +324,13 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
 
     ctx.font = '700 26px Cairo, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 135);
+    ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 135);
 
     ctx.font = '700 22px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
     ctx.fillText('التاريخ: ' + hijriDateStr, 540, 170);
 
+    // كارت اسم الطالب والتقييم
     var curY = 225;
     rr(ctx, 40, curY, canvas.width - 80, 130, 16);
     ctx.fillStyle = '#ffffff';
@@ -348,6 +351,7 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
 
     curY += 155;
 
+    // طباعة أقسام المتابعة
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
       let hasCurrents = sData && sData.currents && sData.currents.length > 0;
@@ -432,11 +436,12 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream
       }
     });
 
+    // الذيل التذييلي
     var footerY = canvas.height - 70;
     ctx.font = '800 26px Cairo, sans-serif';
     ctx.fillStyle = '#0b3d2e';
     ctx.textAlign = 'center';
-    ctx.fillText('الشيخ عبدالرحمن', 540, footerY);
+    ctx.fillText('مركز خادم القرآن الكريم - الشيخ عبدالرحمن', 540, footerY);
 
     ctx.font = '700 18px Cairo, sans-serif';
     ctx.fillStyle = '#64748b';
