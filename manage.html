@@ -1,894 +1,340 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>إدارة تقارير الطلاب - نظام المتابعة</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سجل وتعارير الطلاب المحفوظة</title>
+  <style>
+    :root {
+      --bg-color: #031c16;
+      --card-bg: #0d4236;
+      --card-border: #185a4a;
+      --accent-gold: #e2b765;
+      --btn-bg: #105344;
+      --danger-bg: #2a1b1b;
+      --danger-border: #4a2727;
+      --danger-text: #ff6b6b;
+      --text-main: #ffffff;
+      --text-sub: #b2cbbd;
+    }
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
 
-<style>
-:root {
-  --green-deep: #04201a;
-  --green-mid: #0b3d2e;
-  --green-card: #124d3b;
-  --green-light: #14795c;
-  --gold-primary: #d4af37;
-  --gold-light: #fef08a;
-  --white: #ffffff;
-  --cream: #fdfbf5;
-  --border-light: #e2e8f0;
-  --text-dark: #111827;
-  --sub: #64748b;
-  --red-light: #fee2e2;
-  --red: #ef4444;
-  --red-dark: #dc2626;
-}
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 16px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
 
-* { 
-  box-sizing: border-box; 
-  margin: 0; 
-  padding: 0; 
-  -webkit-tap-highlight-color: transparent;
-}
+    /* الهيدر */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-body { 
-  direction: rtl; 
-  font-family: 'Cairo', sans-serif; 
-  background-color: var(--cream); 
-  color: var(--text-dark);
-  min-height: 100vh; 
-  padding-bottom: 60px; 
-}
+    header h1 {
+      font-size: 1.3rem;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-/* --- الهيدر الرئيسي --- */
-.hdr { 
-  background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
-  padding: 20px 16px; 
-  text-align: center; 
-  border-bottom: 4px solid var(--gold-primary); 
-  color: #fff; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  position: relative;
-}
-.hdr h1 { 
-  font-size: 20px; 
-  font-weight: 800;
-  color: var(--gold-light); 
-  margin-bottom: 4px; 
-}
-.hdr p {
-  font-size: 12px;
-  opacity: 0.85;
-}
+    header p {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
 
-.hdr-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 14px;
-}
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
 
-.nav-btn { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 6px; 
-  background: rgba(255, 255, 255, 0.1); 
-  color: var(--gold-light); 
-  border: 1px solid var(--gold-primary); 
-  padding: 8px 14px; 
-  border-radius: 20px; 
-  text-decoration: none; 
-  font-size: 12px; 
-  font-weight: 700; 
-  transition: all 0.2s ease;
-  touch-action: manipulation;
-  cursor: pointer;
-}
-.nav-btn:active {
-  transform: scale(0.96);
-  background: rgba(212, 175, 55, 0.25);
-}
+    .btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-.btn-reset-data {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.4);
-}
-.btn-reset-data:active {
-  background: var(--red);
-  color: #fff;
-}
+    .btn-primary {
+      background-color: transparent;
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
 
-.container { max-width: 680px; margin: 16px auto; padding: 0 12px; }
+    .btn-danger-outline {
+      background-color: transparent;
+      border-color: var(--danger-border);
+      color: var(--danger-text);
+    }
 
-/* --- البحث والتحكم --- */
-.controls-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  margin-bottom: 16px;
-  border: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+    /* مربع البحث */
+    .search-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-.search-box { 
-  width: 100%; 
-  padding: 12px 14px; 
-  border: 1.5px solid var(--border-light); 
-  border-radius: 12px; 
-  font-size: 14px; 
-  font-family: 'Cairo', sans-serif; 
-  outline: none; 
-  background: #fcfcfc; 
-  transition: border-color 0.2s;
-}
-.search-box:focus {
-  border-color: var(--green-mid);
-  background: #fff;
-}
+    .search-box input {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
 
-/* --- كروت الطلاب --- */
-.student-card { 
-  background: #fff; 
-  border-radius: 16px; 
-  border: 1px solid var(--border-light); 
-  margin-bottom: 12px; 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
-  overflow: hidden; 
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+    .search-box input::placeholder {
+      color: var(--text-sub);
+    }
 
-.student-header { 
-  background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-card) 100%); 
-  color: #fff; 
-  padding: 14px 16px; 
-  cursor: pointer; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  touch-action: manipulation;
-}
-.student-header:active {
-  opacity: 0.92;
-}
+    .search-box .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+    }
 
-.student-info { 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  flex: 1;
-}
+    /* صف الطالب (الكارت + السلة) */
+    .student-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
 
-.student-name {
-  font-size: 15px; 
-  font-weight: 800; 
-  color: var(--gold-light); 
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+    /* كارت الطالب الرئيسي */
+    .student-card {
+      flex: 1;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
 
-.badge-reports {
-  background: rgba(254, 240, 138, 0.15);
-  color: var(--gold-light);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
+    .student-card:active {
+      background-color: var(--btn-bg);
+    }
 
-.student-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.btn-icon-del {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 17px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  touch-action: manipulation;
-}
-.btn-icon-del:active {
-  background: var(--red);
-  color: #fff;
-  transform: scale(0.92);
-}
+    .student-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
 
-.chevron-icon {
-  color: var(--gold-primary);
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-.student-card.active .chevron-icon {
-  transform: rotate(180deg);
-}
+    .badge {
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      color: var(--accent-gold);
+    }
 
-.reports-container { 
-  padding: 12px; 
-  background: #fafafa; 
-  display: none; 
-  border-top: 1px solid var(--border-light);
-}
-.reports-container.active { 
-  display: block; 
-}
+    .arrow-icon {
+      transition: transform 0.3s;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
 
-.report-item { 
-  background: #fff; 
-  border: 1px solid var(--border-light); 
-  border-radius: 12px; 
-  padding: 12px; 
-  margin-bottom: 10px; 
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.report-item:last-child {
-  margin-bottom: 0;
-}
+    /* زر الحذف المستقل */
+    .delete-btn {
+      background-color: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.1s, background-color 0.2s;
+    }
 
-.report-info h4 { 
-  font-size: 13px; 
-  color: var(--green-deep); 
-  font-weight: 800; 
-  margin-bottom: 2px; 
-}
-.report-info p { 
-  font-size: 12px; 
-  color: var(--sub); 
-  line-height: 1.4; 
-}
+    .delete-btn:active {
+      transform: scale(0.92);
+      background-color: #3d2323;
+    }
 
-.report-btns { 
-  display: flex; 
-  gap: 8px; 
-  justify-content: flex-end;
-  margin-top: 4px;
-}
+    /* تفاصيل التقارير عند الفتح */
+    .reports-container {
+      display: none;
+      padding: 10px 16px;
+      margin-top: -6px;
+      margin-bottom: 12px;
+      background-color: rgba(0, 0, 0, 0.15);
+      border-radius: 0 0 16px 16px;
+      border: 1px solid var(--card-border);
+      border-top: none;
+    }
 
-.btn-action-sm { 
-  padding: 8px 14px; 
-  border-radius: 8px; 
-  font-size: 12px; 
-  font-weight: 700; 
-  border: none; 
-  cursor: pointer; 
-  font-family: 'Cairo', sans-serif; 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 4px; 
-  touch-action: manipulation;
-  transition: transform 0.15s;
-}
-.btn-action-sm:active {
-  transform: scale(0.95);
-}
-
-.btn-share-rep { 
-  background: var(--green-light); 
-  color: #fff; 
-}
-.btn-del-rep { 
-  background: #fef2f2; 
-  color: var(--red); 
-  border: 1px solid #fecaca; 
-}
-
-.empty-state { 
-  text-align: center; 
-  padding: 40px 20px; 
-  color: var(--sub); 
-  font-size: 14px; 
-  font-weight: 700; 
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-}
-</style>
+    .reports-container.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
-<div class="hdr">
-  <h1>🗂️ سجل وتقارير الطلاب المحفوظة</h1>
-  <p>إدارة واستعراض ومشاركة التقارير السابقة (من الأحدث للأقدم)</p>
-  
-  <div class="hdr-nav">
-    <a href="index1.html" class="nav-btn"><i class="ti ti-arrow-right"></i> العودة للإدخال</a>
-    <button class="nav-btn btn-reset-data" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash-x"></i> تصفير البيانات</button>
-  </div>
-</div>
+  <header>
+    <h1>📂 سجل وتعارير الطلاب المحفوظة</h1>
+    <p>إدارة واستعراض ومشاركة التقارير السابقة (من الأحدث للأقدم)</p>
+    <div class="header-actions">
+      <button class="btn btn-primary">← العودة للإدخال</button>
+      <button class="btn btn-danger-outline" onclick="clearAllData()">🗑️ تصغير البيانات</button>
+    </div>
+  </header>
 
-<div class="container">
-  <div class="controls-card">
-    <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم الطالب...">
-  </div>
+  <main>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="ابحث عن اسم الطالب..." oninput="handleSearch()">
+    </div>
 
-  <div id="students-list-container">
-    <div class="empty-state">جاري تحميل سجلات الطلاب من قاعدة البيانات... ⏳</div>
-  </div>
-</div>
+    <div id="studentsList">
+      <!-- يتم توليد القائمة هنا عن طريق JavaScript -->
+    </div>
+  </main>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
-    authDomain: "ahmedelzaiady.firebaseapp.com",
-    projectId: "ahmedelzaiady",
-    storageBucket: "ahmedelzaiady.firebasestorage.app",
-    messagingSenderId: "300306825071",
-    appId: "1:300306825071:web:0426ddde56280fa090329a",
-    measurementId: "G-WE04GK5XZZ"
-  };
+  <script>
+    // بيانات أولية مع خيار التخزين المحلي لسرعة التحميل
+    const initialStudents = [
+      { id: 1, name: "رقية محمد", reportsCount: 0 },
+      { id: 2, name: "محمود احمد", reportsCount: 0 },
+      { id: 3, name: "يوسف احمد", reportsCount: 0 }
+    ];
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const studentsCollection = db.collection('students');
+    let debounceTimer;
 
-  let allStudentsData = [];
-  let currentModalElement = null;
-
-  function customAlert(msg) {
-    var m=document.createElement('div');
-    m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);';
-    m.innerHTML='<div style="background:#fff;padding:22px;border-radius:18px;text-align:center;max-width:360px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">'+
-      '<div style="font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:18px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
-      '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;width:100%;">حسناً</button>'+
-      '</div>';
-    document.body.appendChild(m);
-    document.getElementById('c-alert-close').onclick=function(){m.remove();};
-  }
-
-  const monthMap = {
-    "يناير":1, "فبراير":2, "مارس":3, "أبريل":4, "ابريل":4, "مايو":5, "يونيو":6,
-    "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
-  };
-
-  function convertToHijri(dateInput) {
-    try {
-      let d = new Date();
-      if (dateInput && typeof dateInput === 'string') {
-        let str = dateInput.trim();
-        let matches = str.match(/\d+/g);
-        if (matches && matches.length >= 3) {
-          let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
-          let m = parseInt(matches[1]) - 1;
-          let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
-          d = new Date(y, m, day);
-        } else if (matches && matches.length >= 2) {
-          let day = parseInt(matches[0]);
-          let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7;
-          for (let mKey in monthMap) {
-            if (str.includes(mKey)) { month = monthMap[mKey] - 1; break; }
-          }
-          d = new Date(year, month, day);
-        }
-      } else if (dateInput) {
-        d = new Date(dateInput);
-      }
-
-      if (isNaN(d.getTime())) d = new Date();
-
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-
-      return formatter.format(d);
-    } catch (e) {
-      return 'التاريخ الهجري';
-    }
-  }
-
-  function getRatingStars(rating) {
-    if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
-    if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
-    if (rating.includes('جيد جداً') || rating.includes('جيد جدا')) return '⭐⭐⭐⭐';
-    if (rating.includes('جيد')) return '⭐⭐⭐';
-    if (rating.includes('مقبول')) return '⭐⭐';
-    return '⭐';
-  }
-
-  // جلب البيانات مرتبة
-  studentsCollection.onSnapshot(snapshot => {
-    allStudentsData = [];
-    snapshot.forEach(doc => {
-      let s = doc.data();
-      if (s.transactions && Array.isArray(s.transactions)) {
-        s.transactions.reverse();
-      }
-      allStudentsData.push({ id: doc.id, ...s });
-    });
-
-    allStudentsData.sort((a, b) => {
-      let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
-      let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
-      return tB - tA;
-    });
-
-    renderStudents(allStudentsData);
-  });
-
-  function renderStudents(list) {
-    const container = document.getElementById('students-list-container');
-    if (!list.length) {
-      container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حتى الآن.</div>';
-      return;
+    // جلب البيانات مع تقليل الاستهلاك عبر LocalStorage
+    function getStudents() {
+      const cached = localStorage.getItem('students_cache');
+      if (cached) return JSON.parse(cached);
+      
+      localStorage.setItem('students_cache', JSON.stringify(initialStudents));
+      return initialStudents;
     }
 
-    container.innerHTML = '';
-    list.forEach(student => {
-      const card = document.createElement('div');
-      card.className = 'student-card';
-      card.id = 'card-' + student.id;
+    // عرض القائمة
+    function renderStudents(filter = "") {
+      const listContainer = document.getElementById('studentsList');
+      const students = getStudents();
+      listContainer.innerHTML = "";
 
-      let reportsHtml = '';
-      const transactions = student.transactions || [];
+      const filtered = students.filter(s => s.name.includes(filter.trim()));
 
-      if (!transactions.length) {
-        reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
-      } else {
-        transactions.forEach((tx, idx) => {
-          let hijriD = convertToHijri(tx.date);
-          let stars = getRatingStars(tx.generalRating);
-          
-          reportsHtml += `
-            <div class="report-item">
-              <div class="report-info">
-                <h4>📅 التاريخ: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
-                <p>${tx.desc || ''}</p>
-              </div>
-              <div class="report-btns">
-                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.name}', ${idx})"><i class="ti ti-share"></i> عرض ومشاركة</button>
-                <button class="btn-action-sm btn-del-rep" onclick="deleteSingleReport('${student.id}', ${idx})"><i class="ti ti-trash"></i> مسح</button>
-              </div>
+      filtered.forEach(student => {
+        const row = document.createElement('div');
+        row.className = 'student-row';
+        row.id = `student-row-${student.id}`;
+
+        row.innerHTML = `
+          <div class="student-card" onclick="toggleReports(${student.id})">
+            <div class="student-info">
+              <span>👤</span>
+              <span class="student-name">${student.name}</span>
             </div>
-          `;
-        });
-      }
-
-      card.innerHTML = `
-        <div class="student-header" onclick="toggleStudentReports('${student.id}')">
-          <div class="student-info">
-            <i class="ti ti-user-circle" style="font-size: 24px; color: var(--gold-light);"></i> 
-            <span class="student-name">${student.name}</span>
-            <span class="badge-reports">${transactions.length} تقرير</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="badge">${student.reportsCount} تقرير</span>
+              <span class="arrow-icon" id="arrow-${student.id}">▼</span>
+            </div>
           </div>
-          <div class="student-actions" onclick="event.stopPropagation()">
-            <button class="btn-icon-del" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}', '${student.name}')">
-              <i class="ti ti-trash"></i>
-            </button>
-            <i class="ti ti-chevron-down chevron-icon" id="chevron-${student.id}"></i>
-          </div>
-        </div>
-        <div class="reports-container" id="reports-${student.id}">
-          ${reportsHtml}
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
+          <button class="delete-btn" onclick="deleteStudent(${student.id})" title="حذف الطالب">
+            🗑️
+          </button>
+        `;
 
-  function toggleStudentReports(studentId) {
-    const repDiv = document.getElementById('reports-' + studentId);
-    const cardDiv = document.getElementById('card-' + studentId);
-    
-    repDiv.classList.toggle('active');
-    cardDiv.classList.toggle('active');
-  }
+        const reportsDiv = document.createElement('div');
+        reportsDiv.className = 'reports-container';
+        reportsDiv.id = `reports-${student.id}`;
+        reportsDiv.innerText = "جاري تحميل التقارير...";
 
-  document.getElementById('search-student').addEventListener('input', function() {
-    const val = this.value.trim().toLowerCase();
-    const filtered = allStudentsData.filter(s => s.name.toLowerCase().includes(val));
-    renderStudents(filtered);
-  });
+        const wrapper = document.createElement('div');
+        wrapper.appendChild(row);
+        wrapper.appendChild(reportsDiv);
 
-  // مسح تقرير فردي
-  async function deleteSingleReport(docId, txIndex) {
-    if (!confirm("هل أنت متأكد من مسح هذا التقرير نهائياً؟")) return;
-    try {
-      const studentDocRef = studentsCollection.doc(docId);
-      const docSnap = await studentDocRef.get();
-      if (docSnap.exists) {
-        let txs = docSnap.data().transactions || [];
-        txs.splice(txIndex, 1);
-        await studentDocRef.update({ transactions: txs });
-        customAlert("✅ تم مسح التقرير بنجاح.");
-      }
-    } catch(e) {
-      customAlert("حدث خطأ أثناء الحذف: " + e.message);
-    }
-  }
-
-  // 🔒 حماية مضاعفة: التعديل المطلوب بطلب التأكيد مرتين عند حذف الطالب
-  async function deleteStudentDoc(docId, studentName) {
-    // التأكيد الأول
-    const confirm1 = confirm("⚠️ تنبيه أول:\nهل تريد حقاً مسح الطالب (" + studentName + ")؟");
-    if (!confirm1) return;
-
-    // التأكيد الثاني
-    const confirm2 = confirm("🚨 تأكيد نهائي وقطعي:\nسيتم مسح الطالب (" + studentName + ") وجميع تقاريره المحفوظة نهائياً ولن يمكنك استرجاعها!\n\nهل تريد الاستمرار؟");
-    if (!confirm2) return;
-
-    try {
-      await studentsCollection.doc(docId).delete();
-      customAlert("✅ تم حذف الطالب (" + studentName + ") بنجاح.");
-    } catch(e) {
-      customAlert("حدث خطأ أثناء الحذف: " + e.message);
-    }
-  }
-
-  // 🔒 قيود وتأكيد مشدد لتصفير كافة البيانات
-  async function deleteAllStudentsConfirm() {
-    const firstCheck = confirm("🚨 تحذير هام جداً:\nأنت على وشك مسح جميع بيانات الطلاب والتقارير بالكامل من قاعدة البيانات!");
-    if (!firstCheck) return;
-
-    const userInput = prompt("⚠️ لتأكيد عملية التصفير الكلي، يرجى كتابة كلمة (تأكيد) في الخانة التالية:");
-    if (userInput !== "تأكيد") {
-      customAlert("❌ لم يتم التصفير. الكلمة المدخلة غير صحيحة.");
-      return;
+        listContainer.appendChild(wrapper);
+      });
     }
 
-    try {
-      const snapshot = await studentsCollection.get();
-      const batch = db.batch();
-      snapshot.docs.forEach(doc => batch.delete(doc.ref));
-      await batch.commit();
-      customAlert("✅ تم تصفير قاعدة البيانات بالكامل بنجاح.");
-    } catch(e) {
-      customAlert("حدث خطأ أثناء التصفير: " + e.message);
-    }
-  }
+    // جلب التقارير عند الطلب فقط (Lazy Loading) لتقليل استهلاك البيانات
+    function toggleReports(id) {
+      const reportsDiv = document.getElementById(`reports-${id}`);
+      const arrow = document.getElementById(`arrow-${id}`);
+      const isOpen = reportsDiv.classList.contains('active');
 
-  async function reprintAndShareReport(studentName, txIndex) {
-    const student = allStudentsData.find(s => s.name === studentName);
-    if (!student || !student.transactions || !student.transactions[txIndex]) {
-      customAlert("⚠️ لم يتم العثور على بيانات التقرير.");
-      return;
-    }
+      document.querySelectorAll('.reports-container').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.arrow-icon').forEach(el => el.style.transform = 'rotate(0deg)');
 
-    const tx = student.transactions[txIndex];
-    if (!tx.academicData) {
-      customAlert("⚠️ عذراً، هذا التقرير لا يحتوي على البيانات التفصيلية للرسم.");
-      return;
-    }
-
-    try {
-      let hijriDateStr = convertToHijri(tx.date);
-      var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
-      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName);
-    } catch(e) {
-      customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
-    }
-  }
-
-  var SECTIONS = [
-    {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
-    {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
-    {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
-    {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
-    {key:'sj', title:'السراج', icon:'💡', isQ:false},
-    {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
-  ];
-
-  function rr(ctx,x,y,w,h,r){
-    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-    ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
-  }
-
-  async function loadFonts(){
-    try {
-      await Promise.all([
-        document.fonts.load('900 52px Cairo'), 
-        document.fonts.load('800 38px Cairo'), 
-        document.fonts.load('700 32px Cairo'),
-        document.fonts.load('700 28px Cairo'), 
-        document.fonts.load('600 24px Cairo')
-      ]);
-    } catch(e) {}
-  }
-
-  async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
-    await loadFonts();
-    
-    let totalRowsCount = 0;
-    SECTIONS.forEach(sec => {
-      let sData = data[sec.key];
-      if (sData) {
-        if (sData.currents && sData.currents.length) totalRowsCount += sData.currents.length;
-        if (sData.nexts && sData.nexts.length) totalRowsCount += sData.nexts.length;
-      }
-    });
-
-    var canvas = document.createElement('canvas'); 
-    canvas.width = 1080; 
-    canvas.height = Math.max(1750, 800 + (totalRowsCount * 150));
-    var ctx = canvas.getContext('2d');
-
-    var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
-    bgG.addColorStop(0, '#fdfbf5'); 
-    bgG.addColorStop(1, '#f4eee0'); 
-    ctx.fillStyle = bgG; 
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
-    ctx.strokeStyle = '#0b3d2e';
-    ctx.lineWidth = 5;
-    ctx.stroke();
-
-    rr(ctx, 35, 35, canvas.width - 70, 185, 18);
-    var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    hdrGradient.addColorStop(0, '#04201a');
-    hdrGradient.addColorStop(1, '#0b3d2e');
-    ctx.fillStyle = hdrGradient;
-    ctx.fill();
-
-    rr(ctx, 40, 40, canvas.width - 80, 175, 14);
-    ctx.strokeStyle = '#d4af37';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    ctx.font = '900 46px Cairo, sans-serif';
-    ctx.fillStyle = '#fef08a';
-    ctx.textAlign = 'center';
-    ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 98);
-
-    ctx.font = '800 32px Cairo, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
-
-    ctx.font = '700 28px Cairo, sans-serif';
-    ctx.fillStyle = '#d4af37';
-    ctx.textAlign = 'center';
-    ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
-
-    var curY = 250;
-    rr(ctx, 40, curY, canvas.width - 80, 150, 18);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    ctx.font = '900 42px Cairo, sans-serif';
-    ctx.fillStyle = '#04201a';
-    ctx.textAlign = 'center';
-    ctx.fillText('البطل: ' + studentName, 540, curY + 60);
-
-    let displayRating = (generalRating && generalRating !== 'undefined') ? generalRating : 'ممتاز';
-    let starsTxt = getRatingStars(displayRating);
-    ctx.font = '800 32px Cairo, sans-serif';
-    ctx.fillStyle = '#b45309';
-    ctx.textAlign = 'center';
-    ctx.fillText('التقييم العام: ' + displayRating + ' ' + starsTxt, 540, curY + 115);
-
-    curY += 180;
-
-    SECTIONS.forEach(sec => {
-      let sData = data[sec.key];
-      let hasCurrents = sData && sData.currents && sData.currents.length > 0;
-      let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
-
-      if (hasCurrents || hasNexts) {
-        rr(ctx, 40, curY, canvas.width - 80, 68, 14);
-        ctx.fillStyle = '#0b3d2e';
-        ctx.fill();
-
-        ctx.font = '900 34px Cairo, sans-serif';
-        ctx.fillStyle = '#fef08a';
-        ctx.textAlign = 'right';
-        ctx.fillText(sec.icon + ' ' + sec.title, 950, curY + 46);
-        curY += 85;
-
-        if (hasCurrents) {
-          sData.currents.forEach(item => {
-            let itemTitle = "";
-            let rangeBadge = "";
-
-            if (item.sr) {
-              itemTitle = "سورة " + item.sr;
-              rangeBadge = (item.type === 'range' && item.f && item.t) ? `(الآيات ${item.f} إلى ${item.t})` : '(كاملة)';
-            } else if (item.f && item.t) {
-              let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
-              itemTitle = `${unit}`;
-              rangeBadge = `من ${item.f} إلى ${item.t}`;
-            }
-
-            if (itemTitle) {
-              rr(ctx, 50, curY, canvas.width - 100, 115, 16);
-              ctx.fillStyle = '#ffffff';
-              ctx.fill();
-              ctx.strokeStyle = '#94a3b8';
-              ctx.lineWidth = 2;
-              ctx.stroke();
-
-              ctx.font = '900 34px Cairo, sans-serif';
-              ctx.fillStyle = '#020617';
-              ctx.textAlign = 'right';
-              ctx.fillText(itemTitle, 950, curY + 50);
-
-              ctx.font = '800 26px Cairo, sans-serif';
-              ctx.fillStyle = '#475569';
-              ctx.fillText(rangeBadge, 950, curY + 92);
-
-              let rateTxt = item.rating ? item.rating : 'تم التسميع';
-              let errTxt = (item.errors && item.errors !== '0') ? `❌ الأخطاء: ${item.errors}` : '✨ بدون أخطاء';
-
-              rr(ctx, 70, curY + 14, 270, 42, 10);
-              ctx.fillStyle = '#fef3c7';
-              ctx.fill();
-
-              ctx.font = '900 25px Cairo, sans-serif';
-              ctx.fillStyle = '#d97706';
-              ctx.textAlign = 'center';
-              ctx.fillText(rateTxt, 205, curY + 43);
-
-              let isErr = (item.errors && item.errors !== '0');
-              rr(ctx, 70, curY + 60, 270, 40, 10);
-              ctx.fillStyle = isErr ? '#fee2e2' : '#dcfce7';
-              ctx.fill();
-
-              ctx.font = '800 24px Cairo, sans-serif';
-              ctx.fillStyle = isErr ? '#dc2626' : '#15803d';
-              ctx.textAlign = 'center';
-              ctx.fillText(errTxt, 205, curY + 88);
-
-              curY += 130;
-            }
-          });
-        }
-
-        if (hasNexts) {
-          sData.nexts.forEach(item => {
-            let planTitle = "";
-            if (item.nextPlanSr) {
-              planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
-            } else if (item.nextPlanF && item.nextPlanT) {
-              let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
-              planTitle = `${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
-            }
-
-            if (planTitle) {
-              rr(ctx, 50, curY, canvas.width - 100, 75, 14);
-              ctx.fillStyle = '#fffbe2';
-              ctx.fill();
-              ctx.strokeStyle = '#d4af37';
-              ctx.lineWidth = 2;
-              ctx.stroke();
-
-              ctx.font = '900 28px Cairo, sans-serif';
-              ctx.fillStyle = '#78350f';
-              ctx.textAlign = 'right';
-              ctx.fillText('🎯 الخطة القادمة: ' + planTitle, 950, curY + 48);
-
-              curY += 90;
-            }
-          });
-        }
-
-        curY += 15;
-      }
-    });
-
-    var footerY = canvas.height - 60;
-    ctx.font = '900 28px Cairo, sans-serif';
-    ctx.fillStyle = '#0b3d2e';
-    ctx.textAlign = 'center';
-    ctx.fillText('مركز خادم القرآن الكريم | تقرير متابعة الحفظ', 540, footerY);
-
-    return canvas;
-  }
-
-  window.addEventListener('popstate', function(event) {
-    if (currentModalElement) {
-      currentModalElement.remove();
-      currentModalElement = null;
-    }
-  });
-
-  function closeReportModal() {
-    if (currentModalElement) {
-      currentModalElement.remove();
-      currentModalElement = null;
-      if (history.state && history.state.modalOpen) {
-        history.back();
+      if (!isOpen) {
+        reportsDiv.classList.add('active');
+        arrow.style.transform = 'rotate(180deg)';
+        
+        // محاكاة جلب تقارير هذا الطالب فقط من السيرفر عند الضغط
+        setTimeout(() => {
+          reportsDiv.innerHTML = `<small style="color: var(--text-sub)">لا توجد تقارير محفوظة لهذا الطالب.</small>`;
+        }, 200);
       }
     }
-  }
 
-  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName) {
-    if (currentModalElement) {
-      currentModalElement.remove();
+    // البحث المؤجل (Debounce) لتقليل طلبات السيرفر والمعالجة
+    function handleSearch() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const query = document.getElementById('searchInput').value;
+        renderStudents(query);
+      }, 250);
     }
 
-    history.pushState({ modalOpen: true }, "");
-
-    var modal = document.createElement('div');
-    currentModalElement = modal;
-    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
-    
-    var imgPreview = document.createElement('img');
-    imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.95);
-    imgPreview.style.cssText = 'max-width:98%;max-height:72vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5);margin-bottom:16px;';
-    modal.appendChild(imgPreview);
-
-    var btnWrap = document.createElement('div');
-    btnWrap.style.cssText = 'display:flex;gap:10px;justify-content:center;align-items:center;width:100%;flex-wrap:wrap;';
-    
-    var closeBtn = document.createElement('button');
-    closeBtn.innerText = 'إغلاق';
-    closeBtn.style.cssText = 'padding:12px 20px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
-    closeBtn.onclick = function(){ closeReportModal(); };
-    btnWrap.appendChild(closeBtn);
-
-    var editBtn = document.createElement('button');
-    editBtn.innerHTML = '✏️ تعديل التقرير في الإدخال';
-    editBtn.style.cssText = 'padding:12px 20px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
-    editBtn.onclick = function() {
-      if (rawReportData) {
-        localStorage.setItem('editReportData', JSON.stringify({
-          studentName: studentName,
-          academicData: rawReportData
-        }));
-        window.location.href = 'index1.html';
-      } else {
-        customAlert('⚠️ لا توجد بيانات تفصيلية قابلة للتعديل لهذا التقرير.');
+    // حذف طالب معين
+    function deleteStudent(id) {
+      if (confirm("هل أنت تأكد من حذف هذا الطالب؟")) {
+        let students = getStudents().filter(s => s.id !== id);
+        localStorage.setItem('students_cache', JSON.stringify(students));
+        renderStudents(document.getElementById('searchInput').value);
       }
-    };
-    btnWrap.appendChild(editBtn);
+    }
 
-    var shareBtn = document.createElement('button');
-    shareBtn.innerHTML = '📲 مشاركة التقرير';
-    shareBtn.style.cssText = 'padding:12px 20px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
-    
-    shareBtn.onclick = async function() {
-      try {
-        canvasElement.toBlob(async function(blob) {
-          if (!blob) { customAlert('تعذر إنشاء ملف الصورة'); return; }
-          var file = new File([blob], downloadName, { type: 'image/jpeg' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              files: [file],
-              title: 'تقرير متابعة',
-              text: 'تقرير متابعة وتقييم بطل'
-            });
-          } else {
-            var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-            customAlert('تم حفظ التقرير على جهازك.');
-          }
-        }, 'image/jpeg', 0.95);
-      } catch (err) {
-        var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+    // تصفير البيانات
+    function clearAllData() {
+      if (confirm("هل تريد تصفير جميع البيانات؟")) {
+        localStorage.removeItem('students_cache');
+        renderStudents();
       }
-    };
-    btnWrap.appendChild(shareBtn);
+    }
 
-    modal.appendChild(btnWrap);
-    document.body.appendChild(modal);
-  }
-</script>
+    // العرض الأولي عند فتح الصفحة
+    renderStudents();
+  </script>
+
 </body>
 </html>
