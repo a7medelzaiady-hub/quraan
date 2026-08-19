@@ -102,14 +102,14 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 }
 
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
-.section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: hidden; }
-.sec-head { background: var(--green-mid); padding: 14px 16px; }
+.section { background: #fff; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); overflow: visible; }
+.sec-head { background: var(--green-mid); padding: 14px 16px; border-radius: 15px 15px 0 0; }
 .sec-head-title { color: var(--gold-light); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .sec-head-title i { font-size: 18px; }
 .sec-body { padding: 16px; }
 .sub-sec-title { font-size: 14px; font-weight: 800; color: var(--green-mid); margin: 8px 0 12px; display: flex; align-items: center; gap: 6px; }
 .flbl { font-size: 12px; color: var(--sub); margin-bottom: 6px; font-weight: 700; }
-.frow { margin-bottom: 12px; }
+.frow { margin-bottom: 12px; position: relative; }
 .inp { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'Cairo', sans-serif; color: var(--text); background: #fafcfa; outline: none; transition: 0.3s; }
 .inp:focus { border-color: var(--green-light); }
 .inp.num { text-align: center; font-size: 15px; font-weight: 700; }
@@ -117,8 +117,8 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .sel-wrap::after { content: '▾'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--green-mid); font-size: 16px; pointer-events: none; }
 select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .ac-wrap { position: relative; }
-.ac-drop { display: none; position: absolute; top: calc(100% + 4px); right: 0; left: 0; background: #fff; border: 2px solid var(--green-mid); border-radius: 10px; overflow: hidden; z-index: 100; box-shadow: 0 8px 25px rgba(0,0,0,0.2); max-height: 200px; overflow-y: auto; }
-.ac-item { padding: 10px 14px; font-size: 14px; font-family: 'Amiri', serif; cursor: pointer; border-bottom: 1px solid #eef4f0; }
+.ac-drop { display: none; position: absolute; top: calc(100% + 4px); right: 0; left: 0; background: #fff; border: 2px solid var(--green-mid); border-radius: 10px; overflow: hidden; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.2); max-height: 220px; overflow-y: auto; }
+.ac-item { padding: 10px 14px; font-size: 14px; font-family: 'Cairo', serif; cursor: pointer; border-bottom: 1px solid #eef4f0; transition: 0.2s; }
 .ac-item:hover { background: var(--green-light); color: white; }
 .surah-row, .q-row { display: grid; grid-template-columns: 1fr 140px; gap: 10px; margin-bottom: 12px; background: var(--cream); border-radius: 12px; padding: 12px; border: 1px solid var(--border); position: relative; }
 .q-row { grid-template-columns: 1fr 1fr; }
@@ -205,13 +205,11 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-title">مركز خادم القرآن الكريم</div>
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
   
-  <!-- أزرار التحكم العلوية -->
   <div class="top-nav-btns">
-    <button class="nav-btn" onclick="resetFormForNewStudent()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
+    <button class="nav-btn" onclick="addNewStudentAction()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
     <a href="manage.html" class="nav-btn"><i class="ti ti-settings"></i> إدارة التقارير (manage.html)</a>
   </div>
 
-  <!-- أزرار اختيار نظام الرصد العلوي -->
   <div class="system-selector-wrap">
     <span class="system-label">⚙️ نظام رصد وتسجيل الأخطاء الحالي:</span>
     <div class="system-grid">
@@ -228,9 +226,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="section">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
-      <div class="frow">
+      <div class="frow ac-wrap">
         <div class="flbl">اسم البطل الكريم</div>
-        <input class="inp" id="inp-student" placeholder="أدخل اسم البطل">
+        <input class="inp" id="inp-student" placeholder="اكتب أول حرف للبحث..." autocomplete="off">
+        <div class="ac-drop" id="student-ac-drop"></div>
       </div>
       <div class="frow">
         <div class="flbl">التقييم العام للمسار</div>
@@ -328,7 +327,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="submit-wrap">
   <div class="submit-grid">
-    <button class="submit-btn btn-new-student" onclick="resetFormForNewStudent()">👤 طالب جديد</button>
+    <button class="submit-btn btn-new-student" onclick="addNewStudentAction()">👤 طالب جديد</button>
     <button class="submit-btn btn-combined" onclick="generateAllOutputs()">✨ استخراج وحفظ التقرير</button>
   </div>
 </div>
@@ -344,10 +343,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<!-- ربط مكتبة Firebase عبر ESM Module -->
+<!-- Firebase Modular SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
@@ -359,24 +358,57 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     measurementId: "G-WE04GK5XZZ"
   };
 
-  // تهيئة Firebase و Firestore
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // تصدير دالة حفظ التقارير إلى النطاق العام (window) لاستخدامها في الأزرار
+  // جلب كافة قائمة الطلاب المسجلين
+  window.fetchAllStudents = async function() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "students"));
+      let studentsList = [];
+      querySnapshot.forEach((doc) => {
+        if(doc.data().name) studentsList.push(doc.data().name);
+      });
+      return studentsList;
+    } catch (e) {
+      console.error("خطأ في جلب الطلاب:", e);
+      return [];
+    }
+  };
+
+  // تسجيل طالب جديد بجدول الطلاب
+  window.registerStudentInDb = async function(studentName) {
+    if (!studentName.trim()) return false;
+    try {
+      const q = query(collection(db, "students"), where("name", "==", studentName.trim()));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        await addDoc(collection(db, "students"), {
+          name: studentName.trim(),
+          createdAt: serverTimestamp()
+        });
+      }
+      return true;
+    } catch (e) {
+      console.error("خطأ أثناء تسجيل الطالب:", e);
+      return false;
+    }
+  };
+
+  // حفظ تقارير المتابعة
   window.saveReportToFirebase = async function(studentName, rating, reportData) {
     try {
+      await window.registerStudentInDb(studentName);
       await addDoc(collection(db, "reports"), {
-        studentName: studentName,
+        studentName: studentName.trim(),
         rating: rating,
         data: reportData,
         createdAt: serverTimestamp(),
         dateFormatted: new Date().toLocaleDateString('ar-EG')
       });
-      console.log("تم حفظ التقرير بنجاح في السيرفر!");
       return true;
     } catch (e) {
-      console.error("خطأ أثناء الحفظ على السيرفر: ", e);
+      console.error("خطأ أثناء حفظ التقرير:", e);
       return false;
     }
   };
@@ -390,19 +422,81 @@ var counters={};
 var activeErrorInputId = null;
 var currentQuranRowId = null;
 var currentQuranIsQ = false;
+var cachedStudentsList = [];
 
-function customAlert(msg) {
-  var m=document.createElement('div');
-  m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  m.innerHTML='<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:400px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">'+
-    '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
-    '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حسناً</button>'+
+// رسالة تنبيه احترافية بدون إظهار عنوان الموقع
+function customAlert(msg, title) {
+  title = title || "تنبيه النظام 🕌";
+  var m = document.createElement('div');
+  m.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4, 32, 26, 0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);';
+  m.innerHTML = '<div style="background:#fff;padding:28px 24px;border-radius:20px;text-align:center;max-width:420px;width:100%;box-shadow:0 12px 35px rgba(0,0,0,0.3); border: 3px solid var(--gold); position:relative; overflow:hidden;">'+
+    '<div style="background:var(--green-mid); color:var(--gold-light); margin:-28px -24px 20px -24px; padding:16px; font-weight:800; font-size:18px; border-bottom:2px solid var(--gold);">'+title+'</div>'+
+    '<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:24px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
+    '<button id="c-alert-close" style="padding:12px 36px;background:linear-gradient(135deg, #114e3b, var(--green-deep));color:var(--gold-light);border:1px solid var(--gold);border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.15);">حسناً</button>'+
     '</div>';
   document.body.appendChild(m);
-  document.getElementById('c-alert-close').onclick=function(){m.remove();};
+  document.getElementById('c-alert-close').onclick = function(){ m.remove(); };
 }
 
-// دالة إضافة طالب جديد وتصفير الواجهة
+// تهيئة محرك الإكمال التلقائي لاسم الطالب
+document.addEventListener('DOMContentLoaded', function() {
+  var studentInp = document.getElementById('inp-student');
+  var studentDrop = document.getElementById('student-ac-drop');
+
+  studentInp.addEventListener('input', async function() {
+    var val = this.value.trim();
+    if (!val) {
+      studentDrop.style.display = 'none';
+      return;
+    }
+
+    if (cachedStudentsList.length === 0 && typeof window.fetchAllStudents === 'function') {
+      cachedStudentsList = await window.fetchAllStudents();
+    }
+
+    var matches = cachedStudentsList.filter(s => s.toLowerCase().includes(val.toLowerCase())).slice(0, 6);
+    
+    if (matches.length > 0) {
+      studentDrop.innerHTML = matches.map(m => '<div class="ac-item" onclick="pickStudent(\''+m+'\')">👤 '+m+'</div>').join('');
+      studentDrop.style.display = 'block';
+    } else {
+      studentDrop.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#inp-student') && !e.target.closest('#student-ac-drop')) {
+      studentDrop.style.display = 'none';
+    }
+  });
+});
+
+function pickStudent(name) {
+  document.getElementById('inp-student').value = name;
+  document.getElementById('student-ac-drop').style.display = 'none';
+}
+
+// إضافة طالب جديد وتصفير الواجهة مع التسجيل في قاعدة البيانات
+async function addNewStudentAction() {
+  var studentName = document.getElementById('inp-student').value.trim();
+  if (!studentName) {
+    customAlert("يرجى كتابة اسم الطالب الجديد أولاً في الخانة المخصصة له تمهيداً لتسجيله.", "إضافة طالب جديد 👤");
+    return;
+  }
+
+  if (typeof window.registerStudentInDb === 'function') {
+    var success = await window.registerStudentInDb(studentName);
+    if (success) {
+      if (!cachedStudentsList.includes(studentName)) {
+        cachedStudentsList.push(studentName);
+      }
+      customAlert("تم تسجيل الطالب (" + studentName + ") بنجاح في قاعدة البيانات وتجهيز النظام لإدخال التقييمات.", "نجاح التسجيل ✨");
+    }
+  }
+
+  resetFormForNewStudent();
+}
+
 function resetFormForNewStudent() {
   document.getElementById('inp-student').value = '';
   document.getElementById('inp-general-rating').selectedIndex = 0;
@@ -478,7 +572,7 @@ async function openQuranModal(errorInpId, rowId, isQ) {
   if (!isQ) {
     surahName = row.querySelector('.main-sr')?.value.trim();
     if (!surahName) {
-      customAlert("⚠️ لا يمكن رصد الأخطاء؛ يرجى كتابة اسم السورة أولاً ثُم اختيار النطاق.");
+      customAlert("⚠️ لا يمكن رصد الأخطاء؛ يرجى كتابة أو اختيار اسم السورة أولاً ثُم تحديد النطاق.");
       return;
     }
 
@@ -994,7 +1088,7 @@ function showSingleImageModal(canvasElement, downloadName) {
   shareBtn.onclick = async function() {
     try {
       canvasElement.toBlob(async function(blob) {
-        if (!blob) { customAlert('تعذر إنشاء ملف الصورة'); return; }
+        if (!blob) { customAlert('تعذر إنشاء ملف الصورة', 'خطأ في النظام ❌'); return; }
         var file = new File([blob], downloadName, { type: 'image/jpeg' });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
@@ -1004,7 +1098,7 @@ function showSingleImageModal(canvasElement, downloadName) {
           });
         } else {
           var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-          customAlert('المتصفح لا يدعم التشيير التلقائي، تم حفظ الصورة في الجهاز بدلاً من ذلك.');
+          customAlert('المتصفح لا يدعم التشيير التلقائي المباشر، تم تنزيل صورة التقرير إلى جهازك.', 'حفظ الصورة 📥');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
@@ -1019,23 +1113,21 @@ function showSingleImageModal(canvasElement, downloadName) {
 
 async function generateAllOutputs() {
   var nm = document.getElementById('inp-student').value.trim(); 
-  if (!nm) { customAlert('يرجى إدخال اسم البطل أولاً'); return; }
+  if (!nm) { customAlert('يرجى إدخال اسم الطالب أولاً لاستخراج التقرير.', 'تنبيه ⚠️'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
   var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   
   try {
-    // 1. توليد صورة التقرير
     var reportCanvas = await drawReport(nm, data);
     showSingleImageModal(reportCanvas, 'تقرير_متابعة_'+nm+'.jpg');
     
-    // 2. حفظ البيانات والتصحيحات بالسيرفر على قاعدة بيانات Firebase
     if (typeof window.saveReportToFirebase === 'function') {
       let saved = await window.saveReportToFirebase(nm, genRating, data);
       if(saved) {
-        console.log("تمت عملية المزامنة بنجاح مع السيرفر.");
+        console.log("تمت المزامنة بنجاح مع السيرفر.");
       }
     }
-  } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message); }
+  } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); }
 }
 
 SECTIONS.forEach(sec => {
