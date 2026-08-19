@@ -461,22 +461,51 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   };
 
   // حفظ تقارير المتابعة
-  window.saveReportToFirebase = async function(studentName, rating, reportData) {
-    try {
-      await window.registerStudentInDb(studentName);
-      await addDoc(collection(db, "reports"), {
-        studentName: studentName.trim(),
-        rating: rating,
-        data: reportData,
-        createdAt: serverTimestamp(),
-        dateFormatted: new Date().toLocaleDateString('ar-EG')
+  // عدّل الـ import في أعلى الملف:
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getFirestore, collection, addDoc, getDocs, query, where, 
+  serverTimestamp, doc, updateDoc, arrayUnion 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// ... (باقي الكود زي ما هو) ...
+
+// استبدل دالة saveReportToFirebase بالكامل بهذه النسخة:
+window.saveReportToFirebase = async function(studentName, rating, reportData) {
+  try {
+    var trimmedName = studentName.trim();
+
+    // ابحث عن مستند الطالب، أو أنشئه لو مش موجود
+    const q = query(collection(db, "students"), where("name", "==", trimmedName));
+    const querySnapshot = await getDocs(q);
+    let studentDocRef;
+
+    if (!querySnapshot.empty) {
+      studentDocRef = querySnapshot.docs[0].ref;
+    } else {
+      studentDocRef = await addDoc(collection(db, "students"), {
+        name: trimmedName,
+        createdAt: serverTimestamp()
       });
-      return true;
-    } catch (e) {
-      console.error("خطأ أثناء حفظ التقرير:", e);
-      return false;
     }
-  };
+
+    // التقرير الجديد بنفس الأسماء اللي صفحة manage.html بتتوقعها
+    const newTransaction = {
+      date: new Date().toISOString(),
+      generalRating: rating,
+      academicData: reportData
+    };
+
+    await updateDoc(studentDocRef, {
+      transactions: arrayUnion(newTransaction)
+    });
+
+    return true;
+  } catch (e) {
+    console.error("خطأ أثناء حفظ التقرير:", e);
+    return false;
+  }
+};
 </script>
 
 <script>
