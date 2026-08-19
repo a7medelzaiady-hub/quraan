@@ -3,32 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سجل وتعارير الطلاب المحفوظة</title>
+  <title>سجل وتقارير الطلاب المحفوظة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #031c16;
-      --card-bg: #0d4236;
-      --card-border: #185a4a;
-      --accent-gold: #e2b765;
-      --btn-bg: #105344;
-      --danger-bg: #2a1b1b;
-      --danger-border: #4a2727;
-      --danger-text: #ff6b6b;
-      --text-main: #ffffff;
-      --text-sub: #b2cbbd;
+      --bg-color: #f4f7f5;
+      --green-deep: #0f3a2b;
+      --green-mid: #1d6b4f;
+      --green-pale: #e8f4ee;
+      --card-bg: #ffffff;
+      --card-border: #dcece3;
+      --btn-bg: #1d6b4f;
+      --danger-bg: #fdeeec;
+      --danger-border: #f3c9c1;
+      --danger-text: #c1483a;
+      --text-main: #12251c;
+      --text-sub: #6c8478;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Cairo', system-ui, sans-serif;
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 16px;
+      padding: 18px 16px 40px;
       max-width: 500px;
       margin: 0 auto;
     }
@@ -36,12 +41,17 @@
     /* الهيدر */
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
+      background: linear-gradient(180deg, var(--green-deep) 0%, var(--green-mid) 140%);
+      border-radius: 20px;
+      padding: 22px 18px 20px;
+      box-shadow: 0 10px 26px rgba(15, 58, 43, 0.25);
     }
 
     header h1 {
-      font-size: 1.3rem;
-      color: var(--accent-gold);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
       margin-bottom: 6px;
       display: flex;
       align-items: center;
@@ -51,7 +61,7 @@
 
     header p {
       font-size: 0.8rem;
-      color: var(--text-sub);
+      color: rgba(255,255,255,0.75);
       margin-bottom: 16px;
     }
 
@@ -59,47 +69,53 @@
       display: flex;
       gap: 10px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
       cursor: pointer;
       border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      transition: transform 0.12s ease, background-color 0.2s ease;
     }
+    .btn:active{ transform: scale(0.96); }
 
     .btn-primary {
-      background-color: transparent;
-      border-color: var(--accent-gold);
-      color: var(--accent-gold);
+      background-color: #ffffff;
+      color: var(--green-deep);
     }
 
     .btn-danger-outline {
-      background-color: transparent;
-      border-color: var(--danger-border);
-      color: var(--danger-text);
+      background-color: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+      color: #ffffff;
     }
 
     /* مربع البحث */
     .search-box {
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .search-box input {
       width: 100%;
-      padding: 12px 40px 12px 16px;
-      border-radius: 12px;
+      padding: 13px 42px 13px 16px;
+      border-radius: 14px;
       border: 1px solid var(--card-border);
-      background-color: rgba(255, 255, 255, 0.05);
-      color: #fff;
+      background-color: #ffffff;
+      color: var(--text-main);
       font-size: 0.95rem;
       outline: none;
+      box-shadow: 0 2px 10px rgba(15,58,43,0.06);
+      transition: border-color 0.2s ease;
     }
+    .search-box input:focus{ border-color: var(--green-mid); }
 
     .search-box input::placeholder {
       color: var(--text-sub);
@@ -107,10 +123,10 @@
 
     .search-box .search-icon {
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
-      opacity: 0.6;
+      opacity: 0.55;
     }
 
     /* صف الطالب (الكارت + السلة) */
@@ -126,17 +142,20 @@
       flex: 1;
       background-color: var(--card-bg);
       border: 1px solid var(--card-border);
+      border-right: 4px solid var(--green-mid);
       border-radius: 16px;
-      padding: 12px 16px;
+      padding: 13px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: background-color 0.2s;
+      box-shadow: 0 2px 10px rgba(15,58,43,0.06);
+      transition: box-shadow 0.2s, transform 0.12s;
     }
 
     .student-card:active {
-      background-color: var(--btn-bg);
+      transform: scale(0.99);
+      box-shadow: 0 1px 4px rgba(15,58,43,0.08);
     }
 
     .student-info {
@@ -145,24 +164,41 @@
       gap: 10px;
     }
 
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      color: var(--green-deep);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
     .student-name {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1rem;
+      color: var(--text-main);
     }
 
     .badge {
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: var(--green-pale);
       border: 1px solid var(--card-border);
-      padding: 4px 10px;
+      padding: 4px 11px;
       border-radius: 12px;
-      font-size: 0.75rem;
-      color: var(--accent-gold);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--green-mid);
     }
 
     .arrow-icon {
       transition: transform 0.3s;
       font-size: 0.8rem;
-      opacity: 0.7;
+      opacity: 0.5;
+      color: var(--text-sub);
     }
 
     /* زر الحذف المستقل */
@@ -183,7 +219,7 @@
 
     .delete-btn:active {
       transform: scale(0.92);
-      background-color: #3d2323;
+      background-color: #fbe0dc;
     }
 
     /* تفاصيل التقارير عند الفتح */
@@ -192,25 +228,37 @@
       padding: 10px 16px;
       margin-top: -6px;
       margin-bottom: 12px;
-      background-color: rgba(0, 0, 0, 0.15);
+      background-color: var(--green-pale);
       border-radius: 0 0 16px 16px;
       border: 1px solid var(--card-border);
       border-top: none;
+      font-size: 0.85rem;
+      color: var(--text-sub);
     }
 
     .reports-container.active {
       display: block;
+    }
+
+    .empty-state{
+      text-align:center;
+      padding: 36px 20px;
+      color: var(--text-sub);
+      background: #fff;
+      border: 1px dashed var(--card-border);
+      border-radius: 16px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>📂 سجل وتعارير الطلاب المحفوظة</h1>
+    <h1>📂 سجل وتقارير الطلاب المحفوظة</h1>
     <p>إدارة واستعراض ومشاركة التقارير السابقة (من الأحدث للأقدم)</p>
     <div class="header-actions">
       <button class="btn btn-primary">← العودة للإدخال</button>
-      <button class="btn btn-danger-outline" onclick="clearAllData()">🗑️ تصغير البيانات</button>
+      <button class="btn btn-danger-outline" onclick="clearAllData()">🗑️ تصفير البيانات</button>
     </div>
   </header>
 
@@ -239,7 +287,7 @@
     function getStudents() {
       const cached = localStorage.getItem('students_cache');
       if (cached) return JSON.parse(cached);
-      
+
       localStorage.setItem('students_cache', JSON.stringify(initialStudents));
       return initialStudents;
     }
@@ -252,6 +300,11 @@
 
       const filtered = students.filter(s => s.name.includes(filter.trim()));
 
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `<div class="empty-state">لا يوجد طلاب مطابقون للبحث</div>`;
+        return;
+      }
+
       filtered.forEach(student => {
         const row = document.createElement('div');
         row.className = 'student-row';
@@ -260,7 +313,7 @@
         row.innerHTML = `
           <div class="student-card" onclick="toggleReports(${student.id})">
             <div class="student-info">
-              <span>👤</span>
+              <span class="avatar">${student.name.trim().charAt(0)}</span>
               <span class="student-name">${student.name}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -298,10 +351,10 @@
       if (!isOpen) {
         reportsDiv.classList.add('active');
         arrow.style.transform = 'rotate(180deg)';
-        
+
         // محاكاة جلب تقارير هذا الطالب فقط من السيرفر عند الضغط
         setTimeout(() => {
-          reportsDiv.innerHTML = `<small style="color: var(--text-sub)">لا توجد تقارير محفوظة لهذا الطالب.</small>`;
+          reportsDiv.innerHTML = `<small>لا توجد تقارير محفوظة لهذا الطالب.</small>`;
         }, 200);
       }
     }
@@ -317,7 +370,7 @@
 
     // حذف طالب معين
     function deleteStudent(id) {
-      if (confirm("هل أنت تأكد من حذف هذا الطالب؟")) {
+      if (confirm("هل أنت متأكد من حذف هذا الطالب؟")) {
         let students = getStudents().filter(s => s.id !== id);
         localStorage.setItem('students_cache', JSON.stringify(students));
         renderStudents(document.getElementById('searchInput').value);
