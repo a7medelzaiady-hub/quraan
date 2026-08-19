@@ -1247,9 +1247,10 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-function showSingleImageModal(canvasElement, downloadName) {
-  var modal=document.createElement('div');
-  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+function showSingleImageModal(canvasElement, downloadName, studentName, genRating, reportData) {
+  var modal = document.createElement('div');
+  modal.id = 'report-preview-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
   
   var imgPreview = document.createElement('img');
   imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.92);
@@ -1270,10 +1271,23 @@ function showSingleImageModal(canvasElement, downloadName) {
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
+    // 1. حفظ البيانات أولاً على Firebase Firestore قبل فتح شاشة المشاركة
+    shareBtn.innerText = '⏳ جاري الحفظ...';
+    shareBtn.disabled = true;
+
+    if (typeof window.saveReportToFirebase === 'function') {
+      await window.saveReportToFirebase(studentName, genRating, reportData);
+    }
+
+    // 2. إغلاق الـ Modal مباشرةً قبل إطلاق واجهة المشاركة الخاصة بالنظام
+    modal.remove();
+
+    // 3. تجهيز الملف وإطلاق نافذة المشاركة (Share API)
     try {
       canvasElement.toBlob(async function(blob) {
         if (!blob) { customAlert('تعذر إنشاء ملف الصورة', 'خطأ في النظام ❌'); return; }
         var file = new File([blob], downloadName, { type: 'image/jpeg' });
+        
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
@@ -1281,12 +1295,18 @@ function showSingleImageModal(canvasElement, downloadName) {
             text: 'تقرير بطل مركز خادم القرآن الكريم'
           });
         } else {
-          var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-          customAlert('المتصفح لا يدعم التشيير التلقائي المباشر، تم تنزيل صورة التقرير إلى جهازك.', 'حفظ الصورة 📥');
+          var a = document.createElement('a');
+          a.href = imgPreview.src;
+          a.download = downloadName;
+          a.click();
+          customAlert('المتصفح لا يدعم التشيير المباشر، تم تنزيل صورة التقرير وتأكيد الحفظ.', 'حفظ الصورة 📥');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
-      var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+      var a = document.createElement('a');
+      a.href = imgPreview.src;
+      a.download = downloadName;
+      a.click();
     }
   };
   
@@ -1303,15 +1323,10 @@ async function generateAllOutputs() {
   
   try {
     var reportCanvas = await drawReport(nm, data);
-    showSingleImageModal(reportCanvas, 'تقرير_متابعة_'+nm+'.jpg');
-    
-    if (typeof window.saveReportToFirebase === 'function') {
-      let saved = await window.saveReportToFirebase(nm, genRating, data);
-      if(saved) {
-        console.log("تمت المزامنة بنجاح مع السيرفر.");
-      }
-    }
-  } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); }
+    showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + nm + '.jpg', nm, genRating, data);
+  } catch (e) { 
+    customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); 
+  }
 }
 
 // إنشاء الحقول الافتراضية عند أول تشغيل لصفحة فارغة
