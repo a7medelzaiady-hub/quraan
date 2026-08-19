@@ -40,7 +40,6 @@ body {
   padding-bottom: 50px; 
 }
 
-/* --- الهيدر الرئيسي --- */
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px; 
@@ -374,11 +373,9 @@ body {
   function convertToHijri(dateInput) {
     try {
       let d = new Date();
-
       if (dateInput && typeof dateInput === 'string') {
         let str = dateInput.trim();
         let matches = str.match(/\d+/g);
-
         if (matches && matches.length >= 3) {
           let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
           let m = parseInt(matches[1]) - 1;
@@ -425,7 +422,6 @@ body {
     return '⭐';
   }
 
-  // دالة توحيد النصوص والهمزات للبحث الذكي
   function normalizeText(text) {
     if (!text) return '';
     return text.toString()
@@ -436,7 +432,6 @@ body {
       .replace(/ى/g, 'ي');
   }
 
-  // دالة جلب بيانات الطلاب بنمط موحد ومباشر من السيرفر
   async function loadStudentsData() {
     const container = document.getElementById('students-list-container');
     container.innerHTML = '<div class="empty-state">جاري تحميل سجلات الطلاب ... ⏳</div>';
@@ -447,11 +442,7 @@ body {
 
       snapshot.forEach(doc => {
         let rawData = doc.data();
-        
-        // 1. دعم قراءة اسم الطالب سواء كـ name أو studentName
-        let resolvedName = rawData.name || rawData.studentName || 'طالب بدون اسم';
-
-        // 2. توحيد قراءة المصفوفات والأقسام (currents/current و nexts/next)
+        let resolvedName = rawData.studentName || rawData.name || 'طالب بدون اسم';
         let rawTransactions = rawData.transactions || [];
         
         let normalizedTransactions = rawTransactions.map(tx => {
@@ -463,8 +454,8 @@ body {
               let sec = academic[secKey] || {};
               normalizedAcademic[secKey] = {
                 ...sec,
-                currents: sec.currents || sec.current || [],
-                nexts: sec.nexts || sec.next || []
+                currents: sec.currents || sec.curr || sec.current || [],
+                nexts: sec.nexts || sec.nxt || sec.next || []
               };
             });
           }
@@ -476,7 +467,6 @@ body {
           };
         });
 
-        // ترتيب التقارير لكل طالب من الأحدث للأقدم
         normalizedTransactions.reverse();
 
         allStudentsData.push({
@@ -487,7 +477,6 @@ body {
         });
       });
 
-      // 3. ترتيب الطلاب حسب تاريخ أحدث حلقة/تقرير
       allStudentsData.sort((a, b) => {
         let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
         let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
@@ -532,7 +521,7 @@ body {
             <div class="report-item">
               <div class="report-info">
                 <h4>📅 التاريخ: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
-                <p>${tx.desc || ''}</p>
+                <p>${tx.desc || tx.notes || ''}</p>
               </div>
               <div class="report-btns">
                 <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.name}', ${idx})"><i class="ti ti-share"></i> مشاركة</button>
@@ -575,7 +564,6 @@ body {
   function toggleStudentReports(studentId) {
     const repDiv = document.getElementById('reports-' + studentId);
     const cardDiv = document.getElementById('card-' + studentId);
-    
     repDiv.classList.toggle('active');
     cardDiv.classList.toggle('active');
   }
@@ -586,7 +574,6 @@ body {
     renderStudents(filtered);
   });
 
-  /* وظيفة التعديل والاسترجاع إلى index1.html */
   function editSessionData(docId, txIndex) {
     const student = allStudentsData.find(s => s.id === docId);
     if (!student || !student.transactions || !student.transactions[txIndex]) return;
@@ -625,7 +612,6 @@ body {
       const docSnap = await studentDocRef.get();
       if (docSnap.exists) {
         let txs = docSnap.data().transactions || [];
-        // التراجع في الفهرس نظراً لأن التقارير معروضة في القائمة بشكل معكوس
         let realIndex = txs.length - 1 - txIndex;
         if (realIndex >= 0 && realIndex < txs.length) {
           txs.splice(realIndex, 1);
@@ -720,8 +706,8 @@ body {
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
       if (sData) {
-        let currents = sData.currents || sData.current || [];
-        let nexts = sData.nexts || sData.next || [];
+        let currents = sData.currents || sData.curr || [];
+        let nexts = sData.nexts || sData.nxt || [];
         if (currents.length) totalRowsCount += currents.length;
         if (nexts.length) totalRowsCount += nexts.length;
       }
@@ -793,8 +779,8 @@ body {
 
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
-      let currents = sData ? (sData.currents || sData.current || []) : [];
-      let nexts = sData ? (sData.nexts || sData.next || []) : [];
+      let currents = sData ? (sData.currents || sData.curr || []) : [];
+      let nexts = sData ? (sData.nexts || sData.nxt || []) : [];
 
       let hasCurrents = currents.length > 0;
       let hasNexts = nexts.length > 0;
@@ -815,8 +801,8 @@ body {
             let itemTitle = "";
             let rangeBadge = "";
 
-            if (item.sr) {
-              itemTitle = "سورة " + item.sr;
+            if (item.sr || item.sura) {
+              itemTitle = "سورة " + (item.sr || item.sura);
               rangeBadge = (item.type === 'range' && item.f && item.t) ? `(الآيات ${item.f} إلى ${item.t})` : '(كاملة)';
             } else if (item.f && item.t) {
               let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
@@ -871,11 +857,12 @@ body {
         if (hasNexts) {
           nexts.forEach(item => {
             let planTitle = "";
-            if (item.nextPlanSr) {
-              planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
-            } else if (item.nextPlanF && item.nextPlanT) {
+            if (item.nextPlanSr || item.sura) {
+              let sName = item.nextPlanSr || item.sura;
+              planTitle = "سورة " + sName + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF || item.f} إلى ${item.nextPlanT || item.t})` : ' (كاملة)');
+            } else if ((item.nextPlanF || item.f) && (item.nextPlanT || item.t)) {
               let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
-              planTitle = `${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
+              planTitle = `${unit} من ${item.nextPlanF || item.f} إلى ${item.nextPlanT || item.t}`;
             }
 
             if (planTitle) {
@@ -981,7 +968,6 @@ body {
     document.body.appendChild(modal);
   }
 
-  // تشغيل طلب الجلب فور تحميل الصفحة
   document.addEventListener('DOMContentLoaded', () => {
     loadStudentsData();
   });
