@@ -424,7 +424,124 @@ var currentQuranRowId = null;
 var currentQuranIsQ = false;
 var cachedStudentsList = [];
 
-// رسالة تنبيه احترافية بدون إظهار عنوان الموقع
+/* ==========================================================================
+   كود الكشف والتعبئة التلقائية عند التحويل من صفحة الإدارة (manage.html)
+   ========================================================================== */
+document.addEventListener("DOMContentLoaded", function () {
+  const savedDataStr = localStorage.getItem("edit_report_payload");
+  if (savedDataStr) {
+    try {
+      const payload = JSON.parse(savedDataStr);
+      const studentName = payload.studentName;
+      const rating = payload.rating;
+      const data = payload.academicData || payload.data;
+
+      // 1. تعبئة اسم الطالب
+      const nameInput = document.getElementById("inp-student");
+      if (nameInput && studentName) {
+        nameInput.value = studentName;
+      }
+
+      // 2. تعبئة التقييم العام
+      const ratingInput = document.getElementById("inp-general-rating");
+      if (ratingInput && rating) {
+        ratingInput.value = rating;
+      }
+
+      // 3. تعبئة بيانات الأقسام المختلفة
+      if (data) {
+        for (let secKey in data) {
+          const sectionData = data[secKey];
+          const isQ = (secKey === 'mq' || secKey === 'pm' || secKey === 'hd');
+
+          // تفريغ الحقول التلقائية الحالية قبل التعبئة
+          const currentContainer = document.getElementById(secKey + '-current-list');
+          const nextContainer = document.getElementById(secKey + '-next-list');
+          if (currentContainer) currentContainer.innerHTML = '';
+          if (nextContainer) nextContainer.innerHTML = '';
+          counters[secKey + '_c'] = 0;
+          counters[secKey + '_n'] = 0;
+
+          // تعبئة البيانات الحالية
+          if (sectionData.currents && sectionData.currents.length > 0) {
+            sectionData.currents.forEach(item => {
+              if (!isQ) {
+                addCurrentSurah(secKey + '-current-list', secKey);
+                const idx = counters[secKey + '_c'];
+                const srInp = document.getElementById('sr-' + secKey + '-c-' + idx);
+                const selInp = document.getElementById('sel-' + secKey + '-c-' + idx);
+                const fInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-f');
+                const tInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-t');
+                const ratingSel = document.querySelector('#crow-' + secKey + '-' + idx + ' .rating-sel');
+                const errInp = document.getElementById('err-' + secKey + '-c-' + idx);
+
+                if (srInp && item.sr) srInp.value = item.sr;
+                if (selInp && item.type) {
+                  selInp.value = item.type;
+                  toggleRange('rng-' + secKey + '-c-' + idx, item.type);
+                }
+                if (fInp && item.f) fInp.value = item.f;
+                if (tInp && item.t) tInp.value = item.t;
+                if (ratingSel && item.rating) ratingSel.value = item.rating;
+                if (errInp && item.errors) errInp.value = item.errors;
+              } else {
+                addCurrentQuestion(secKey + '-current-list', secKey);
+                const idx = counters[secKey + '_c'];
+                const qfInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qf');
+                const qtInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qt');
+                const ratingSel = document.querySelector('#crow-' + secKey + '-' + idx + ' .rating-sel');
+                const errInp = document.getElementById('err-' + secKey + '-c-' + idx);
+
+                if (qfInp && item.f) qfInp.value = item.f;
+                if (qtInp && item.t) qtInp.value = item.t;
+                if (ratingSel && item.rating) ratingSel.value = item.rating;
+                if (errInp && item.errors) errInp.value = item.errors;
+              }
+            });
+          }
+
+          // تعبئة الخطط القادمة
+          if (sectionData.nexts && sectionData.nexts.length > 0) {
+            sectionData.nexts.forEach(plan => {
+              if (!isQ) {
+                addNextSurah(secKey + '-next-list', secKey);
+                const idx = counters[secKey + '_n'];
+                const srInp = document.getElementById('sr-' + secKey + '-n-' + idx);
+                const selInp = document.getElementById('sel-' + secKey + '-n-' + idx);
+                const fInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-f');
+                const tInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-t');
+
+                if (srInp && plan.nextPlanSr) srInp.value = plan.nextPlanSr;
+                if (selInp && plan.nextPlanType) {
+                  selInp.value = plan.nextPlanType;
+                  toggleRange('rng-' + secKey + '-n-' + idx, plan.nextPlanType);
+                }
+                if (fInp && plan.nextPlanF) fInp.value = plan.nextPlanF;
+                if (tInp && plan.nextPlanT) tInp.value = plan.nextPlanT;
+              } else {
+                addNextQuestion(secKey + '-next-list', secKey);
+                const idx = counters[secKey + '_n'];
+                const qfInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-qf');
+                const qtInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-qt');
+
+                if (qfInp && plan.nextPlanF) qfInp.value = plan.nextPlanF;
+                if (qtInp && plan.nextPlanT) qtInp.value = plan.nextPlanT;
+              }
+            });
+          }
+        }
+      }
+
+      // إزالة البيانات الموقتة من ذاكرة التخزين بعد تحميلها بنجاح
+      localStorage.removeItem("edit_report_payload");
+      customAlert("تم جلب بيانات التقرير المحول بنجاح! يمكنك الآن تعديله وإعادة استخراجه وحفظه.", "تعبئة تلقائية 📋");
+    } catch (e) {
+      console.error("خطأ في قراءة بيانات التقرير المحول:", e);
+    }
+  }
+});
+
+// رسالة تنبيه احترافية
 function customAlert(msg, title) {
   title = title || "تنبيه النظام 🕌";
   var m = document.createElement('div');
@@ -659,7 +776,6 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
       return;
   }
 
-  var labelPrefix = isQ ? "س " : "آية ";
   var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
   var ayahsData = SURAS_CACHE[surahIndex];
 
@@ -1130,6 +1246,7 @@ async function generateAllOutputs() {
   } catch (e) { customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); }
 }
 
+// إنشاء الحقول الافتراضية عند أول تشغيل لصفحة فارغة
 SECTIONS.forEach(sec => {
   if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
