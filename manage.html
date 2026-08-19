@@ -90,14 +90,6 @@ body {
   background: rgba(212, 175, 55, 0.25);
 }
 
-@media (hover: hover) {
-  .header-btn:hover {
-    background: rgba(212, 175, 55, 0.2);
-    border-color: #fef08a;
-    transform: translateY(-1px);
-  }
-}
-
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
 
 .controls-card {
@@ -162,13 +154,6 @@ body {
   background: linear-gradient(135deg, #031813 0%, var(--green-mid) 100%);
 }
 
-@media (hover: hover) {
-  .student-card:hover {
-    box-shadow: 0 6px 16px rgba(11, 61, 46, 0.12);
-    border-color: rgba(212, 175, 55, 0.5);
-  }
-}
-
 .student-info { 
   display: flex; 
   flex-direction: column;
@@ -225,21 +210,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.btn-external-del:active {
-  transform: scale(0.9);
-  background: var(--red-light);
-  border-color: var(--red);
-}
-
-.chevron-icon {
-  color: var(--gold-primary);
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-.student-card.active .chevron-icon {
-  transform: rotate(180deg);
-}
-
 .reports-container { 
   padding: 14px; 
   background: #fafafa; 
@@ -259,9 +229,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-.report-item:last-child {
-  margin-bottom: 0;
 }
 
 .report-info h4 { 
@@ -293,10 +260,6 @@ body {
   display: inline-flex; 
   align-items: center; 
   gap: 4px; 
-  transition: transform 0.15s ease;
-}
-.btn-action-sm:active {
-  transform: scale(0.95);
 }
 
 .btn-share-rep { background: var(--green-light); color: #fff; }
@@ -429,8 +392,6 @@ body {
       snapshot.forEach(doc => {
         let rawData = doc.data() || {};
         let resolvedName = rawData.studentName || rawData.name || rawData.student_name || 'طالب بدون اسم';
-        
-        // تحديد مصفوفة التقارير مع حفظ المفتاح الأصلي للحقل
         let targetKey = rawData.transactions ? 'transactions' : (rawData.reports ? 'reports' : 'transactions');
         let rawTransactions = rawData[targetKey] || [];
         
@@ -460,13 +421,12 @@ body {
 
           return {
             ...tx,
-            originalIndex: originalIndex, // التراسل مع الفهرس الأصلي المخزن
+            originalIndex: originalIndex,
             date: formattedDate,
             academicData: normalizedAcademic
           };
         });
 
-        // ترتيب التقارير تنازلياً للعرض فقط
         let sortedTransactions = [...normalizedTransactions].reverse();
 
         allStudentsData.push({
@@ -525,7 +485,7 @@ body {
                 <p>${tx.desc || tx.notes || ''}</p>
               </div>
               <div class="report-btns">
-                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.id}', ${displayIdx})"><i class="ti ti-share"></i> مشاركة</button>
+                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.id}', ${displayIdx})"><i class="ti ti-share"></i> مشاركة الصورة</button>
                 <button class="btn-action-sm btn-restore-rep" onclick="restoreSessionData('${student.id}', ${displayIdx})"><i class="ti ti-history"></i> استرجاع للحصة</button>
                 <button class="btn-action-sm btn-edit-rep" onclick="editSessionData('${student.id}', ${displayIdx})"><i class="ti ti-edit"></i> تعديل</button>
                 <button class="btn-action-sm btn-del-rep" onclick="deleteSingleReport('${student.id}', ${displayIdx})"><i class="ti ti-trash"></i> مسح</button>
@@ -537,7 +497,7 @@ body {
 
       rowWrapper.innerHTML = `
         <div class="student-card" id="card-${student.id}">
-          <div class="student-header" onclick="toggleStudentReports('${student.id}')">
+          <div class="student-header" onclick="openStudentPage('${student.id}')">
             <div class="student-info">
               <div class="student-main-row">
                 <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
@@ -548,10 +508,7 @@ body {
                 <i class="ti ti-calendar-event"></i> ${lastDateText}
               </div>
             </div>
-            <i class="ti ti-chevron-down chevron-icon" id="chevron-${student.id}"></i>
-          </div>
-          <div class="reports-container" id="reports-${student.id}">
-            ${reportsHtml}
+            <i class="ti ti-chevron-left chevron-icon"></i>
           </div>
         </div>
         <button class="btn-external-del" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}', '${student.name}')">
@@ -562,11 +519,9 @@ body {
     });
   }
 
-  function toggleStudentReports(studentId) {
-    const repDiv = document.getElementById('reports-' + studentId);
-    const cardDiv = document.getElementById('card-' + studentId);
-    repDiv.classList.toggle('active');
-    cardDiv.classList.toggle('active');
+  // الانقال لصفحة جميع سجلات الطالب عند الضغط على كارت الطالب
+  function openStudentPage(studentId) {
+    window.location.href = `student_history.html?id=${studentId}`;
   }
 
   document.getElementById('search-student').addEventListener('input', function() {
@@ -580,7 +535,7 @@ body {
     if (!student || !student.transactions || !student.transactions[displayIdx]) return;
     
     const targetReport = student.transactions[displayIdx];
-    const realIndex = targetReport.originalIndex; // الفهرس الحقيقي المخزن في Firestore
+    const realIndex = targetReport.originalIndex;
 
     const sessionData = {
       action: 'edit',
@@ -599,7 +554,7 @@ body {
     if (!student || !student.transactions || !student.transactions[displayIdx]) return;
     
     const targetReport = student.transactions[displayIdx];
-    const realIndex = targetReport.originalIndex; // الفهرس الحقيقي المخزن في Firestore
+    const realIndex = targetReport.originalIndex;
 
     const sessionData = {
       action: 'restore',
@@ -913,23 +868,6 @@ body {
     return canvas;
   }
 
-  window.addEventListener('popstate', function(event) {
-    if (currentModalElement) {
-      currentModalElement.remove();
-      currentModalElement = null;
-    }
-  });
-
-  function closeReportModal() {
-    if (currentModalElement) {
-      currentModalElement.remove();
-      currentModalElement = null;
-      if (history.state && history.state.modalOpen) {
-        history.back();
-      }
-    }
-  }
-
   function showSingleImageModal(canvasElement, downloadName) {
     if (currentModalElement) {
       currentModalElement.remove();
@@ -952,7 +890,7 @@ body {
     var closeBtn = document.createElement('button');
     closeBtn.innerText = 'إغلاق';
     closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
-    closeBtn.onclick = function(){ closeReportModal(); };
+    closeBtn.onclick = function(){ modal.remove(); };
     btnWrap.appendChild(closeBtn);
 
     var shareBtn = document.createElement('button');
