@@ -127,7 +127,7 @@ body {
   color: #fff; 
 }
 
-/* --- كروت الطلاب المتناسقة --- */
+/* --- كروت الطلاب --- */
 .student-card { 
   background: #fff; 
   border-radius: 16px; 
@@ -332,22 +332,59 @@ body {
     document.getElementById('c-alert-close').onclick=function(){m.remove();};
   }
 
-  // تحويل أي تاريخ ميلادي/نصي إلى تاريخ هجري منسق
-  function convertToHijri(dateStr) {
+  // قاموس تحويل أسماء الأشهر العربية الميلادية لأرقام لاستخراج التاريخ بدقة
+  const monthMap = {
+    "يناير":1, "فبراير":2, "مارس":3, "أبريل":4, "ابريل":4, "مايو":5, "يونيو":6,
+    "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
+  };
+
+  // دالة تحويل تحول التاريخ الميلادي بالكامل إلى تاريخ هجري حقيقي ومضبوط
+  function convertToHijri(dateInput) {
     try {
-      let d = dateStr ? new Date(dateStr) : new Date();
+      let d = new Date();
+
+      if (dateInput && typeof dateInput === 'string') {
+        let str = dateInput.trim();
+        let matches = str.match(/\d+/g);
+
+        if (matches && matches.length >= 3) {
+          let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
+          let m = parseInt(matches[1]) - 1;
+          let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
+          d = new Date(y, m, day);
+        } else if (matches && matches.length >= 2) {
+          // التعامل مع حالات النصوص مثل "19 أغسطس 2026"
+          let day = parseInt(matches[0]);
+          let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
+          let month = 7; // أغسطس كافتراضي
+          for (let mKey in monthMap) {
+            if (str.includes(mKey)) {
+              month = monthMap[mKey] - 1;
+              break;
+            }
+          }
+          d = new Date(year, month, day);
+        }
+      } else if (dateInput) {
+        d = new Date(dateInput);
+      }
+
       if (isNaN(d.getTime())) d = new Date();
-      return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+
+      // تحويل تاريخ الحساب للتقويم الهجري أم القرى
+      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-      }).format(d) + ' هـ';
-    } catch(e) {
-      return dateStr || 'تاريخ هجري';
+      });
+
+      return formatter.format(d);
+    } catch (e) {
+      return 'التاريخ الهجري';
     }
   }
 
-  // إرجاع النجوم المناسبة للتقييم العام
+  // نجوم التقييم
   function getRatingStars(rating) {
     if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
     if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
@@ -357,19 +394,17 @@ body {
     return '⭐';
   }
 
-  // الاستماع للبيانات من الأحدث إلى الأقدم
+  // جلب البيانات مع ترتيبها من الأحدث للأقدم
   studentsCollection.onSnapshot(snapshot => {
     allStudentsData = [];
     snapshot.forEach(doc => {
       let s = doc.data();
-      // ترتيب العمليات/التقارير الخاصة بكل طالب من الأحدث للأقدم
       if (s.transactions && Array.isArray(s.transactions)) {
         s.transactions.reverse();
       }
       allStudentsData.push({ id: doc.id, ...s });
     });
 
-    // ترتيب الطلاب أنفسهم حسب أحدث تحديث أو تاريخ
     allStudentsData.sort((a, b) => {
       let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
       let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
@@ -541,7 +576,7 @@ body {
     } catch(e) {}
   }
 
-  /* --- رسم التقرير بعد التعديلات الجديدة --- */
+  /* --- رسم التقرير بالحجم والخطوط الكبيرة جداً --- */
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -594,9 +629,10 @@ body {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
 
-    // التاريخ الهجري
+    // التاريخ الهجري المصحح ناصع الوضوح
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
+    ctx.textAlign = 'center';
     ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
 
     // كارت الطالب
@@ -608,13 +644,11 @@ body {
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    // تعديل العبارة إلى "البطل" بدل "اسم البطل"
     ctx.font = '900 42px Cairo, sans-serif';
     ctx.fillStyle = '#04201a';
     ctx.textAlign = 'center';
     ctx.fillText('البطل: ' + studentName, 540, curY + 60);
 
-    // إضافة النجوم للتقييم العام
     let displayRating = (generalRating && generalRating !== 'undefined') ? generalRating : 'ممتاز';
     let starsTxt = getRatingStars(displayRating);
     ctx.font = '800 32px Cairo, sans-serif';
@@ -740,7 +774,7 @@ body {
     return canvas;
   }
 
-  // إغلاق النافذة المنبثقة للتقرير عند الضغط على زر الرجوع في الجوال
+  // التحكم بالرجوع للجوال
   window.addEventListener('popstate', function(event) {
     if (currentModalElement) {
       currentModalElement.remove();
