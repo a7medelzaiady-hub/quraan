@@ -212,7 +212,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="hdr-subtitle">إشراف الشيخ عبدالرحمن</div>
   
   <div class="nav-actions">
-    <a href="manage.html" class="btn-nav-action"><i class="ti ti-settings"></i> إدارة التقارير وسجل الطلاب (manage.html)</a>
+    <a href="manage.html" class="btn-nav-action"><i class="ti ti-settings"></i> صفحة الإدارة (manage.html)</a>
   </div>
 
   <div class="system-selector-wrap">
@@ -351,6 +351,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 </div>
 
 <script>
+  // تهيئة الفايربيس
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
     authDomain: "ahmedelzaiady.firebaseapp.com",
@@ -367,6 +368,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   let existingStudentsList = [];
 
+  // دالة تحويل التاريخ إلى هجري خالص
   function getHijriDateString() {
     try {
       const now = new Date();
@@ -380,6 +382,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   }
 
+  // الاستماع للطلاب من قاعدة البيانات لإمكانية الإكمال التلقائي في خانة الاسم
   studentsCollection.onSnapshot(snapshot => {
     existingStudentsList = [];
     snapshot.forEach(doc => {
@@ -388,6 +391,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     });
   });
 
+  // التحكم بالإكمال التلقائي لاسم الطالب
   const studentInp = document.getElementById('inp-student');
   const studentDrop = document.getElementById('drop-students-list');
 
@@ -418,6 +422,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     if (!e.target.closest('.ac-wrap')) { studentDrop.style.display = 'none'; }
   });
 
+  // إضافة طالب جديد مباشرة مع عدم التكرار (تم إزالة balance و createdAt)
   async function addNewStudentPrompt() {
     const name = prompt("أدخل اسم البطل الجديد:");
     if (!name || !name.trim()) return;
@@ -446,6 +451,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   }
 
+  // الحفظ واستخراج تقرير المتابعة وحفظ البيانات في قاعدة البيانات (تم إزالة isPay و amount)
   async function saveAndGenerateReport() {
     var studentName = document.getElementById('inp-student').value.trim();
     if (!studentName) {
@@ -462,6 +468,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     var data = {};
     SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
 
+    // التاريخ الهجري
     const hijriDateStr = getHijriDateString();
     
     let descParts = [`التقييم العام: ${generalRating}`];
@@ -896,7 +903,7 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
 
   var canvas = document.createElement('canvas'); 
   canvas.width = 1080; 
-  canvas.height = Math.max(1600, 700 + (totalRowsCount * 120));
+  canvas.height = Math.max(1400, 600 + (totalRowsCount * 95));
   var ctx = canvas.getContext('2d');
 
   var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
@@ -910,50 +917,50 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  rr(ctx, 35, 35, canvas.width - 70, 160, 18);
+  rr(ctx, 35, 35, canvas.width - 70, 150, 18);
   var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
   hdrGradient.addColorStop(0, '#04201a');
   hdrGradient.addColorStop(1, '#0b3d2e');
   ctx.fillStyle = hdrGradient;
   ctx.fill();
 
-  rr(ctx, 40, 40, canvas.width - 80, 150, 14);
+  rr(ctx, 40, 40, canvas.width - 80, 140, 14);
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.font = '800 38px Cairo, sans-serif';
+  ctx.font = '800 32px Cairo, sans-serif';
   ctx.fillStyle = '#fef08a';
   ctx.textAlign = 'center';
-  ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 95);
-
-  ctx.font = '700 26px Cairo, sans-serif';
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 135);
+  ctx.fillText('بطاقة متابعة وتقييم المستوى', 540, 90);
 
   ctx.font = '700 22px Cairo, sans-serif';
-  ctx.fillStyle = '#d4af37';
-  ctx.fillText('التاريخ: ' + hijriDateStr, 540, 170);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('إشراف الشيخ عبدالرحمن', 540, 125);
 
-  var curY = 225;
-  rr(ctx, 40, curY, canvas.width - 80, 130, 16);
+  ctx.font = '600 18px Cairo, sans-serif';
+  ctx.fillStyle = '#d4af37';
+  ctx.fillText('التاريخ: ' + hijriDateStr, 540, 155);
+
+  var curY = 215;
+  rr(ctx, 40, curY, canvas.width - 80, 120, 16);
   ctx.fillStyle = '#ffffff';
   ctx.fill();
   ctx.strokeStyle = '#e5e7eb';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.font = '900 34px Cairo, sans-serif';
+  ctx.font = '800 28px Cairo, sans-serif';
   ctx.fillStyle = '#04201a';
   ctx.textAlign = 'center';
-  ctx.fillText('اسم البطل: ' + studentName, 540, curY + 52);
+  ctx.fillText('اسم البطل: ' + studentName, 540, curY + 48);
 
-  ctx.font = '800 26px Cairo, sans-serif';
-  ctx.fillStyle = '#b45309';
+  ctx.font = '700 22px Cairo, sans-serif';
+  ctx.fillStyle = '#725304';
   ctx.textAlign = 'center';
-  ctx.fillText('التقييم العام: ' + generalRating, 540, curY + 100);
+  ctx.fillText('التقييم العام: ' + generalRating, 540, curY + 92);
 
-  curY += 155;
+  curY += 145;
 
   SECTIONS.forEach(sec => {
     let sData = data[sec.key];
@@ -961,15 +968,15 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
     let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
 
     if (hasCurrents || hasNexts) {
-      rr(ctx, 40, curY, canvas.width - 80, 55, 10);
+      rr(ctx, 40, curY, canvas.width - 80, 50, 10);
       ctx.fillStyle = '#0b3d2e';
       ctx.fill();
 
-      ctx.font = '800 26px Cairo, sans-serif';
+      ctx.font = '800 22px Cairo, sans-serif';
       ctx.fillStyle = '#fef08a';
       ctx.textAlign = 'right';
-      ctx.fillText(sec.icon + ' ' + sec.title, 970, curY + 38);
-      curY += 70;
+      ctx.fillText(sec.icon + ' ' + sec.title, 980, curY + 34);
+      curY += 65;
 
       if (hasCurrents) {
         sData.currents.forEach(item => {
@@ -982,27 +989,27 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
           }
 
           if (itemTitle) {
-            rr(ctx, 55, curY, canvas.width - 110, 90, 12);
+            rr(ctx, 55, curY, canvas.width - 110, 75, 12);
             ctx.fillStyle = '#ffffff';
             ctx.fill();
             ctx.strokeStyle = '#cbd5e1';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            ctx.font = '800 24px Cairo, sans-serif';
+            ctx.font = '700 20px Cairo, sans-serif';
             ctx.fillStyle = '#111827';
             ctx.textAlign = 'right';
-            ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 950, curY + 36);
+            ctx.fillText('• الإنجاز الحالي: ' + itemTitle, 960, curY + 32);
 
             let rateTxt = item.rating ? item.rating : 'تم التسميع';
             let errTxt = (item.errors && item.errors !== '0') ? ` (الأخطاء: ${item.errors})` : ' (بدون أخطاء ✨)';
 
-            ctx.font = '700 22px Cairo, sans-serif';
+            ctx.font = '600 18px Cairo, sans-serif';
             ctx.fillStyle = (item.errors && item.errors !== '0') ? '#b91c1c' : '#15803d';
             ctx.textAlign = 'right';
-            ctx.fillText(rateTxt + errTxt, 930, curY + 70);
+            ctx.fillText(rateTxt + errTxt, 940, curY + 60);
 
-            curY += 105;
+            curY += 85;
           }
         });
       }
@@ -1018,19 +1025,19 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
           }
 
           if (planTitle) {
-            rr(ctx, 55, curY, canvas.width - 110, 60, 10);
+            rr(ctx, 55, curY, canvas.width - 110, 50, 10);
             ctx.fillStyle = '#fffbe2';
             ctx.fill();
             ctx.strokeStyle = '#d4af37';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            ctx.font = '800 22px Cairo, sans-serif';
+            ctx.font = '700 19px Cairo, sans-serif';
             ctx.fillStyle = '#854d0e';
             ctx.textAlign = 'right';
-            ctx.fillText('🎯 الخطة والواجب القادم: ' + planTitle, 950, curY + 38);
+            ctx.fillText('🎯 الخطة والواجب القادم: ' + planTitle, 960, curY + 32);
 
-            curY += 75;
+            curY += 60;
           }
         });
       }
@@ -1039,15 +1046,15 @@ async function drawDetailedFollowUpReport(studentName, generalRating, data, hijr
     }
   });
 
-  var footerY = canvas.height - 70;
-  ctx.font = '800 26px Cairo, sans-serif';
+  var footerY = canvas.height - 80;
+  ctx.font = '700 22px Cairo, sans-serif';
   ctx.fillStyle = '#0b3d2e';
   ctx.textAlign = 'center';
   ctx.fillText('الشيخ عبدالرحمن', 540, footerY);
 
-  ctx.font = '700 18px Cairo, sans-serif';
+  ctx.font = '600 16px Cairo, sans-serif';
   ctx.fillStyle = '#64748b';
-  ctx.fillText('تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 32);
+  ctx.fillText('تقرير متابعة إلكتروني معتمد 🛡️', 540, footerY + 30);
 
   return canvas;
 }
@@ -1096,7 +1103,6 @@ function showSingleImageModal(canvasElement, downloadName) {
   };
   
   btnWrap.appendChild(shareBtn);
-  modal.appendChild(modal); // Fix append
   modal.appendChild(btnWrap);
   document.body.appendChild(modal);
 }
