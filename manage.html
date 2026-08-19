@@ -321,6 +321,7 @@ body {
   const studentsCollection = db.collection('students');
 
   let allStudentsData = [];
+  let currentModalElement = null;
 
   function customAlert(msg) {
     var m=document.createElement('div');
@@ -507,7 +508,7 @@ body {
     } catch(e) {}
   }
 
-  /* --- رسم التقرير بالحجم المطور والتقسيم على اليسار --- */
+  /* --- رسم التقرير بالخطوط العريضة والمكبرة جداً --- */
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -522,7 +523,7 @@ body {
 
     var canvas = document.createElement('canvas'); 
     canvas.width = 1080; 
-    canvas.height = Math.max(1650, 750 + (totalRowsCount * 135));
+    canvas.height = Math.max(1750, 800 + (totalRowsCount * 150));
     var ctx = canvas.getContext('2d');
 
     // الخلفية
@@ -535,55 +536,58 @@ body {
     // الإطار الخارجي
     rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
     ctx.strokeStyle = '#0b3d2e';
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 5;
     ctx.stroke();
 
-    // رأس البطاقة
-    rr(ctx, 35, 35, canvas.width - 70, 170, 18);
+    // رأس البطاقة (الهيدر)
+    rr(ctx, 35, 35, canvas.width - 70, 185, 18);
     var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     hdrGradient.addColorStop(0, '#04201a');
     hdrGradient.addColorStop(1, '#0b3d2e');
     ctx.fillStyle = hdrGradient;
     ctx.fill();
 
-    rr(ctx, 40, 40, canvas.width - 80, 160, 14);
+    rr(ctx, 40, 40, canvas.width - 80, 175, 14);
     ctx.strokeStyle = '#d4af37';
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 3;
     ctx.stroke();
 
-    ctx.font = '900 42px Cairo, sans-serif';
+    // عنوان الهيدر مكبر
+    ctx.font = '900 46px Cairo, sans-serif';
     ctx.fillStyle = '#fef08a';
     ctx.textAlign = 'center';
     ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 98);
 
-    ctx.font = '800 28px Cairo, sans-serif';
+    ctx.font = '800 32px Cairo, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 140);
+    ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
 
-    ctx.font = '700 24px Cairo, sans-serif';
+    ctx.font = '700 26px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
-    ctx.fillText('التاريخ: ' + hijriDateStr, 540, 178);
+    ctx.fillText('التاريخ: ' + hijriDateStr, 540, 188);
 
     // كارت اسم الطالب والتقييم العام
-    var curY = 235;
-    rr(ctx, 40, curY, canvas.width - 80, 140, 18);
+    var curY = 250;
+    rr(ctx, 40, curY, canvas.width - 80, 150, 18);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    ctx.font = '900 38px Cairo, sans-serif';
+    ctx.font = '900 42px Cairo, sans-serif';
     ctx.fillStyle = '#04201a';
     ctx.textAlign = 'center';
-    ctx.fillText('اسم البطل: ' + studentName, 540, curY + 56);
+    ctx.fillText('اسم البطل: ' + studentName, 540, curY + 60);
 
-    ctx.font = '800 28px Cairo, sans-serif';
+    // معالجة undefined للتقييم العام
+    let displayRating = (generalRating && generalRating !== 'undefined') ? generalRating : 'مستوى ممتاز 🌟';
+    ctx.font = '800 32px Cairo, sans-serif';
     ctx.fillStyle = '#b45309';
     ctx.textAlign = 'center';
-    ctx.fillText('التقييم العام: ' + generalRating, 540, curY + 108);
+    ctx.fillText('التقييم العام: ' + displayRating, 540, curY + 115);
 
-    curY += 165;
+    curY += 180;
 
     // أقسام المتابعة
     SECTIONS.forEach(sec => {
@@ -592,18 +596,18 @@ body {
       let hasNexts = sData && sData.nexts && sData.nexts.length > 0;
 
       if (hasCurrents || hasNexts) {
-        // شريط القسم
-        rr(ctx, 40, curY, canvas.width - 80, 60, 12);
+        // شريط العنوان الرئيسي للقسم
+        rr(ctx, 40, curY, canvas.width - 80, 68, 14);
         ctx.fillStyle = '#0b3d2e';
         ctx.fill();
 
-        ctx.font = '800 30px Cairo, sans-serif';
+        ctx.font = '900 34px Cairo, sans-serif';
         ctx.fillStyle = '#fef08a';
         ctx.textAlign = 'right';
-        ctx.fillText(sec.icon + ' ' + sec.title, 960, curY + 41);
-        curY += 75;
+        ctx.fillText(sec.icon + ' ' + sec.title, 950, curY + 46);
+        curY += 85;
 
-        // العناصر الحالية (التوزيع: العنوان يمين - التقييم والأخطاء يسار)
+        // العناصر الحالية
         if (hasCurrents) {
           sData.currents.forEach(item => {
             let itemTitle = "";
@@ -612,7 +616,7 @@ body {
             if (item.sr) {
               itemTitle = "سورة " + item.sr;
               if (item.type === 'range' && item.f && item.t) {
-                rangeBadge = `(الآيات ${item.f} - ${item.t})`;
+                rangeBadge = `(الآيات ${item.f} إلى ${item.t})`;
               } else {
                 rangeBadge = '(كاملة)';
               }
@@ -623,49 +627,50 @@ body {
             }
 
             if (itemTitle) {
-              rr(ctx, 50, curY, canvas.width - 100, 100, 14);
+              rr(ctx, 50, curY, canvas.width - 100, 115, 16);
               ctx.fillStyle = '#ffffff';
               ctx.fill();
-              ctx.strokeStyle = '#cbd5e1';
-              ctx.lineWidth = 1.5;
+              ctx.strokeStyle = '#94a3b8';
+              ctx.lineWidth = 2;
               ctx.stroke();
 
-              // الجهة اليمنى: اسم الدرس/السورة والنطاق
-              ctx.font = '900 30px Cairo, sans-serif';
-              ctx.fillStyle = '#0f172a';
+              // اسم السورة/الدرس
+              ctx.font = '900 34px Cairo, sans-serif';
+              ctx.fillStyle = '#020617';
               ctx.textAlign = 'right';
-              ctx.fillText(itemTitle, 950, curY + 45);
+              ctx.fillText(itemTitle, 950, curY + 50);
 
-              ctx.font = '700 22px Cairo, sans-serif';
+              // نطاق الآيات
+              ctx.font = '800 26px Cairo, sans-serif';
               ctx.fillStyle = '#475569';
-              ctx.fillText(rangeBadge, 950, curY + 80);
+              ctx.fillText(rangeBadge, 950, curY + 92);
 
-              // الجهة اليسرى: التقييم والأخطاء (مثل التصميم المطلوب)
+              // التقييم والأخطاء
               let rateTxt = item.rating ? item.rating : 'تم التسميع';
               let errTxt = (item.errors && item.errors !== '0') ? `❌ الأخطاء: ${item.errors}` : '✨ بدون أخطاء';
 
-              // شارة التقييم يسار
-              rr(ctx, 70, curY + 15, 230, 36, 8);
+              // شارة التقييم
+              rr(ctx, 70, curY + 14, 270, 42, 10);
               ctx.fillStyle = '#fef3c7';
               ctx.fill();
 
-              ctx.font = '800 22px Cairo, sans-serif';
+              ctx.font = '900 25px Cairo, sans-serif';
               ctx.fillStyle = '#d97706';
               ctx.textAlign = 'center';
-              ctx.fillText(rateTxt, 185, curY + 41);
+              ctx.fillText(rateTxt, 205, curY + 43);
 
-              // شارة الأخطاء يسار أسفل
+              // شارة الأخطاء
               let isErr = (item.errors && item.errors !== '0');
-              rr(ctx, 70, curY + 55, 230, 34, 8);
+              rr(ctx, 70, curY + 60, 270, 40, 10);
               ctx.fillStyle = isErr ? '#fee2e2' : '#dcfce7';
               ctx.fill();
 
-              ctx.font = '700 20px Cairo, sans-serif';
+              ctx.font = '800 24px Cairo, sans-serif';
               ctx.fillStyle = isErr ? '#dc2626' : '#15803d';
               ctx.textAlign = 'center';
-              ctx.fillText(errTxt, 185, curY + 79);
+              ctx.fillText(errTxt, 205, curY + 88);
 
-              curY += 115;
+              curY += 130;
             }
           });
         }
@@ -675,37 +680,37 @@ body {
           sData.nexts.forEach(item => {
             let planTitle = "";
             if (item.nextPlanSr) {
-              planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF} - ${item.nextPlanT})` : ' (كاملة)');
+              planTitle = "سورة " + item.nextPlanSr + (item.nextPlanType === 'range' ? ` (الآيات ${item.nextPlanF} إلى ${item.nextPlanT})` : ' (كاملة)');
             } else if (item.nextPlanF && item.nextPlanT) {
               let unit = (sec.key === 'hd') ? 'الحديث' : 'سؤال';
               planTitle = `${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
             }
 
             if (planTitle) {
-              rr(ctx, 50, curY, canvas.width - 100, 65, 12);
+              rr(ctx, 50, curY, canvas.width - 100, 75, 14);
               ctx.fillStyle = '#fffbe2';
               ctx.fill();
               ctx.strokeStyle = '#d4af37';
-              ctx.lineWidth = 1.5;
+              ctx.lineWidth = 2;
               ctx.stroke();
 
-              ctx.font = '800 25px Cairo, sans-serif';
-              ctx.fillStyle = '#854d0e';
+              ctx.font = '900 28px Cairo, sans-serif';
+              ctx.fillStyle = '#78350f';
               ctx.textAlign = 'right';
-              ctx.fillText('🎯 الخطة القادمة: ' + planTitle, 950, curY + 42);
+              ctx.fillText('🎯 الخطة القادمة: ' + planTitle, 950, curY + 48);
 
-              curY += 80;
+              curY += 90;
             }
           });
         }
 
-        curY += 10;
+        curY += 15;
       }
     });
 
     // ذيل التقرير
-    var footerY = canvas.height - 65;
-    ctx.font = '800 26px Cairo, sans-serif';
+    var footerY = canvas.height - 60;
+    ctx.font = '900 28px Cairo, sans-serif';
     ctx.fillStyle = '#0b3d2e';
     ctx.textAlign = 'center';
     ctx.fillText('مركز خادم القرآن الكريم | تقرير متابعة الحفظ', 540, footerY);
@@ -713,9 +718,35 @@ body {
     return canvas;
   }
 
+  // التحكم بإغلاق Modal عند الضغط على زر الرجوع في الهاتف
+  window.addEventListener('popstate', function(event) {
+    if (currentModalElement) {
+      currentModalElement.remove();
+      currentModalElement = null;
+    }
+  });
+
+  function closeReportModal() {
+    if (currentModalElement) {
+      currentModalElement.remove();
+      currentModalElement = null;
+      if (history.state && history.state.modalOpen) {
+        history.back();
+      }
+    }
+  }
+
   function showSingleImageModal(canvasElement, downloadName) {
-    var modal=document.createElement('div');
-    modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+    if (currentModalElement) {
+      currentModalElement.remove();
+    }
+
+    // إضافة حالة في سجل المتصفح
+    history.pushState({ modalOpen: true }, "");
+
+    var modal = document.createElement('div');
+    currentModalElement = modal;
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
     
     var imgPreview = document.createElement('img');
     imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.95);
@@ -728,7 +759,7 @@ body {
     var closeBtn = document.createElement('button');
     closeBtn.innerText = 'إغلاق';
     closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
-    closeBtn.onclick = function(){ modal.remove(); };
+    closeBtn.onclick = function(){ closeReportModal(); };
     btnWrap.appendChild(closeBtn);
 
     var shareBtn = document.createElement('button');
