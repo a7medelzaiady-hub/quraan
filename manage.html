@@ -540,8 +540,8 @@ body {
     try {
       let hijriDateStr = convertToHijri(tx.date);
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
-      // تمرير الكانفاس والاسم والبيانات التفصيلية لدعم زر التعديل والتفريغ
-      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName);
+      // تمرير الكانفاس والاسم والبيانات التفصيلية مع التقييم العام للدالة
+      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating);
     } catch(e) {
       customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
     }
@@ -791,7 +791,7 @@ body {
   }
 
   /* --- عرض التقرير والنافذة المنبثقة الشاملة مع زر التعديل والتفريغ --- */
-  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName) {
+  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName, generalRating) {
     if (currentModalElement) {
       currentModalElement.remove();
     }
@@ -817,17 +817,21 @@ body {
     closeBtn.onclick = function(){ closeReportModal(); };
     btnWrap.appendChild(closeBtn);
 
-    // 2. ⚡ الزر الجديد: تعديل وتفريغ التقرير في index1.html
+    // 2. ⚡ تعديل زر التعديل ليتوافق تمامًا مع المفتاح والهيكلية المتوقعة في index1.html
     var editBtn = document.createElement('button');
     editBtn.innerHTML = '✏️ تعديل التقرير في الإدخال';
     editBtn.style.cssText = 'padding:12px 20px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     editBtn.onclick = function() {
       if (rawReportData) {
-        // حفظ بيانات التقرير واسم الطالب في الـ LocalStorage
-        localStorage.setItem('editReportData', JSON.stringify({
-          studentName: studentName,
+        // إنشاء الهيكل الكامل بالاسم edit_report_payload المتوافق مع index1.html
+        var payload = {
+          studentName: studentName || '',
+          generalRating: generalRating || 'ممتاز',
           academicData: rawReportData
-        }));
+        };
+        
+        localStorage.setItem('edit_report_payload', JSON.stringify(payload));
+        
         // الانتقال لصفحة الإدخال index1.html
         window.location.href = 'index1.html';
       } else {
