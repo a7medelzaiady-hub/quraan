@@ -23,7 +23,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
 
-/* الهيدر المحسّن - إنهاء الأخضر عند كلمة تحت إشراف الشيخ عبدالرحمن */
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px 18px; 
@@ -35,76 +34,87 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* أزرار التحكم العلوية الشفافة / العادية خارج الأخضر */
 .top-nav-btns {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   margin: 16px auto 0;
   max-width: 800px;
   padding: 0 14px;
 }
 .nav-btn {
-  background: #fff;
+  background: #ffffff;
   color: var(--green-deep);
-  border: 1.5px solid var(--green-mid);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: 0.2s;
+  gap: 8px;
+  transition: all 0.3s ease;
   text-decoration: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.06);
+  position: relative;
+  overflow: hidden;
 }
-.nav-btn:hover, .nav-btn:active {
+.nav-btn:hover {
   background: var(--green-mid);
-  color: #fff;
+  color: var(--gold-light);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11, 61, 46, 0.25);
+}
+.nav-btn:active {
+  transform: translateY(0);
 }
 
-/* شريط نظام الأخطاء العلوي خارج الأخضر */
 .system-selector-wrap {
-  background: #fff;
-  padding: 10px;
-  border-radius: 12px;
-  max-width: 400px;
-  margin: 12px auto 0;
-  border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 16px;
+  max-width: 440px;
+  margin: 16px auto 0;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
 }
 .system-label {
   color: var(--green-deep);
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 10px;
   display: block;
   text-align: center;
 }
 .system-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 .system-radio-btn { display: none; }
 .system-radio-label {
-  background: #f3f4f6;
+  background: #f8faf9;
   color: var(--sub);
-  padding: 8px 4px;
+  padding: 10px 8px;
   font-size: 13px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
-  display: block;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   text-align: center;
+  border: 1.5px solid var(--border);
 }
 .system-radio-btn:checked + .system-radio-label {
-  background: var(--green-mid);
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
   color: var(--gold-light);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.2);
 }
 
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
@@ -131,29 +141,67 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .del-btn { position: absolute; left: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--red); color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
 .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--border); }
 .range-row.hidden { display: none; }
-.add-btn { width: 100%; padding: 11px; margin-top: 4px; margin-bottom: 14px; border: 2px dashed var(--green-light); border-radius: 10px; background: rgba(20, 121, 92, 0.03); color: var(--green-light); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
-.add-btn:hover { background: rgba(20, 121, 92, 0.08); }
-.add-btn.next-add { border-color: #b45309; color: #b45309; background: rgba(180, 83, 9, 0.03); }
-.add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
+
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  border: 2px dashed var(--green-light);
+  border-radius: 12px;
+  background: rgba(20, 121, 92, 0.04);
+  color: var(--green-light);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.add-btn:hover {
+  background: var(--green-light);
+  color: #fff;
+  border-style: solid;
+  box-shadow: 0 4px 12px rgba(20, 121, 92, 0.2);
+}
+.add-btn.next-add {
+  border-color: #d97706;
+  color: #b45309;
+  background: rgba(217, 119, 6, 0.04);
+}
+.add-btn.next-add:hover {
+  background: #d97706;
+  color: #fff;
+  border-style: solid;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
-/* عداد الأخطاء */
 .counter-box { display: flex; align-items: center; border: 2px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; height: 48px; }
 .counter-btn { width: 40px; height: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
 .counter-btn.plus:active { background: #fee2e2; }
 .counter-btn.minus { background: #f3f4f6; color: var(--sub); border-left: 1px solid var(--border); }
-.counter-btn.minus:active { background: #e5e7eb; }
+.counter-btn.minus:active { background: #e5e5e5; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* أزرار التثبيت السفلي (زر استخراج واحد بدلاً من زرين) */
-.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
+.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); padding: 14px 16px; border-top: 1.5px solid var(--border); box-shadow: 0 -6px 24px rgba(0,0,0,0.08); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; display: block; }
-.submit-btn { width: 100%; padding: 14px 8px; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-.btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
+.submit-btn { width: 100%; padding: 15px 12px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; }
+.btn-combined { 
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); 
+  color: var(--gold-light); 
+  border: 2px solid var(--gold); 
+  box-shadow: 0 6px 18px rgba(4, 32, 26, 0.3);
+}
+.btn-combined:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(4, 32, 26, 0.4);
+}
 .submit-btn:active { transform: scale(0.98); }
 
-/* نافذة مصحف التسميع */
 .quran-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 99999; align-items: center; justify-content: center; padding: 12px; }
 .quran-box { background: #fff; border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--green-mid); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
 .quran-header { background: var(--green-mid); color: var(--gold-light); padding: 16px; text-align: center; font-weight: 700; font-size: 16px; border-bottom: 2px solid var(--gold); }
@@ -250,7 +298,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     </div>
   </div>
   
-  <!-- Sections -->
   <div class="section" id="sec-ns">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-book"></i>السور الجديدة</div></div>
     <div class="sec-body">
@@ -336,7 +383,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   </div>
 </div>
 
-<!-- نافذة مصحف التسميع التفاعلية -->
 <div class="quran-modal" id="quran-modal">
   <div class="quran-box">
     <div class="quran-header" id="quran-modal-header">مصحف التسميع التفاعلي</div>
@@ -350,7 +396,10 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 <!-- Firebase Modular SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, doc, updateDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import {
+    getFirestore, collection, addDoc, getDocs, query, where,
+    serverTimestamp, doc, updateDoc, arrayUnion
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
@@ -365,13 +414,12 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // جلب كافة قائمة الطلاب المسجلين
   window.fetchAllStudents = async function() {
     try {
       const querySnapshot = await getDocs(collection(db, "students"));
       let studentsList = [];
-      querySnapshot.forEach((docSnap) => {
-        if(docSnap.data().name) studentsList.push(docSnap.data().name);
+      querySnapshot.forEach((doc) => {
+        if(doc.data().name) studentsList.push(doc.data().name);
       });
       return studentsList;
     } catch (e) {
@@ -380,59 +428,70 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // تسجيل طالب جديد بجدول الطلاب
+  // البحث عن مستند طالب بالاسم، أو إنشاؤه إذا لم يكن موجوداً — يُرجع مرجع المستند (docRef)
+  async function findOrCreateStudentDoc(studentName) {
+    var trimmedName = studentName.trim();
+    const q = query(collection(db, "students"), where("name", "==", trimmedName));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return { ref: querySnapshot.docs[0].ref, isNew: false };
+    }
+
+    const newDocRef = await addDoc(collection(db, "students"), {
+      name: trimmedName,
+      createdAt: serverTimestamp(),
+      transactions: []
+    });
+    return { ref: newDocRef, isNew: true };
+  }
+
   window.registerStudentInDb = async function(studentName) {
-    if (!studentName.trim()) return false;
+    var trimmedName = studentName.trim();
+    if (!trimmedName) return { success: false, reason: 'empty' };
+    
     try {
-      const q = query(collection(db, "students"), where("name", "==", studentName.trim()));
+      const q = query(collection(db, "students"), where("name", "==", trimmedName));
       const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) {
-        await addDoc(collection(db, "students"), {
-          name: studentName.trim(),
-          createdAt: serverTimestamp()
-        });
+      
+      if (!querySnapshot.empty) {
+        return { success: false, reason: 'exists' };
       }
-      return true;
+      
+      await addDoc(collection(db, "students"), {
+        name: trimmedName,
+        createdAt: serverTimestamp(),
+        transactions: []
+      });
+      return { success: true };
     } catch (e) {
       console.error("خطأ أثناء تسجيل الطالب:", e);
-      return false;
+      return { success: false, reason: 'error', error: e };
     }
   };
 
-  // حفظ وحداثة تقارير المتابعة في Firebase (تدعم التحديث أو الإضافة)
+  // حفظ تقرير متابعة داخل مستند الطالب نفسه (transactions[])
+  // بنفس أسماء الحقول التي تتوقعها صفحة manage.html: date, generalRating, academicData
   window.saveReportToFirebase = async function(studentName, rating, reportData) {
     try {
-      const sName = studentName.trim();
-      await window.registerStudentInDb(sName);
+      var trimmedName = studentName.trim();
+      if (!trimmedName) return false;
 
-      // تنظيف البيانات من أي قيم undefined لمنع أخطاء التخزين
-      const cleanData = JSON.parse(JSON.stringify(reportData, (k, v) => v === undefined ? null : v));
+      const { ref: studentDocRef } = await findOrCreateStudentDoc(trimmedName);
 
-      const activeReportId = window.editingReportId;
+      const newTransaction = {
+        date: new Date().toISOString(),
+        generalRating: rating,
+        academicData: reportData
+      };
 
-      if (activeReportId) {
-        // حالة تعديل تقرير مسبق
-        const reportRef = doc(db, "reports", activeReportId);
-        await updateDoc(reportRef, {
-          studentName: sName,
-          rating: rating,
-          data: cleanData,
-          updatedAt: serverTimestamp(),
-          dateFormatted: new Date().toLocaleDateString('ar-EG')
-        });
-      } else {
-        // حالة إضافة تقرير جديد
-        await addDoc(collection(db, "reports"), {
-          studentName: sName,
-          rating: rating,
-          data: cleanData,
-          createdAt: serverTimestamp(),
-          dateFormatted: new Date().toLocaleDateString('ar-EG')
-        });
-      }
+      await updateDoc(studentDocRef, {
+        transactions: arrayUnion(newTransaction)
+      });
+
       return true;
     } catch (e) {
-      console.error("خطأ أثناء حفظ/تحديث التقرير في Firebase:", e);
+      console.error("خطأ أثناء حفظ التقرير:", e);
       return false;
     }
   };
@@ -447,11 +506,7 @@ var activeErrorInputId = null;
 var currentQuranRowId = null;
 var currentQuranIsQ = false;
 var cachedStudentsList = [];
-window.editingReportId = null; // الاحتفاظ بمعرّف التقرير في حالة التعديل
 
-/* ==========================================================================
-   كود الكشف والتعبئة التلقائية عند التحويل من صفحة الإدارة (manage.html)
-   ========================================================================== */
 document.addEventListener("DOMContentLoaded", function () {
   const savedDataStr = localStorage.getItem("edit_report_payload");
   if (savedDataStr) {
@@ -460,31 +515,22 @@ document.addEventListener("DOMContentLoaded", function () {
       const studentName = payload.studentName;
       const rating = payload.rating;
       const data = payload.academicData || payload.data;
-      
-      // حفظ معرف التقرير لضمان التحديث عند استخراج التقرير من جديد
-      if (payload.reportId || payload.id) {
-        window.editingReportId = payload.reportId || payload.id;
-      }
 
-      // 1. تعبئة اسم الطالب
       const nameInput = document.getElementById("inp-student");
       if (nameInput && studentName) {
         nameInput.value = studentName;
       }
 
-      // 2. تعبئة التقييم العام
       const ratingInput = document.getElementById("inp-general-rating");
       if (ratingInput && rating) {
         ratingInput.value = rating;
       }
 
-      // 3. تعبئة بيانات الأقسام المختلفة
       if (data) {
         for (let secKey in data) {
           const sectionData = data[secKey];
           const isQ = (secKey === 'mq' || secKey === 'pm' || secKey === 'hd');
 
-          // تفريغ الحقول التلقائية الحالية قبل التعبئة
           const currentContainer = document.getElementById(secKey + '-current-list');
           const nextContainer = document.getElementById(secKey + '-next-list');
           if (currentContainer) currentContainer.innerHTML = '';
@@ -492,7 +538,6 @@ document.addEventListener("DOMContentLoaded", function () {
           counters[secKey + '_c'] = 0;
           counters[secKey + '_n'] = 0;
 
-          // تعبئة البيانات الحالية
           if (sectionData.currents && sectionData.currents.length > 0) {
             sectionData.currents.forEach(item => {
               if (!isQ) {
@@ -513,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (fInp && item.f) fInp.value = item.f;
                 if (tInp && item.t) tInp.value = item.t;
                 if (ratingSel && item.rating) ratingSel.value = item.rating;
-                if (errInp && item.errors !== undefined) errInp.value = item.errors;
+                if (errInp && item.errors) errInp.value = item.errors;
               } else {
                 addCurrentQuestion(secKey + '-current-list', secKey);
                 const idx = counters[secKey + '_c'];
@@ -525,12 +570,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (qfInp && item.f) qfInp.value = item.f;
                 if (qtInp && item.t) qtInp.value = item.t;
                 if (ratingSel && item.rating) ratingSel.value = item.rating;
-                if (errInp && item.errors !== undefined) errInp.value = item.errors;
+                if (errInp && item.errors) errInp.value = item.errors;
               }
             });
           }
 
-          // تعبئة الخطط القادمة
           if (sectionData.nexts && sectionData.nexts.length > 0) {
             sectionData.nexts.forEach(plan => {
               if (!isQ) {
@@ -562,7 +606,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
-      // إزالة البيانات الموقتة من ذاكرة التخزين بعد تحميلها بنجاح
       localStorage.removeItem("edit_report_payload");
       customAlert("تم جلب بيانات التقرير المحول بنجاح! يمكنك الآن تعديله وإعادة استخراجه وحفظه.", "تعبئة تلقائية 📋");
     } catch (e) {
@@ -571,7 +614,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// رسالة تنبيه احترافية
 function customAlert(msg, title) {
   title = title || "تنبيه النظام 🕌";
   var m = document.createElement('div');
@@ -585,7 +627,6 @@ function customAlert(msg, title) {
   document.getElementById('c-alert-close').onclick = function(){ m.remove(); };
 }
 
-// تهيئة محرك الإكمال التلقائي لاسم الطالب
 document.addEventListener('DOMContentLoaded', function() {
   var studentInp = document.getElementById('inp-student');
   var studentDrop = document.getElementById('student-ac-drop');
@@ -623,7 +664,6 @@ function pickStudent(name) {
   document.getElementById('student-ac-drop').style.display = 'none';
 }
 
-// إضافة طالب جديد وتصفير الواجهة مع التسجيل في قاعدة البيانات
 async function addNewStudentAction() {
   var studentName = document.getElementById('inp-student').value.trim();
   if (!studentName) {
@@ -632,20 +672,22 @@ async function addNewStudentAction() {
   }
 
   if (typeof window.registerStudentInDb === 'function') {
-    var success = await window.registerStudentInDb(studentName);
-    if (success) {
+    var result = await window.registerStudentInDb(studentName);
+    if (result.success) {
       if (!cachedStudentsList.includes(studentName)) {
         cachedStudentsList.push(studentName);
       }
       customAlert("تم تسجيل الطالب (" + studentName + ") بنجاح في قاعدة البيانات وتجهيز النظام لإدخال التقييمات.", "نجاح التسجيل ✨");
+      resetFormForNewStudent();
+    } else if (result.reason === 'exists') {
+      customAlert("الطالب (" + studentName + ") مسجل بالفعل في النظام مسبقاً، ولا يمكن تكراره.", "اسم مُكرّر ⚠️");
+    } else {
+      customAlert("حدث خطأ أثناء محاولة تسجيل الطالب، يرجى المحاولة لاحقاً.", "خطأ في التسجيل ❌");
     }
   }
-
-  resetFormForNewStudent();
 }
 
 function resetFormForNewStudent() {
-  window.editingReportId = null; // إعادة ضبط معرف التقرير
   document.getElementById('inp-student').value = '';
   document.getElementById('inp-general-rating').selectedIndex = 0;
   
@@ -824,16 +866,16 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
       let ayahObj = ayahsData.find(a => a.numberInSurah === i);
       if (ayahObj) {
         displayTxt = ayahObj.text + " ۝";
-        if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
-           displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
+        if (surahIndex !== 1 && i === 1 && displayTxt.startsWith("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ")) {
+           displayTxt = displayTxt.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ", "");
         }
       } else {
-        displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
+        displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
       }
     } else if (isQ) {
       displayTxt = "السؤال أو التمرين التدريبي رقم " + i + " داخل المذكرة المعتمدة.";
     } else {
-      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
+      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
     }
 
     card.innerHTML = '<span class="ayah-num-badge">' + i + '</span>' +
@@ -965,33 +1007,26 @@ function collectSectionData(prefix, isQ) {
   document.querySelectorAll('[id^="crow-'+prefix+'-"]').forEach(row => {
     var item = { rating: row.querySelector('.rating-sel')?.value || '', errors: row.querySelector('.error-inp')?.value || '0' };
     if (!isQ) {
-      item.sr = row.querySelector('.main-sr')?.value || ''; 
-      item.type = row.querySelector('.main-sel')?.value || 'full';
-      item.f = row.querySelector('.main-f')?.value || ''; 
-      item.t = row.querySelector('.main-t')?.value || '';
+      item.sr = row.querySelector('.main-sr')?.value; item.type = row.querySelector('.main-sel')?.value;
+      item.f = row.querySelector('.main-f')?.value; item.t = row.querySelector('.main-t')?.value;
     } else {
-      item.f = row.querySelector('.main-qf')?.value || ''; 
-      item.t = row.querySelector('.main-qt')?.value || '';
+      item.f = row.querySelector('.main-qf')?.value; item.t = row.querySelector('.main-qt')?.value;
     }
     if (item.sr || item.f) currents.push(item);
   });
   document.querySelectorAll('[id^="nrow-'+prefix+'-"]').forEach(row => {
     var item = {};
     if (!isQ) {
-      item.nextPlanSr = row.querySelector('.nxt-sr')?.value || ''; 
-      item.nextPlanType = row.querySelector('.nxt-sel')?.value || 'full';
-      item.nextPlanF = row.querySelector('.nxt-f')?.value || ''; 
-      item.nextPlanT = row.querySelector('.nxt-t')?.value || '';
+      item.nextPlanSr = row.querySelector('.nxt-sr')?.value; item.nextPlanType = row.querySelector('.nxt-sel')?.value;
+      item.nextPlanF = row.querySelector('.nxt-f')?.value; item.nextPlanT = row.querySelector('.nxt-t')?.value;
     } else {
-      item.nextPlanF = row.querySelector('.nxt-qf')?.value || ''; 
-      item.nextPlanT = row.querySelector('.nxt-qt')?.value || '';
+      item.nextPlanF = row.querySelector('.nxt-qf')?.value; item.nextPlanT = row.querySelector('.nxt-qt')?.value;
     }
     if (item.nextPlanSr || item.nextPlanF) nexts.push(item);
   });
   return { currents: currents, nexts: nexts };
 }
 
-/* محرك الـ Canvas الإخراجي */
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
 var SECTIONS = [
@@ -1216,9 +1251,10 @@ async function drawReport(nm, data){
   return canvas;
 }
 
-function showSingleImageModal(canvasElement, downloadName) {
-  var modal=document.createElement('div');
-  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
+function showSingleImageModal(canvasElement, downloadName, studentName, genRating, reportData) {
+  var modal = document.createElement('div');
+  modal.id = 'report-preview-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;';
   
   var imgPreview = document.createElement('img');
   imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.92);
@@ -1239,10 +1275,28 @@ function showSingleImageModal(canvasElement, downloadName) {
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
+    shareBtn.innerText = '⏳ جاري الحفظ...';
+    shareBtn.disabled = true;
+
+    var saved = false;
+    if (typeof window.saveReportToFirebase === 'function') {
+      saved = await window.saveReportToFirebase(studentName, genRating, reportData);
+    }
+
+    if (!saved) {
+      shareBtn.innerText = '🔗 مشاركة التقرير مباشر';
+      shareBtn.disabled = false;
+      customAlert('تعذر حفظ التقرير في قاعدة البيانات، يرجى التأكد من الاتصال بالإنترنت والمحاولة مرة أخرى.', 'خطأ في الحفظ ❌');
+      return;
+    }
+
+    modal.remove();
+
     try {
       canvasElement.toBlob(async function(blob) {
         if (!blob) { customAlert('تعذر إنشاء ملف الصورة', 'خطأ في النظام ❌'); return; }
         var file = new File([blob], downloadName, { type: 'image/jpeg' });
+        
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
@@ -1250,12 +1304,18 @@ function showSingleImageModal(canvasElement, downloadName) {
             text: 'تقرير بطل مركز خادم القرآن الكريم'
           });
         } else {
-          var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
-          customAlert('المتصفح لا يدعم التشيير التلقائي المباشر، تم تنزيل صورة التقرير إلى جهازك.', 'حفظ الصورة 📥');
+          var a = document.createElement('a');
+          a.href = imgPreview.src;
+          a.download = downloadName;
+          a.click();
+          customAlert('المتصفح لا يدعم التشيير المباشر، تم تنزيل صورة التقرير وتأكيد الحفظ.', 'حفظ الصورة 📥');
         }
       }, 'image/jpeg', 0.95);
     } catch (err) {
-      var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
+      var a = document.createElement('a');
+      a.href = imgPreview.src;
+      a.download = downloadName;
+      a.click();
     }
   };
   
@@ -1271,22 +1331,13 @@ async function generateAllOutputs() {
   var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
   
   try {
-    // 1. مزامنة البيانات مع السيرفر وتحديث/إضافة التقرير أولاً لضمان حفظ البيانات بدقة
-    if (typeof window.saveReportToFirebase === 'function') {
-      let saved = await window.saveReportToFirebase(nm, genRating, data);
-      if (saved) {
-        console.log("تمت المزامنة بنجاح مع السيرفر.");
-      }
-    }
-
-    // 2. استخراج صورة التقرير وعرض النافذة دون تغيير
     var reportCanvas = await drawReport(nm, data);
-    showSingleImageModal(reportCanvas, 'تقرير_متابعة_'+nm+'.jpg');
-
-  } catch (e) { customAlert('حدث خطأ أثناء معالجة التقرير: ' + e.message, 'خطأ ❌'); }
+    showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + nm + '.jpg', nm, genRating, data);
+  } catch (e) { 
+    customAlert('حدث خطأ أثناء إعداد الصور: ' + e.message, 'خطأ ❌'); 
+  }
 }
 
-// إنشاء الحقول الافتراضية عند أول تشغيل لصفحة فارغة
 SECTIONS.forEach(sec => {
   if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
