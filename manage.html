@@ -373,7 +373,11 @@ body {
   function convertToHijri(dateInput) {
     try {
       let d = new Date();
-      if (dateInput && typeof dateInput === 'string') {
+      if (dateInput && dateInput.toDate) {
+        d = dateInput.toDate();
+      } else if (dateInput instanceof Date) {
+        d = dateInput;
+      } else if (dateInput && typeof dateInput === 'string') {
         let str = dateInput.trim();
         let matches = str.match(/\d+/g);
         if (matches && matches.length >= 3) {
@@ -381,22 +385,9 @@ body {
           let m = parseInt(matches[1]) - 1;
           let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
           d = new Date(y, m, day);
-        } else if (matches && matches.length >= 2) {
-          let day = parseInt(matches[0]);
-          let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7;
-          for (let mKey in monthMap) {
-            if (str.includes(mKey)) {
-              month = monthMap[mKey] - 1;
-              break;
-            }
-          }
-          d = new Date(year, month, day);
+        } else {
+          d = new Date(dateInput);
         }
-      } else if (dateInput && dateInput.toDate) {
-        d = dateInput.toDate();
-      } else if (dateInput) {
-        d = new Date(dateInput);
       }
 
       if (isNaN(d.getTime())) d = new Date();
@@ -441,12 +432,12 @@ body {
       allStudentsData = [];
 
       snapshot.forEach(doc => {
-        let rawData = doc.data();
-        let resolvedName = rawData.studentName || rawData.name || 'طالب بدون اسم';
-        let rawTransactions = rawData.transactions || [];
+        let rawData = doc.data() || {};
+        let resolvedName = rawData.studentName || rawData.name || rawData.student_name || 'طالب بدون اسم';
+        let rawTransactions = rawData.transactions || rawData.reports || [];
         
         let normalizedTransactions = rawTransactions.map(tx => {
-          let academic = tx.academicData || {};
+          let academic = tx.academicData || tx.academic || {};
           let normalizedAcademic = {};
 
           if (typeof academic === 'object') {
@@ -460,9 +451,18 @@ body {
             });
           }
 
+          let formattedDate = new Date().toISOString();
+          if (tx.date && tx.date.toDate) {
+            formattedDate = tx.date.toDate().toISOString();
+          } else if (tx.date) {
+            formattedDate = tx.date;
+          } else if (tx.createdAt && tx.createdAt.toDate) {
+            formattedDate = tx.createdAt.toDate().toISOString();
+          }
+
           return {
             ...tx,
-            date: tx.date || (tx.createdAt && tx.createdAt.toDate ? tx.createdAt.toDate().toISOString() : new Date().toISOString()),
+            date: formattedDate,
             academicData: normalizedAcademic
           };
         });
@@ -478,9 +478,9 @@ body {
       });
 
       allStudentsData.sort((a, b) => {
-        let tA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date) : 0;
-        let tB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date) : 0;
-        return tB - tA;
+        let timeA = (a.transactions && a.transactions[0] && a.transactions[0].date) ? new Date(a.transactions[0].date).getTime() : 0;
+        let timeB = (b.transactions && b.transactions[0] && b.transactions[0].date) ? new Date(b.transactions[0].date).getTime() : 0;
+        return timeB - timeA;
       });
 
       renderStudents(allStudentsData);
@@ -611,7 +611,7 @@ body {
       const studentDocRef = studentsCollection.doc(docId);
       const docSnap = await studentDocRef.get();
       if (docSnap.exists) {
-        let txs = docSnap.data().transactions || [];
+        let txs = docSnap.data().transactions || docSnap.data().reports || [];
         let realIndex = txs.length - 1 - txIndex;
         if (realIndex >= 0 && realIndex < txs.length) {
           txs.splice(realIndex, 1);
