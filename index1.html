@@ -23,7 +23,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
 
-/* الهيدر المحسّن - إنهاء الأخضر عند كلمة تحت إشراف الشيخ عبدالرحمن */
+/* الهيدر المحسّن */
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px 18px; 
@@ -35,76 +35,89 @@ html, body { direction: rtl; font-family: 'Cairo', sans-serif; background: var(-
 .hdr-title { color: var(--gold-light); font-family: 'Amiri', serif; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .hdr-subtitle { color: #fff; font-size: 14px; font-weight: 600; margin-top: 6px; letter-spacing: 0.5px; }
 
-/* أزرار التحكم العلوية الشفافة / العادية خارج الأخضر */
+/* أزرار التحكم العلوية بتصميم احترافي متطور */
 .top-nav-btns {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   margin: 16px auto 0;
   max-width: 800px;
   padding: 0 14px;
 }
 .nav-btn {
-  background: #fff;
+  background: #ffffff;
   color: var(--green-deep);
-  border: 1.5px solid var(--green-mid);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: 0.2s;
+  gap: 8px;
+  transition: all 0.3s ease;
   text-decoration: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.06);
+  position: relative;
+  overflow: hidden;
 }
-.nav-btn:hover, .nav-btn:active {
+.nav-btn:hover {
   background: var(--green-mid);
-  color: #fff;
+  color: var(--gold-light);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11, 61, 46, 0.25);
+}
+.nav-btn:active {
+  transform: translateY(0);
 }
 
-/* شريط نظام الأخطاء العلوي خارج الأخضر */
+/* شريط نظام الأخطاء الاحترافي */
 .system-selector-wrap {
-  background: #fff;
-  padding: 10px;
-  border-radius: 12px;
-  max-width: 400px;
-  margin: 12px auto 0;
-  border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 16px;
+  max-width: 440px;
+  margin: 16px auto 0;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
 }
 .system-label {
   color: var(--green-deep);
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 10px;
   display: block;
   text-align: center;
 }
 .system-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 .system-radio-btn { display: none; }
 .system-radio-label {
-  background: #f3f4f6;
+  background: #f8faf9;
   color: var(--sub);
-  padding: 8px 4px;
+  padding: 10px 8px;
   font-size: 13px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
-  display: block;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   text-align: center;
+  border: 1.5px solid var(--border);
 }
 .system-radio-btn:checked + .system-radio-label {
-  background: var(--green-mid);
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
   color: var(--gold-light);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 4px 12px rgba(4, 32, 26, 0.2);
 }
 
 .body { padding: 20px 14px 140px; max-width: 800px; margin: 0 auto; }
@@ -131,10 +144,43 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .del-btn { position: absolute; left: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--red); color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
 .range-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--border); }
 .range-row.hidden { display: none; }
-.add-btn { width: 100%; padding: 11px; margin-top: 4px; margin-bottom: 14px; border: 2px dashed var(--green-light); border-radius: 10px; background: rgba(20, 121, 92, 0.03); color: var(--green-light); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
-.add-btn:hover { background: rgba(20, 121, 92, 0.08); }
-.add-btn.next-add { border-color: #b45309; color: #b45309; background: rgba(180, 83, 9, 0.03); }
-.add-btn.next-add:hover { background: rgba(180, 83, 9, 0.08); }
+
+/* أزرار الإضافة بتصميم تفاعلي جذاب */
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  border: 2px dashed var(--green-light);
+  border-radius: 12px;
+  background: rgba(20, 121, 92, 0.04);
+  color: var(--green-light);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.add-btn:hover {
+  background: var(--green-light);
+  color: #fff;
+  border-style: solid;
+  box-shadow: 0 4px 12px rgba(20, 121, 92, 0.2);
+}
+.add-btn.next-add {
+  border-color: #d97706;
+  color: #b45309;
+  background: rgba(217, 119, 6, 0.04);
+}
+.add-btn.next-add:hover {
+  background: #d97706;
+  color: #fff;
+  border-style: solid;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
 .divider { margin: 16px 0; border-top: 2px dashed var(--border); }
 
 /* عداد الأخطاء */
@@ -143,14 +189,23 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 .counter-btn.plus { background: #fef2f2; color: var(--red); border-right: 1px solid var(--border); }
 .counter-btn.plus:active { background: #fee2e2; }
 .counter-btn.minus { background: #f3f4f6; color: var(--sub); border-left: 1px solid var(--border); }
-.counter-btn.minus:active { background: #e5e7eb; }
+.counter-btn.minus:active { background: #e5e5e5; }
 .counter-box .error-inp { flex: 1; border: none !important; background: transparent !important; height: 100%; font-size: 12px; font-weight: 700; text-align: center; width: 100%; padding: 0 4px; outline: none; color: #9a1d1d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* أزرار التثبيت السفلي (زر استخراج واحد بدلاً من زرين) */
-.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: #fff; padding: 14px 16px; border-top: 1px solid var(--border); box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 200; }
+/* زر التثبيت السفلي الملكي الفخم */
+.submit-wrap { position: fixed; bottom: 0; right: 0; left: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); padding: 14px 16px; border-top: 1.5px solid var(--border); box-shadow: 0 -6px 24px rgba(0,0,0,0.08); z-index: 200; }
 .submit-grid { max-width: 800px; margin: 0 auto; display: block; }
-.submit-btn { width: 100%; padding: 14px 8px; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
-.btn-combined { background: linear-gradient(135deg, #114e3b, var(--green-deep)); color: var(--gold-light); border: 2px solid var(--gold); }
+.submit-btn { width: 100%; padding: 15px 12px; border-radius: 14px; font-size: 17px; font-weight: 800; cursor: pointer; text-align: center; font-family: 'Cairo', sans-serif; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; }
+.btn-combined { 
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); 
+  color: var(--gold-light); 
+  border: 2px solid var(--gold); 
+  box-shadow: 0 6px 18px rgba(4, 32, 26, 0.3);
+}
+.btn-combined:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(4, 32, 26, 0.4);
+}
 .submit-btn:active { transform: scale(0.98); }
 
 /* نافذة مصحف التسميع */
@@ -380,22 +435,28 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // تسجيل طالب جديد بجدول الطلاب
+  // تسجيل طالب جديد بجدول الطلاب مع منع تكرار الاسم
   window.registerStudentInDb = async function(studentName) {
-    if (!studentName.trim()) return false;
+    var trimmedName = studentName.trim();
+    if (!trimmedName) return { success: false, reason: 'empty' };
+    
     try {
-      const q = query(collection(db, "students"), where("name", "==", studentName.trim()));
+      const q = query(collection(db, "students"), where("name", "==", trimmedName));
       const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) {
-        await addDoc(collection(db, "students"), {
-          name: studentName.trim(),
-          createdAt: serverTimestamp()
-        });
+      
+      // التحقق من وجود الاسم مسبقاً لمنع التكرار
+      if (!querySnapshot.empty) {
+        return { success: false, reason: 'exists' };
       }
-      return true;
+      
+      await addDoc(collection(db, "students"), {
+        name: trimmedName,
+        createdAt: serverTimestamp()
+      });
+      return { success: true };
     } catch (e) {
       console.error("خطأ أثناء تسجيل الطالب:", e);
-      return false;
+      return { success: false, reason: 'error', error: e };
     }
   };
 
@@ -597,7 +658,7 @@ function pickStudent(name) {
   document.getElementById('student-ac-drop').style.display = 'none';
 }
 
-// إضافة طالب جديد وتصفير الواجهة مع التسجيل في قاعدة البيانات
+// إضافة طالب جديد وتصفير الواجهة مع منع التكرار
 async function addNewStudentAction() {
   var studentName = document.getElementById('inp-student').value.trim();
   if (!studentName) {
@@ -606,16 +667,19 @@ async function addNewStudentAction() {
   }
 
   if (typeof window.registerStudentInDb === 'function') {
-    var success = await window.registerStudentInDb(studentName);
-    if (success) {
+    var result = await window.registerStudentInDb(studentName);
+    if (result.success) {
       if (!cachedStudentsList.includes(studentName)) {
         cachedStudentsList.push(studentName);
       }
       customAlert("تم تسجيل الطالب (" + studentName + ") بنجاح في قاعدة البيانات وتجهيز النظام لإدخال التقييمات.", "نجاح التسجيل ✨");
+      resetFormForNewStudent();
+    } else if (result.reason === 'exists') {
+      customAlert("الطالب (" + studentName + ") مسجل بالفعل في النظام مسبقاً، ولا يمكن تكراره.", "اسم مُكرّر ⚠️");
+    } else {
+      customAlert("حدث خطأ أثناء محاولة تسجيل الطالب، يرجى المحاولة لاحقاً.", "خطأ في التسجيل ❌");
     }
   }
-
-  resetFormForNewStudent();
 }
 
 function resetFormForNewStudent() {
