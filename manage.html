@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إدارة تقارير الطلاب - نظام المتابعة</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>سجلات الطالب - تفاصيل المتابعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -15,17 +14,12 @@
 :root {
   --green-deep: #062b22;
   --green-mid: #0b3d2e;
-  --green-card: #0f4c3a;
-  --green-light: #14795c;
   --gold-primary: #d4af37;
-  --gold-shiny: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
   --gold-light: #fef08a;
   --cream: #f8f6f0;
   --border-light: #e2e8f0;
   --text-dark: #111827;
   --sub: #4b5563;
-  --red: #ef4444;
-  --blue-btn: #0284c7;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,154 +28,65 @@ body {
   font-family: 'Cairo', sans-serif; 
   background-color: var(--cream); 
   color: var(--text-dark);
-  min-height: 100vh; 
-  padding-bottom: 50px; 
+  min-height: 100vh;
+  padding-bottom: 40px;
 }
 
 .hdr { 
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px; 
   text-align: center; 
-  border-bottom: 4px solid;
-  border-image: var(--gold-shiny) 1;
+  border-bottom: 4px solid var(--gold-primary);
   color: #fff; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 .hdr h1 { 
   font-size: 22px; 
   font-weight: 800;
   color: var(--gold-light); 
-  margin-bottom: 6px; 
+  margin-bottom: 12px; 
 }
 
-.hdr-btns {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.header-btn { 
+.back-btn { 
   display: inline-flex; 
   align-items: center; 
-  justify-content: center;
   gap: 6px; 
   background: rgba(255, 255, 255, 0.08); 
   color: var(--gold-light); 
   border: 1.5px solid var(--gold-primary); 
-  padding: 8px 18px; 
+  padding: 8px 20px; 
   border-radius: 20px; 
   text-decoration: none; 
   font-size: 13px; 
   font-weight: 700; 
-  cursor: pointer;
-  font-family: 'Cairo', sans-serif;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
 
-.controls-card {
+.report-card {
   background: #fff;
   border-radius: 16px;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  margin-bottom: 16px;
   border: 1px solid var(--border-light);
-}
-
-.search-box { 
-  width: 100%; 
-  padding: 12px 16px; 
-  border: 1.5px solid var(--border-light); 
-  border-radius: 12px; 
-  font-size: 14px; 
-  font-family: 'Cairo', sans-serif; 
-  outline: none; 
-  background: #fcfcfc; 
-}
-
-.student-row-wrapper {
-  display: flex;
-  align-items: stretch;
-  gap: 10px;
+  padding: 16px;
   margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
-.student-card { 
-  flex: 1;
-  background: #fff; 
-  border-radius: 18px; 
-  border: 1.5px solid var(--border-light); 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-  overflow: hidden; 
-}
-
-.student-header { 
-  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-card) 100%); 
-  color: #fff; 
-  padding: 14px 16px; 
-  cursor: pointer; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
-  border-right: 4px solid var(--gold-primary);
-}
-
-.student-info { 
-  display: flex; 
-  flex-direction: column;
-  gap: 4px; 
-  flex: 1;
-}
-
-.student-main-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.student-name {
-  font-size: 16px; 
-  font-weight: 800; 
-  color: #ffffff; 
-}
-
-.last-session-tag {
-  font-size: 11px;
-  color: var(--gold-light);
-  opacity: 0.9;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
-}
-
-.badge-reports {
-  background: rgba(254, 240, 138, 0.15);
-  color: var(--gold-light);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
+.report-date {
+  font-size: 13px;
   font-weight: 700;
-}
-
-.btn-external-del {
-  background: #ffffff;
-  color: var(--red);
-  border: 1.5px solid var(--border-light);
-  border-radius: 18px;
-  width: 52px;
+  color: var(--green-mid);
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  flex-shrink: 0;
+  gap: 6px;
+}
+
+.report-item {
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .empty-state { 
@@ -199,21 +104,12 @@ body {
 <body>
 
 <div class="hdr">
-  <h1>🗂️ سجل وتقارير الطلاب</h1>
-  <div class="hdr-btns">
-    <a href="index1.html" class="header-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
-    <button class="header-btn" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
-  </div>
+  <h1 id="page-title">جاري تحميل سجلات البطل...</h1>
+  <a href="reports.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لقائمة الطلاب</a>
 </div>
 
-<div class="container">
-  <div class="controls-card">
-    <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم البطل...">
-  </div>
-
-  <div id="students-list-container">
-    <div class="empty-state">جاري تحميل سجلات الطلاب ... ⏳</div>
-  </div>
+<div class="container" id="history-container">
+  <div class="empty-state">⏳ جاري التحميل...</div>
 </div>
 
 <script>
@@ -230,228 +126,120 @@ body {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  let allStudentsData = [];
-
-  function customAlert(msg) {
-    var m = document.createElement('div');
-    m.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    m.innerHTML = '<div style="background:#fff;padding:24px;border-radius:16px;text-align:center;max-width:380px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2); border: 2px solid var(--green-mid);">' +
-      '<div style="font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:20px;font-family:Cairo,sans-serif;line-height:1.6;">' + msg + '</div>' +
-      '<button id="c-alert-close" style="padding:10px 32px;background:var(--green-mid);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">حسناً</button>' +
-      '</div>';
-    document.body.appendChild(m);
-    document.getElementById('c-alert-close').onclick = function() { m.remove(); };
-  }
-
-  function convertToHijri(dateInput) {
-    try {
-      let d = new Date();
-      if (dateInput && dateInput.toDate) {
-        d = dateInput.toDate();
-      } else if (dateInput instanceof Date) {
-        d = dateInput;
-      } else if (dateInput && typeof dateInput === 'string') {
-        let str = dateInput.trim();
-        let matches = str.match(/\d+/g);
-        if (matches && matches.length >= 3) {
-          let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
-          let m = parseInt(matches[1]) - 1;
-          let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
-          d = new Date(y, m, day);
-        } else {
-          d = new Date(dateInput);
-        }
-      }
-
-      if (isNaN(d.getTime())) d = new Date();
-
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-
-      return formatter.format(d);
-    } catch (e) {
-      return 'التاريخ الهجري';
-    }
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
   }
 
   function normalizeText(text) {
     if (!text) return '';
-    return text.toString()
-      .trim()
-      .toLowerCase()
+    return text.toString().trim().toLowerCase()
       .replace(/[أإآ]/g, 'ا')
       .replace(/ة/g, 'ه')
       .replace(/ى/g, 'ي');
   }
 
-  async function loadStudentsData() {
-    const container = document.getElementById('students-list-container');
-    container.innerHTML = '<div class="empty-state">جاري تحميل سجلات الطلاب من قاعدة البيانات ... ⏳</div>';
+  async function loadStudentHistory() {
+    const studentId = getQueryParam('id');
+    const container = document.getElementById('history-container');
+    const title = document.getElementById('page-title');
 
-    try {
-      const studentsSnap = await db.collection('students').get();
-      const recordsSnap = await db.collection('students_records').get();
-
-      // خريطة لتجميع الطلاب وحساب عدد التقارير بدقة دون تكرار
-      let studentsMap = {};
-
-      // 1. معالجة وثائق الطلاب الأساسية
-      studentsSnap.forEach(doc => {
-        let rawData = doc.data() || {};
-        let studentId = doc.id;
-        let resolvedName = rawData.name || rawData.studentName || rawData.student_name || studentId;
-
-        studentsMap[studentId] = {
-          id: studentId,
-          name: resolvedName,
-          transactions: rawData.transactions || rawData.reports || [],
-          rawStudent: rawData,
-          rawRecord: null
-        };
-      });
-
-      // 2. دمج وتجميع سجلات المتابعة من students_records
-      recordsSnap.forEach(doc => {
-        let recData = doc.data() || {};
-        let recName = recData.studentName || recData.name || doc.id;
-        let studentId = doc.id;
-
-        // البحث إذا كان الطالب موجوداً بالـ ID أو بالإصدار الموحد للاسم
-        let existingKey = Object.keys(studentsMap).find(k => 
-          k === studentId || normalizeText(studentsMap[k].name) === normalizeText(recName)
-        );
-
-        let reportItem = {
-          date: recData.created || recData.date || new Date().toISOString(),
-          academicData: recData.data || {},
-          advice: recData.advice || [],
-          generalRating: recData.generalRating || 'ممتاز'
-        };
-
-        if (existingKey) {
-          studentsMap[existingKey].rawRecord = recData;
-          // دمج التقرير إذا لم يكن مضافاً مسبقاً
-          if (!studentsMap[existingKey].transactions.some(t => t.date === reportItem.date)) {
-            studentsMap[existingKey].transactions.push(reportItem);
-          }
-        } else {
-          studentsMap[studentId] = {
-            id: studentId,
-            name: recName,
-            transactions: [reportItem],
-            rawStudent: {},
-            rawRecord: recData
-          };
-        }
-      });
-
-      allStudentsData = Object.values(studentsMap);
-
-      if (allStudentsData.length === 0) {
-        container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب محفوظة حالياً.</div>';
-        return;
-      }
-
-      renderStudents(allStudentsData);
-    } catch (error) {
-      console.error("خطأ أثناء جلب البيانات:", error);
-      container.innerHTML = '<div class="empty-state" style="color:var(--red)">حدث خطأ أثناء تحميل البيانات: ' + error.message + '</div>';
-    }
-  }
-
-  function renderStudents(list) {
-    const container = document.getElementById('students-list-container');
-    if (!list.length) {
-      container.innerHTML = '<div class="empty-state">لا توجد سجلات طلاب مطابقة للبحث.</div>';
+    if (!studentId) {
+      title.innerText = 'سجلات البطل';
+      container.innerHTML = '<div class="empty-state">لم يتم تحديد معرّف الطالب بشكل صحيح.</div>';
       return;
     }
 
-    container.innerHTML = '';
-    list.forEach(student => {
-      const rowWrapper = document.createElement('div');
-      rowWrapper.className = 'student-row-wrapper';
+    try {
+      let reports = [];
+      let studentName = decodeURIComponent(studentId);
 
-      const transactions = student.transactions || [];
-      let lastDateText = "لا توجد حصص سابقة";
+      // 1. البحث في مجموعتي students و students_records بالـ ID المباشر
+      const [doc1, doc2] = await Promise.all([
+        db.collection('students').doc(studentId).get(),
+        db.collection('students_records').doc(studentId).get()
+      ]);
 
-      // رتب التقارير تنازلياً حسب التاريخ لعرض أحدث حصة
-      if (transactions.length > 0) {
-        transactions.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-        if (transactions[0].date) {
-          lastDateText = "الحصة الماضية بتاريخ: " + convertToHijri(transactions[0].date);
+      if (doc1.exists) {
+        const data = doc1.data();
+        studentName = data.name || data.studentName || studentName;
+        if (data.transactions) reports.push(...data.transactions);
+      }
+
+      if (doc2.exists) {
+        const data = doc2.data();
+        studentName = data.studentName || data.name || studentName;
+        if (data.data) {
+          reports.push({
+            date: data.created || data.date || new Date().toISOString(),
+            academicData: data.data,
+            advice: data.advice || [],
+            generalRating: data.generalRating || ''
+          });
         }
       }
 
-      rowWrapper.innerHTML = `
-        <div class="student-card" id="card-${student.id}">
-          <div class="student-header" onclick="openStudentPage('${student.id}')">
-            <div class="student-info">
-              <div class="student-main-row">
-                <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
-                <span class="student-name">${student.name}</span>
-                <span class="badge-reports">${transactions.length} تقرير</span>
-              </div>
-              <div class="last-session-tag">
-                <i class="ti ti-calendar-event"></i> ${lastDateText}
-              </div>
-            </div>
-            <i class="ti ti-chevron-left chevron-icon"></i>
-          </div>
-        </div>
-        <button class="btn-external-del" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}', '${student.name}')">
-          <i class="ti ti-trash"></i>
-        </button>
-      `;
-      container.appendChild(rowWrapper);
-    });
-  }
+      // 2. إذا لم توجد سجلات برقم الـ ID، يتم البحث بالاسم
+      if (reports.length === 0) {
+        const normSearch = normalizeText(studentName);
+        const querySnap = await db.collection('students_records').get();
+        
+        querySnap.forEach(doc => {
+          const rec = doc.data();
+          const nameToCompare = rec.studentName || rec.name || doc.id;
+          if (normalizeText(nameToCompare) === normSearch) {
+            reports.push({
+              date: rec.created || rec.date || new Date().toISOString(),
+              academicData: rec.data || {},
+              advice: rec.advice || [],
+              generalRating: rec.generalRating || ''
+            });
+            studentName = nameToCompare;
+          }
+        });
+      }
 
-  function openStudentPage(studentId) {
-    window.location.href = `student_history.html?id=${encodeURIComponent(studentId)}`;
-  }
+      title.innerText = `سجلات البطل: ${studentName}`;
 
-  document.getElementById('search-student').addEventListener('input', function() {
-    const val = normalizeText(this.value);
-    const filtered = allStudentsData.filter(s => normalizeText(s.name).includes(val));
-    renderStudents(filtered);
-  });
+      if (reports.length === 0) {
+        container.innerHTML = '<div class="empty-state">لا توجد سجلات محفوظة لهذا الطالب.</div>';
+        return;
+      }
 
-  async function deleteStudentDoc(docId, studentName) {
-    if (!confirm("⚠️ هل أنت متأكد من حذف الطالب (" + studentName + ") وجميع تقاريره من قاعدة البيانات؟")) return;
-    try {
-      await db.collection('students').doc(docId).delete();
-      await db.collection('students_records').doc(docId).delete();
-      customAlert("✅ تم حذف الطالب وسجلاته بنجاح.");
-      await loadStudentsData();
-    } catch(e) {
-      customAlert("حدث خطأ أثناء الحذف: " + e.message);
+      // ترتيب السجلات من الأحدث إلى الأقدم
+      reports.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+      container.innerHTML = '';
+      reports.forEach((rep, index) => {
+        const card = document.createElement('div');
+        card.className = 'report-card';
+        
+        let detailsHtml = '';
+        if (rep.academicData && typeof rep.academicData === 'object') {
+          for (const [k, v] of Object.entries(rep.academicData)) {
+            detailsHtml += `<div class="report-item"><strong>${k}:</strong> ${v}</div>`;
+          }
+        }
+
+        if (rep.advice && rep.advice.length) {
+          detailsHtml += `<div class="report-item"><strong>الملاحظات:</strong> ${Array.isArray(rep.advice) ? rep.advice.join(' - ') : rep.advice}</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="report-date"><i class="ti ti-calendar"></i> تقرير الحصة - ${new Date(rep.date).toLocaleDateString('ar-EG')}</div>
+          ${detailsHtml || '<div class="report-item">تم تسجيل الحضور والمتابعة بنجاح.</div>'}
+        `;
+        container.appendChild(card);
+      });
+
+    } catch (e) {
+      console.error(e);
+      title.innerText = 'خطأ في التحميل';
+      container.innerHTML = `<div class="empty-state" style="color:red">حدث خطأ أثناء تحميل السجلات: ${e.message}</div>`;
     }
   }
 
-  async function deleteAllStudentsConfirm() {
-    if (!confirm("🚨 تحذير خطير: هل تريد حقاً مسح جميع الطلاب وكل التقارير المحفوظة بالكامل؟")) return;
-    try {
-      const snap1 = await db.collection('students').get();
-      const snap2 = await db.collection('students_records').get();
-      const batch = db.batch();
-      
-      snap1.docs.forEach(doc => batch.delete(doc.ref));
-      snap2.docs.forEach(doc => batch.delete(doc.ref));
-      
-      await batch.commit();
-      customAlert("✅ تم مسح قاعدة البيانات بالكامل.");
-      await loadStudentsData();
-    } catch(e) {
-      customAlert("حدث خطأ: " + e.message);
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    loadStudentsData();
-  });
+  document.addEventListener('DOMContentLoaded', loadStudentHistory);
 </script>
 </body>
 </html>
