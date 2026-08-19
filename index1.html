@@ -227,7 +227,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-user"></i>بيانات البطل التعليمية</div></div>
     <div class="sec-body">
       <div class="frow ac-wrap">
-        <div class="flbl">اسم البطل الكريم</div>
+        <div class="flbl"> البطل </div>
         <input class="inp" id="inp-student" placeholder="اكتب أول حرف للبحث..." autocomplete="off">
         <div class="ac-drop" id="student-ac-drop"></div>
       </div>
@@ -238,7 +238,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
             <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة دقيقة 📖</option>
+            <option value="يحتاج مراجعة 📖">يحتاج مراجعة  📖</option>
           </select>
         </div>
       </div>
@@ -314,11 +314,11 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="section" id="sec-hd">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿 الحديث الشريف والأذكار الحالية:</div>
+      <div class="sub-sec-title">📿   الأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة للحديث:</div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للاذكار:</div>
       <div id="hd-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
     </div>
@@ -963,7 +963,7 @@ var SECTIONS = [
   {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
   {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
   {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:'الحديث والأذكار', icon:'📿', isQ:true}
+  {key:'hd', title:' الأذكار', icon:'📿', isQ:true}
 ];
 
 function rr(ctx,x,y,w,h,r){
@@ -1011,7 +1011,7 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
 }
 
 function ratingStyle(rating){
-  if(rating.indexOf('بارك الله')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
+  if(rating.indexOf(' بارك الله فيك')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
   if(rating.indexOf('جيد جدا')>-1 || rating.indexOf('جيد جداً')>-1) return {bg:'#fefce8', color:'#854d0e', border:'#eab308'};
   if(rating.indexOf('جيد')>-1) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
   return {bg:'#fef2f2', color:'#991b1b', border:'#ef4444'};
