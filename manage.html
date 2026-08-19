@@ -289,7 +289,7 @@ body {
 <div class="hdr">
   <h1>🗂️ سجل وتقارير الطلاب المحفوظة</h1>
   <p>إدارة واستعراض ومشاركة التقارير السابقة (من الأحدث للأقدم)</p>
-  <a href="index.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
+  <a href="index1.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
 </div>
 
 <div class="container">
@@ -332,7 +332,7 @@ body {
     document.getElementById('c-alert-close').onclick=function(){m.remove();};
   }
 
-  // قاموس تحويل أسماء الأشهر العربية الميلادية لأرقام لاستخراج التاريخ بدقة
+  // قاموس تحويل أسماء الأشهر العربية الميلادية لأرقام
   const monthMap = {
     "يناير":1, "فبراير":2, "مارس":3, "أبريل":4, "ابريل":4, "مايو":5, "يونيو":6,
     "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
@@ -353,10 +353,9 @@ body {
           let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
           d = new Date(y, m, day);
         } else if (matches && matches.length >= 2) {
-          // التعامل مع حالات النصوص مثل "19 أغسطس 2026"
           let day = parseInt(matches[0]);
           let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7; // أغسطس كافتراضي
+          let month = 7;
           for (let mKey in monthMap) {
             if (str.includes(mKey)) {
               month = monthMap[mKey] - 1;
@@ -371,7 +370,6 @@ body {
 
       if (isNaN(d.getTime())) d = new Date();
 
-      // تحويل تاريخ الحساب للتقويم الهجري أم القرى
       const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
@@ -384,7 +382,6 @@ body {
     }
   }
 
-  // نجوم التقييم
   function getRatingStars(rating) {
     if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
     if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
@@ -543,7 +540,8 @@ body {
     try {
       let hijriDateStr = convertToHijri(tx.date);
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
-      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg');
+      // تمرير الكانفاس والاسم والبيانات التفصيلية لدعم زر التعديل والتفريغ
+      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName);
     } catch(e) {
       customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
     }
@@ -576,7 +574,7 @@ body {
     } catch(e) {}
   }
 
-  /* --- رسم التقرير بالحجم والخطوط الكبيرة جداً --- */
+  /* --- رسم التقرير بالحجم والخطوط الكبيرة --- */
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -629,7 +627,7 @@ body {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
 
-    // التاريخ الهجري المصحح ناصع الوضوح
+    // التاريخ الهجري الصريح بدون خلط مع الميلادي
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
     ctx.textAlign = 'center';
@@ -792,7 +790,8 @@ body {
     }
   }
 
-  function showSingleImageModal(canvasElement, downloadName) {
+  /* --- عرض التقرير والنافذة المنبثقة الشاملة مع زر التعديل والتفريغ --- */
+  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName) {
     if (currentModalElement) {
       currentModalElement.remove();
     }
@@ -805,21 +804,42 @@ body {
     
     var imgPreview = document.createElement('img');
     imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.95);
-    imgPreview.style.cssText = 'max-width:98%;max-height:78vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5);margin-bottom:16px;';
+    imgPreview.style.cssText = 'max-width:98%;max-height:72vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5);margin-bottom:16px;';
     modal.appendChild(imgPreview);
 
     var btnWrap = document.createElement('div');
-    btnWrap.style.cssText = 'display:flex;gap:12px;justify-content:center;width:100%;';
+    btnWrap.style.cssText = 'display:flex;gap:10px;justify-content:center;align-items:center;width:100%;flex-wrap:wrap;';
     
+    // 1. زر إغلاق
     var closeBtn = document.createElement('button');
     closeBtn.innerText = 'إغلاق';
-    closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
+    closeBtn.style.cssText = 'padding:12px 20px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
     closeBtn.onclick = function(){ closeReportModal(); };
     btnWrap.appendChild(closeBtn);
 
+    // 2. ⚡ الزر الجديد: تعديل وتفريغ التقرير في index1.html
+    var editBtn = document.createElement('button');
+    editBtn.innerHTML = '✏️ تعديل التقرير في الإدخال';
+    editBtn.style.cssText = 'padding:12px 20px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    editBtn.onclick = function() {
+      if (rawReportData) {
+        // حفظ بيانات التقرير واسم الطالب في الـ LocalStorage
+        localStorage.setItem('editReportData', JSON.stringify({
+          studentName: studentName,
+          academicData: rawReportData
+        }));
+        // الانتقال لصفحة الإدخال index1.html
+        window.location.href = 'index1.html';
+      } else {
+        customAlert('⚠️ لا توجد بيانات تفصيلية قابلة للتعديل لهذا التقرير.');
+      }
+    };
+    btnWrap.appendChild(editBtn);
+
+    // 3. زر مشاركة
     var shareBtn = document.createElement('button');
-    shareBtn.innerHTML = '📲 مشاركة التقرير مع ولي الأمر';
-    shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    shareBtn.innerHTML = '📲 مشاركة التقرير';
+    shareBtn.style.cssText = 'padding:12px 20px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     
     shareBtn.onclick = async function() {
       try {
@@ -841,8 +861,8 @@ body {
         var a = document.createElement('a'); a.href = imgPreview.src; a.download = downloadName; a.click();
       }
     };
-    
     btnWrap.appendChild(shareBtn);
+
     modal.appendChild(btnWrap);
     document.body.appendChild(modal);
   }
