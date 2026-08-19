@@ -248,6 +248,7 @@ body {
   display: flex; 
   gap: 8px; 
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 .btn-action-sm { 
   padding: 6px 12px; 
@@ -338,7 +339,7 @@ body {
     "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
   };
 
-  // دالة تحويل تحول التاريخ الميلادي بالكامل إلى تاريخ هجري حقيقي ومضبوط
+  // دالة تحويل التاريخ إلى تاريخ هجري
   function convertToHijri(dateInput) {
     try {
       let d = new Date();
@@ -391,7 +392,7 @@ body {
     return '⭐';
   }
 
-  // جلب البيانات مع ترتيبها من الأحدث للأقدم
+  // جلب البيانات
   studentsCollection.onSnapshot(snapshot => {
     allStudentsData = [];
     snapshot.forEach(doc => {
@@ -540,7 +541,6 @@ body {
     try {
       let hijriDateStr = convertToHijri(tx.date);
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
-      // تمرير الكانفاس والاسم والبيانات التفصيلية مع التقييم العام للدالة
       showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating);
     } catch(e) {
       customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
@@ -574,7 +574,6 @@ body {
     } catch(e) {}
   }
 
-  /* --- رسم التقرير بالحجم والخطوط الكبيرة --- */
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -592,20 +591,17 @@ body {
     canvas.height = Math.max(1750, 800 + (totalRowsCount * 150));
     var ctx = canvas.getContext('2d');
 
-    // الخلفية
     var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
     bgG.addColorStop(0, '#fdfbf5'); 
     bgG.addColorStop(1, '#f4eee0'); 
     ctx.fillStyle = bgG; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // الإطار الخارجي
     rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
     ctx.strokeStyle = '#0b3d2e';
     ctx.lineWidth = 5;
     ctx.stroke();
 
-    // الهيدر
     rr(ctx, 35, 35, canvas.width - 70, 185, 18);
     var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     hdrGradient.addColorStop(0, '#04201a');
@@ -627,13 +623,11 @@ body {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
 
-    // التاريخ الهجري الصريح بدون خلط مع الميلادي
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
     ctx.textAlign = 'center';
     ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
 
-    // كارت الطالب
     var curY = 250;
     rr(ctx, 40, curY, canvas.width - 80, 150, 18);
     ctx.fillStyle = '#ffffff';
@@ -656,7 +650,6 @@ body {
 
     curY += 180;
 
-    // أقسام المتابعة
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
       let hasCurrents = sData && sData.currents && sData.currents.length > 0;
@@ -772,7 +765,6 @@ body {
     return canvas;
   }
 
-  // التحكم بالرجوع للجوال
   window.addEventListener('popstate', function(event) {
     if (currentModalElement) {
       currentModalElement.remove();
@@ -790,7 +782,7 @@ body {
     }
   }
 
-  /* --- عرض التقرير والنافذة المنبثقة الشاملة مع زر التعديل والتفريغ --- */
+  /* --- عرض التقرير والنافذة المنبثقة مع زر الاسترجاع والبدء للتقرير الجديد --- */
   function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName, generalRating) {
     if (currentModalElement) {
       currentModalElement.remove();
@@ -804,7 +796,7 @@ body {
     
     var imgPreview = document.createElement('img');
     imgPreview.src = canvasElement.toDataURL('image/jpeg', 0.95);
-    imgPreview.style.cssText = 'max-width:98%;max-height:72vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5);margin-bottom:16px;';
+    imgPreview.style.cssText = 'max-width:98%;max-height:68vh;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5);margin-bottom:16px;';
     modal.appendChild(imgPreview);
 
     var btnWrap = document.createElement('div');
@@ -813,17 +805,71 @@ body {
     // 1. زر إغلاق
     var closeBtn = document.createElement('button');
     closeBtn.innerText = 'إغلاق';
-    closeBtn.style.cssText = 'padding:12px 20px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
+    closeBtn.style.cssText = 'padding:10px 16px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
     closeBtn.onclick = function(){ closeReportModal(); };
     btnWrap.appendChild(closeBtn);
 
-    // 2. ⚡ تعديل زر التعديل ليتوافق تمامًا مع المفتاح والهيكلية المتوقعة في index1.html
+    // 2. 🔄 زر المتابعة والتكملة (تحويل الخطة القادمة إلى تسميع حالي في index1)
+    var continueBtn = document.createElement('button');
+    continueBtn.innerHTML = '🔄 المتابعة والتكملة لتقرير جديد';
+    continueBtn.style.cssText = 'padding:10px 16px;background:#14795c;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    continueBtn.onclick = function() {
+      if (rawReportData) {
+        // بناء هيكلية جديدة تقوم بترحيل الخطة القادمة (nexts) لتكون هي الحالية (currents)
+        let nextAcademicData = {};
+
+        SECTIONS.forEach(sec => {
+          let oldSec = rawReportData[sec.key] || {};
+          let newCurrents = [];
+
+          if (oldSec.nexts && oldSec.nexts.length > 0) {
+            oldSec.nexts.forEach(nItem => {
+              if (nItem.nextPlanSr) {
+                newCurrents.push({
+                  sr: nItem.nextPlanSr,
+                  type: nItem.nextPlanType || 'full',
+                  f: nItem.nextPlanF || '',
+                  t: nItem.nextPlanT || '',
+                  rating: 'ممتاز',
+                  errors: '0'
+                });
+              } else if (nItem.nextPlanF && nItem.nextPlanT) {
+                newCurrents.push({
+                  f: nItem.nextPlanF,
+                  t: nItem.nextPlanT,
+                  rating: 'ممتاز',
+                  errors: '0'
+                });
+              }
+            });
+          }
+
+          nextAcademicData[sec.key] = {
+            currents: newCurrents,
+            nexts: [] // يترك خالياً ليكتب المعلم خطة قادمة جديدة
+          };
+        });
+
+        var payload = {
+          studentName: studentName || '',
+          generalRating: 'ممتاز',
+          academicData: nextAcademicData
+        };
+
+        localStorage.setItem('edit_report_payload', JSON.stringify(payload));
+        window.location.href = 'index1.html';
+      } else {
+        customAlert('⚠️ لا توجد بيانات للتقرير السابقة للتكملة عليها.');
+      }
+    };
+    btnWrap.appendChild(continueBtn);
+
+    // 3. ✏️ زر تعديل التقرير الحالي
     var editBtn = document.createElement('button');
-    editBtn.innerHTML = '✏️ تعديل التقرير في الإدخال';
-    editBtn.style.cssText = 'padding:12px 20px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    editBtn.innerHTML = '✏️ تعديل التقرير';
+    editBtn.style.cssText = 'padding:10px 16px;background:#d4af37;color:#04201a;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     editBtn.onclick = function() {
       if (rawReportData) {
-        // إنشاء الهيكل الكامل بالاسم edit_report_payload المتوافق مع index1.html
         var payload = {
           studentName: studentName || '',
           generalRating: generalRating || 'ممتاز',
@@ -831,8 +877,6 @@ body {
         };
         
         localStorage.setItem('edit_report_payload', JSON.stringify(payload));
-        
-        // الانتقال لصفحة الإدخال index1.html
         window.location.href = 'index1.html';
       } else {
         customAlert('⚠️ لا توجد بيانات تفصيلية قابلة للتعديل لهذا التقرير.');
@@ -840,10 +884,10 @@ body {
     };
     btnWrap.appendChild(editBtn);
 
-    // 3. زر مشاركة
+    // 4. 📲 زر مشاركة التقرير
     var shareBtn = document.createElement('button');
-    shareBtn.innerHTML = '📲 مشاركة التقرير';
-    shareBtn.style.cssText = 'padding:12px 20px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+    shareBtn.innerHTML = '📲 مشاركة';
+    shareBtn.style.cssText = 'padding:10px 16px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     
     shareBtn.onclick = async function() {
       try {
