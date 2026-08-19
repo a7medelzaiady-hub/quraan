@@ -53,26 +53,33 @@ body {
   color: var(--gold-light); 
   margin-bottom: 6px; 
 }
-.hdr p {
-  font-size: 13px;
-  opacity: 0.9;
+
+.hdr-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
-.back-btn { 
+
+.header-btn { 
   display: inline-flex; 
   align-items: center; 
   gap: 6px; 
   background: rgba(255, 255, 255, 0.1); 
   color: var(--gold-light); 
   border: 1px solid var(--gold-primary); 
-  padding: 8px 18px; 
+  padding: 8px 16px; 
   border-radius: 20px; 
   text-decoration: none; 
   font-size: 13px; 
   font-weight: 700; 
-  margin-top: 12px; 
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
   transition: all 0.2s ease;
 }
-.back-btn:hover {
+.header-btn:hover {
   background: rgba(212, 175, 55, 0.2);
 }
 
@@ -82,13 +89,10 @@ body {
 .controls-card {
   background: #fff;
   border-radius: 16px;
-  padding: 14px;
+  padding: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   margin-bottom: 16px;
   border: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .search-box { 
@@ -106,33 +110,19 @@ body {
   background: #fff;
 }
 
-.btn-danger-all { 
-  background: var(--red-light); 
-  color: var(--red); 
-  border: 1px solid #fecaca; 
-  padding: 10px 14px; 
-  border-radius: 12px; 
-  font-weight: 700; 
-  cursor: pointer; 
-  font-family: 'Cairo', sans-serif; 
-  font-size: 13px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  gap: 6px; 
-  width: 100%;
-}
-.btn-danger-all:hover { 
-  background: var(--red); 
-  color: #fff; 
+/* --- كروت الطلاب وحاوية الحذف الخارجي --- */
+.student-row-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
-/* --- كروت الطلاب --- */
 .student-card { 
+  flex: 1;
   background: #fff; 
   border-radius: 16px; 
   border: 1px solid var(--border-light); 
-  margin-bottom: 14px; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.04); 
   overflow: hidden; 
 }
@@ -146,6 +136,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  height: 100%;
 }
 
 .student-info { 
@@ -174,29 +165,25 @@ body {
   font-weight: 700;
 }
 
-.student-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-icon-del {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+.btn-external-del {
+  background: #ffffff;
+  color: var(--red);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 18px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  flex-shrink: 0;
 }
-.btn-icon-del:hover {
+.btn-external-del:hover {
   background: var(--red);
   color: #fff;
+  border-color: var(--red);
 }
 
 .chevron-icon {
@@ -287,15 +274,16 @@ body {
 <body>
 
 <div class="hdr">
-  <h1>🗂️ سجل وتقارير الطلاب </h1>
-  
-  <a href="index.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
+  <h1>🗂️ سجل وتقارير الطلاب</h1>
+  <div class="hdr-btns">
+    <a href="index.html" class="header-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
+    <button class="header-btn" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح جميع بيانات الطلاب</button>
+  </div>
 </div>
 
 <div class="container">
   <div class="controls-card">
     <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم البطل...">
-    <button class="btn-danger-all" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح جميع بيانات الطلاب</button>
   </div>
 
   <div id="students-list-container">
@@ -332,13 +320,11 @@ body {
     document.getElementById('c-alert-close').onclick=function(){m.remove();};
   }
 
-  // قاموس تحويل أسماء الأشهر العربية الميلادية لأرقام لاستخراج التاريخ بدقة
   const monthMap = {
     "يناير":1, "فبراير":2, "مارس":3, "أبريل":4, "ابريل":4, "مايو":5, "يونيو":6,
     "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
   };
 
-  // دالة تحويل تحول التاريخ الميلادي بالكامل إلى تاريخ هجري حقيقي ومضبوط
   function convertToHijri(dateInput) {
     try {
       let d = new Date();
@@ -353,10 +339,9 @@ body {
           let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
           d = new Date(y, m, day);
         } else if (matches && matches.length >= 2) {
-          // التعامل مع حالات النصوص مثل "19 أغسطس 2026"
           let day = parseInt(matches[0]);
           let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7; // أغسطس كافتراضي
+          let month = 7;
           for (let mKey in monthMap) {
             if (str.includes(mKey)) {
               month = monthMap[mKey] - 1;
@@ -371,7 +356,6 @@ body {
 
       if (isNaN(d.getTime())) d = new Date();
 
-      // تحويل تاريخ الحساب للتقويم الهجري أم القرى
       const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
@@ -384,7 +368,6 @@ body {
     }
   }
 
-  // نجوم التقييم
   function getRatingStars(rating) {
     if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
     if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
@@ -394,7 +377,6 @@ body {
     return '⭐';
   }
 
-  // جلب البيانات مع ترتيبها من الأحدث للأقدم
   studentsCollection.onSnapshot(snapshot => {
     allStudentsData = [];
     snapshot.forEach(doc => {
@@ -423,9 +405,8 @@ body {
 
     container.innerHTML = '';
     list.forEach(student => {
-      const card = document.createElement('div');
-      card.className = 'student-card';
-      card.id = 'card-' + student.id;
+      const rowWrapper = document.createElement('div');
+      rowWrapper.className = 'student-row-wrapper';
 
       let reportsHtml = '';
       const transactions = student.transactions || [];
@@ -452,25 +433,25 @@ body {
         });
       }
 
-      card.innerHTML = `
-        <div class="student-header" onclick="toggleStudentReports('${student.id}')">
-          <div class="student-info">
-            <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
-            <span class="student-name">${student.name}</span>
-            <span class="badge-reports">${transactions.length} تقرير</span>
-          </div>
-          <div class="student-actions" onclick="event.stopPropagation()">
-            <button class="btn-icon-del" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}', '${student.name}')">
-              <i class="ti ti-trash"></i>
-            </button>
+      rowWrapper.innerHTML = `
+        <div class="student-card" id="card-${student.id}">
+          <div class="student-header" onclick="toggleStudentReports('${student.id}')">
+            <div class="student-info">
+              <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
+              <span class="student-name">${student.name}</span>
+              <span class="badge-reports">${transactions.length} تقرير</span>
+            </div>
             <i class="ti ti-chevron-down chevron-icon" id="chevron-${student.id}"></i>
           </div>
+          <div class="reports-container" id="reports-${student.id}">
+            ${reportsHtml}
+          </div>
         </div>
-        <div class="reports-container" id="reports-${student.id}">
-          ${reportsHtml}
-        </div>
+        <button class="btn-external-del" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}', '${student.name}')">
+          <i class="ti ti-trash"></i>
+        </button>
       `;
-      container.appendChild(card);
+      container.appendChild(rowWrapper);
     });
   }
 
@@ -576,7 +557,6 @@ body {
     } catch(e) {}
   }
 
-  /* --- رسم التقرير بالحجم والخطوط الكبيرة جداً --- */
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -594,20 +574,17 @@ body {
     canvas.height = Math.max(1750, 800 + (totalRowsCount * 150));
     var ctx = canvas.getContext('2d');
 
-    // الخلفية
     var bgG = ctx.createLinearGradient(0, 0, 0, canvas.height); 
     bgG.addColorStop(0, '#fdfbf5'); 
     bgG.addColorStop(1, '#f4eee0'); 
     ctx.fillStyle = bgG; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // الإطار الخارجي
     rr(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 24);
     ctx.strokeStyle = '#0b3d2e';
     ctx.lineWidth = 5;
     ctx.stroke();
 
-    // الهيدر
     rr(ctx, 35, 35, canvas.width - 70, 185, 18);
     var hdrGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     hdrGradient.addColorStop(0, '#04201a');
@@ -629,13 +606,11 @@ body {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن', 540, 145);
 
-    // التاريخ الهجري المصحح ناصع الوضوح
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#d4af37';
     ctx.textAlign = 'center';
     ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
 
-    // كارت الطالب
     var curY = 250;
     rr(ctx, 40, curY, canvas.width - 80, 150, 18);
     ctx.fillStyle = '#ffffff';
@@ -658,7 +633,6 @@ body {
 
     curY += 180;
 
-    // أقسام المتابعة
     SECTIONS.forEach(sec => {
       let sData = data[sec.key];
       let hasCurrents = sData && sData.currents && sData.currents.length > 0;
@@ -774,7 +748,6 @@ body {
     return canvas;
   }
 
-  // التحكم بالرجوع للجوال
   window.addEventListener('popstate', function(event) {
     if (currentModalElement) {
       currentModalElement.remove();
