@@ -13,14 +13,15 @@
 
 <style>
 :root {
-  --green-deep: #04201a;
+  --green-deep: #062b22;
   --green-mid: #0b3d2e;
-  --green-card: #124d3b;
+  --green-card: #0f4c3a;
   --green-light: #14795c;
   --gold-primary: #d4af37;
+  --gold-shiny: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
   --gold-light: #fef08a;
   --white: #ffffff;
-  --cream: #fdfbf5;
+  --cream: #f8f6f0;
   --border-light: #e2e8f0;
   --text-dark: #111827;
   --sub: #4b5563;
@@ -43,7 +44,8 @@ body {
   background: linear-gradient(160deg, var(--green-deep), var(--green-mid)); 
   padding: 24px 16px; 
   text-align: center; 
-  border-bottom: 4px solid var(--gold-primary); 
+  border-bottom: 4px solid;
+  border-image: var(--gold-shiny) 1;
   color: #fff; 
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
@@ -52,35 +54,49 @@ body {
   font-weight: 800;
   color: var(--gold-light); 
   margin-bottom: 6px; 
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+/* زرين العودة ومسح الكل بجانب بعضهما */
 .hdr-btns {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-top: 12px;
-  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .header-btn { 
   display: inline-flex; 
   align-items: center; 
+  justify-content: center;
   gap: 6px; 
-  background: rgba(255, 255, 255, 0.1); 
+  background: rgba(255, 255, 255, 0.08); 
   color: var(--gold-light); 
-  border: 1px solid var(--gold-primary); 
-  padding: 8px 16px; 
+  border: 1.5px solid var(--gold-primary); 
+  padding: 8px 18px; 
   border-radius: 20px; 
   text-decoration: none; 
   font-size: 13px; 
   font-weight: 700; 
   cursor: pointer;
   font-family: 'Cairo', sans-serif;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  -webkit-tap-highlight-color: transparent;
 }
-.header-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
+
+.header-btn:active {
+  transform: scale(0.95);
+  background: rgba(212, 175, 55, 0.25);
+}
+
+@media (hover: hover) {
+  .header-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: #fef08a;
+    transform: translateY(-1px);
+  }
 }
 
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
@@ -104,39 +120,58 @@ body {
   font-family: 'Cairo', sans-serif; 
   outline: none; 
   background: #fcfcfc; 
+  transition: border-color 0.2s ease;
 }
 .search-box:focus {
   border-color: var(--green-mid);
   background: #fff;
 }
 
-/* --- كروت الطلاب وحاوية الحذف الخارجي --- */
+/* --- صف كارت الطالب مع زر الحذف المنفصل --- */
 .student-row-wrapper {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 14px;
 }
 
+/* كارت الطالب التفاعلي */
 .student-card { 
   flex: 1;
   background: #fff; 
-  border-radius: 16px; 
-  border: 1px solid var(--border-light); 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04); 
+  border-radius: 18px; 
+  border: 1.5px solid var(--border-light); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
   overflow: hidden; 
+  transition: all 0.25s ease;
 }
 
 .student-header { 
-  background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-card) 100%); 
+  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-card) 100%); 
   color: #fff; 
-  padding: 12px 16px; 
+  padding: 14px 16px; 
   cursor: pointer; 
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   height: 100%;
+  border-right: 4px solid var(--gold-primary);
+  transition: background 0.3s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* تفاعلية كارت الطالب عند اللمس */
+.student-header:active {
+  transform: scale(0.985);
+  background: linear-gradient(135deg, #031813 0%, var(--green-mid) 100%);
+}
+
+@media (hover: hover) {
+  .student-card:hover {
+    box-shadow: 0 6px 16px rgba(11, 61, 46, 0.12);
+    border-color: rgba(212, 175, 55, 0.5);
+  }
 }
 
 .student-info { 
@@ -149,7 +184,7 @@ body {
 .student-name {
   font-size: 16px; 
   font-weight: 800; 
-  color: var(--gold-light); 
+  color: #ffffff; 
   display: flex;
   align-items: center;
   gap: 6px;
@@ -158,32 +193,45 @@ body {
 .badge-reports {
   background: rgba(254, 240, 138, 0.15);
   color: var(--gold-light);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  padding: 2px 8px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  padding: 2px 10px;
   border-radius: 12px;
   font-size: 11px;
   font-weight: 700;
 }
 
+/* زر السلة المنفصل التفاعلي */
 .btn-external-del {
   background: #ffffff;
   color: var(--red);
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  width: 50px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 18px;
+  width: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn-external-del:hover {
-  background: var(--red);
-  color: #fff;
+
+.btn-external-del:active {
+  transform: scale(0.9);
+  background: var(--red-light);
   border-color: var(--red);
+}
+
+@media (hover: hover) {
+  .btn-external-del:hover {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  }
 }
 
 .chevron-icon {
@@ -247,6 +295,10 @@ body {
   display: inline-flex; 
   align-items: center; 
   gap: 4px; 
+  transition: transform 0.15s ease;
+}
+.btn-action-sm:active {
+  transform: scale(0.95);
 }
 
 .btn-share-rep { 
@@ -277,7 +329,7 @@ body {
   <h1>🗂️ سجل وتقارير الطلاب</h1>
   <div class="hdr-btns">
     <a href="index.html" class="header-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
-    <button class="header-btn" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح جميع بيانات الطلاب</button>
+    <button class="header-btn" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
   </div>
 </div>
 
@@ -437,7 +489,7 @@ body {
         <div class="student-card" id="card-${student.id}">
           <div class="student-header" onclick="toggleStudentReports('${student.id}')">
             <div class="student-info">
-              <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
+              <i class="ti ti-user-circle" style="font-size: 24px; color: var(--gold-light);"></i> 
               <span class="student-name">${student.name}</span>
               <span class="badge-reports">${transactions.length} تقرير</span>
             </div>
