@@ -13,17 +13,17 @@
 
 <style>
 :root {
-  --green-deep: #083e32;
-  --green-mid: #0d5142;
-  --green-card: #0c4337;
-  --green-light: #156d59;
-  --gold-primary: #ca9746;
-  --gold-light: #e6c280;
+  --green-deep: #04201a;
+  --green-mid: #0b3d2e;
+  --green-card: #0a3527;
+  --green-light: #14795c;
+  --gold-primary: #d4af37;
+  --gold-light: #fef08a;
   --white: #ffffff;
-  --cream: #f9f6ef;
-  --border-light: #e2dcd0;
-  --text-dark: #1b2823;
-  --sub: #52635c;
+  --cream: #fdfbf5;
+  --border-light: #e5e7eb;
+  --text-dark: #111827;
+  --sub: #4b5563;
   --red-light: #fee2e2;
   --red: #dc2626;
 }
@@ -47,11 +47,28 @@ body {
   color: #fff; 
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
+.hdr-emblem {
+  width: 54px; height: 54px; margin: 0 auto 10px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 2px solid var(--gold-primary);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
 .hdr h1 { 
-  font-size: 24px; 
+  font-size: 22px; 
   font-weight: 800;
   color: var(--gold-light); 
   margin-bottom: 14px; 
+  letter-spacing: 0.3px;
+}
+.hdr-subtitle {
+  color: rgba(255,255,255,0.85);
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-top: -8px;
+  margin-bottom: 14px;
 }
 
 /* أزرار التحكم بالهيدر */
@@ -181,6 +198,22 @@ body {
   border-radius: 12px;
   font-size: 11px;
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.student-name-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.last-session-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .btn-icon-del-separate {
@@ -294,7 +327,9 @@ body {
 <body>
 
 <div class="hdr">
-  <h1>🗂️ سجل وتقارير الطلاب</h1>
+  <div class="hdr-emblem">🗂️</div>
+  <h1>سجل وتقارير الطلاب</h1>
+  <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
   <div class="header-btns">
     <a href="index1.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
     <button class="btn-danger-all-hdr" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
@@ -432,6 +467,11 @@ body {
       let reportsHtml = '';
       const transactions = student.transactions || [];
 
+      let lastSessionHtml = '';
+      if (transactions.length && transactions[0] && transactions[0].date) {
+        lastSessionHtml = '<span class="last-session-date"><i class="ti ti-calendar-event"></i> آخر حصة: ' + convertToHijri(transactions[0].date) + '</span>';
+      }
+
       if (!transactions.length) {
         reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
       } else {
@@ -458,9 +498,11 @@ body {
         <div class="student-card" id="card-${student.id}">
           <div class="student-header" onclick="toggleStudentReports('${student.id}')">
             <div class="student-info">
-              <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i> 
-              <span class="student-name">${student.name}</span>
-              <span class="badge-reports">${transactions.length} تقرير</span>
+              <i class="ti ti-user-circle" style="font-size: 22px; color: var(--gold-light);"></i>
+              <div class="student-name-col">
+                <span class="student-name">${student.name} <span class="badge-reports">${transactions.length} تقرير</span></span>
+                ${lastSessionHtml}
+              </div>
             </div>
             <i class="ti ti-chevron-down chevron-icon" id="chevron-${student.id}"></i>
           </div>
@@ -545,7 +587,7 @@ body {
     try {
       let hijriDateStr = convertToHijri(tx.date);
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
-      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating);
+      showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating, student.id, txIndex);
     } catch(e) {
       customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
     }
@@ -786,7 +828,7 @@ body {
     }
   }
 
-  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName, generalRating) {
+  function showSingleImageModal(canvasElement, downloadName, rawReportData, studentName, generalRating, studentId, txIndex) {
     if (currentModalElement) {
       currentModalElement.remove();
     }
@@ -812,7 +854,8 @@ body {
     btnWrap.appendChild(closeBtn);
 
     var continueBtn = document.createElement('button');
-    continueBtn.innerHTML = '🔄 المتابعة والتكملة لتقرير جديد';
+    continueBtn.innerHTML = '↩️ استرجاع كسجل جديد';
+    continueBtn.title = 'نقل بيانات الخطة القادمة إلى صفحة الإدخال للبدء في تسجيل تقرير جديد';
     continueBtn.style.cssText = 'padding:10px 16px;background:#156d59;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     continueBtn.onclick = function() {
       if (rawReportData) {
@@ -851,6 +894,7 @@ body {
         });
 
         var payload = {
+          mode: 'new',
           studentName: studentName || '',
           generalRating: 'ممتاز',
           academicData: nextAcademicData
@@ -868,8 +912,11 @@ body {
     editBtn.innerHTML = '✏️ تعديل التقرير';
     editBtn.style.cssText = 'padding:10px 16px;background:#ca9746;color:#083e32;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     editBtn.onclick = function() {
-      if (rawReportData) {
+      if (rawReportData && studentId != null && txIndex != null) {
         var payload = {
+          mode: 'edit',
+          docId: studentId,
+          txIndex: txIndex,
           studentName: studentName || '',
           generalRating: generalRating || 'ممتاز',
           academicData: rawReportData
