@@ -329,7 +329,7 @@ function shareParentDashboard(studentId, studentName) {
   const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
   const dashUrl = `${window.location.origin}${basePath}student_dashboard.html?id=${encodeURIComponent(studentId)}`;
 
-  const msgText = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير وتطور البطل (${studentName}) عبر لوحة المتابعة التفاعلية والرسوم البيانية من الرابط التالي:`;
+  const msgText = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير البطل (${studentName}) عبر لوحة المتابعة من الرابط التالي:`;
 
   if (navigator.share) {
     navigator.share({
