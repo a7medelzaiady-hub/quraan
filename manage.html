@@ -98,7 +98,26 @@ body {
   background: rgba(202, 151, 70, 0.2);
 }
 
-/* تم حذف ستايل زر مسح الكل */
+.btn-danger-all-hdr { 
+  background: rgba(220, 38, 38, 0.15); 
+  color: #fca5a5; 
+  border: 1px solid rgba(220, 38, 38, 0.4); 
+  padding: 8px 18px; 
+  border-radius: 20px; 
+  font-weight: 700; 
+  cursor: pointer; 
+  font-family: 'Cairo', sans-serif; 
+  font-size: 13px; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;
+  gap: 6px; 
+  transition: all 0.2s ease;
+}
+.btn-danger-all-hdr:hover { 
+  background: var(--red); 
+  color: #fff; 
+}
 
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
 
@@ -313,7 +332,7 @@ body {
   <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
   <div class="header-btns">
     <a href="index1.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
-    <!-- تم حذف زر مسح الكل من هنا -->
+    <button class="btn-danger-all-hdr" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
   </div>
 </div>
 
@@ -356,25 +375,24 @@ body {
     document.getElementById('c-alert-close').onclick=function(){m.remove();};
   }
 
-  // تم حذف monthMap لأننا لن نحتاجها في التحويل العكسي للتاريخ الميلادي
+  // تم حذف monthMap لأننا سنعتمد على التحويل المباشر من مكتبة Intl
 
-  // دالة محسنة لتحويل أي مدخل تاريخ إلى نص هجري فقط
+  // دالة تحويل التاريخ إلى هجري - محدثة لتقبل كائن تاريخ ميلادي بشكل صحيح
   function convertToHijri(dateInput) {
     try {
       let d;
-      // التحقق مما إذا كان المدخل كائن تاريخ أو نص
-      if (dateInput instanceof Date) {
+      // التحقق مما إذا كان المدخل كائن تاريخ ميلادي صالح
+      if (dateInput instanceof Date && !isNaN(dateInput.getTime())) {
         d = dateInput;
       } else if (dateInput && typeof dateInput === 'string') {
         d = new Date(dateInput); // محاولة تحويل النص إلى تاريخ
       } else {
-        d = new Date(); // افتراضي اليوم في حال عدم وجود مدخل صالح
+        d = new Date(); // افتراضي اليوم إذا لم يوجد تاريخ صالح
       }
-
-      // التحقق من صحة التاريخ
+      
+      // التأكد النهائي من صلاحية التاريخ
       if (isNaN(d.getTime())) d = new Date();
 
-      // استخدام Intl.DateTimeFormat للحصول على التاريخ الهجري المنسق
       const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
@@ -383,7 +401,7 @@ body {
 
       return formatter.format(d);
     } catch (e) {
-      console.error("خطأ في تحويل التاريخ:", e);
+      console.error("خطأ في دالة تحويل التاريخ:", e);
       return 'التاريخ الهجري';
     }
   }
@@ -434,7 +452,7 @@ body {
 
       let lastSessionHtml = '';
       if (transactions.length && transactions[0] && transactions[0].date) {
-        // استخدام التاريخ الهجري هنا
+        // تحويل التاريخ المخزن (الذي يكون ميلادياً في الغالب) إلى هجري للعرض في القائمة
         lastSessionHtml = '<span class="last-session-date"><i class="ti ti-calendar-event"></i> آخر حصة: ' + convertToHijri(transactions[0].date) + '</span>';
       }
 
@@ -442,14 +460,14 @@ body {
         reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
       } else {
         transactions.forEach((tx, idx) => {
-          // استخدام التاريخ الهجري هنا في تفاصيل التقارير
+          // تحويل تاريخ كل تقرير إلى هجري للعرض في القائمة التفصيلية
           let hijriD = convertToHijri(tx.date);
           let stars = getRatingStars(tx.generalRating);
           
           reportsHtml += `
             <div class="report-item">
               <div class="report-info">
-                <h4>📅 التاريخ الهجري: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
+                <h4>📅 التاريخ: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
                 <p>${tx.desc || ''}</p>
               </div>
               <div class="report-btns">
@@ -525,8 +543,20 @@ body {
     }
   }
 
-  // تم حذف دالة deleteAllStudentsConfirm لأن الزر الخاص بها حُذف
+  async function deleteAllStudentsConfirm() {
+    if (!confirm("🚨 تحذير خطير: هل تريد حقاً مسح جميع الطلاب وكل التقارير المحفوظة بالكامل؟")) return;
+    try {
+      const snapshot = await studentsCollection.get();
+      const batch = db.batch();
+      snapshot.docs.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+      customAlert("✅ تم مسح قاعدة البيانات بالكامل.");
+    } catch(e) {
+      customAlert("حدث خطأ: " + e.message);
+    }
+  }
 
+  // دالة عرض ومشاركة التقرير - تم تحديثها لإصلاح مشكلة التاريخ
   async function reprintAndShareReport(studentName, txIndex) {
     const student = allStudentsData.find(s => s.name === studentName);
     if (!student || !student.transactions || !student.transactions[txIndex]) {
@@ -541,12 +571,16 @@ body {
     }
 
     try {
-      // تمرير كائن التاريخ للدالة
+      // إصلاح: استخدام التاريخ الميلادي الأصلي المخزن لتحويله بشكل صحيح
+      // بافتراض أن tx.date يحتوي على التاريخ بتنسيق صالح (مثل ISO)
       let reportDateObj = tx.date ? new Date(tx.date) : new Date();
       let hijriDateStr = convertToHijri(reportDateObj);
+
+      // الآن سيتم رسم التاريخ الهجري الصحيح على الكانفاس
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
       showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating, student.id, txIndex);
     } catch(e) {
+      console.error("خطأ في reprintAndShareReport:", e);
       customAlert("حدث خطأ أثناء توليد التقرير: " + e.message);
     }
   }
@@ -578,6 +612,7 @@ body {
     } catch(e) {}
   }
 
+  // الدالة التي ترسم التقرير على الكانفاس
   async function drawDetailedFollowUpReport(studentName, generalRating, data, hijriDateStr) {
     await loadFonts();
     
@@ -618,7 +653,7 @@ body {
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    ctx.font = '900 48px Cairo, sans-serif';
+    ctx.font = '900 46px Cairo, sans-serif';
     ctx.fillStyle = '#e6c280';
     ctx.textAlign = 'center';
     ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 98);
@@ -630,7 +665,7 @@ body {
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#ca9746';
     ctx.textAlign = 'center';
-    // تم تغيير النص هنا ليوضح أنه التاريخ الهجري
+    // رسم النص الهجري المُمرر للدالة
     ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
 
     var curY = 250;
@@ -703,45 +738,26 @@ body {
               ctx.fillText(rangeBadge, 950, curY + 92);
 
               let rateTxt = item.rating ? item.rating : 'تم التسميع';
-              let errTxt = (item.errors && item.errors !== '0' && item.errors !== 0) ? `❌ الأخطاء: ${item.errors}` : '✨ بدون أخطاء';
+              let errTxt = (item.errors && item.errors !== '0') ? `❌ الأخطاء: ${item.errors}` : '✨ بدون أخطاء';
 
-              let badgeWidth = 330;
-              let badgeX = 65;
-
-              // 1. رسم بادج التقييم
-              rr(ctx, badgeX, curY + 12, badgeWidth, 42, 10);
+              rr(ctx, 70, curY + 14, 270, 42, 10);
               ctx.fillStyle = '#fef3c7';
               ctx.fill();
 
-              let rateFontSize = 24;
-              ctx.font = `900 ${rateFontSize}px Cairo, sans-serif`;
-              while (ctx.measureText(rateTxt).width > (badgeWidth - 20) && rateFontSize > 13) {
-                rateFontSize -= 1;
-                ctx.font = `900 ${rateFontSize}px Cairo, sans-serif`;
-              }
-
+              ctx.font = '900 25px Cairo, sans-serif';
               ctx.fillStyle = '#d97706';
               ctx.textAlign = 'center';
-              ctx.fillText(rateTxt, badgeX + (badgeWidth / 2), curY + 41);
+              ctx.fillText(rateTxt, 205, curY + 43);
 
-              // 2. رسم بادج الأخطاء
-              let isErr = (item.errors && item.errors !== '0' && item.errors !== 0);
-
-              rr(ctx, badgeX, curY + 60, badgeWidth, 42, 10);
+              let isErr = (item.errors && item.errors !== '0');
+              rr(ctx, 70, curY + 60, 270, 40, 10);
               ctx.fillStyle = isErr ? '#fee2e2' : '#dcfce7';
               ctx.fill();
 
-              let errFontSize = 22;
-              ctx.font = `800 ${errFontSize}px Cairo, sans-serif`;
-
-              while (ctx.measureText(errTxt).width > (badgeWidth - 20) && errFontSize > 12) {
-                errFontSize -= 1;
-                ctx.font = `800 ${errFontSize}px Cairo, sans-serif`;
-              }
-
+              ctx.font = '800 24px Cairo, sans-serif';
               ctx.fillStyle = isErr ? '#dc2626' : '#15803d';
               ctx.textAlign = 'center';
-              ctx.fillText(errTxt, badgeX + (badgeWidth / 2), curY + 88);
+              ctx.fillText(errTxt, 205, curY + 88);
 
               curY += 130;
             }
