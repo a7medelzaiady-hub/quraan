@@ -8,40 +8,44 @@
     <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
     <!-- الأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* لوحة ألوان مستوحاة من تصميم الصورة */
-            --brand-green: #054a36;        /* الأخضر الأزهري العميق */
-            --brand-green-light: #0d6e52;  /* أخضر متوسط للأزرار */
-            --brand-green-subtle: #e8f3ef; /* أخضر فاتح جداً للخلفيات الصغيرة */
+            /* لوحة الألوان المستوحاة من الصورة + الذهبي اللامع */
+            --brand-dark-green: #023a28;   /* أخضر غامق وعميق مثل خلفيات الهواتف */
+            --brand-primary: #056548;      /* الأخضر الرئيسي للعلامة التجارية */
+            --brand-accent: #0b8e67;       /* أخضر زاهي للتبريز */
+            --bg-gradient: #dbe8e2;        /* خلفية متموجة هادئة مثل الصورة */
             
-            --brand-gold: #c88e38;         /* الذهبي الدافئ */
-            --brand-gold-dark: #a06e23;    /* ذهبي غامق للحدود والتفاصيل */
-            --brand-gold-light: #f7ede0;   /* ذهبي فاتح/بيج خلفي */
-
-            --bg-cream: #f8f5ee;           /* الخلفية العامة (كريمي دافئ) */
-            --surface-white: #ffffff;      /* أبيض ناصع للكروت والنوافذ */
+            /* التدرج الذهبي اللامع الفاخر (Metallic Metallic Gold) */
+            --gold-light: #ffea9f;
+            --gold-main: #d4af37;
+            --gold-dark: #aa7c11;
+            --gold-metallic: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-metallic-hover: linear-gradient(135deg, #aa771c 0%, #fbf5b7 25%, #b38728 50%, #fcf6ba 75%, #bf953f 100%);
             
-            --text-dark: #12231c;          /* داكن نصوص رئيسية */
-            --text-body: #3c5248;          /* أخضر غامق للنصوص الفرعية */
-            --text-muted: #72877d;         /* رمادي مخضر هادئ */
+            --surface-white: #ffffff;
+            --surface-glass: rgba(255, 255, 255, 0.85);
+            
+            --text-dark: #0a2018;
+            --text-body: #2d453b;
+            --text-muted: #627d73;
 
-            --danger-red: #c0392b;         /* أحمر للإنذار والمناطق المقفلة */
-            --danger-bg: #fdf2f2;
+            --danger-red: #d93829;
+            --danger-bg: #fff0ee;
 
-            --border-subtle: rgba(5, 74, 54, 0.12);
-            --border-gold: rgba(200, 142, 56, 0.35);
-
-            --radius-xl: 22px;
-            --radius-lg: 15px;
-            --radius-sm: 9px;
-            --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            --perspective: 1200px;
+            --radius-xl: 28px;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-full: 999px;
+            
+            --shadow-lux: 0 20px 40px rgba(2, 58, 44, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-gold: 0 8px 25px rgba(212, 175, 55, 0.35);
+            --transition-smooth: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         * {
@@ -55,173 +59,193 @@
         body {
             font-family: 'Tajawal', 'Cairo', sans-serif;
             color: var(--text-body);
-            background: var(--bg-cream);
-            background-image:
-                radial-gradient(circle at 10% 0%, rgba(200, 142, 56, 0.08), transparent 40%),
-                radial-gradient(circle at 90% 20%, rgba(5, 74, 54, 0.06), transparent 45%),
-                radial-gradient(circle at 50% 100%, rgba(200, 142, 56, 0.05), transparent 50%);
+            background: linear-gradient(180deg, #edf4f0 0%, #d8e6df 100%);
             background-attachment: fixed;
+            min-height: 100vh;
             overflow-x: hidden;
-            line-height: 1.7;
-            padding-bottom: 40px;
+            line-height: 1.6;
+            padding-bottom: 50px;
         }
 
-        /* ===== شاشة الترحيب ===== */
+        /* ===== شاشة الترحيب الفاخرة ===== */
         #welcome-screen {
             position: fixed;
             inset: 0;
-            background: var(--bg-cream);
-            background-image: radial-gradient(circle at 50% 30%, rgba(200, 142, 56, 0.12), transparent 60%);
+            background: linear-gradient(135deg, var(--brand-dark-green) 0%, #011d14 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: var(--transition-smooth);
-            padding: 20px;
+            padding: 24px;
         }
 
-        .welcome-center { text-align: center; width: 100%; perspective: var(--perspective); }
+        .welcome-center { text-align: center; width: 100%; max-width: 400px; }
+
+        .welcome-logo-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+        }
 
         .welcome-logo {
-            width: 116px;
-            height: 116px;
-            margin: 0 auto 25px;
+            width: 100%;
+            height: 100%;
+            background: var(--brand-primary);
+            border-radius: 35px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, var(--brand-green) 0%, #022b1f 100%);
-            border: 2px solid var(--brand-gold);
-            border-radius: 30px;
-            box-shadow:
-                0 18px 36px rgba(5, 74, 54, 0.25),
-                0 0 25px rgba(200, 142, 56, 0.2);
-            font-size: 2.8rem;
-            color: var(--brand-gold);
-            animation: pulseGlow 3s infinite alternate;
-            transform-style: preserve-3d;
+            font-size: 3rem;
+            color: #ffffff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
 
-        @keyframes pulseGlow {
-            0% { transform: scale(1) rotateY(0deg); }
-            100% { transform: scale(1.05) rotateY(8deg); box-shadow: 0 20px 45px rgba(5, 74, 54, 0.3), 0 0 35px rgba(200, 142, 56, 0.35); }
+        .welcome-logo-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 39px;
+            background: var(--gold-metallic);
+            z-index: 1;
+            animation: rotateGlow 6s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); filter: blur(3px); }
+            100% { transform: rotate(360deg); filter: blur(3px); }
         }
 
         #welcome-screen h1 {
-            color: var(--brand-green);
-            font-size: 2.15rem;
+            color: #ffffff;
+            font-size: 2.2rem;
             font-weight: 900;
             margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
+            letter-spacing: -0.5px;
         }
 
         .welcome-sub {
-            color: var(--brand-gold-dark);
-            font-size: 1.05rem;
-            margin-bottom: 38px;
-            font-weight: 700;
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            font-weight: 800;
         }
 
-        .btn-start {
-            background: linear-gradient(135deg, var(--brand-green), var(--brand-green-light));
-            color: #ffffff;
-            border: 1px solid var(--brand-gold);
-            padding: 16px 40px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            border-radius: var(--radius-lg);
-            width: 85%;
-            max-width: 280px;
-            box-shadow: 0 12px 24px rgba(5, 74, 54, 0.25);
+        .btn-gold-shimmer {
+            background: var(--gold-metallic);
+            color: var(--brand-dark-green);
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.15rem;
+            font-weight: 900;
+            border-radius: var(--radius-full);
+            width: 100%;
+            box-shadow: var(--shadow-gold);
             transition: var(--transition-smooth);
             font-family: 'Cairo', sans-serif;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-start:active { transform: scale(0.96) translateY(2px); }
+        .btn-gold-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%);
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite;
+        }
 
-        /* ===== الهيدر ===== */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        .btn-gold-shimmer:active { transform: scale(0.96); }
+
+        /* ===== الهيدر العصري ===== */
         header {
-            padding: 35px 20px 22px;
+            padding: 40px 20px 20px;
             text-align: center;
             position: relative;
         }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 10%; right: 10%; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-            opacity: 0.8;
-        }
 
-        .platform-badge {
+        .brand-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--brand-gold-light);
-            border: 1px solid var(--border-gold);
-            padding: 7px 18px;
-            border-radius: 100px;
-            color: var(--brand-gold-dark);
-            font-size: 0.85rem;
+            background: var(--surface-white);
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 16px;
+        }
+
+        .brand-badge i {
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
+        }
+
+        .brand-badge span {
+            color: var(--brand-dark-green);
             font-weight: 800;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 12px rgba(200, 142, 56, 0.1);
+            font-size: 0.88rem;
         }
 
         header h1 {
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            color: var(--brand-green);
+            color: var(--brand-dark-green);
             font-family: 'Cairo', sans-serif;
+            letter-spacing: -0.5px;
         }
 
         header p {
-            color: var(--text-body);
-            font-size: 1.05rem;
-            margin-top: 6px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 4px;
             font-weight: 700;
         }
 
-        header p::after {
-            content: '\f684';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            display: block;
-            font-size: 1.1rem;
-            color: var(--brand-gold);
-            margin-top: 10px;
-            animation: prayMotion 3s infinite ease-in-out;
-        }
-
-        @keyframes prayMotion {
-            0%, 100% { transform: scaleY(1); opacity: 0.6; }
-            50% { transform: scaleY(0.85); opacity: 1; }
-        }
-
-        /* ===== شريط الإشراقات ===== */
+        /* ===== شريط الإشراقات الأنيق ===== */
         .ticker-container {
-            margin: 0 16px 28px;
-            background: var(--surface-white);
-            border: 1px solid var(--border-gold);
+            margin: 10px 20px 30px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: var(--radius-lg);
-            padding: 12px 16px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 8px 20px rgba(5, 74, 54, 0.05);
+            box-shadow: 0 8px 20px rgba(2, 58, 44, 0.06);
         }
 
         .ticker-label {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: var(--brand-green);
-            font-size: 0.9rem;
+            background: var(--brand-dark-green);
+            color: var(--gold-light);
+            font-size: 0.8rem;
             font-weight: 800;
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
             white-space: nowrap;
-            padding-left: 12px;
-            border-left: 1px solid var(--border-subtle);
         }
 
         .ticker-wrap { flex-grow: 1; overflow: hidden; }
@@ -229,185 +253,181 @@
         .ticker-track {
             display: flex;
             white-space: nowrap;
-            animation: scrollText 16s linear infinite;
+            animation: scrollText 22s linear infinite;
         }
 
         .ticker-track span {
             color: var(--text-dark);
             font-size: 0.95rem;
-            font-weight: 600;
-            margin-left: 50px;
+            font-weight: 700;
+            margin-left: 40px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .ticker-track span i { color: var(--brand-gold); }
+        .ticker-track span i { color: var(--gold-main); }
 
         @keyframes scrollText {
             from { transform: translateX(0); }
             to   { transform: translateX(-50%); }
         }
 
-        /* ===== شبكة الكروت ثلاثية الأبعاد ===== */
+        /* ===== شبكة الكروت الاحترافية (Design System) ===== */
         .cards-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 22px;
-            padding: 4px 16px;
-            perspective: var(--perspective);
+            gap: 20px;
+            padding: 0 20px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .card {
-            --rx: 0deg;
-            --ry: 0deg;
             background: var(--surface-white);
-            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-xl);
             padding: 24px;
+            position: relative;
+            box-shadow: var(--shadow-lux);
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             display: flex;
             flex-direction: column;
-            position: relative;
-            transform-style: preserve-3d;
-            transform: perspective(var(--perspective)) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
-            box-shadow:
-                0 4px 12px rgba(0,0,0,0.03),
-                0 12px 28px rgba(5, 74, 54, 0.06);
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: transform;
+            overflow: hidden;
         }
 
+        /* لمسة الإطار الذهبي الفريد للبطاقات */
         .card::before {
-            /* شريط علوي ذهبي دافئ */
             content: '';
             position: absolute;
-            top: 0; right: 20px; left: 20px; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-            opacity: 0.7;
-            transform: translateZ(2px);
-            border-radius: 3px;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: var(--gold-metallic);
         }
 
         .card:active {
-            border-color: var(--brand-gold);
-            box-shadow: 0 6px 16px rgba(5, 74, 54, 0.12);
+            transform: translateY(-3px) scale(0.99);
+            box-shadow: 0 12px 28px rgba(2, 58, 44, 0.15);
         }
 
-        .card-meta {
+        .card-header-flex {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
-            transform: translateZ(30px);
+            margin-bottom: 18px;
         }
 
         .card-icon {
-            width: 52px; height: 52px;
-            background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-green-light) 100%);
-            border: 1px solid var(--brand-gold);
-            border-radius: var(--radius-lg);
+            width: 58px;
+            height: 58px;
+            background: linear-gradient(135deg, var(--brand-dark-green) 0%, var(--brand-primary) 100%);
+            border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.35rem;
-            color: #ffffff;
-            box-shadow: 0 6px 14px rgba(5, 74, 54, 0.2);
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            box-shadow: 0 8px 18px rgba(2, 58, 44, 0.2);
+            position: relative;
         }
 
         .card-tag {
-            font-size: 0.76rem;
+            font-size: 0.78rem;
             font-weight: 800;
-            padding: 5px 13px;
-            border-radius: 100px;
-            background: var(--brand-green-subtle);
-            color: var(--brand-green);
-            border: 1px solid rgba(5, 74, 54, 0.15);
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            background: rgba(5, 101, 72, 0.08);
+            color: var(--brand-primary);
+            border: 1px solid rgba(5, 101, 72, 0.15);
         }
 
         .card h3 {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            color: var(--brand-green);
+            color: var(--brand-dark-green);
             margin-bottom: 8px;
             font-family: 'Cairo', sans-serif;
-            transform: translateZ(26px);
         }
 
         .card p {
             color: var(--text-body);
             font-size: 0.95rem;
-            margin-bottom: 22px;
-            transform: translateZ(18px);
+            margin-bottom: 24px;
+            font-weight: 500;
         }
 
         .card-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-top: auto;
-            transform: translateZ(34px);
         }
 
         .btn-action {
-            padding: 13px 20px;
             border: none;
             border-radius: var(--radius-lg);
             font-family: 'Cairo', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            transition: var(--transition-smooth);
         }
 
         .btn-main {
             flex-grow: 1;
-            background: var(--brand-green);
+            height: 50px;
+            background: var(--brand-dark-green);
             color: #ffffff;
-            border: 1px solid var(--brand-green);
-            box-shadow: 0 4px 12px rgba(5, 74, 54, 0.15);
+            box-shadow: 0 6px 16px rgba(2, 58, 44, 0.2);
         }
 
         .btn-main:active {
-            background: var(--brand-gold-dark);
-            border-color: var(--brand-gold-dark);
-            transform: scale(0.97);
+            background: var(--brand-primary);
         }
 
         .btn-icon-only {
-            width: 48px; height: 48px;
-            padding: 0;
-            background: var(--bg-cream);
-            border: 1px solid var(--border-subtle);
-            color: var(--brand-green);
+            width: 50px; height: 50px;
+            background: #f2f7f4;
+            color: var(--brand-dark-green);
+            border: 1px solid rgba(2, 58, 44, 0.08);
         }
 
         .btn-icon-only:active {
-            border-color: var(--brand-gold);
-            color: var(--brand-gold-dark);
-            transform: scale(0.92);
+            background: var(--gold-light);
+            color: var(--brand-dark-green);
         }
 
-        /* كارت المشرفين المحمي (أحمر تنبيهي) */
-        .card-secure { border-color: rgba(192, 57, 43, 0.25); }
-        .card-secure::before { background: linear-gradient(90deg, transparent, var(--danger-red), transparent); }
-        .card-secure .card-icon { background: linear-gradient(135deg, var(--danger-red) 0%, #962d22 100%); border-color: rgba(192, 57, 43, 0.4); box-shadow: 0 6px 14px rgba(192, 57, 43, 0.2); }
-        .card-secure .card-tag { color: var(--danger-red); background: var(--danger-bg); border-color: rgba(192, 57, 43, 0.2); }
-        .card-secure .btn-main { background: var(--danger-red); border-color: var(--danger-red); box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2); }
-        .card-secure .btn-main:active { background: #962d22; }
+        /* كارت المشرفين المحمي (أحمر نبيذي فاخر) */
+        .card-secure::before {
+            background: linear-gradient(90deg, #d93829, #ff7b70);
+        }
+        .card-secure .card-icon {
+            background: linear-gradient(135deg, #a81c10 0%, #d93829 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(217, 56, 41, 0.25);
+        }
+        .card-secure .card-tag {
+            color: var(--danger-red);
+            background: var(--danger-bg);
+            border-color: rgba(217, 56, 41, 0.2);
+        }
+        .card-secure .btn-main {
+            background: var(--danger-red);
+            box-shadow: 0 6px 16px rgba(217, 56, 41, 0.25);
+        }
 
-        /* ===== لوحة إدخال الرمز السري (PIN Pad) ===== */
+        /* ===== PIN Pad فاخر ===== */
         #password-modal {
             position: fixed;
             inset: 0;
-            background: rgba(12, 35, 28, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(1, 29, 20, 0.85);
+            backdrop-filter: blur(12px);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
             opacity: 0;
             visibility: hidden;
             transition: var(--transition-smooth);
@@ -417,104 +437,113 @@
 
         .modal-box {
             background: var(--surface-white);
-            border: 1px solid var(--border-gold);
-            padding: 32px 22px;
             border-radius: var(--radius-xl);
+            padding: 32px 24px;
             text-align: center;
-            width: 92%;
-            max-width: 340px;
-            box-shadow: 0 20px 50px rgba(5, 74, 54, 0.25);
-            transition: var(--transition-smooth);
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 30px;
+            background: var(--gold-metallic);
+            z-index: -1;
         }
 
         .modal-shield {
-            width: 58px; height: 58px;
-            background: var(--brand-gold-light);
-            color: var(--brand-gold-dark);
-            border: 1px solid var(--border-gold);
+            width: 64px; height: 64px;
+            background: var(--gold-metallic);
+            color: var(--brand-dark-green);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.55rem;
-            margin: 0 auto 14px;
-            transition: var(--transition-smooth);
+            font-size: 1.6rem;
+            margin: 0 auto 16px;
+            box-shadow: var(--shadow-gold);
         }
 
-        .modal-box h3 { color: var(--brand-green); font-size: 1.4rem; margin-bottom: 4px; font-family: 'Cairo', sans-serif; font-weight: 800; }
-        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 22px; }
+        .modal-box h3 { color: var(--brand-dark-green); font-size: 1.4rem; font-weight: 800; font-family: 'Cairo', sans-serif; }
+        .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
 
-        .pin-display { display: flex; justify-content: center; gap: 12px; margin-bottom: 22px; }
+        .pin-display { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
 
         .pin-dot {
-            width: 14px; height: 14px;
-            border: 2px solid var(--text-muted);
+            width: 16px; height: 16px;
+            border: 2px solid #ccd8d3;
             border-radius: 50%;
             transition: 0.2s ease;
         }
 
         .pin-dot.active {
-            background: var(--brand-gold);
-            border-color: var(--brand-gold-dark);
-            box-shadow: 0 0 10px rgba(200, 142, 56, 0.5);
+            background: var(--gold-main);
+            border-color: var(--gold-dark);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
         }
 
         .pin-pad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         .pad-btn {
-            background: var(--bg-cream);
-            border: 1px solid var(--border-subtle);
-            color: var(--brand-green);
-            font-size: 1.4rem;
-            font-weight: 700;
-            padding: 13px 0;
+            background: #f2f7f4;
+            border: none;
+            color: var(--brand-dark-green);
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 14px 0;
             border-radius: var(--radius-lg);
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: 0.15s ease;
         }
 
         .pad-btn:active {
-            background: var(--brand-gold-light);
-            color: var(--brand-gold-dark);
-            transform: scale(0.94);
+            background: var(--gold-metallic);
+            color: var(--brand-dark-green);
+            transform: scale(0.92);
         }
 
         .modal-cancel-btn {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-weight: 700;
+            font-weight: 800;
             font-size: 0.95rem;
-            padding: 5px;
             cursor: pointer;
         }
 
         .toast-error {
             color: var(--danger-red);
             background: var(--danger-bg);
-            border: 1px solid rgba(192,57,43,0.25);
+            border: 1px solid rgba(217, 56, 41, 0.2);
             padding: 10px;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             font-size: 0.85rem;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             display: none;
+            font-weight: 700;
         }
 
         /* ===== الفوتر ===== */
         footer {
             text-align: center;
-            margin-top: 42px;
-            padding: 26px;
+            margin-top: 50px;
+            padding: 20px;
             color: var(--text-muted);
             font-size: 0.88rem;
-            border-top: 1px solid var(--border-subtle);
+            font-weight: 700;
         }
-        footer span.brand { color: var(--brand-green); font-weight: 800; }
+        footer span.brand { color: var(--brand-dark-green); font-weight: 900; }
     </style>
 </head>
 <body>
@@ -528,10 +557,12 @@
     <!-- شاشة الترحيب -->
     <div id="welcome-screen">
         <div class="welcome-center">
-            <div class="welcome-logo"><i class="fa-solid fa-kaaba"></i></div>
+            <div class="welcome-logo-wrapper">
+                <div class="welcome-logo"><i class="fa-solid fa-kaaba"></i></div>
+            </div>
             <h1>خادم القرآن الكريم</h1>
             <div class="welcome-sub">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-            <button class="btn-start" onclick="startPlatform()">الدخول للمنصة</button>
+            <button class="btn-gold-shimmer" onclick="startPlatform()">الدخول للمنصة</button>
         </div>
     </div>
 
@@ -563,7 +594,7 @@
                 <button class="pad-btn" onclick="pressKey('9')">9</button>
                 <button class="pad-btn" style="color: var(--danger-red)" onclick="clearPin()"><i class="fa-solid fa-trash-can"></i></button>
                 <button class="pad-btn" onclick="pressKey('0')">0</button>
-                <button class="pad-btn" style="color: var(--brand-green)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
+                <button class="pad-btn" style="color: var(--brand-primary)" onclick="submitPin()"><i class="fa-solid fa-circle-check"></i></button>
             </div>
 
             <button class="modal-cancel-btn" onclick="closeModal()">إلغاء</button>
@@ -572,115 +603,103 @@
 
     <!-- الهيدر -->
     <header>
-        <div class="platform-badge"><i class="fa-solid fa-kaaba"></i> منصة خادم القرآن الرقمية</div>
+        <div class="brand-badge">
+            <i class="fa-solid fa-crown"></i>
+            <span>منصة خادم القرآن الرقمية</span>
+        </div>
         <h1>مَرْكَزُ خَادِمِ القُرْآنِ</h1>
         <p>بإشراف فضيلة الشيخ عبدالرحمن</p>
     </header>
 
     <!-- شريط الإشراقات -->
     <div class="ticker-container" ontouchstart="pauseTicker()" ontouchend="resumeTicker()">
-        <div class="ticker-label"><i class="fa-solid fa-heart-open"></i> إشراقات</div>
+        <div class="ticker-label"><i class="fa-solid fa-star"></i> إشراقات</div>
         <div class="ticker-wrap">
             <div class="ticker-track" id="tickerTrack">
-                <span><i class="fa-solid fa-star"></i> الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة والراحة.</span>
-                <span><i class="fa-solid fa-star"></i> الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
-                <span><i class="fa-solid fa-star"></i> الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة من عمل صالح.</span>
-                <span><i class="fa-solid fa-star"></i> تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات، فلا تهجر مصحفك.</span>
+                <span><i class="fa-solid fa-sparkles"></i> الصلاة نور يضيء دربك، فحافظ عليها في وقتها لتنعم بالبركة.</span>
+                <span><i class="fa-solid fa-sparkles"></i> الصوم مدرسة لتهذيب النفس، فاحرص على النوافل لتنال الأجر العظيم.</span>
+                <span><i class="fa-solid fa-sparkles"></i> الصدقة تطفئ غضب الرب وتدفع البلاء، فاجعل لك خبيئة صالحة.</span>
+                <span><i class="fa-solid fa-sparkles"></i> تلاوة القرآن تجلي هموم القلب وتزيد من الحسنات.</span>
             </div>
         </div>
     </div>
 
-    <!-- شبكة المحتوى -->
+    <!-- شبكة المحتوى (بدون كارت القرآن) -->
     <main class="cards-grid">
 
         <!-- كارت 1 -->
         <div class="card">
-            <div class="card-meta">
+            <div class="card-header-flex">
                 <div class="card-icon"><i class="fa-solid fa-book-open-reader"></i></div>
                 <div class="card-tag">أسئلة وأجوبة</div>
             </div>
             <h3>السراج المنير</h3>
             <p>مجموعة متكاملة من الأسئلة والأجوبة الفقهية الهامة التي تهم كل مسلم في حياته اليومية.</p>
             <div class="card-actions">
-                <button class="btn-action btn-main" onclick="navigate('السراج المنير.html')">تصفح الآن</button>
+                <button class="btn-action btn-main" onclick="navigate('السراج المنير.html')">تصفح الآن <i class="fa-solid fa-arrow-left"></i></button>
                 <button class="btn-action btn-icon-only" onclick="sharePage('السراج المنير', 'السراج المنير.html', false, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
             </div>
         </div>
 
         <!-- كارت 2 -->
         <div class="card">
-            <div class="card-meta">
+            <div class="card-header-flex">
                 <div class="card-icon"><i class="fa-solid fa-mosque"></i></div>
                 <div class="card-tag">قصص وعبر</div>
             </div>
             <h3>الحياة السعيدة</h3>
             <p>باقة مختارة من القصص والمواعظ الإيمانية التي تشرح الصدر وتريح النفس وتقربك من الله.</p>
             <div class="card-actions">
-                <button class="btn-action btn-main" onclick="navigate('الاسئله المفيده للحياه السعيده.html')">تصفح الآن</button>
+                <button class="btn-action btn-main" onclick="navigate('الاسئله المفيده للحياه السعيده.html')">تصفح الآن <i class="fa-solid fa-arrow-left"></i></button>
                 <button class="btn-action btn-icon-only" onclick="sharePage('الحياة السعيدة', 'الاسئله المفيده للحياه السعيده.html', false, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
             </div>
         </div>
 
         <!-- كارت 3 (المنطقة المقفلة للمشرفين) -->
         <div class="card card-secure">
-            <div class="card-meta">
+            <div class="card-header-flex">
                 <div class="card-icon"><i class="fa-solid fa-user-shield"></i></div>
                 <div class="card-tag">منطقة مقفلة</div>
             </div>
             <h3>التقييم والمتابعة</h3>
             <p>نظام إلكتروني مغلق لتقييم ومتابعة درجات التحصيل وإنجاز الطلاب اليومي (للمشرفين فقط).</p>
             <div class="card-actions">
-                <button class="btn-action btn-main" onclick="openProtectedPage('index1.html')"><i class="fa-solid fa-lock-open"></i> دخول المشرفين</button>
+                <button class="btn-action btn-main" onclick="openProtectedPage('index1.html')"><i class="fa-solid fa-lock"></i> دخول المشرفين</button>
                 <button class="btn-action btn-icon-only" onclick="sharePage('التقييم والمتابعة', 'index1.html', true, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
             </div>
         </div>
 
         <!-- كارت 4 -->
         <div class="card">
-            <div class="card-meta">
+            <div class="card-header-flex">
                 <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
                 <div class="card-tag">الجزء الثاني</div>
             </div>
             <h3>الحياة السعيدة (ج2)</h3>
             <p>تكملة تفصيلية لسلسلة قصص ومواعظ الحياة السعيدة الإيمانية مع استنباط الدروس المستفادة.</p>
             <div class="card-actions">
-                <button class="btn-action btn-main" onclick="navigate('part2.html')">تصفح الآن</button>
+                <button class="btn-action btn-main" onclick="navigate('part2.html')">تصفح الآن <i class="fa-solid fa-arrow-left"></i></button>
                 <button class="btn-action btn-icon-only" onclick="sharePage('الحياه السعيده الجزء الثاني', 'part2.html', false, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
             </div>
         </div>
 
         <!-- كارت 5 -->
         <div class="card">
-            <div class="card-meta">
-                <div class="card-icon"><i class="fa-solid fa-book-quran"></i></div>
-                <div class="card-tag">المصحف الرقمي</div>
-            </div>
-            <h3>القرآن الكريم</h3>
-            <p>تلاوة وتدبر آيات الذكر الحكيم، مع واجهة قراءة مريحة للعين وتفاسير معتمدة.</p>
-            <div class="card-actions">
-                <button class="btn-action btn-main" onclick="navigate('quran.html')">تصفح الآن</button>
-                <button class="btn-action btn-icon-only" onclick="sharePage('القرآن الكريم', 'quran.html', false, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
-            </div>
-        </div>
-
-        <!-- كارت 6 -->
-        <div class="card">
-            <div class="card-meta">
+            <div class="card-header-flex">
                 <div class="card-icon"><i class="fa-solid fa-scroll"></i></div>
                 <div class="card-tag">أحاديث نبوية</div>
             </div>
             <h3>كتاب الأخيار</h3>
             <p>ما تيسر وصح من كلام خير الأنام سيدنا محمد ﷺ وجوامع الكلم والسيرة العطرة.</p>
             <div class="card-actions">
-                <button class="btn-action btn-main" onclick="navigate('alakhyar.html')">تصفح الآن</button>
+                <button class="btn-action btn-main" onclick="navigate('alakhyar.html')">تصفح الآن <i class="fa-solid fa-arrow-left"></i></button>
                 <button class="btn-action btn-icon-only" onclick="sharePage('كتاب الأخيار', 'alakhyar.html', false, event)" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
             </div>
         </div>
     </main>
 
     <footer>
-        رَبِّ زِدْنِي عِلْمًا • <span class="brand">مركز خادم القرآن الكريم</span> <br>
-        <span style="font-size: 0.75rem; opacity: 0.7; display: inline-block; margin-top: 5px;">نسخة الهاتف الذكي فائقة السرعة</span>
+        رَبِّ زِدْنِي عِلْمًا • <span class="brand">مركز خادم القرآن الكريم</span>
     </footer>
 
     <script>
@@ -692,7 +711,7 @@
         let targetProtectedUrl = '';
         let currentPin = '';
 
-        // تكرار شريط الإشراقات للحركة اللانهائية
+        // تكرار شريط الإشراقات
         const track = document.getElementById('tickerTrack');
         track.innerHTML += track.innerHTML;
 
@@ -713,7 +732,7 @@
 
             const welcome = document.getElementById('welcome-screen');
             welcome.style.opacity = '0';
-            welcome.style.filter = 'blur(10px)';
+            welcome.style.transform = 'scale(1.05)';
             setTimeout(() => { welcome.style.visibility = 'hidden'; }, 400);
         }
 
@@ -769,10 +788,7 @@
             if (currentPin === '7222') {
                 toastError.style.display = 'none';
                 playSound(successSound);
-                document.querySelector('.modal-box').style.borderColor = 'var(--brand-green)';
-                document.querySelector('.modal-shield').style.color = 'var(--brand-green)';
-                document.querySelector('.modal-shield').style.borderColor = 'rgba(5,74,54,0.4)';
-                setTimeout(() => { window.location.href = targetProtectedUrl; }, 600);
+                setTimeout(() => { window.location.href = targetProtectedUrl; }, 400);
             } else {
                 playSound(errorSound);
                 toastError.style.display = 'block';
@@ -802,47 +818,6 @@
                 });
             }
         }
-
-        /* ===== تأثير الإمالة ثلاثية الأبعاد للكروت ===== */
-        (function initTiltCards() {
-            const cards = document.querySelectorAll('.card');
-            const MAX_TILT = 7;
-
-            function applyTilt(card, clientX, clientY) {
-                const rect = card.getBoundingClientRect();
-                const px = (clientX - rect.left) / rect.width;
-                const py = (clientY - rect.top) / rect.height;
-                const ry = (px - 0.5) * MAX_TILT * 2;
-                const rx = (0.5 - py) * MAX_TILT * 2;
-                card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
-                card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
-            }
-
-            function resetTilt(card) {
-                card.style.setProperty('--rx', '0deg');
-                card.style.setProperty('--ry', '0deg');
-            }
-
-            cards.forEach(card => {
-                card.addEventListener('touchstart', function (e) {
-                    const t = e.touches[0];
-                    applyTilt(card, t.clientX, t.clientY);
-                }, { passive: true });
-
-                card.addEventListener('touchmove', function (e) {
-                    const t = e.touches[0];
-                    applyTilt(card, t.clientX, t.clientY);
-                }, { passive: true });
-
-                card.addEventListener('touchend', function () { resetTilt(card); });
-                card.addEventListener('touchcancel', function () { resetTilt(card); });
-
-                card.addEventListener('mousemove', function (e) {
-                    applyTilt(card, e.clientX, e.clientY);
-                });
-                card.addEventListener('mouseleave', function () { resetTilt(card); });
-            });
-        })();
     </script>
 </body>
 </html>
