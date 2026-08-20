@@ -127,6 +127,34 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background-color: var(-
   const studentId = urlParams.get('id');
   let currentStudentData = null;
 
+  // دالة تحويل موحدة لكافة التواريخ إلى التقويم الهجري (أم القرى)
+  function convertToHijri(dateInput) {
+    if (!dateInput) return "تاريخ غير محدد";
+    try {
+      let d;
+      if (typeof dateInput === "object" && typeof dateInput.toDate === "function") {
+        d = dateInput.toDate();
+      } else if (dateInput instanceof Date) {
+        d = dateInput;
+      } else {
+        d = new Date(dateInput);
+      }
+      
+      if (isNaN(d.getTime())) return "تاريخ غير محدد";
+
+      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      return formatter.format(d);
+    } catch (e) {
+      return "تاريخ غير محدد";
+    }
+  }
+
   async function loadStudentHistory() {
     if (!studentId) return;
     try {
@@ -149,7 +177,9 @@ body { direction: rtl; font-family: 'Cairo', sans-serif; background-color: var(-
       listContainer.innerHTML = '';
       txs.reverse().forEach((tx, idx) => {
         let realIndex = txs.length - 1 - idx;
-        let dateStr = tx.date ? new Date(tx.date).toLocaleDateString('ar-EG') : 'تاريخ غير محدد';
+        
+        // استخدام دالة التحويل الهجري بدلاً من toLocaleDateString
+        let dateStr = convertToHijri(tx.date);
 
         let card = document.createElement('div');
         card.className = 'report-card';
