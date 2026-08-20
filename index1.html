@@ -171,7 +171,7 @@ html,body{
   box-shadow:0 5px 14px rgba(6,44,36,.16)
 }
 
-/* ===== تنبيه وضع التعديل ===== */
+/* ===== تنبيه وضع التعديل والتحميل ===== */
 .edit-mode-banner{
   max-width:800px;
   margin:12px auto 0;
@@ -577,7 +577,6 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
   .submit-wrap{padding:7px 9px calc(7px + env(safe-area-inset-bottom))}
   .submit-btn{padding:12px 10px;font-size:12.5px;border-radius:12px}
 }
-
 </style>
 </head>
 <body>
@@ -761,6 +760,37 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
     } catch (e) {
       console.error("خطأ في جلب الطلاب:", e);
       return [];
+    }
+  };
+
+  // دالة التعبئة التلقائية المضافة: جلب أحدث خطة قادمة وتحويلها إلى خطة حالية
+  window.fetchAndAutoFillLastNextPlan = async function(studentName) {
+    var trimmedName = studentName.trim();
+    if (!trimmedName) return;
+
+    try {
+      const q = query(collection(db, "students"), where("name", "==", trimmedName));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) return;
+
+      const studentData = querySnapshot.docs[0].data();
+      const txs = studentData.transactions || [];
+      if (txs.length === 0) return;
+
+      // ترتيب المعاملات للوصول للتقرير الأخير
+      txs.sort((a,b) => new Date(b.date) - new Date(a.date));
+      const lastTx = txs[0];
+      const academicData = lastTx.academicData;
+
+      if (!academicData) return;
+
+      // تحويل البيانات واستدعاء الدالة في النطاق العام
+      if (typeof window.applyAutoFillData === 'function') {
+        window.applyAutoFillData(academicData);
+      }
+    } catch (e) {
+      console.error("خطأ في جلب الخطة السابقة لتعبئتها تلقائياً:", e);
     }
   };
 
@@ -978,6 +1008,63 @@ function setupDirtyTrackingListeners() {
   if (ratingSel) ratingSel.addEventListener('change', markFormDirty);
 }
 
+// دالة تطبيق التعبئة التلقائية لنقل الخطة القادمة إلى الحالي
+window.applyAutoFillData = function(academicData) {
+  suppressDirtyTracking = true;
+  let hasFilledAny = false;
+
+  SECTIONS.forEach(sec => {
+    const secKey = sec.key;
+    const isQ = sec.isQ;
+    const secData = academicData[secKey];
+
+    if (secData && secData.nexts && secData.nexts.length > 0) {
+      const currentContainer = document.getElementById(secKey + '-current-list');
+      if (currentContainer) currentContainer.innerHTML = '';
+      counters[secKey + '_c'] = 0;
+
+      secData.nexts.forEach(plan => {
+        if (!isQ) {
+          if (plan.nextPlanSr) {
+            addCurrentSurah(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const srInp = document.getElementById('sr-' + secKey + '-c-' + idx);
+            const selInp = document.getElementById('sel-' + secKey + '-c-' + idx);
+            const fInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-f');
+            const tInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-t');
+
+            if (srInp) srInp.value = plan.nextPlanSr;
+            if (selInp && plan.nextPlanType) {
+              selInp.value = plan.nextPlanType;
+              toggleRange('rng-' + secKey + '-c-' + idx, plan.nextPlanType);
+            }
+            if (fInp && plan.nextPlanF) fInp.value = plan.nextPlanF;
+            if (tInp && plan.nextPlanT) tInp.value = plan.nextPlanT;
+            hasFilledAny = true;
+          }
+        } else {
+          if (plan.nextPlanF || plan.nextPlanT) {
+            addCurrentQuestion(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const qfInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qf');
+            const qtInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qt');
+
+            if (qfInp && plan.nextPlanF) qfInp.value = plan.nextPlanF;
+            if (qtInp && plan.nextPlanT) qtInp.value = plan.nextPlanT;
+            hasFilledAny = true;
+          }
+        }
+      });
+    }
+  });
+
+  if (hasFilledAny) {
+    customAlert("تم جلب وتعبئة خطة الحفظ والماضي القادمة تلقائياً لهذا الطالب من التقرير السابق! ✨", "تعبئة تلقائية ذكية ⚡");
+  }
+
+  setTimeout(function () { suppressDirtyTracking = false; }, 200);
+};
+
 function restoreFormFromPayload(payload) {
   const studentName = payload.studentName || payload.name;
   const rating = payload.generalRating || payload.rating;
@@ -1112,6 +1199,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // إضافة جلب وتعبئة التقرير السابق تلقائياً عند ترك خانة اسم الطالب
+  studentInp.addEventListener('blur', function() {
+    var studentName = this.value.trim();
+    if (studentName && !editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
+      window.fetchAndAutoFillLastNextPlan(studentName);
+    }
+  });
+
   document.addEventListener('click', function(e) {
     if (!e.target.closest('#inp-student') && !e.target.closest('#student-ac-drop')) {
       studentDrop.style.display = 'none';
@@ -1123,6 +1218,11 @@ function pickStudent(name) {
   document.getElementById('inp-student').value = name;
   document.getElementById('student-ac-drop').style.display = 'none';
   markFormDirty();
+
+  // جلب وتعبئة الخطة القادمة السابقة للطالب المختار تلقائياً
+  if (!editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
+    window.fetchAndAutoFillLastNextPlan(name);
+  }
 }
 
 async function addNewStudentAction() {
