@@ -329,16 +329,17 @@ function shareParentDashboard(studentId, studentName) {
   const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
   const dashUrl = `${window.location.origin}${basePath}student_dashboard.html?id=${encodeURIComponent(studentId)}`;
 
-  const msg = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير وتطور البطل (${studentName}) عبر لوحة المتابعة التفاعلية والرسوم البيانية من الرابط التالي:\n${dashUrl}`;
+  const msgText = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير وتطور البطل (${studentName}) عبر لوحة المتابعة التفاعلية والرسوم البيانية من الرابط التالي:`;
 
   if (navigator.share) {
     navigator.share({
       title: `لوحة متابعة البطل ${studentName}`,
-      text: msg,
+      text: msgText,
       url: dashUrl
     }).catch(() => {});
   } else {
-    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    const fullMsg = `${msgText}\n${dashUrl}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMsg)}`;
     window.open(waUrl, '_blank');
   }
 }
