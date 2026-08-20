@@ -98,26 +98,7 @@ body {
   background: rgba(202, 151, 70, 0.2);
 }
 
-.btn-danger-all-hdr { 
-  background: rgba(220, 38, 38, 0.15); 
-  color: #fca5a5; 
-  border: 1px solid rgba(220, 38, 38, 0.4); 
-  padding: 8px 18px; 
-  border-radius: 20px; 
-  font-weight: 700; 
-  cursor: pointer; 
-  font-family: 'Cairo', sans-serif; 
-  font-size: 13px; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center;
-  gap: 6px; 
-  transition: all 0.2s ease;
-}
-.btn-danger-all-hdr:hover { 
-  background: var(--red); 
-  color: #fff; 
-}
+/* تم حذف ستايل زر مسح الكل */
 
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
 
@@ -332,7 +313,7 @@ body {
   <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
   <div class="header-btns">
     <a href="index1.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
-    <button class="btn-danger-all-hdr" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
+    <!-- تم حذف زر مسح الكل من هنا -->
   </div>
 </div>
 
@@ -375,42 +356,25 @@ body {
     document.getElementById('c-alert-close').onclick=function(){m.remove();};
   }
 
-  const monthMap = {
-    "يناير":1, "فبراير":2, "مارس":3, "أبريل":4, "ابريل":4, "مايو":5, "يونيو":6,
-    "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
-  };
+  // تم حذف monthMap لأننا لن نحتاجها في التحويل العكسي للتاريخ الميلادي
 
+  // دالة محسنة لتحويل أي مدخل تاريخ إلى نص هجري فقط
   function convertToHijri(dateInput) {
     try {
-      let d = new Date();
-
-      if (dateInput && typeof dateInput === 'string') {
-        let str = dateInput.trim();
-        let matches = str.match(/\d+/g);
-
-        if (matches && matches.length >= 3) {
-          let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
-          let m = parseInt(matches[1]) - 1;
-          let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
-          d = new Date(y, m, day);
-        } else if (matches && matches.length >= 2) {
-          let day = parseInt(matches[0]);
-          let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7;
-          for (let mKey in monthMap) {
-            if (str.includes(mKey)) {
-              month = monthMap[mKey] - 1;
-              break;
-            }
-          }
-          d = new Date(year, month, day);
-        }
-      } else if (dateInput) {
-        d = new Date(dateInput);
+      let d;
+      // التحقق مما إذا كان المدخل كائن تاريخ أو نص
+      if (dateInput instanceof Date) {
+        d = dateInput;
+      } else if (dateInput && typeof dateInput === 'string') {
+        d = new Date(dateInput); // محاولة تحويل النص إلى تاريخ
+      } else {
+        d = new Date(); // افتراضي اليوم في حال عدم وجود مدخل صالح
       }
 
+      // التحقق من صحة التاريخ
       if (isNaN(d.getTime())) d = new Date();
 
+      // استخدام Intl.DateTimeFormat للحصول على التاريخ الهجري المنسق
       const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
         day: 'numeric',
         month: 'long',
@@ -419,6 +383,7 @@ body {
 
       return formatter.format(d);
     } catch (e) {
+      console.error("خطأ في تحويل التاريخ:", e);
       return 'التاريخ الهجري';
     }
   }
@@ -469,6 +434,7 @@ body {
 
       let lastSessionHtml = '';
       if (transactions.length && transactions[0] && transactions[0].date) {
+        // استخدام التاريخ الهجري هنا
         lastSessionHtml = '<span class="last-session-date"><i class="ti ti-calendar-event"></i> آخر حصة: ' + convertToHijri(transactions[0].date) + '</span>';
       }
 
@@ -476,13 +442,14 @@ body {
         reportsHtml = '<div style="padding: 10px; color: var(--sub); text-align: center; font-size: 13px;">لا توجد تقارير محفوظة لهذا الطالب.</div>';
       } else {
         transactions.forEach((tx, idx) => {
+          // استخدام التاريخ الهجري هنا في تفاصيل التقارير
           let hijriD = convertToHijri(tx.date);
           let stars = getRatingStars(tx.generalRating);
           
           reportsHtml += `
             <div class="report-item">
               <div class="report-info">
-                <h4>📅 التاريخ: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
+                <h4>📅 التاريخ الهجري: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
                 <p>${tx.desc || ''}</p>
               </div>
               <div class="report-btns">
@@ -558,18 +525,7 @@ body {
     }
   }
 
-  async function deleteAllStudentsConfirm() {
-    if (!confirm("🚨 تحذير خطير: هل تريد حقاً مسح جميع الطلاب وكل التقارير المحفوظة بالكامل؟")) return;
-    try {
-      const snapshot = await studentsCollection.get();
-      const batch = db.batch();
-      snapshot.docs.forEach(doc => batch.delete(doc.ref));
-      await batch.commit();
-      customAlert("✅ تم مسح قاعدة البيانات بالكامل.");
-    } catch(e) {
-      customAlert("حدث خطأ: " + e.message);
-    }
-  }
+  // تم حذف دالة deleteAllStudentsConfirm لأن الزر الخاص بها حُذف
 
   async function reprintAndShareReport(studentName, txIndex) {
     const student = allStudentsData.find(s => s.name === studentName);
@@ -585,7 +541,9 @@ body {
     }
 
     try {
-      let hijriDateStr = convertToHijri(tx.date);
+      // تمرير كائن التاريخ للدالة
+      let reportDateObj = tx.date ? new Date(tx.date) : new Date();
+      let hijriDateStr = convertToHijri(reportDateObj);
       var reportCanvas = await drawDetailedFollowUpReport(studentName, tx.generalRating, tx.academicData, hijriDateStr);
       showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + studentName + '.jpg', tx.academicData, studentName, tx.generalRating, student.id, txIndex);
     } catch(e) {
@@ -663,7 +621,7 @@ body {
     ctx.font = '900 48px Cairo, sans-serif';
     ctx.fillStyle = '#e6c280';
     ctx.textAlign = 'center';
-    ctx.fillText('بطاقة متابعة وتقييم', 540, 98);
+    ctx.fillText('بطاقة متابعة وتقييم المستوى التعليمي', 540, 98);
 
     ctx.font = '800 32px Cairo, sans-serif';
     ctx.fillStyle = '#ffffff';
@@ -672,7 +630,8 @@ body {
     ctx.font = '700 28px Cairo, sans-serif';
     ctx.fillStyle = '#ca9746';
     ctx.textAlign = 'center';
-    ctx.fillText('التاريخ: ' + hijriDateStr, 540, 188);
+    // تم تغيير النص هنا ليوضح أنه التاريخ الهجري
+    ctx.fillText('التاريخ الهجري: ' + hijriDateStr, 540, 188);
 
     var curY = 250;
     rr(ctx, 40, curY, canvas.width - 80, 150, 18);
