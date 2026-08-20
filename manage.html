@@ -98,26 +98,7 @@ body {
   background: rgba(202, 151, 70, 0.2);
 }
 
-.btn-danger-all-hdr { 
-  background: rgba(220, 38, 38, 0.15); 
-  color: #fca5a5; 
-  border: 1px solid rgba(220, 38, 38, 0.4); 
-  padding: 8px 18px; 
-  border-radius: 20px; 
-  font-weight: 700; 
-  cursor: pointer; 
-  font-family: 'Cairo', sans-serif; 
-  font-size: 13px; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center;
-  gap: 6px; 
-  transition: all 0.2s ease;
-}
-.btn-danger-all-hdr:hover { 
-  background: var(--red); 
-  color: #fff; 
-}
+
 
 .container { max-width: 680px; margin: 20px auto; padding: 0 14px; }
 
@@ -332,7 +313,7 @@ body {
   <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
   <div class="header-btns">
     <a href="index1.html" class="back-btn"><i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال</a>
-    <button class="btn-danger-all-hdr" onclick="deleteAllStudentsConfirm()"><i class="ti ti-trash"></i> مسح الكل</button>
+
   </div>
 </div>
 
@@ -381,49 +362,55 @@ body {
   };
 
   // تحويل التاريخ دائماً لصيغة التاريخ الهجري
-  function convertToHijri(dateInput) {
-    try {
-      let d = new Date();
+ function convertToHijri(dateInput) {
+  try {
+    let d;
 
-      if (dateInput && typeof dateInput === 'string') {
-        let str = dateInput.trim();
-        let matches = str.match(/\d+/g);
+    if (dateInput && typeof dateInput.toDate === 'function') {
+      d = dateInput.toDate();
+    } 
+    else if (dateInput instanceof Date) {
+      d = dateInput;
+    } 
+    else if (typeof dateInput === 'number') {
+      d = new Date(dateInput);
+    } 
+    else if (typeof dateInput === 'string') {
+      d = new Date(dateInput);
 
-        if (matches && matches.length >= 3) {
-          let y = parseInt(matches[0] > 1000 ? matches[0] : matches[2]);
-          let m = parseInt(matches[1]) - 1;
-          let day = parseInt(matches[0] > 1000 ? matches[2] : matches[0]);
-          d = new Date(y, m, day);
-        } else if (matches && matches.length >= 2) {
-          let day = parseInt(matches[0]);
-          let year = parseInt(matches[1] > 1000 ? matches[1] : 2026);
-          let month = 7;
-          for (let mKey in monthMap) {
-            if (str.includes(mKey)) {
-              month = monthMap[mKey] - 1;
-              break;
-            }
-          }
-          d = new Date(year, month, day);
+      if (isNaN(d.getTime())) {
+        const m = dateInput.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+
+        if (m) {
+          d = new Date(
+            Number(m[1]),
+            Number(m[2]) - 1,
+            Number(m[3])
+          );
         }
-      } else if (dateInput) {
-        d = new Date(dateInput);
       }
+    }
 
-      if (isNaN(d.getTime())) d = new Date();
+    if (!d || isNaN(d.getTime())) {
+      return 'غير محدد';
+    }
 
-      const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+    const formatter = new Intl.DateTimeFormat(
+      'ar-SA-u-ca-islamic-umalqura',
+      {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-      });
+      }
+    );
 
-      return formatter.format(d);
-    } catch (e) {
-      return 'التاريخ الهجري';
-    }
+    return formatter.format(d);
+
+  } catch (e) {
+    console.error('خطأ في تحويل التاريخ الهجري:', e);
+    return 'غير محدد';
   }
-
+}
   function getRatingStars(rating) {
     if (!rating || rating === 'undefined') return '⭐⭐⭐⭐⭐';
     if (rating.includes('ممتاز') || rating.includes('ممتازة')) return '⭐⭐⭐⭐⭐';
@@ -487,7 +474,7 @@ body {
                 <p>${tx.desc || ''}</p>
               </div>
               <div class="report-btns">
-                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.name}', ${idx})"><i class="ti ti-share"></i> عرض ومشاركة</button>
+                <button class="btn-action-sm btn-share-rep" onclick="reprintAndShareReport('${student.id}', ${idx})"><i class="ti ti-share"></i> عرض ومشاركة</button>
                 <button class="btn-action-sm btn-del-rep" onclick="deleteSingleReport('${student.id}', ${idx})"><i class="ti ti-trash"></i> مسح</button>
               </div>
             </div>
@@ -559,21 +546,16 @@ body {
     }
   }
 
-  async function deleteAllStudentsConfirm() {
-    if (!confirm("🚨 تحذير خطير: هل تريد حقاً مسح جميع الطلاب وكل التقارير المحفوظة بالكامل؟")) return;
-    try {
-      const snapshot = await studentsCollection.get();
-      const batch = db.batch();
-      snapshot.docs.forEach(doc => batch.delete(doc.ref));
-      await batch.commit();
-      customAlert("✅ تم مسح قاعدة البيانات بالكامل.");
-    } catch(e) {
-      customAlert("حدث خطأ: " + e.message);
-    }
+
+async function reprintAndShareReport(studentId, txIndex) {
+  const student = allStudentsData.find(s => s.id === studentId);
+
+  if (!student || !student.transactions || !student.transactions[txIndex]) {
+    customAlert("⚠️ لم يتم العثور على بيانات التقرير.");
+    return;
   }
 
-  async function reprintAndShareReport(studentName, txIndex) {
-    const student = allStudentsData.find(s => s.name === studentName);
+  const studentName = student.name;
     if (!student || !student.transactions || !student.transactions[txIndex]) {
       customAlert("⚠️ لم يتم العثور على بيانات التقرير.");
       return;
