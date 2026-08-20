@@ -904,57 +904,11 @@ var cachedStudentsList = [];
 
 var editContext = null;
 var originalReportDate = null;
-var formDirty = false;
-var autosaveTimer = null;
-var suppressDirtyTracking = true;
 
-function markFormDirty() {
-  if (suppressDirtyTracking) return;
-  formDirty = true;
-  scheduleAutosaveDraft();
-}
-
-function scheduleAutosaveDraft() {
-  if (autosaveTimer) clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(saveDraftNow, 800);
-}
-
-function saveDraftNow() {
-  try {
-    var nm = document.getElementById('inp-student').value.trim();
-    var rating = document.getElementById('inp-general-rating').value;
-    var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
-    var hasContent = nm || SECTIONS.some(sec => (data[sec.key].currents.length || data[sec.key].nexts.length));
-    if (!hasContent) { localStorage.removeItem('draft_report_temp'); return; }
-    var draft = { studentName: nm, generalRating: rating, academicData: data, savedAt: new Date().toISOString() };
-    localStorage.setItem('draft_report_temp', JSON.stringify(draft));
-  } catch(e) { console.error('تعذر حفظ المسودة المؤقتة:', e); }
-}
-
-function clearDraft() {
-  localStorage.removeItem('draft_report_temp');
-}
-
-window.addEventListener('beforeunload', function(e) {
-  if (formDirty) {
-    e.preventDefault();
-    e.returnValue = '';
-    return '';
-  }
-});
+// مسح أي مسودات سابقة وتنظيف التخزين المحلّي نهائياً
+localStorage.removeItem('draft_report_temp');
 
 document.addEventListener("DOMContentLoaded", function () {
-  var manageLink = document.getElementById('link-to-manage');
-  if (manageLink) {
-    manageLink.addEventListener('click', function(e) {
-      if (formDirty) {
-        if (!confirm('⚠️ لديك بيانات لم يتم حفظها بعد، سيتم فقدانها إذا غادرت الصفحة الآن. هل تريد المتابعة؟')) {
-          e.preventDefault();
-        }
-      }
-    });
-  }
-
   const savedDataStr = localStorage.getItem("edit_report_payload");
   if (savedDataStr) {
     try {
@@ -973,24 +927,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("خطأ في قراءة بيانات التقرير المحول:", e);
     }
     localStorage.removeItem("edit_report_payload");
-    clearDraft();
-  } else {
-    const draftStr = localStorage.getItem("draft_report_temp");
-    if (draftStr) {
-      try {
-        const draft = JSON.parse(draftStr);
-        restoreFormFromPayload(draft);
-        customAlert("تم استرجاع مسودة محفوظة مؤقتاً من آخر جلسة عمل، يمكنك المتابعة من حيث توقفت ✅", "استرجاع مسودة 📝");
-      } catch (e) {
-        console.error("خطأ في قراءة المسودة المؤقتة:", e);
-      }
-    }
   }
-
-  setTimeout(function () {
-    suppressDirtyTracking = false;
-    setupDirtyTrackingListeners();
-  }, 300);
 });
 
 function setEditModeUI(isEdit) {
@@ -1005,18 +942,7 @@ function setEditModeUI(isEdit) {
   }
 }
 
-function setupDirtyTrackingListeners() {
-  var body = document.getElementById('main-form-body');
-  if (body) {
-    body.addEventListener('input', markFormDirty);
-    body.addEventListener('change', markFormDirty);
-  }
-  var ratingSel = document.getElementById('inp-general-rating');
-  if (ratingSel) ratingSel.addEventListener('change', markFormDirty);
-}
-
 window.applyAutoFillData = function(academicData) {
-  suppressDirtyTracking = true;
   let hasFilledAny = false;
 
   SECTIONS.forEach(sec => {
@@ -1067,8 +993,6 @@ window.applyAutoFillData = function(academicData) {
   if (hasFilledAny) {
     customAlert("تم جلب وتعبئة خطة الحفظ والماضي القادمة تلقائياً لهذا الطالب من التقرير السابق! ✨", "تعبئة تلقائية ذكية ⚡");
   }
-
-  setTimeout(function () { suppressDirtyTracking = false; }, 200);
 };
 
 function restoreFormFromPayload(payload) {
@@ -1222,7 +1146,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function pickStudent(name) {
   document.getElementById('inp-student').value = name;
   document.getElementById('student-ac-drop').style.display = 'none';
-  markFormDirty();
 
   if (!editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
     window.fetchAndAutoFillLastNextPlan(name);
@@ -1253,8 +1176,6 @@ async function addNewStudentAction() {
 }
 
 function resetFormForNewStudent() {
-  suppressDirtyTracking = true;
-
   document.getElementById('inp-student').value = '';
   document.getElementById('inp-general-rating').selectedIndex = 0;
   
@@ -1276,11 +1197,7 @@ function resetFormForNewStudent() {
   editContext = null;
   originalReportDate = null;
   setEditModeUI(false);
-  formDirty = false;
-  clearDraft();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  setTimeout(function () { suppressDirtyTracking = false; }, 200);
 }
 
 function handleSystemChange() {
@@ -1304,7 +1221,6 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       var down = current - 1;
       inp.value = down < 0 ? 0 : down;
     }
-    markFormDirty();
   } else {
     if (action === 'plus') {
       openQuranModal(errorInpId, rowId, isQ);
@@ -1322,7 +1238,6 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       } else {
         inp.value = list.join('، ');
       }
-      markFormDirty();
     }
   }
 }
@@ -1494,7 +1409,6 @@ function toggleErrorState(num, isQ) {
   } else {
     inp.value = list.join('، ');
   }
-  markFormDirty();
 }
 
 function closeQuranModal() {
@@ -1576,8 +1490,8 @@ function setupAC(inp,drop){
     drop.style.display='block';
   });
 }
-function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';markFormDirty();}
-function delRow(id){document.getElementById(id).remove();markFormDirty();}
+function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
+function delRow(id){document.getElementById(id).remove();}
 function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range');}
 
 function collectSectionData(prefix, isQ) {
@@ -1974,9 +1888,6 @@ async function generateAllOutputs() {
       customAlert('تعذر حفظ التقرير في قاعدة البيانات، يرجى التأكد من الاتصال بالإنترنت والمحاولة مرة أخرى.', 'خطأ في الحفظ ❌');
       return;
     }
-
-    formDirty = false;
-    clearDraft();
 
     showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + nm + '.jpg', nm, genRating, data);
   } catch (e) { 
