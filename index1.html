@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مركز خادم القرآن - نظام المتابعة الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
 :root{
@@ -16,9 +16,9 @@
   --gold-light:#fff3a6;
   --cream:#f7f5ef;
   --white:#fff;
-  --border:#e5e7eb;
-  --text:#17221f;
-  --sub:#66736f;
+  --border:#cbd5e1;
+  --text:#0f172a;
+  --sub:#334155;
   --red:#d92d3a;
   --shadow:0 10px 30px rgba(6,44,36,.07);
 }
@@ -31,7 +31,8 @@ html,body{
     linear-gradient(180deg,#fbfaf6 0,#f4f2ec 100%);
   min-height:100vh;
   overflow-x:hidden;
-  color:var(--text)
+  color:var(--text);
+  font-weight:700;
 }
 
 /* ===== رأس الصفحة ===== */
@@ -41,7 +42,7 @@ html,body{
   background:linear-gradient(145deg,#05261f 0%,#083b2f 58%,#0a5140 100%);
   padding:22px 16px 24px;
   text-align:center;
-  border-bottom:3px solid var(--gold);
+  border-bottom:3.5px solid var(--gold);
   box-shadow:0 8px 28px rgba(4,32,26,.18)
 }
 .hdr:before{
@@ -68,21 +69,21 @@ html,body{
   background:rgba(212,175,55,.12);
   border:1.5px solid rgba(212,175,55,.85);
   box-shadow:0 8px 22px rgba(0,0,0,.18);
-  font-size:27px
+  font-size:28px
 }
 .hdr-title{
   position:relative;z-index:1;
   color:var(--gold-light);
   font-family:'Amiri',serif;
-  font-size:27px;
+  font-size:29px;
   line-height:1.2;
-  font-weight:700
+  font-weight:900
 }
 .hdr-subtitle{
   position:relative;z-index:1;
-  color:rgba(255,255,255,.82);
-  font-size:11px;
-  font-weight:600;
+  color:rgba(255,255,255,.95);
+  font-size:12px;
+  font-weight:800;
   margin-top:5px
 }
 
@@ -96,13 +97,13 @@ html,body{
   padding:0 14px
 }
 .nav-btn{
-  min-height:48px;
+  min-height:50px;
   background:#fff;
   color:var(--green-deep);
-  border:1px solid #e6d79f;
+  border:1.5px solid #d5c483;
   padding:9px 12px;
   border-radius:14px;
-  font-size:12px;
+  font-size:13px;
   font-weight:900;
   cursor:pointer;
   display:flex;
@@ -127,8 +128,8 @@ html,body{
   max-width:800px;
   margin:12px auto 0;
   padding:13px 14px;
-  background:rgba(255,255,255,.94);
-  border:1px solid var(--border);
+  background:rgba(255,255,255,.96);
+  border:1.5px solid var(--border);
   border-radius:18px;
   box-shadow:var(--shadow)
 }
@@ -138,7 +139,7 @@ html,body{
   justify-content:center;
   gap:5px;
   color:var(--green-deep);
-  font-size:12px;
+  font-size:13px;
   font-weight:900;
   margin-bottom:9px
 }
@@ -149,19 +150,19 @@ html,body{
 }
 .system-radio-btn{display:none}
 .system-radio-label{
-  min-height:43px;
-  background:#f6f8f7;
-  color:#63706c;
+  min-height:45px;
+  background:#f1f5f3;
+  color:#475569;
   padding:8px 7px;
-  font-size:11px;
-  font-weight:800;
+  font-size:12px;
+  font-weight:900;
   border-radius:12px;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  border:1px solid #e2e8e5;
+  border:1.5px solid #cbd5e1;
   transition:.2s
 }
 .system-radio-btn:checked+.system-radio-label{
@@ -181,12 +182,12 @@ html,body{
 .edit-mode-banner.active{display:block}
 .edit-mode-banner-inner{
   background:linear-gradient(135deg,#fff9e7,#f8edca);
-  border:1px solid #e2c95e;
+  border:1.5px solid #e2c95e;
   border-radius:14px;
-  padding:10px 13px;
-  font-size:11px;
+  padding:11px 14px;
+  font-size:12px;
   font-weight:900;
-  color:#6b4f05;
+  color:#543e03;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -204,17 +205,17 @@ html,body{
   position:relative;
   background:#fff;
   border-radius:18px;
-  margin-bottom:13px;
-  border:1px solid #e6e9e7;
-  box-shadow:0 7px 22px rgba(6,44,36,.055);
+  margin-bottom:14px;
+  border:1.5px solid #d1d5db;
+  box-shadow:0 7px 22px rgba(6,44,36,.06);
   overflow:visible
 }
 .sec-head{
   position:relative;
   background:linear-gradient(135deg,#07382d,#0b4a3a);
-  padding:12px 14px;
-  border-radius:17px 17px 0 0;
-  border-bottom:1px solid rgba(212,175,55,.28)
+  padding:13px 15px;
+  border-radius:16px 16px 0 0;
+  border-bottom:1.5px solid rgba(212,175,55,.4)
 }
 .sec-head:after{
   content:"";
@@ -222,73 +223,79 @@ html,body{
   bottom:-1px;
   right:14px;
   left:14px;
-  height:2px;
+  height:2.5px;
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:.65
+  opacity:.8
 }
 .sec-head-title{
   color:var(--gold-light);
-  font-size:13px;
+  font-size:14px;
   font-weight:900;
   display:flex;
   align-items:center;
   gap:8px
 }
 .sec-head-title i{
-  width:30px;height:30px;
+  width:32px;height:32px;
   display:flex;align-items:center;justify-content:center;
   border-radius:10px;
-  background:rgba(212,175,55,.12);
-  border:1px solid rgba(212,175,55,.3);
-  font-size:16px
+  background:rgba(212,175,55,.15);
+  border:1.5px solid rgba(212,175,55,.4);
+  font-size:18px
 }
-.sec-body{padding:13px}
+.sec-body{padding:14px}
 .sub-sec-title{
-  font-size:11px;
+  font-size:12px;
   font-weight:900;
   color:var(--green-mid);
-  margin:4px 0 9px;
+  margin:6px 0 10px;
   display:flex;
   align-items:center;
-  gap:5px
+  gap:6px
 }
 .flbl{
-  font-size:10px;
+  font-size:11px;
   color:var(--sub);
-  margin-bottom:5px;
-  font-weight:800
+  margin-bottom:6px;
+  font-weight:900
 }
-.frow{margin-bottom:9px;position:relative}
+.frow{margin-bottom:10px;position:relative}
 .inp{
   width:100%;
-  padding:11px 12px;
-  border:1.5px solid #dfe5e2;
-  border-radius:11px;
-  font-size:12px;
+  padding:12px 13px;
+  border:2px solid #cbd5e1;
+  border-radius:12px;
+  font-size:13px;
   font-family:'Cairo',sans-serif;
   color:var(--text);
-  background:#fbfcfb;
+  background:#f8faf9;
   outline:none;
+  font-weight:800;
   transition:.2s
+}
+.inp::placeholder{
+  color:#94a3b8;
+  font-weight:700;
 }
 .inp:focus{
   border-color:var(--green-light);
   background:#fff;
-  box-shadow:0 0 0 3px rgba(22,134,106,.08)
+  box-shadow:0 0 0 3.5px rgba(22,134,106,.12)
 }
-.inp.num{text-align:center;font-size:13px;font-weight:800}
+.inp.num{text-align:center;font-size:14px;font-weight:900}
 .sel-wrap{position:relative}
 .sel-wrap:after{
   content:'▾';
   position:absolute;
-  left:12px;
+  left:14px;
   top:50%;
   transform:translateY(-50%);
   color:var(--green-mid);
-  font-size:14px;
+  font-size:16px;
+  font-weight:900;
   pointer-events:none
 }
-select.inp{padding-left:28px;cursor:pointer;appearance:none}
+select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
 .ac-wrap{position:relative}
 .ac-drop{
   display:none;
@@ -296,8 +303,8 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
   top:calc(100% + 4px);
   right:0;left:0;
   background:#fff;
-  border:1.5px solid var(--green-mid);
-  border-radius:11px;
+  border:2px solid var(--green-mid);
+  border-radius:12px;
   overflow:hidden;
   z-index:1000;
   box-shadow:0 12px 30px rgba(0,0,0,.16);
@@ -305,8 +312,9 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
   overflow-y:auto
 }
 .ac-item{
-  padding:10px 12px;
-  font-size:12px;
+  padding:11px 14px;
+  font-size:13px;
+  font-weight:800;
   font-family:'Cairo',sans-serif;
   cursor:pointer;
   border-bottom:1px solid #eef3f0
@@ -315,52 +323,53 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 
 .surah-row,.q-row{
   display:grid;
-  grid-template-columns:1fr 125px;
-  gap:8px;
-  margin-bottom:9px;
+  grid-template-columns:1fr 130px;
+  gap:9px;
+  margin-bottom:10px;
   background:#f8faf8;
-  border-radius:13px;
-  padding:10px;
-  border:1px solid #e5ebe8;
+  border-radius:14px;
+  padding:11px;
+  border:1.5px solid #d1d5db;
   position:relative
 }
 .q-row{grid-template-columns:1fr 1fr}
 .del-btn{
   position:absolute;
-  left:-6px;top:-6px;
-  width:23px;height:23px;
+  left:-7px;top:-7px;
+  width:25px;height:25px;
   border-radius:50%;
   background:#fff;
-  border:1.5px solid var(--red);
+  border:2px solid var(--red);
   color:var(--red);
-  font-size:12px;
+  font-size:13px;
+  font-weight:900;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 3px 8px rgba(0,0,0,.08);
+  box-shadow:0 3px 8px rgba(0,0,0,.12);
   z-index:10
 }
 .range-row{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px dashed #d9e0dd
+  gap:9px;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1.5px dashed #cbd5e1
 }
 .range-row.hidden{display:none}
 
 .add-btn{
   width:100%;
-  padding:9px 10px;
-  margin-top:3px;
-  margin-bottom:11px;
-  border:1.5px dashed #75ad9d;
-  border-radius:11px;
-  background:#f5fbf8;
+  padding:10px 12px;
+  margin-top:4px;
+  margin-bottom:12px;
+  border:2px dashed #16866a;
+  border-radius:12px;
+  background:#f0fdf9;
   color:var(--green-light);
-  font-size:11px;
+  font-size:12px;
   font-weight:900;
   cursor:pointer;
   display:flex;
@@ -381,42 +390,42 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 }
 .add-btn.next-add:hover{background:#c98912;color:#fff}
 .divider{
-  margin:12px 0;
-  border-top:1px dashed #d9dfdc
+  margin:14px 0;
+  border-top:1.5px dashed #cbd5e1
 }
 
 .counter-box{
   display:flex;
   align-items:center;
-  border:1.5px solid #dfe5e2;
-  border-radius:10px;
+  border:2px solid #cbd5e1;
+  border-radius:11px;
   background:#fff;
   overflow:hidden;
-  height:43px
+  height:45px
 }
 .counter-btn{
-  width:35px;
+  width:38px;
   height:100%;
   border:none;
-  font-size:17px;
+  font-size:18px;
   font-weight:900;
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center
 }
-.counter-btn.plus{background:#fff0f1;color:var(--red);border-right:1px solid #e6e8e8}
-.counter-btn.minus{background:#f1f3f3;color:#69736f;border-left:1px solid #e6e8e8}
+.counter-btn.plus{background:#fee2e2;color:var(--red);border-right:1.5px solid #cbd5e1}
+.counter-btn.minus{background:#f1f5f9;color:#475569;border-left:1.5px solid #cbd5e1}
 .counter-box .error-inp{
   flex:1;
   border:none!important;
   background:transparent!important;
   height:100%;
-  font-size:10px;
+  font-size:11px;
   font-weight:900;
   text-align:center;
   width:100%;
-  padding:0 3px;
+  padding:0 4px;
   outline:none;
   color:#9a1d1d;
   overflow:hidden;
@@ -428,19 +437,19 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 .submit-wrap{
   position:fixed;
   bottom:0;right:0;left:0;
-  background:rgba(250,249,245,.94);
+  background:rgba(250,249,245,.95);
   backdrop-filter:blur(12px);
-  padding:9px 12px calc(9px + env(safe-area-inset-bottom));
-  border-top:1px solid #e3e6e4;
-  box-shadow:0 -8px 28px rgba(0,0,0,.08);
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  border-top:1.5px solid #cbd5e1;
+  box-shadow:0 -8px 28px rgba(0,0,0,.1);
   z-index:200
 }
 .submit-grid{max-width:800px;margin:0 auto}
 .submit-btn{
   width:100%;
-  padding:13px 12px;
-  border-radius:14px;
-  font-size:14px;
+  padding:14px 14px;
+  border-radius:15px;
+  font-size:15px;
   font-weight:900;
   cursor:pointer;
   text-align:center;
@@ -455,7 +464,7 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 .btn-combined{
   background:linear-gradient(135deg,#07533f,#062c24);
   color:var(--gold-light);
-  border:1.5px solid var(--gold);
+  border:2px solid var(--gold);
   box-shadow:0 7px 20px rgba(6,44,36,.22)
 }
 .btn-combined:hover{transform:translateY(-1px)}
@@ -464,7 +473,7 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 /* ===== المصحف التفاعلي ===== */
 .quran-modal{
   display:none;position:fixed;inset:0;
-  background:rgba(2,19,15,.78);
+  background:rgba(2,19,15,.82);
   z-index:99999;
   align-items:center;
   justify-content:center;
@@ -472,39 +481,39 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 }
 .quran-box{
   background:#fff;
-  border-radius:19px;
+  border-radius:20px;
   width:100%;
   max-width:600px;
   max-height:92vh;
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  border:2px solid var(--gold);
+  border:2.5px solid var(--gold);
   box-shadow:0 18px 45px rgba(0,0,0,.4)
 }
 .quran-header{
   background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
   color:var(--gold-light);
-  padding:13px;
+  padding:14px;
   text-align:center;
   font-weight:900;
-  font-size:14px;
+  font-size:15px;
   border-bottom:2px solid var(--gold)
 }
 .quran-grid{
-  padding:12px;
+  padding:13px;
   overflow-y:auto;
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:10px;
   background:#fbfaf6;
   flex:1
 }
 .ayah-text-card{
   background:#fff;
-  border:1px solid #e2decb;
-  border-radius:12px;
-  padding:12px;
+  border:1.5px solid #d1d5db;
+  border-radius:13px;
+  padding:13px;
   cursor:pointer;
   transition:.15s;
   text-align:right;
@@ -516,18 +525,18 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
   display:inline-block;
   background:var(--green-deep);
   color:var(--gold-light);
-  width:29px;height:29px;
+  width:30px;height:30px;
   border-radius:50%;
   text-align:center;
-  line-height:29px;
-  font-size:11px;
+  line-height:30px;
+  font-size:12px;
   font-weight:900;
   margin-left:9px;
   vertical-align:middle
 }
 .ayah-text-card .ayah-content{
   font-family:'Amiri',serif;
-  font-size:22px;
+  font-size:23px;
   font-weight:700;
   color:var(--green-deep);
   vertical-align:middle
@@ -536,46 +545,46 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
 .ayah-text-card.active .ayah-content{color:#b91c1c}
 .ayah-text-card.active .ayah-num-badge{background:var(--red);color:#fff}
 .quran-footer{
-  padding:11px;background:#fff;border-top:1px solid var(--border);text-align:center
+  padding:12px;background:#fff;border-top:1.5px solid var(--border);text-align:center
 }
 .quran-close{
-  padding:10px 34px;
+  padding:11px 36px;
   background:var(--green-deep);
-  color:#fff;border:1px solid var(--gold);
-  border-radius:11px;
-  font-size:13px;font-weight:900;
+  color:#fff;border:1.5px solid var(--gold);
+  border-radius:12px;
+  font-size:14px;font-weight:900;
   cursor:pointer;font-family:'Cairo',sans-serif
 }
 
 @media(max-width:600px){
   .hdr{padding:18px 12px 20px}
-  .hdr-emblem{width:52px;height:52px;font-size:24px;margin-bottom:6px}
-  .hdr-title{font-size:24px}
-  .hdr-subtitle{font-size:10px}
+  .hdr-emblem{width:52px;height:52px;font-size:25px;margin-bottom:6px}
+  .hdr-title{font-size:25px}
+  .hdr-subtitle{font-size:11px}
   .top-nav-btns{gap:8px;padding:0 10px;margin-top:11px}
-  .nav-btn{min-height:44px;padding:7px 7px;font-size:10.5px;border-radius:12px}
-  .system-selector-wrap{margin:10px 10px 0;padding:10px;border-radius:15px}
-  .system-label{font-size:10.5px;margin-bottom:7px}
-  .system-radio-label{min-height:39px;font-size:9.5px}
+  .nav-btn{min-height:46px;padding:7px 7px;font-size:11.5px;border-radius:12px}
+  .system-selector-wrap{margin:10px 10px 0;padding:11px;border-radius:15px}
+  .system-label{font-size:11.5px;margin-bottom:7px}
+  .system-radio-label{min-height:41px;font-size:10.5px}
   .edit-mode-banner{margin-top:9px;padding:0 10px}
-  .edit-mode-banner-inner{font-size:9.5px;padding:8px 10px}
+  .edit-mode-banner-inner{font-size:10.5px;padding:9px 11px}
   .body{padding:11px 9px 105px}
-  .section{border-radius:15px;margin-bottom:10px}
-  .sec-head{padding:10px 11px;border-radius:14px 14px 0 0}
-  .sec-head-title{font-size:11px}
-  .sec-head-title i{width:27px;height:27px;font-size:14px}
-  .sec-body{padding:10px}
-  .sub-sec-title{font-size:9.5px}
-  .flbl{font-size:9px}
-  .inp{padding:9px 10px;font-size:11px}
-  .surah-row,.q-row{grid-template-columns:1fr 112px;gap:7px;padding:8px}
+  .section{border-radius:15px;margin-bottom:11px}
+  .sec-head{padding:11px 12px;border-radius:13px 13px 0 0}
+  .sec-head-title{font-size:12px}
+  .sec-head-title i{width:29px;height:29px;font-size:15px}
+  .sec-body{padding:11px}
+  .sub-sec-title{font-size:10.5px}
+  .flbl{font-size:10px}
+  .inp{padding:10px 11px;font-size:12px}
+  .surah-row,.q-row{grid-template-columns:1fr 116px;gap:7px;padding:9px}
   .q-row{grid-template-columns:1fr 1fr}
-  .counter-box{height:39px}
-  .counter-btn{width:31px;font-size:15px}
-  .counter-box .error-inp{font-size:9px}
-  .add-btn{font-size:10px;padding:8px}
-  .submit-wrap{padding:7px 9px calc(7px + env(safe-area-inset-bottom))}
-  .submit-btn{padding:12px 10px;font-size:12.5px;border-radius:12px}
+  .counter-box{height:41px}
+  .counter-btn{width:33px;font-size:16px}
+  .counter-box .error-inp{font-size:10px}
+  .add-btn{font-size:11px;padding:9px}
+  .submit-wrap{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+  .submit-btn{padding:13px 11px;font-size:13.5px;border-radius:13px}
 }
 
 </style>
@@ -691,7 +700,7 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
     <div class="sec-body">
       <div class="sub-sec-title">💡 منهج السراج الحالي:</div>
       <div id="sj-current-list"></div>
-      <button class="add-btn" onclick="addCurrentSurah('sj-current-list','sj')"><i class="ti ti-plus"></i> إضافة سورة للسراج الحالي</button>
+      <button class="add-btn" onclick="addCurrentSurah('sj-current-list','sj')"><i class="ti ti-plus"></i> إضافة سورة بالسراج الحالي</button>
       <div class="divider"></div>
       <div class="sub-sec-title">🎯 الخطة القادمة للسراج:</div>
       <div id="sj-next-list"></div>
@@ -761,6 +770,34 @@ select.inp{padding-left:28px;cursor:pointer;appearance:none}
     } catch (e) {
       console.error("خطأ في جلب الطلاب:", e);
       return [];
+    }
+  };
+
+  window.fetchAndAutoFillLastNextPlan = async function(studentName) {
+    var trimmedName = studentName.trim();
+    if (!trimmedName) return;
+
+    try {
+      const q = query(collection(db, "students"), where("name", "==", trimmedName));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) return;
+
+      const studentData = querySnapshot.docs[0].data();
+      const txs = studentData.transactions || [];
+      if (txs.length === 0) return;
+
+      txs.sort((a,b) => new Date(b.date) - new Date(a.date));
+      const lastTx = txs[0];
+      const academicData = lastTx.academicData;
+
+      if (!academicData) return;
+
+      if (typeof window.applyAutoFillData === 'function') {
+        window.applyAutoFillData(academicData);
+      }
+    } catch (e) {
+      console.error("خطأ في جلب الخطة السابقة لتعبئتها تلقائياً:", e);
     }
   };
 
@@ -978,6 +1015,62 @@ function setupDirtyTrackingListeners() {
   if (ratingSel) ratingSel.addEventListener('change', markFormDirty);
 }
 
+window.applyAutoFillData = function(academicData) {
+  suppressDirtyTracking = true;
+  let hasFilledAny = false;
+
+  SECTIONS.forEach(sec => {
+    const secKey = sec.key;
+    const isQ = sec.isQ;
+    const secData = academicData[secKey];
+
+    if (secData && secData.nexts && secData.nexts.length > 0) {
+      const currentContainer = document.getElementById(secKey + '-current-list');
+      if (currentContainer) currentContainer.innerHTML = '';
+      counters[secKey + '_c'] = 0;
+
+      secData.nexts.forEach(plan => {
+        if (!isQ) {
+          if (plan.nextPlanSr) {
+            addCurrentSurah(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const srInp = document.getElementById('sr-' + secKey + '-c-' + idx);
+            const selInp = document.getElementById('sel-' + secKey + '-c-' + idx);
+            const fInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-f');
+            const tInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-t');
+
+            if (srInp) srInp.value = plan.nextPlanSr;
+            if (selInp && plan.nextPlanType) {
+              selInp.value = plan.nextPlanType;
+              toggleRange('rng-' + secKey + '-c-' + idx, plan.nextPlanType);
+            }
+            if (fInp && plan.nextPlanF) fInp.value = plan.nextPlanF;
+            if (tInp && plan.nextPlanT) tInp.value = plan.nextPlanT;
+            hasFilledAny = true;
+          }
+        } else {
+          if (plan.nextPlanF || plan.nextPlanT) {
+            addCurrentQuestion(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const qfInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qf');
+            const qtInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-qt');
+
+            if (qfInp && plan.nextPlanF) qfInp.value = plan.nextPlanF;
+            if (qtInp && plan.nextPlanT) qtInp.value = plan.nextPlanT;
+            hasFilledAny = true;
+          }
+        }
+      });
+    }
+  });
+
+  if (hasFilledAny) {
+    customAlert("تم جلب وتعبئة خطة الحفظ والماضي القادمة تلقائياً لهذا الطالب من التقرير السابق! ✨", "تعبئة تلقائية ذكية ⚡");
+  }
+
+  setTimeout(function () { suppressDirtyTracking = false; }, 200);
+};
+
 function restoreFormFromPayload(payload) {
   const studentName = payload.studentName || payload.name;
   const rating = payload.generalRating || payload.rating;
@@ -1079,9 +1172,9 @@ function customAlert(msg, title) {
   var m = document.createElement('div');
   m.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4, 32, 26, 0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);';
   m.innerHTML = '<div style="background:#fff;padding:28px 24px;border-radius:20px;text-align:center;max-width:420px;width:100%;box-shadow:0 12px 35px rgba(0,0,0,0.3); border: 3px solid var(--gold); position:relative; overflow:hidden;">'+
-    '<div style="background:var(--green-mid); color:var(--gold-light); margin:-28px -24px 20px -24px; padding:16px; font-weight:800; font-size:18px; border-bottom:2px solid var(--gold);">'+title+'</div>'+
-    '<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:24px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
-    '<button id="c-alert-close" style="padding:12px 36px;background:linear-gradient(135deg, #114e3b, var(--green-deep));color:var(--gold-light);border:1px solid var(--gold);border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.15);">حسناً</button>'+
+    '<div style="background:var(--green-mid); color:var(--gold-light); margin:-28px -24px 20px -24px; padding:16px; font-weight:900; font-size:18px; border-bottom:2px solid var(--gold);">'+title+'</div>'+
+    '<div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:24px;font-family:Cairo,sans-serif;line-height:1.6;">'+msg+'</div>'+
+    '<button id="c-alert-close" style="padding:12px 36px;background:linear-gradient(135deg, #114e3b, var(--green-deep));color:var(--gold-light);border:1px solid var(--gold);border-radius:12px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.15);">حسناً</button>'+
     '</div>';
   document.body.appendChild(m);
   document.getElementById('c-alert-close').onclick = function(){ m.remove(); };
@@ -1112,6 +1205,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  studentInp.addEventListener('blur', function() {
+    var studentName = this.value.trim();
+    if (studentName && !editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
+      window.fetchAndAutoFillLastNextPlan(studentName);
+    }
+  });
+
   document.addEventListener('click', function(e) {
     if (!e.target.closest('#inp-student') && !e.target.closest('#student-ac-drop')) {
       studentDrop.style.display = 'none';
@@ -1123,6 +1223,10 @@ function pickStudent(name) {
   document.getElementById('inp-student').value = name;
   document.getElementById('student-ac-drop').style.display = 'none';
   markFormDirty();
+
+  if (!editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
+    window.fetchAndAutoFillLastNextPlan(name);
+  }
 }
 
 async function addNewStudentAction() {
@@ -1783,7 +1887,7 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
 
   var savedNote = document.createElement('div');
   savedNote.innerHTML = '✅ تم حفظ التقرير في قاعدة البيانات بنجاح مع الاحتفاظ بالتاريخ المعتمد';
-  savedNote.style.cssText = 'color:#bbf7d0;font-weight:800;font-size:14px;margin-bottom:14px;font-family:Cairo,sans-serif;';
+  savedNote.style.cssText = 'color:#bbf7d0;font-weight:900;font-size:15px;margin-bottom:14px;font-family:Cairo,sans-serif;';
   modal.appendChild(savedNote);
 
   var btnWrap = document.createElement('div');
@@ -1791,13 +1895,13 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   
   var closeBtn = document.createElement('button');
   closeBtn.innerText = 'إغلاق';
-  closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;';
+  closeBtn.style.cssText = 'padding:12px 28px;background:#e5e7eb;color:#111827;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif;';
   closeBtn.onclick = function(){ modal.remove(); finishAfterSaveAndShare(); };
   btnWrap.appendChild(closeBtn);
 
   var shareBtn = document.createElement('button');
   shareBtn.innerHTML = '🔗 مشاركة التقرير مباشر';
-  shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
+  shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
     try {
