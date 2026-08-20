@@ -235,7 +235,7 @@ button,input{font-family:Cairo,sans-serif}
         </div>
         <div class="stat">
           <strong id="excellentReports">0</strong>
-          <span>تقييم ممتاز</span>
+          <span>تقييم بارك الله فيك</span>
         </div>
         <div class="stat">
           <strong id="lastRating">—</strong>
@@ -248,7 +248,7 @@ button,input{font-family:Cairo,sans-serif}
       <input id="reportSearch" class="search" placeholder="🔎 ابحث داخل سجلات الطالب...">
       <select id="ratingFilter" class="select">
         <option value="">كل التقييمات</option>
-        <option value="ممتاز">ممتاز</option>
+        <option value="بارك الله فيك">بارك الله فيك</option>
         <option value="جيد جداً">جيد جداً</option>
         <option value="جيد">جيد</option>
         <option value="مقبول">مقبول</option>
@@ -323,8 +323,8 @@ function convertToHijri(dateInput){
 }
 
 function ratingStars(r){
-  r=r||"ممتاز";
-  if(r.includes("ممتاز")) return "⭐⭐⭐⭐⭐";
+  r=r||"بارك الله فيك";
+  if(r.includes("بارك الله فيك")) return "⭐⭐⭐⭐⭐";
   if(r.includes("جيد جداً")||r.includes("جيد جدا")) return "⭐⭐⭐⭐";
   if(r.includes("جيد")) return "⭐⭐⭐";
   if(r.includes("مقبول")) return "⭐⭐";
@@ -391,7 +391,7 @@ async function loadStudent(){
     document.getElementById("totalReports").textContent=allTransactions.length;
 
     const excellent=allTransactions.filter(x=>
-      (x.generalRating||"").includes("ممتاز")
+      (x.generalRating||"").includes("بارك الله فيك")
     ).length;
 
     document.getElementById("excellentReports").textContent=excellent;
@@ -401,7 +401,7 @@ async function loadStudent(){
         "آخر حصة: "+convertToHijri(allTransactions[0].date);
 
       document.getElementById("lastRating").textContent=
-        allTransactions[0].generalRating||"ممتاز";
+        allTransactions[0].generalRating||"بارك الله فيك";
     }
 
     renderReports(allTransactions);
@@ -426,7 +426,7 @@ function renderReports(list){
   list.forEach((tx)=>{
     const realIndex=allTransactions.indexOf(tx);
     const hijri=convertToHijri(tx.date);
-    const rating=tx.generalRating||"ممتاز";
+    const rating=tx.generalRating||"بارك الله فيك";
     const chips=summarizeAcademic(tx.academicData);
 
     const item=document.createElement("article");
@@ -502,7 +502,7 @@ function restoreAsNew(index){
     sourceTxIndex:index,
 
     studentName:student.name||"",
-    generalRating:tx.generalRating||"ممتاز",
+    generalRating:tx.generalRating||"بارك الله فيك",
 
     // نسخ كامل بيانات السجل السابق
     academicData:academicData
@@ -535,7 +535,7 @@ function editReport(index){
     docId:student.id,
     txIndex:index,
     studentName:student.name||"",
-    generalRating:tx.generalRating||"ممتاز",
+    generalRating:tx.generalRating||"بارك الله فيك",
     academicData:JSON.parse(JSON.stringify(tx.academicData))
   };
 
@@ -553,7 +553,7 @@ function showReport(index){
 
   drawReport(
     student.name||"",
-    tx.generalRating||"ممتاز",
+    tx.generalRating||"بارك الله فيك",
     tx.academicData,
     convertToHijri(tx.date)
   ).then(canvas=>{
@@ -590,7 +590,7 @@ async function deleteReport(index){
     document.getElementById("totalReports").textContent=allTransactions.length;
 
     const excellent=allTransactions.filter(x=>
-      (x.generalRating||"").includes("ممتاز")
+      (x.generalRating||"").includes("بارك الله فيك")
     ).length;
 
     document.getElementById("excellentReports").textContent=excellent;
@@ -726,7 +726,7 @@ async function drawReport(studentName,generalRating,data,hijriDateStr){
   ctx.fillStyle="#083e32";
   ctx.fillText("البطل: "+studentName,540,y+60);
 
-  const r=generalRating||"ممتاز";
+  const r=generalRating||"بارك الله فيك";
   ctx.font="800 32px Cairo";
   ctx.fillStyle="#ca9746";
   ctx.fillText("التقييم العام: "+r+" "+ratingStars(r),540,y+115);
