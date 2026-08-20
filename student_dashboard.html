@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>لوحة متابعة البطل - مركز خادم القرآن</title>
+<title>لوحة متابعة البطل - نظام المتابعة الذكي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 
@@ -14,6 +14,7 @@
 :root{
   --green-deep:#04201a;
   --green-mid:#0b3d2e;
+  --green-card:#0a3527;
   --green-light:#14795c;
   --gold:#d4af37;
   --gold-light:#fef08a;
@@ -42,7 +43,7 @@ body{
 .hdr h1{font-size:22px;font-weight:900;color:var(--gold-light);margin-bottom:4px}
 .hdr-subtitle{font-size:12px;color:rgba(255,255,255,.82);font-weight:700}
 
-.container{max-width:800px;margin:18px auto;padding:0 14px}
+.container{max-width:720px;margin:18px auto;padding:0 14px}
 
 .sec-card{
   background:#fff;border-radius:20px;border:1px solid var(--line);
@@ -54,39 +55,44 @@ body{
   display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--gold)
 }
 
-/* معرض صور التقارير */
-.reports-gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-  gap:14px;padding:16px
+/* بطاقات التقارير والصور */
+.reports-list{padding:14px}
+.report-item-card{
+  background:#f9fbf9;border:1.5px solid var(--line);border-radius:16px;
+  padding:14px;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,0,0,.03)
 }
-.report-img-card{
-  background:#f8faf8;border:1.5px solid var(--line);border-radius:14px;
-  overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.04);
-  transition:.25s;display:flex;flex-direction:column;align-items:center;
-  cursor:pointer
+.report-item-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--line)
 }
-.report-img-card:hover{
-  transform:translateY(-3px);border-color:var(--gold);
-  box-shadow:0 8px 20px rgba(0,0,0,.1)
-}
-.report-img-preview{
-  width:100%;height:280px;object-fit:cover;object-position:top;
-  border-bottom:1px solid var(--line)
-}
-.report-img-info{
-  padding:10px 12px;width:100%;text-align:center;
-  background:#fff
-}
-.report-date-txt{
-  font-size:11px;font-weight:800;color:var(--green-mid);margin-bottom:4px
-}
-.report-badge-rating{
-  display:inline-block;font-size:10px;font-weight:800;padding:3px 10px;
-  border-radius:12px;background:#fdf8e6;color:#725304;border:1px solid var(--gold)
+.report-date{font-size:12px;font-weight:800;color:var(--green-mid)}
+.report-rating-badge{
+  font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;
+  background:#fdf8e6;color:#725304;border:1px solid var(--gold)
 }
 
-/* نافذة عرض الصورة المكبرة */
+/* أزرار وعرض الصور داخل كروت التقارير */
+.btn-view-image{
+  width:100%;padding:10px;margin-top:8px;
+  background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
+  color:var(--gold-light);border:1px solid var(--gold);
+  border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:'Cairo',sans-serif;transition:.2s
+}
+.btn-view-image:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+
+/* المعاينة المباشرة للصورة */
+.report-img-container{
+  margin-top:10px;display:none;text-align:center
+}
+.report-img-container.active{display:block}
+.report-img-preview{
+  width:100%;max-height:480px;object-fit:contain;border-radius:14px;
+  border:2px solid var(--gold);box-shadow:0 5px 15px rgba(0,0,0,.1)
+}
+
+/* النافذة المكبرة للصور */
 .lightbox-modal{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);
   z-index:99999;align-items:center;justify-content:center;
@@ -94,7 +100,7 @@ body{
 }
 .lightbox-modal.active{display:flex}
 .lightbox-img{
-  max-width:96%;max-height:78vh;border-radius:14px;
+  max-width:96%;max-height:80vh;border-radius:14px;
   box-shadow:0 10px 35px rgba(0,0,0,.5);margin-bottom:14px;
   border:2px solid var(--gold)
 }
@@ -109,10 +115,7 @@ body{
 .btn-close{background:#e5e7eb;color:#111827}
 .btn-download{background:var(--green-mid);color:var(--gold-light);border:1px solid var(--gold)}
 
-.loading-box{
-  text-align:center;padding:40px;color:var(--sub);font-weight:800;font-size:14px
-}
-.empty-box{
+.empty-box,.loading-box{
   text-align:center;padding:35px;color:var(--sub);font-weight:800;font-size:13px
 }
 </style>
@@ -126,14 +129,14 @@ body{
 </header>
 
 <div class="container">
-  <!-- قسم معرض جميع صور التقارير -->
+  <!-- قسم صور التقارير وسجل المتابعة -->
   <div class="sec-card">
     <div class="sec-header">
       <i class="ti ti-photo"></i>
-      <span>جميع صور تقارير المتابعة والمعاينات 📜</span>
+      <span>جميع صور تقارير المتابعة والمعاينات 🖼️</span>
     </div>
-    <div id="reports-gallery-container" class="reports-gallery">
-      <div class="loading-box">جاري تجهيز وتوليد صور التقارير... ⏳</div>
+    <div id="reports-list-container" class="reports-list">
+      <div class="loading-box">جاري تحميل تقارير المتابعة... ⏳</div>
     </div>
   </div>
 </div>
@@ -149,6 +152,7 @@ body{
   </div>
 </div>
 
+<!-- محرك إعداد ورسم الصور المعتمد -->
 <script>
 const firebaseConfig={
   apiKey:"AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
@@ -163,7 +167,6 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-// ثوابت ومحرك الرسم للتقارير
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5' };
 var SECTIONS = [
@@ -199,7 +202,7 @@ function wrapText(ctx, text, maxWidth){
 }
 
 function drawRoyalPill(ctx, text, anchorX, y, opts){
-  opts = opts || {}; ctx.save(); ctx.font = opts.font || '800 24px Cairo, sans-serif';
+  opts = opts || {}; ctx.save(); ctx.font = opts.font || '800 24px sans-serif';
   var padX = opts.padX != null ? opts.padX : 28; var h = opts.h || 48;
   var w = ctx.measureText(text).width + padX * 2.5;
   var left = opts.align === 'left' ? anchorX : (opts.align === 'center' ? anchorX - w/2 : anchorX - w);
@@ -215,33 +218,25 @@ function drawRoyalPill(ctx, text, anchorX, y, opts){
   ctx.restore(); return w;
 }
 
-function ratingStyle(rating){
-  if(!rating) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
-  if(rating.indexOf('بارك الله فيك')>-1 || rating.indexOf('👑')>-1) return {bg:'#fdf8e6', color:'#725304', border:'#d4af37'};
-  if(rating.indexOf('جيد جدا')>-1) return {bg:'#fefce8', color:'#854d0e', border:'#eab308'};
-  if(rating.indexOf('جيد')>-1) return {bg:'#f0fdf4', color:'#166534', border:'#22c55e'};
-  return {bg:'#fef2f2', color:'#991b1b', border:'#ef4444'};
-}
-
 function renderItemCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var leftX = x + CARD_PAD_X; var cy = y + CARD_PAD_Y;
   var mainTxt, subTxt = null;
   if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
   else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
   
-  ctx.font = '900 38px Cairo, sans-serif'; 
+  ctx.font = 'bold 36px sans-serif'; 
   var titleLines = wrapText(ctx, mainTxt, innerW - 100);
   var titleBlockH = titleLines.length * 48;
 
   if(draw){
     titleLines.forEach(function(line, i){
-      ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+      ctx.font = 'bold 36px sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
       ctx.fillText(line, rightX, cy + 32 + i*48);
     });
   }
   if(subTxt){
     var tagY = cy + Math.max(0, titleBlockH/2 - 25);
-    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 24px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:48, padX:18, align:'left', draw:draw});
+    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'24px sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:48, padX:18, align:'left', draw:draw});
   }
   cy += titleBlockH + 20;
 
@@ -250,13 +245,12 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
     var errTxt = (item.errors === '0' || !item.errors) ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors);
     var errPillH = 54;
     if(hasRating){
-      var rs = ratingStyle(item.rating);
-      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 26px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:errPillH, padX:22, align:'right', draw:draw});
+      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'bold 24px sans-serif', bg:'#fdf8e6', color:'#725304', border:PALETTE.gold, borderWidth:2, h:errPillH, padX:22, align:'right', draw:draw});
     }
     if(hasErrors){
       var isZero = (item.errors === '0' || !item.errors);
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      drawRoyalPill(ctx, errTxt, leftX, cy, {font:'800 22px Cairo, sans-serif', bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:errPillH, padX:22, align:'left', draw:draw});
+      drawRoyalPill(ctx, errTxt, leftX, cy, {font:'bold 22px sans-serif', bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:errPillH, padX:22, align:'left', draw:draw});
     }
     cy += errPillH + 20;
   }
@@ -266,15 +260,15 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
 function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var cy = y + CARD_PAD_Y;
   var planTxt = item.nextPlanSr ? (item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً')) : ('من سؤال ' + item.nextPlanF + ' إلى ' + item.nextPlanT);
-  ctx.font = '700 28px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
+  ctx.font = '28px sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
   var boxH = 22 + 38 + planLines.length*40 + 22;
   var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
   if(draw){
     rr(ctx, boxX, cy - 10, boxW, boxH, 16); ctx.fillStyle = '#fbf3d9'; ctx.fill();
-    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right';
+    ctx.font = 'bold 26px sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right';
     ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 28);
     planLines.forEach(function(line, i){
-      ctx.font = '700 28px Cairo, sans-serif'; ctx.fillStyle = '#5a4400';
+      ctx.font = '28px sans-serif'; ctx.fillStyle = '#5a4400';
       ctx.fillText(line, rightX - 20, cy + 28 + 38 + 20 + i*40);
     });
   }
@@ -284,17 +278,17 @@ function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
 function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
   var y = 0;
   if(draw){ ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, C_W, canvasH); }
-  var hH = 232;
+  var hH = 220;
   if(draw){
     var hG = ctx.createLinearGradient(0, 0, 0, hH); hG.addColorStop(0, PALETTE.deep); hG.addColorStop(1, PALETTE.mid);
-    ctx.fillRect(0, 0, C_W, hH);
-    ctx.font = '900 52px Amiri, serif'; ctx.fillStyle = PALETTE.goldLt; ctx.textAlign = 'center'; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 100);
+    ctx.fillStyle = hG; ctx.fillRect(0, 0, C_W, hH);
+    ctx.font = 'bold 48px sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.textAlign = 'center'; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 110);
   }
   y = hH;
   var bh = 90; var bw = C_W - PAD*2; var bx = PAD;
   if(draw){
     rr(ctx, bx, y, bw, bh, 30); ctx.fillStyle = PALETTE.gold; ctx.fill();
-    ctx.font = '900 40px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.fillText('بطلنا: ' + nm + ' 🏆', C_W/2, y + 56);
+    ctx.font = 'bold 38px sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.fillText('بطلنا: ' + nm + ' 🏆', C_W/2, y + 56);
   }
   y += bh + 40;
 
@@ -302,7 +296,7 @@ function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
   SECTIONS.forEach(function(sec){
     var sData = data[sec.key]; if(!sData || (!sData.currents.length && !sData.nexts.length)) return;
     if(draw){
-      ctx.font = '900 36px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.fillText(sec.icon + ' ' + sec.title, cardX + cardW, y + 30);
+      ctx.font = 'bold 34px sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.fillText(sec.icon + ' ' + sec.title, cardX + cardW, y + 30);
     }
     y += 50;
     sData.currents.forEach(function(item){
@@ -325,28 +319,32 @@ function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
   return y + 60;
 }
 
-async function drawReportCanvas(studentName, academicData, reportDate){
-  var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
-  var totalH = layoutReport(tmp.getContext('2d'), 0, studentName, academicData, reportDate, false);
-  var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 600);
-  layoutReport(canvas.getContext('2d'), canvas.height, studentName, academicData, reportDate, true);
-  return canvas.toDataURL('image/jpeg', 0.88);
+function generateReportDataUrl(studentName, academicData, reportDate){
+  try{
+    var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
+    var totalH = layoutReport(tmp.getContext('2d'), 0, studentName, academicData, reportDate, false);
+    var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 600);
+    layoutReport(canvas.getContext('2d'), canvas.height, studentName, academicData, reportDate, true);
+    return canvas.toDataURL('image/jpeg', 0.88);
+  }catch(e){
+    return null;
+  }
 }
 
-// جلب وتوليد صور جميع تقارير الطالب
-async function loadStudentReportsGallery(){
+// تحميل وتجهيز السجل
+async function loadStudentDashboard(){
   const urlParams = new URLSearchParams(window.location.search);
   const studentId = urlParams.get('id');
 
   if(!studentId){
-    document.getElementById("reports-gallery-container").innerHTML = '<div class="empty-box">❌ لم يتم تحديد الطالب.</div>';
+    document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ لم يتم تحديد الطالب.</div>';
     return;
   }
 
   try{
     const docSnap = await db.collection("students").doc(studentId).get();
     if(!docSnap.exists()){
-      document.getElementById("reports-gallery-container").innerHTML = '<div class="empty-box">❌ بيانات الطالب غير موجودة.</div>';
+      document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ بيانات الطالب غير موجودة.</div>';
       return;
     }
 
@@ -356,41 +354,70 @@ async function loadStudentReportsGallery(){
 
     const txs = sData.transactions || [];
     if(txs.length === 0){
-      document.getElementById("reports-gallery-container").innerHTML = '<div class="empty-box">لا توجد تقارير مسجلة لهذا الطالب حتى الآن.</div>';
+      document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">لا توجد تقارير مسجلة لهذا الطالب حتى الآن.</div>';
       return;
     }
 
-    // ترتيب التقارير من الأحدث للأقدم
     txs.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-    const container = document.getElementById("reports-gallery-container");
+    const container = document.getElementById("reports-list-container");
     container.innerHTML = "";
 
-    for(let i = 0; i < txs.length; i++){
-      const tx = txs[i];
+    txs.forEach((tx, idx) => {
       const hijriDate = convertToHijri(tx.date);
-      const rating = tx.generalRating || "مستوى مميز";
-
-      // رسم وتوليد صورة التقرير
-      const dataUrl = await drawReportCanvas(studentName, tx.academicData || {}, tx.date);
+      const rating = tx.generalRating || "بارك الله فيك 👑";
 
       const card = document.createElement("div");
-      card.className = "report-img-card";
-      card.onclick = () => openLightbox(dataUrl, `تقرير_${studentName}_${i+1}.jpg`);
+      card.className = "report-item-card";
 
       card.innerHTML = `
-        <img src="${dataUrl}" alt="تقرير ${hijriDate}" class="report-img-preview" loading="lazy">
-        <div class="report-img-info">
-          <div class="report-date-txt">📅 ${hijriDate}</div>
-          <span class="report-badge-rating">${rating}</span>
+        <div class="report-item-head">
+          <span class="report-date">📅 حصة يوم: ${hijriDate}</span>
+          <span class="report-rating-badge">${rating}</span>
         </div>
+        <button class="btn-view-image" onclick="toggleReportImage(${idx}, '${escapeQuotes(studentName)}', ${JSON.stringify(tx.academicData || {}).replace(/"/g, '&quot;')}, '${tx.date}')">
+          <i class="ti ti-photo"></i> عرض صورة التقرير كاملة 🖼️
+        </button>
+        <div class="report-img-container" id="img-container-${idx}"></div>
       `;
       container.appendChild(card);
-    }
+    });
 
   }catch(e){
-    console.error(e);
-    document.getElementById("reports-gallery-container").innerHTML = '<div class="empty-box">❌ حدث خطأ أثناء تحميل الصور.</div>';
+    document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ حدث خطأ أثناء تحميل التقارير.</div>';
+  }
+}
+
+function escapeQuotes(str) {
+  return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function toggleReportImage(index, studentName, academicData, reportDate){
+  const box = document.getElementById(`img-container-${index}`);
+  if(!box) return;
+
+  if(box.classList.contains("active")){
+    box.classList.remove("active");
+    return;
+  }
+
+  if(!box.innerHTML.trim()){
+    box.innerHTML = '<div style="padding:15px;font-size:12px;font-weight:800;color:var(--green-mid)">جاري تجهيز الصورة... ⏳</div>';
+    box.classList.add("active");
+
+    setTimeout(() => {
+      const dataUrl = generateReportDataUrl(studentName, academicData, reportDate);
+      if(dataUrl){
+        box.innerHTML = `
+          <img src="${dataUrl}" class="report-img-preview" alt="تقرير المتابعة" onclick="openLightbox('${dataUrl}', 'تقرير_${studentName}_${index+1}.jpg')">
+          <div style="font-size:10px;color:var(--sub);margin-top:5px;font-weight:700">اضغط على الصورة لتكبيرها أو تنزيلها 🔍</div>
+        `;
+      } else {
+        box.innerHTML = '<div style="padding:10px;font-size:12px;color:var(--red);font-weight:800">تعذر توليد صورة التقرير.</div>';
+      }
+    }, 100);
+  } else {
+    box.classList.add("active");
   }
 }
 
@@ -406,7 +433,7 @@ function closeLightbox(){
   document.getElementById("lightbox-modal").classList.remove("active");
 }
 
-document.addEventListener("DOMContentLoaded", loadStudentReportsGallery);
+document.addEventListener("DOMContentLoaded", loadStudentDashboard);
 </script>
 </body>
 </html>
