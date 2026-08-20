@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملف الطالب - مركز خادم القرآن الكريم</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<style>
+:root{
+  --green-deep:#04201a;
+  --green-mid:#0b3d2e;
+  --green-card:#0a3527;
+  --green-light:#14795c;
+  --gold:#d4af37;
+  --gold-light:#fef08a;
+  --cream:#fdfbf5;
+  --white:#fff;
+  --text:#111827;
+  --sub:#64748b;
+  --line:#e5e7eb;
+  --red:#dc2626;
+  --blue:#2563eb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  direction:rtl;
+  font-family:Cairo,sans-serif;
+  background:linear-gradient(180deg,#f7f8f6 0%,#fdfbf5 100%);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:40px;
+}
+button,input{font-family:Cairo,sans-serif}
+
+.top{
+  background:linear-gradient(145deg,#04201a,#0b3d2e 65%,#0f604a);
+  color:#fff;
+  border-bottom:4px solid var(--gold);
+  box-shadow:0 5px 20px rgba(0,0,0,.13);
+}
+.top-inner{max-width:760px;margin:auto;padding:18px 15px 20px}
+.back{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--gold-light);text-decoration:none;
+  border:1px solid rgba(212,175,55,.7);
+  border-radius:22px;padding:7px 13px;font-size:12px;font-weight:800;
+}
+.brand{text-align:center;margin-top:8px}
+.brand .icon{
+  width:48px;height:48px;margin:auto;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(212,175,55,.12);
+  border:1px solid rgba(212,175,55,.55);
+  color:var(--gold-light);font-size:24px;
+}
+.brand h1{font-size:21px;font-weight:900;color:var(--gold-light);margin-top:8px}
+.brand p{font-size:11px;color:rgba(255,255,255,.75);margin-top:3px}
+
+.container{max-width:760px;margin:16px auto;padding:0 13px}
+
+.profile{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 6px 22px rgba(4,32,26,.07);overflow:hidden;
+}
+.profile-main{
+  padding:20px 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.avatar{
+  width:65px;height:65px;flex:0 0 65px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#083e32,#0f8063);
+  color:var(--gold-light);font-size:34px;
+  box-shadow:0 5px 14px rgba(4,62,48,.18);
+}
+.profile-info{min-width:0;flex:1}
+.profile-name{font-size:22px;font-weight:900;color:var(--green-deep);line-height:1.4}
+.profile-sub{font-size:11px;color:var(--sub);margin-top:4px}
+.profile-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.btn{
+  border:0;border-radius:10px;padding:8px 12px;cursor:pointer;
+  font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+}
+.btn-new{background:#0f8063;color:#fff}
+.btn-back{background:#f1f5f9;color:#334155}
+.btn-new:hover{background:#096b52}
+
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);background:#fbfcfb;
+}
+.stat{text-align:center;padding:12px 6px;border-left:1px solid var(--line)}
+.stat:last-child{border-left:0}
+.stat strong{display:block;font-size:18px;font-weight:900;color:var(--green-mid)}
+.stat span{font-size:10px;color:var(--sub);font-weight:700}
+
+.toolbar{
+  margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:10px;display:flex;gap:8px;align-items:center;box-shadow:0 3px 12px rgba(0,0,0,.035);
+}
+.search{
+  flex:1;min-width:0;border:1px solid var(--line);background:#fafaf9;
+  border-radius:10px;padding:9px 12px;outline:none;font-size:12px;
+}
+.search:focus{border-color:#0f8063;background:#fff}
+.select{
+  border:1px solid var(--line);background:#fafaf9;border-radius:10px;
+  padding:9px 7px;outline:none;font-size:11px;color:#334155;
+}
+
+.section-title{
+  margin:18px 2px 10px;display:flex;align-items:center;justify-content:space-between;
+}
+.section-title h2{font-size:16px;color:var(--green-deep);font-weight:900}
+.section-title span{font-size:10px;color:var(--sub)}
+
+.timeline{position:relative;padding-right:25px}
+.timeline:before{
+  content:"";position:absolute;right:8px;top:7px;bottom:7px;width:2px;
+  background:linear-gradient(#d4af37,#d8e1dd,#d4af37);
+}
+.item{
+  position:relative;background:#fff;border:1px solid var(--line);
+  border-radius:16px;margin-bottom:11px;padding:13px 14px;
+  box-shadow:0 3px 10px rgba(0,0,0,.035);
+}
+.item:before{
+  content:"";position:absolute;right:-22px;top:18px;
+  width:12px;height:12px;border-radius:50%;
+  background:#0f8063;border:3px solid #fff;box-shadow:0 0 0 2px #d4af37;
+}
+.item-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.date{font-size:13px;font-weight:900;color:var(--green-deep)}
+.rating{
+  font-size:10px;font-weight:800;padding:4px 8px;border-radius:14px;
+  background:#fff8df;color:#a16207;border:1px solid #f1d78b;white-space:nowrap;
+}
+.desc{font-size:11px;color:var(--sub);line-height:1.8;margin-top:7px}
+.quick-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{
+  font-size:10px;font-weight:700;padding:4px 8px;border-radius:9px;
+  background:#f1f7f5;color:#16624e;border:1px solid #d8ebe4;
+}
+.actions{
+  display:flex;gap:7px;flex-wrap:wrap;margin-top:11px;
+  padding-top:9px;border-top:1px dashed #e5e7eb;
+}
+.btn-view{background:#0b6650;color:#fff}
+.btn-restore{background:#fff7df;color:#8a5a00;border:1px solid #ead18c}
+.btn-edit{background:#f1f5f9;color:#334155}
+.btn-delete{background:#fff;color:var(--red);border:1px solid #fecaca}
+
+.empty{
+  background:#fff;border:1px dashed #cbd5e1;border-radius:16px;
+  padding:35px 20px;text-align:center;color:var(--sub);font-size:13px;font-weight:700;
+}
+
+.loading{text-align:center;padding:50px 20px;color:var(--sub);font-weight:700}
+
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;padding:15px;
+}
+.modal img{max-width:96%;max-height:75vh;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:13px}
+.modal-actions button{padding:9px 14px;border:0;border-radius:10px;font-weight:800;cursor:pointer;font-family:Cairo}
+
+@media(max-width:600px){
+  .profile-main{padding:15px}
+  .avatar{width:55px;height:55px;flex-basis:55px;font-size:28px}
+  .profile-name{font-size:18px}
+  .toolbar{flex-wrap:wrap}
+  .search{flex-basis:100%}
+  .select{flex:1}
+  .timeline{padding-right:22px}
+  .timeline:before{right:7px}
+  .item:before{right:-20px}
+  .item-head{display:block}
+  .rating{display:inline-flex;margin-top:7px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a href="manage.html" class="back">
+      <i class="ti ti-arrow-right"></i> سجل الطلاب
+    </a>
+
+    <div class="brand">
+      <div class="icon"><i class="ti ti-user"></i></div>
+      <h1>ملف الطالب</h1>
+      <p>مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</p>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div id="loading" class="loading">جاري تحميل ملف الطالب... ⏳</div>
+
+  <div id="profileArea" style="display:none">
+
+    <section class="profile">
+      <div class="profile-main">
+        <div class="avatar"><i class="ti ti-user"></i></div>
+
+        <div class="profile-info">
+          <div class="profile-name" id="studentName">—</div>
+          <div class="profile-sub" id="lastSession">آخر حصة: —</div>
+
+          <div class="profile-actions">
+            <button class="btn btn-new" onclick="createNewFromLatest()">
+              <i class="ti ti-plus"></i> متابعة جديدة
+            </button>
+            <a class="btn btn-back" href="manage.html">
+              <i class="ti ti-arrow-right"></i> رجوع
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong id="totalReports">0</strong>
+          <span>إجمالي التقارير</span>
+        </div>
+        <div class="stat">
+          <strong id="excellentReports">0</strong>
+          <span>تقييم ممتاز</span>
+        </div>
+        <div class="stat">
+          <strong id="lastRating">—</strong>
+          <span>آخر تقييم</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <input id="reportSearch" class="search" placeholder="🔎 ابحث داخل سجلات الطالب...">
+      <select id="ratingFilter" class="select">
+        <option value="">كل التقييمات</option>
+        <option value="ممتاز">ممتاز</option>
+        <option value="جيد جداً">جيد جداً</option>
+        <option value="جيد">جيد</option>
+        <option value="مقبول">مقبول</option>
+      </select>
+    </div>
+
+    <div class="section-title">
+      <h2>📚 سجل المتابعة</h2>
+      <span id="shownCount">0 سجل</span>
+    </div>
+
+    <div id="timeline" class="timeline"></div>
+
+  </div>
+</main>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+  authDomain: "ahmedelzaiady.firebaseapp.com",
+  projectId: "ahmedelzaiady",
+  storageBucket: "ahmedelzaiady.firebasestorage.app",
+  messagingSenderId: "300306825071",
+  appId: "1:300306825071:web:0426ddde56280fa090329a",
+  measurementId: "G-WE04GK5XZZ"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const studentsCollection = db.collection("students");
+
+const params = new URLSearchParams(location.search);
+const studentId = params.get("id");
+
+let student = null;
+let allTransactions = [];
+let currentModal = null;
+
+const monthMap = {
+  "يناير":1,"فبراير":2,"مارس":3,"أبريل":4,"ابريل":4,"مايو":5,"يونيو":6,
+  "يوليو":7,"أغسطس":8,"اغسطس":8,"سبتمبر":9,"أكتوبر":10,"اكتوبر":10,
+  "نوفمبر":11,"ديسمبر":12
+};
+
+function alertBox(msg){
+  const d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px";
+  d.innerHTML=`<div style="background:#fff;border-radius:16px;padding:23px;max-width:380px;width:100%;text-align:center;font-family:Cairo;box-shadow:0 12px 35px rgba(0,0,0,.25)">
+    <div style="font-weight:800;line-height:1.8;margin-bottom:16px">${msg}</div>
+    <button style="border:0;background:#0b3d2e;color:#fff;padding:9px 30px;border-radius:9px;font-family:Cairo;font-weight:800;cursor:pointer">حسناً</button>
+  </div>`;
+  document.body.appendChild(d);
+  d.querySelector("button").onclick=()=>d.remove();
+}
+
+function convertToHijri(dateInput){
+  try{
+    let d;
+    if(dateInput && typeof dateInput==="object" && typeof dateInput.toDate==="function"){
+      d=dateInput.toDate();
+    }else{
+      d=new Date(dateInput || Date.now());
+    }
+    if(isNaN(d.getTime())) d=new Date();
+
+    return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-uma",{
+      day:"numeric",month:"long",year:"numeric"
+    }).format(d);
+  }catch(e){
+    return "التاريخ غير متاح";
+  }
+}
+
+function ratingStars(r){
+  r=r||"ممتاز";
+  if(r.includes("ممتاز")) return "⭐⭐⭐⭐⭐";
+  if(r.includes("جيد جداً")||r.includes("جيد جدا")) return "⭐⭐⭐⭐";
+  if(r.includes("جيد")) return "⭐⭐⭐";
+  if(r.includes("مقبول")) return "⭐⭐";
+  return "⭐";
+}
+
+function transactionDate(tx){
+  if(!tx || !tx.date) return 0;
+  const d=new Date(tx.date);
+  return isNaN(d.getTime()) ? 0 : d.getTime();
+}
+
+function summarizeAcademic(data){
+  const chips=[];
+  if(!data) return chips;
+
+  const sectionTitles={
+    ns:"السور الجديدة",
+    ps:"ماضي السور",
+    mq:"المذكرة الجديدة",
+    pm:"ماضي المذكرة",
+    sj:"السراج",
+    hd:"الحديث والأذكار"
+  };
+
+  Object.keys(sectionTitles).forEach(k=>{
+    const s=data[k];
+    if(!s) return;
+
+    const countCurr=s.currents?.length||0;
+    const countNext=s.nexts?.length||0;
+
+    if(countCurr||countNext){
+      chips.push(`${sectionTitles[k]}: ${countCurr} سجل${countNext ? ` + ${countNext} خطة` : ""}`);
+    }
+  });
+
+  return chips;
+}
+
+async function loadStudent(){
+  if(!studentId){
+    document.getElementById("loading").innerHTML="⚠️ لم يتم تحديد الطالب.";
+    return;
+  }
+
+  try{
+    const snap=await studentsCollection.doc(studentId).get();
+
+    if(!snap.exists){
+      document.getElementById("loading").innerHTML="⚠️ الطالب غير موجود.";
+      return;
+    }
+
+    student={id:snap.id,...snap.data()};
+    allTransactions=Array.isArray(student.transactions)
+      ? [...student.transactions].sort((a,b)=>transactionDate(b)-transactionDate(a))
+      : [];
+
+    document.getElementById("loading").style.display="none";
+    document.getElementById("profileArea").style.display="block";
+
+    document.getElementById("studentName").textContent=student.name||"طالب بدون اسم";
+    document.getElementById("totalReports").textContent=allTransactions.length;
+
+    const excellent=allTransactions.filter(x=>
+      (x.generalRating||"").includes("ممتاز")
+    ).length;
+
+    document.getElementById("excellentReports").textContent=excellent;
+
+    if(allTransactions[0]){
+      document.getElementById("lastSession").textContent=
+        "آخر حصة: "+convertToHijri(allTransactions[0].date);
+
+      document.getElementById("lastRating").textContent=
+        allTransactions[0].generalRating||"ممتاز";
+    }
+
+    renderReports(allTransactions);
+  }catch(e){
+    console.error(e);
+    document.getElementById("loading").innerHTML=
+      "❌ حدث خطأ أثناء تحميل الطالب.<br><small>"+e.message+"</small>";
+  }
+}
+
+function renderReports(list){
+  const timeline=document.getElementById("timeline");
+  document.getElementById("shownCount").textContent=list.length+" سجل";
+
+  if(!list.length){
+    timeline.innerHTML=`<div class="empty">لا توجد سجلات مطابقة للبحث.</div>`;
+    return;
+  }
+
+  timeline.innerHTML="";
+
+  list.forEach((tx)=>{
+    const realIndex=allTransactions.indexOf(tx);
+    const hijri=convertToHijri(tx.date);
+    const rating=tx.generalRating||"ممتاز";
+    const chips=summarizeAcademic(tx.academicData);
+
+    const item=document.createElement("article");
+    item.className="item";
+
+    item.innerHTML=`
+      <div class="item-head">
+        <div class="date">📅 ${hijri}</div>
+        <div class="rating">${rating} ${ratingStars(rating)}</div>
+      </div>
+
+      ${tx.desc ? `<div class="desc">${escapeHtml(tx.desc)}</div>` : ""}
+
+      ${chips.length ? `
+        <div class="quick-grid">
+          ${chips.map(x=>`<span class="chip">${escapeHtml(x)}</span>`).join("")}
+        </div>
+      ` : ""}
+
+      <div class="actions">
+        <button class="btn btn-view" onclick="showReport(${realIndex})">
+          <i class="ti ti-eye"></i> عرض التقرير
+        </button>
+
+        <button class="btn btn-restore" onclick="restoreAsNew(${realIndex})">
+          <i class="ti ti-copy"></i> استرجاع كسجل جديد
+        </button>
+
+        <button class="btn btn-edit" onclick="editReport(${realIndex})">
+          <i class="ti ti-edit"></i> تعديل
+        </button>
+
+        <button class="btn btn-delete" onclick="deleteReport(${realIndex})">
+          <i class="ti ti-trash"></i> مسح
+        </button>
+      </div>
+    `;
+
+    timeline.appendChild(item);
+  });
+}
+
+function escapeHtml(v){
+  return String(v??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+/*
+  أهم نقطة في النظام:
+  "استرجاع كسجل جديد" ينسخ التقرير بالكامل، وليس الخطة القادمة فقط.
+  ثم index1.html يستقبل mode=new ويستطيع المستخدم تغيير ما يريد.
+*/
+function restoreAsNew(index){
+  const tx=allTransactions[index];
+
+  if(!tx){
+    alertBox("⚠️ لم يتم العثور على السجل.");
+    return;
+  }
+
+  const academicData=tx.academicData
+    ? JSON.parse(JSON.stringify(tx.academicData))
+    : {};
+
+  const payload={
+    mode:"new",
+    source:"student-profile",
+    sourceStudentId:student.id,
+    sourceTxIndex:index,
+
+    studentName:student.name||"",
+    generalRating:tx.generalRating||"ممتاز",
+
+    // نسخ كامل بيانات السجل السابق
+    academicData:academicData
+  };
+
+  localStorage.setItem("edit_report_payload",JSON.stringify(payload));
+
+  location.href="index1.html";
+}
+
+function createNewFromLatest(){
+  if(!allTransactions.length){
+    location.href="index1.html";
+    return;
+  }
+
+  restoreAsNew(0);
+}
+
+function editReport(index){
+  const tx=allTransactions[index];
+
+  if(!tx || !tx.academicData){
+    alertBox("⚠️ هذا السجل لا يحتوي على البيانات التفصيلية المطلوبة للتعديل.");
+    return;
+  }
+
+  const payload={
+    mode:"edit",
+    docId:student.id,
+    txIndex:index,
+    studentName:student.name||"",
+    generalRating:tx.generalRating||"ممتاز",
+    academicData:JSON.parse(JSON.stringify(tx.academicData))
+  };
+
+  localStorage.setItem("edit_report_payload",JSON.stringify(payload));
+  location.href="index1.html";
+}
+
+function showReport(index){
+  const tx=allTransactions[index];
+
+  if(!tx || !tx.academicData){
+    alertBox("⚠️ هذا التقرير لا يحتوي على بيانات تفصيلية لعرضه.");
+    return;
+  }
+
+  drawReport(
+    student.name||"",
+    tx.generalRating||"ممتاز",
+    tx.academicData,
+    convertToHijri(tx.date)
+  ).then(canvas=>{
+    openImageModal(canvas,index);
+  }).catch(e=>{
+    alertBox("حدث خطأ أثناء إنشاء التقرير: "+e.message);
+  });
+}
+
+async function deleteReport(index){
+  if(!confirm("هل أنت متأكد من مسح هذا التقرير نهائياً؟")) return;
+
+  try{
+    const txs=[...(student.transactions||[])];
+
+    // allTransactions مرتبة تنازلياً؛ نحتاج السجل نفسه لا الاعتماد على ترتيب Firestore.
+    const target=allTransactions[index];
+    const originalIndex=txs.indexOf(target);
+
+    if(originalIndex<0){
+      alertBox("⚠️ لم يتم العثور على السجل.");
+      return;
+    }
+
+    txs.splice(originalIndex,1);
+
+    await studentsCollection.doc(student.id).update({
+      transactions:txs
+    });
+
+    student.transactions=txs;
+    allTransactions=txs.slice().sort((a,b)=>transactionDate(b)-transactionDate(a));
+
+    document.getElementById("totalReports").textContent=allTransactions.length;
+
+    const excellent=allTransactions.filter(x=>
+      (x.generalRating||"").includes("ممتاز")
+    ).length;
+
+    document.getElementById("excellentReports").textContent=excellent;
+
+    document.getElementById("lastRating").textContent=
+      allTransactions[0]?.generalRating||"—";
+
+    document.getElementById("lastSession").textContent=
+      allTransactions[0]
+      ? "آخر حصة: "+convertToHijri(allTransactions[0].date)
+      : "آخر حصة: —";
+
+    applyFilters();
+    alertBox("✅ تم مسح التقرير بنجاح.");
+  }catch(e){
+    alertBox("❌ حدث خطأ أثناء الحذف: "+e.message);
+  }
+}
+
+function applyFilters(){
+  const q=document.getElementById("reportSearch").value.trim().toLowerCase();
+  const rating=document.getElementById("ratingFilter").value;
+
+  const filtered=allTransactions.filter(tx=>{
+    const text=JSON.stringify(tx).toLowerCase();
+    const okSearch=!q||text.includes(q);
+    const okRating=!rating||(tx.generalRating||"").includes(rating);
+    return okSearch&&okRating;
+  });
+
+  renderReports(filtered);
+}
+
+document.getElementById("reportSearch").addEventListener("input",applyFilters);
+document.getElementById("ratingFilter").addEventListener("change",applyFilters);
+
+function rr(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+async function loadFonts(){
+  try{
+    await Promise.all([
+      document.fonts.load("900 52px Cairo"),
+      document.fonts.load("800 38px Cairo"),
+      document.fonts.load("700 32px Cairo"),
+      document.fonts.load("600 24px Cairo")
+    ]);
+  }catch(e){}
+}
+
+const SECTIONS=[
+  {key:"ns",title:"السور الجديدة",icon:"📖"},
+  {key:"ps",title:"ماضي السور",icon:"📚"},
+  {key:"mq",title:"المذكرة الجديدة",icon:"📝"},
+  {key:"pm",title:"ماضي المذكرة",icon:"📋"},
+  {key:"sj",title:"السراج",icon:"💡"},
+  {key:"hd",title:"الحديث والأذكار",icon:"📿"}
+];
+
+async function drawReport(studentName,generalRating,data,hijriDateStr){
+  await loadFonts();
+
+  let rows=0;
+  SECTIONS.forEach(sec=>{
+    const s=data?.[sec.key];
+    if(!s)return;
+    rows+=(s.currents?.length||0)+(s.nexts?.length||0);
+  });
+
+  const canvas=document.createElement("canvas");
+  canvas.width=1080;
+  canvas.height=Math.max(1750,800+rows*150);
+
+  const ctx=canvas.getContext("2d");
+
+  const bg=ctx.createLinearGradient(0,0,0,canvas.height);
+  bg.addColorStop(0,"#f9f6ef");
+  bg.addColorStop(1,"#ebe3d3");
+  ctx.fillStyle=bg;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  rr(ctx,20,20,1040,canvas.height-40,24);
+  ctx.strokeStyle="#0d5142";
+  ctx.lineWidth=5;
+  ctx.stroke();
+
+  rr(ctx,35,35,1010,185,18);
+  const hg=ctx.createLinearGradient(0,0,1080,0);
+  hg.addColorStop(0,"#083e32");
+  hg.addColorStop(1,"#0d5142");
+  ctx.fillStyle=hg;
+  ctx.fill();
+
+  rr(ctx,40,40,1000,175,14);
+  ctx.strokeStyle="#ca9746";
+  ctx.lineWidth=3;
+  ctx.stroke();
+
+  ctx.textAlign="center";
+  ctx.font="900 48px Cairo";
+  ctx.fillStyle="#e6c280";
+  ctx.fillText("بطاقة متابعة وتقييم",540,98);
+
+  ctx.font="800 32px Cairo";
+  ctx.fillStyle="#fff";
+  ctx.fillText("مركز خادم القرآن الكريم - تحت إشراف الشيخ عبدالرحمن",540,145);
+
+  ctx.font="700 28px Cairo";
+  ctx.fillStyle="#ca9746";
+  ctx.fillText("التاريخ: "+hijriDateStr,540,188);
+
+  let y=250;
+
+  rr(ctx,40,y,1000,150,18);
+  ctx.fillStyle="#fff";
+  ctx.fill();
+  ctx.strokeStyle="#cbd5e1";
+  ctx.lineWidth=2.5;
+  ctx.stroke();
+
+  ctx.font="900 42px Cairo";
+  ctx.fillStyle="#083e32";
+  ctx.fillText("البطل: "+studentName,540,y+60);
+
+  const r=generalRating||"ممتاز";
+  ctx.font="800 32px Cairo";
+  ctx.fillStyle="#ca9746";
+  ctx.fillText("التقييم العام: "+r+" "+ratingStars(r),540,y+115);
+
+  y+=180;
+
+  SECTIONS.forEach(sec=>{
+    const s=data?.[sec.key];
+    const currents=s?.currents||[];
+    const nexts=s?.nexts||[];
+
+    if(!currents.length&&!nexts.length)return;
+
+    rr(ctx,40,y,1000,68,14);
+    ctx.fillStyle="#0d5142";
+    ctx.fill();
+
+    ctx.font="900 34px Cairo";
+    ctx.fillStyle="#e6c280";
+    ctx.textAlign="right";
+    ctx.fillText(sec.icon+" "+sec.title,950,y+46);
+
+    y+=85;
+
+    currents.forEach(item=>{
+      let title="";
+      let range="";
+
+      if(item.sr){
+        title="سورة "+item.sr;
+        range=(item.type==="range"&&item.f&&item.t)
+          ? `(الآيات ${item.f} إلى ${item.t})`
+          :"(كاملة)";
+      }else if(item.f&&item.t){
+        const unit=sec.key==="hd"?"الحديث":"سؤال";
+        title=unit;
+        range=`من ${item.f} إلى ${item.t}`;
+      }
+
+      if(!title)return;
+
+      rr(ctx,50,y,980,115,16);
+      ctx.fillStyle="#fff";
+      ctx.fill();
+      ctx.strokeStyle="#94a3b8";
+      ctx.lineWidth=2;
+      ctx.stroke();
+
+      ctx.textAlign="right";
+      ctx.font="900 34px Cairo";
+      ctx.fillStyle="#020617";
+      ctx.fillText(title,950,y+50);
+
+      ctx.font="800 26px Cairo";
+      ctx.fillStyle="#475569";
+      ctx.fillText(range,950,y+92);
+
+      const rate=item.rating||"تم التسميع";
+      const errors=(item.errors&&item.errors!=="0"&&item.errors!==0)
+        ? `❌ الأخطاء: ${item.errors}`
+        :"✨ بدون أخطاء";
+
+      rr(ctx,65,y+12,330,42,10);
+      ctx.fillStyle="#fef3c7";
+      ctx.fill();
+
+      let fs=24;
+      ctx.font=`900 ${fs}px Cairo`;
+      while(ctx.measureText(rate).width>310&&fs>13){
+        fs--;ctx.font=`900 ${fs}px Cairo`;
+      }
+
+      ctx.fillStyle="#d97706";
+      ctx.textAlign="center";
+      ctx.fillText(rate,230,y+41);
+
+      const hasErr=(item.errors&&item.errors!=="0"&&item.errors!==0);
+
+      rr(ctx,65,y+60,330,42,10);
+      ctx.fillStyle=hasErr?"#fee2e2":"#dcfce7";
+      ctx.fill();
+
+      fs=22;
+      ctx.font=`800 ${fs}px Cairo`;
+      while(ctx.measureText(errors).width>310&&fs>12){
+        fs--;ctx.font=`800 ${fs}px Cairo`;
+      }
+
+      ctx.fillStyle=hasErr?"#dc2626":"#15803d";
+      ctx.fillText(errors,230,y+88);
+
+      y+=130;
+    });
+
+    nexts.forEach(item=>{
+      let title="";
+
+      if(item.nextPlanSr){
+        title="سورة "+item.nextPlanSr+
+          (item.nextPlanType==="range"
+            ? ` (الآيات ${item.nextPlanF} إلى ${item.nextPlanT})`
+            :" (كاملة)");
+      }else if(item.nextPlanF&&item.nextPlanT){
+        const unit=sec.key==="hd"?"الحديث":"سؤال";
+        title=`${unit} من ${item.nextPlanF} إلى ${item.nextPlanT}`;
+      }
+
+      if(!title)return;
+
+      rr(ctx,50,y,980,75,14);
+      ctx.fillStyle="#fffbe2";
+      ctx.fill();
+      ctx.strokeStyle="#ca9746";
+      ctx.lineWidth=2;
+      ctx.stroke();
+
+      ctx.font="900 28px Cairo";
+      ctx.fillStyle="#78350f";
+      ctx.textAlign="right";
+      ctx.fillText("🎯 الخطة القادمة: "+title,950,y+48);
+
+      y+=90;
+    });
+
+    y+=15;
+  });
+
+  ctx.font="900 28px Cairo";
+  ctx.fillStyle="#0d5142";
+  ctx.textAlign="center";
+  ctx.fillText("مركز خادم القرآن الكريم | تقرير متابعة الحفظ",540,canvas.height-60);
+
+  return canvas;
+}
+
+function openImageModal(canvas,index){
+  closeModal();
+
+  const modal=document.createElement("div");
+  modal.className="modal";
+  currentModal=modal;
+
+  const img=document.createElement("img");
+  img.src=canvas.toDataURL("image/jpeg",.95);
+  modal.appendChild(img);
+
+  const actions=document.createElement("div");
+  actions.className="modal-actions";
+
+  const close=document.createElement("button");
+  close.textContent="إغلاق";
+  close.style.background="#e5e7eb";
+  close.onclick=closeModal;
+
+  const restore=document.createElement("button");
+  restore.textContent="↩️ استرجاع كسجل جديد";
+  restore.style.background="#fff7df";
+  restore.onclick=()=>{closeModal();restoreAsNew(index)};
+
+  const share=document.createElement("button");
+  share.textContent="📲 مشاركة";
+  share.style.background="#0d5142";
+  share.style.color="#fff";
+  share.onclick=async()=>{
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.95));
+    const file=new File([blob],"تقرير_"+(student.name||"طالب")+".jpg",{type:"image/jpeg"});
+
+    try{
+      if(navigator.canShare&&navigator.canShare({files:[file]})){
+        await navigator.share({
+          files:[file],
+          title:"تقرير متابعة",
+          text:"تقرير متابعة وتقييم بطل"
+        });
+      }else{
+        const a=document.createElement("a");
+        a.href=img.src;
+        a.download=file.name;
+        a.click();
+      }
+    }catch(e){}
+  };
+
+  actions.append(close,restore,share);
+  modal.appendChild(actions);
+  document.body.appendChild(modal);
+
+  history.pushState({reportModal:true},"");
+}
+
+function closeModal(){
+  if(currentModal){
+    currentModal.remove();
+    currentModal=null;
+    if(history.state?.reportModal) history.back();
+  }
+}
+
+window.addEventListener("popstate",()=>{
+  if(currentModal){
+    currentModal.remove();
+    currentModal=null;
+  }
+});
+
+loadStudent();
+</script>
+</body>
+</html>
