@@ -862,39 +862,63 @@ async function reprintAndShareReport(studentId, txIndex) {
     continueBtn.style.cssText = 'padding:10px 16px;background:#156d59;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
     continueBtn.onclick = function() {
       if (rawReportData) {
-        let nextAcademicData = {};
+     continueBtn.onclick = function() {
+  if (!rawReportData) {
+    customAlert('⚠️ لا توجد بيانات للتقرير السابقة للتكملة عليها.');
+    return;
+  }
 
-        SECTIONS.forEach(sec => {
-          let oldSec = rawReportData[sec.key] || {};
-          let newCurrents = [];
+  /*
+   * استرجاع التقرير بالكامل كسجل جديد
+   * ---------------------------------
+   * لا نحذف currents
+   * لا نحذف nexts
+   * لا نغير التقييمات
+   * لا نغير الأخطاء
+   * لا نغير السور
+   * لا نغير الآيات
+   *
+   * يتم إرسال كل academicData كما هو إلى index1.html
+   */
 
-          if (oldSec.nexts && oldSec.nexts.length > 0) {
-            oldSec.nexts.forEach(nItem => {
-              if (nItem.nextPlanSr) {
-                newCurrents.push({
-                  sr: nItem.nextPlanSr,
-                  type: nItem.nextPlanType || 'full',
-                  f: nItem.nextPlanF || '',
-                  t: nItem.nextPlanT || '',
-                  rating: 'ممتاز',
-                  errors: '0'
-                });
-              } else if (nItem.nextPlanF && nItem.nextPlanT) {
-                newCurrents.push({
-                  f: nItem.nextPlanF,
-                  t: nItem.nextPlanT,
-                  rating: 'ممتاز',
-                  errors: '0'
-                });
-              }
-            });
-          }
+  const fullAcademicData = JSON.parse(
+    JSON.stringify(rawReportData)
+  );
 
-          nextAcademicData[sec.key] = {
-            currents: newCurrents,
-            nexts: []
-          };
-        });
+  var payload = {
+    mode: 'new',
+
+    // اسم الطالب يظهر جاهزاً ويمكن تغييره
+    studentName: studentName || '',
+
+    // التقييم العام السابق يظهر جاهزاً ويمكن تغييره
+    generalRating: generalRating || 'بارك الله فيك 👑',
+
+    // التقرير بالكامل
+    academicData: fullAcademicData
+  };
+
+  try {
+    localStorage.setItem(
+      'edit_report_payload',
+      JSON.stringify(payload)
+    );
+
+    // مهم جداً:
+    // لا نرسل docId
+    // ولا txIndex
+    // لأننا نريد إنشاء تقرير جديد وليس تعديل القديم.
+
+    window.location.href = 'index1.html';
+
+  } catch (e) {
+    console.error('خطأ في تجهيز التقرير الجديد:', e);
+
+    customAlert(
+      '⚠️ حدث خطأ أثناء تجهيز التقرير للاسترجاع: ' + e.message
+    );
+  }
+};
 
         var payload = {
           mode: 'new',
