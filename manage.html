@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سجل الطلاب - نظام المتابعة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>سجل الطلاب - نظام المتابعة الذكي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 
@@ -22,8 +22,9 @@
   --line:#e5e7eb;
   --sub:#64748b;
   --red:#dc2626;
+  --whatsapp:#25d366;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{
   direction:rtl;font-family:Cairo,sans-serif;background:var(--cream);
   color:#111827;min-height:100vh;padding-bottom:40px
@@ -46,8 +47,10 @@ body{
   display:inline-flex;align-items:center;gap:5px;
   color:var(--gold-light);border:1px solid var(--gold);
   padding:7px 15px;border-radius:20px;text-decoration:none;
-  font-size:12px;font-weight:800
+  font-size:12px;font-weight:800;transition:.2s
 }
+.back-btn:hover{background:rgba(212,175,55,.15)}
+
 .container{max-width:680px;margin:16px auto;padding:0 13px}
 .controls-card{
   background:#fff;border-radius:16px;padding:11px;
@@ -61,22 +64,19 @@ body{
 }
 .search-box:focus{border-color:var(--green-mid);background:#fff}
 
-.student-card-wrapper{margin-bottom:10px}
+.student-card-wrapper{margin-bottom:12px}
 .student-card{
   width:100%;background:#fff;border-radius:18px;
   border:1px solid var(--line);overflow:hidden;
   box-shadow:0 4px 13px rgba(0,0,0,.045);
-  cursor:pointer;transition:.2s
-}
-.student-card:hover{
-  transform:translateY(-1px);
-  box-shadow:0 7px 20px rgba(4,32,26,.09)
+  transition:.2s
 }
 .student-header{
   position:relative;
   background:linear-gradient(135deg,#063e30,#07533f 60%,#0b6750);
   color:#fff;padding:14px 16px;min-height:78px;
-  display:flex;align-items:center
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer
 }
 .student-info{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .student-info>.student-icon{
@@ -100,20 +100,33 @@ body{
   font-size:10px;font-weight:600;color:rgba(255,255,255,.72);
   display:flex;align-items:center;gap:4px
 }
-.chevron-icon{
-  width:34px;height:34px;border-radius:10px;flex:0 0 34px;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--gold-light);background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.1);font-size:19px
+
+/* شريط الأزرار السريعة لولي الأمر والعمليات */
+.student-actions-bar{
+  background:#f8faf8;padding:10px 14px;
+  border-top:1px solid var(--line);
+  display:grid;grid-template-columns:1fr auto;gap:8px;
+  align-items:center
 }
+.btn-dash-share{
+  background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
+  color:var(--gold-light);border:1px solid var(--gold);
+  padding:8px 12px;border-radius:10px;font-size:11px;
+  font-weight:800;font-family:Cairo;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:.2s
+}
+.btn-dash-share:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+
 .delete-student{
-  width:31px;height:31px;margin-left:7px;border-radius:9px;
+  width:34px;height:34px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.07);color:rgba(255,255,255,.65);
-  border:1px solid rgba(255,255,255,.12);cursor:pointer;
-  font-size:14px;flex:0 0 31px
+  background:#fff;color:var(--sub);
+  border:1px solid var(--line);cursor:pointer;
+  font-size:15px;transition:.2s
 }
 .delete-student:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
 .empty-state{
   text-align:center;padding:38px 20px;color:var(--sub);
   font-size:13px;font-weight:700;background:#fff;border-radius:16px;
@@ -128,7 +141,8 @@ body{
   .student-info>.student-icon{width:40px;height:40px;flex-basis:40px;font-size:21px}
   .student-name{font-size:14px}
   .last-session-date{font-size:9.5px}
-  .chevron-icon{width:31px;height:31px;flex-basis:31px}
+  .student-actions-bar{grid-template-columns:1fr auto;gap:6px;padding:8px 10px}
+  .btn-dash-share{font-size:10px;padding:7px 10px}
 }
 </style>
 </head>
@@ -145,8 +159,7 @@ body{
 
 <div class="container">
   <div class="controls-card">
-    <input type="text" class="search-box" id="search-student"
-           placeholder="🔍 ابحث عن اسم البطل...">
+    <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم البطل...">
   </div>
 
   <div id="students-list-container">
@@ -170,12 +183,6 @@ const db=firebase.firestore();
 const studentsCollection=db.collection("students");
 
 let allStudentsData=[];
-
-const monthMap={
-  "يناير":1,"فبراير":2,"مارس":3,"أبريل":4,"ابريل":4,"مايو":5,"يونيو":6,
-  "يوليو":7,"أغسطس":8,"اغسطس":8,"سبتمبر":9,"أكتوبر":10,"اكتوبر":10,
-  "نوفمبر":11,"ديسمبر":12
-};
 
 function customAlert(msg){
   const m=document.createElement("div");
@@ -221,7 +228,6 @@ studentsCollection.onSnapshot(snapshot=>{
   snapshot.forEach(doc=>{
     const s=doc.data();
     const txs=Array.isArray(s.transactions)?s.transactions.slice():[];
-
     txs.sort((a,b)=>dateValue(b.date)-dateValue(a.date));
 
     allStudentsData.push({
@@ -269,43 +275,35 @@ function renderStudents(list){
     }
 
     wrapper.innerHTML=`
-      <div class="student-card"
-           onclick="openStudentProfile('${student.id}')">
-
-        <div class="student-header">
-
+      <div class="student-card">
+        <div class="student-header" onclick="openStudentProfile('${student.id}')">
           <div class="student-info">
-
             <div class="student-icon">
               <i class="ti ti-user"></i>
             </div>
-
             <div class="student-name-col">
-
               <span class="student-name">
                 ${escapeHtml(student.name||"بدون اسم")}
                 <span class="badge-reports">
                   ${transactions.length} ${transactions.length===1?"تقرير":"تقارير"}
                 </span>
               </span>
-
               ${lastSession}
-
             </div>
-
           </div>
-
-          <button
-            class="delete-student"
-            title="حذف الطالب"
-            onclick="event.stopPropagation();deleteStudentDoc('${student.id}',${JSON.stringify(student.name||"بدون اسم")})">
-            <i class="ti ti-trash"></i>
-          </button>
-
-          <i class="ti ti-chevron-left chevron-icon"></i>
-
+          <i class="ti ti-chevron-left" style="color:var(--gold-light);font-size:20px;"></i>
         </div>
 
+        <div class="student-actions-bar">
+          <button class="btn-dash-share" onclick="shareParentDashboard('${student.id}', '${escapeHtml(student.name||"البطل")}')">
+            <i class="ti ti-chart-dots"></i>
+            <span>مشاركة لوحة المتابعة لولي الأمر 📊</span>
+          </button>
+
+          <button class="delete-student" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}',${JSON.stringify(student.name||"بدون اسم")})">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
       </div>
     `;
 
@@ -326,13 +324,30 @@ function openStudentProfile(studentId){
   window.location.href="student.html?id="+encodeURIComponent(studentId);
 }
 
+function shareParentDashboard(studentId, studentName) {
+  const currentPath = window.location.pathname;
+  const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+  const dashUrl = `${window.location.origin}${basePath}student_dashboard.html?id=${encodeURIComponent(studentId)}`;
+
+  const msg = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير وتطور البطل (${studentName}) عبر لوحة المتابعة التفاعلية والرسوم البيانية من الرابط التالي:\n${dashUrl}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: `لوحة متابعة البطل ${studentName}`,
+      text: msg,
+      url: dashUrl
+    }).catch(() => {});
+  } else {
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    window.open(waUrl, '_blank');
+  }
+}
+
 document.getElementById("search-student").addEventListener("input",function(){
   const val=this.value.trim().toLowerCase();
-
   const filtered=allStudentsData.filter(s=>
     String(s.name||"").toLowerCase().includes(val)
   );
-
   renderStudents(filtered);
 });
 
