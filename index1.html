@@ -281,11 +281,11 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
 <div class="top-nav-btns">
   <button class="nav-btn" onclick="addNewStudentAction()"><i class="ti ti-user-plus"></i> إضافة طالب جديد</button>
-  <a href="manage.html" class="nav-btn" id="link-to-manage"><i class="ti ti-address-book"></i> سجل الطلاب</a>
+  <a href="manage.html" class="nav-btn" id="link-to-manage"><i class="ti ti-address-book"></i> 📋 عرض سجل الطلاب</a>
 </div>
 
 <div class="edit-mode-banner" id="edit-mode-banner">
-  <div class="edit-mode-banner-inner"><i class="ti ti-pencil"></i> أنت الآن في وضع تعديل تقرير سابق — سيتم استبدال هذا التقرير عند الحفظ.</div>
+  <div class="edit-mode-banner-inner"><i class="ti ti-pencil"></i> أنت الآن في وضع تعديل تقرير سابق — سيتم الحفاظ على تاريخ التقرير الأصلي عند الحفظ.</div>
 </div>
 
 <div class="system-selector-wrap">
@@ -315,7 +315,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
             <option value="بارك الله فيك 👑">مستوى بارك الله فيك 👑</option>
             <option value="جيد جداً ⭐">مستوى جيد جداً ⭐</option>
             <option value="جيد 👍">مستوى جيد 👍</option>
-            <option value="يحتاج مراجعة 📖">يحتاج مراجعة  📖</option>
+            <option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option>
           </select>
         </div>
       </div>
@@ -390,7 +390,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
   <div class="section" id="sec-hd">
     <div class="sec-head"><div class="sec-head-title"><i class="ti ti-feather"></i>الحديث والأذكار</div></div>
     <div class="sec-body">
-      <div class="sub-sec-title">📿   الأذكار الحالية:</div>
+      <div class="sub-sec-title">📿 الأذكار الحالية:</div>
       <div id="hd-current-list"></div>
       <button class="add-btn" onclick="addCurrentQuestion('hd-current-list','hd')"><i class="ti ti-plus"></i> إضافة للحديث الحالي</button>
       <div class="divider"></div>
@@ -452,7 +452,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // البحث عن مستند طالب بالاسم، أو إنشاؤه إذا لم يكن موجوداً — يُرجع مرجع المستند (docRef)
   async function findOrCreateStudentDoc(studentName) {
     var trimmedName = studentName.trim();
     const q = query(collection(db, "students"), where("name", "==", trimmedName));
@@ -494,8 +493,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // حفظ تقرير متابعة داخل مستند الطالب نفسه (transactions[])
-  // بنفس أسماء الحقول التي تتوقعها صفحة manage.html: date, generalRating, academicData
   window.saveReportToFirebase = async function(studentName, rating, reportData) {
     try {
       var trimmedName = studentName.trim();
@@ -520,8 +517,6 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
     }
   };
 
-  // تحديث تقرير موجود بالفعل (وضع التعديل) داخل مصفوفة transactions عند فهرس محدد
-  // يحافظ على تاريخ التقرير الأصلي ولا يضيف تقريراً جديداً
   window.updateReportInFirebase = async function(docId, txIndex, rating, reportData) {
     try {
       if (!docId || txIndex == null) return false;
@@ -558,11 +553,11 @@ var currentQuranRowId = null;
 var currentQuranIsQ = false;
 var cachedStudentsList = [];
 
-// ===== حالة التعديل / التتبع =====
-var editContext = null;       // { docId, txIndex } عند التعديل على تقرير موجود بالفعل
-var formDirty = false;        // هل يوجد تغييرات لم تُحفظ بعد؟
+var editContext = null;
+var originalReportDate = null;
+var formDirty = false;
 var autosaveTimer = null;
-var suppressDirtyTracking = true; // نمنع تفعيل formDirty أثناء التعبئة التلقائية عند التحميل
+var suppressDirtyTracking = true;
 
 function markFormDirty() {
   if (suppressDirtyTracking) return;
@@ -591,7 +586,6 @@ function clearDraft() {
   localStorage.removeItem('draft_report_temp');
 }
 
-// تحذير عند محاولة إغلاق/تحديث الصفحة ووجود بيانات غير محفوظة
 window.addEventListener('beforeunload', function(e) {
   if (formDirty) {
     e.preventDefault();
@@ -601,7 +595,6 @@ window.addEventListener('beforeunload', function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // تحذير عند الانتقال داخلياً لصفحة سجل الطلاب ووجود بيانات غير محفوظة
   var manageLink = document.getElementById('link-to-manage');
   if (manageLink) {
     manageLink.addEventListener('click', function(e) {
@@ -621,8 +614,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (payload.mode === 'edit' && payload.docId) {
         editContext = { docId: payload.docId, txIndex: payload.txIndex };
+        originalReportDate = payload.date || null;
         setEditModeUI(true);
-        customAlert("تم جلب بيانات التقرير للتعديل. عند الحفظ سيتم استبدال هذا التقرير بالتحديثات الجديدة.", "وضع تعديل تقرير ✏️");
+        customAlert("تم جلب بيانات التقرير للتعديل. عند الحفظ سيتم الحفاظ على تاريخ التقرير الأصلي.", "وضع تعديل تقرير ✏️");
       } else {
         customAlert("تم جلب بيانات التقرير المحول بنجاح! يمكنك الآن تعديله وإعادة استخراجه وحفظه كتقرير جديد.", "تعبئة تلقائية 📋");
       }
@@ -644,7 +638,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // تفعيل تتبّع التغييرات والحفظ المؤقت بعد انتهاء أي تعبئة تلقائية
   setTimeout(function () {
     suppressDirtyTracking = false;
     setupDirtyTrackingListeners();
@@ -656,7 +649,7 @@ function setEditModeUI(isEdit) {
   var btn = document.getElementById('main-submit-btn');
   if (isEdit) {
     if (banner) banner.classList.add('active');
-    if (btn) btn.innerHTML = '💾 حفظ التعديلات على التقرير';
+    if (btn) btn.innerHTML = '💾 حفظ التعديلات على التقرير الأصلي';
   } else {
     if (banner) banner.classList.remove('active');
     if (btn) btn.innerHTML = '✨ استخراج وحفظ التقرير';
@@ -673,10 +666,9 @@ function setupDirtyTrackingListeners() {
   if (ratingSel) ratingSel.addEventListener('change', markFormDirty);
 }
 
-// إعادة بناء النموذج بالكامل من بيانات محفوظة (تعديل / استرجاع / مسودة مؤقتة)
 function restoreFormFromPayload(payload) {
-  const studentName = payload.studentName;
-  const rating = payload.generalRating;
+  const studentName = payload.studentName || payload.name;
+  const rating = payload.generalRating || payload.rating;
   const data = payload.academicData || payload.data;
 
   const nameInput = document.getElementById("inp-student");
@@ -721,7 +713,7 @@ function restoreFormFromPayload(payload) {
             if (fInp && item.f) fInp.value = item.f;
             if (tInp && item.t) tInp.value = item.t;
             if (ratingSel && item.rating) ratingSel.value = item.rating;
-            if (errInp && item.errors) errInp.value = item.errors;
+            if (errInp && (item.errors !== undefined)) errInp.value = item.errors;
           } else {
             addCurrentQuestion(secKey + '-current-list', secKey);
             const idx = counters[secKey + '_c'];
@@ -733,7 +725,7 @@ function restoreFormFromPayload(payload) {
             if (qfInp && item.f) qfInp.value = item.f;
             if (qtInp && item.t) qtInp.value = item.t;
             if (ratingSel && item.rating) ratingSel.value = item.rating;
-            if (errInp && item.errors) errInp.value = item.errors;
+            if (errInp && (item.errors !== undefined)) errInp.value = item.errors;
           }
         });
       }
@@ -866,6 +858,7 @@ function resetFormForNewStudent() {
   });
 
   editContext = null;
+  originalReportDate = null;
   setEditModeUI(false);
   formDirty = false;
   clearDraft();
@@ -1212,8 +1205,23 @@ function rr(ctx,x,y,w,h,r){
   ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
   ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
 }
-function hijriDate(){ try { return new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {weekday:'long', year:'numeric', month:'long', day:'numeric'}).format(new Date()); } catch(e) { return ''; } }
-function timeStamp(){ try { return new Intl.DateTimeFormat('ar-EG', {hour:'2-digit', minute:'2-digit'}).format(new Date()); } catch(e){ return ''; } }
+
+function formatFullDateAndTime(dateObj) {
+  try {
+    const d = dateObj ? new Date(dateObj) : new Date();
+    const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    }).format(d);
+    
+    const time = new Intl.DateTimeFormat('ar-EG', {
+      hour: '2-digit', minute: '2-digit', hour12: true
+    }).format(d);
+
+    return { hijri, time };
+  } catch(e) {
+    return { hijri: '', time: '' };
+  }
+}
 
 async function loadFonts(){
   try {
@@ -1281,35 +1289,62 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
   var mainTxt, subTxt = null;
   if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
   else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
+  
   ctx.font = '700 26px Cairo, sans-serif'; var tagW = subTxt ? (ctx.measureText(subTxt).width + 65) : 0;
-  ctx.font = '900 44px Cairo, sans-serif'; var titleLines = wrapText(ctx, mainTxt, Math.max(innerW - tagW, innerW * 0.5));
-  var titleBlockH = titleLines.length * 52;
+  ctx.font = '900 38px Cairo, sans-serif'; 
+  var maxTitleW = Math.max(innerW - tagW - 20, 320);
+  var titleLines = wrapText(ctx, mainTxt, maxTitleW);
+  var titleBlockH = titleLines.length * 48;
+
   if(draw){
     titleLines.forEach(function(line, i){
-      ctx.font = '900 44px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 36 + i*52);
+      ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(line, rightX, cy + 32 + i*48);
     });
   }
   if(subTxt){
     var tagY = cy + Math.max(0, titleBlockH/2 - 25);
-    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 26px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:50, padX:20, align:'left', draw:draw});
+    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'700 24px Cairo, sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:48, padX:18, align:'left', draw:draw});
   }
-  cy += titleBlockH + 24;
-  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null && item.errors !== '0';
-  if(hasRating || hasErrors || item.errors === '0'){
+  cy += titleBlockH + 20;
+
+  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null;
+  if(hasRating || hasErrors){
+    var errTxt = '';
+    var isZero = (item.errors === '0' || !item.errors);
+    if (hasErrors) {
+      errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors) : ('عدد الأخطاء: ' + item.errors));
+    }
+
+    ctx.font = '800 22px Cairo, sans-serif';
+    var errorLines = wrapText(ctx, errTxt, innerW - (hasRating ? 280 : 20));
+    var errPillH = Math.max(54, errorLines.length * 28 + 20);
+
     if(hasRating){
       var rs = ratingStyle(item.rating);
-      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 28px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:60, padX:26, align:'right', draw:draw});
+      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'800 26px Cairo, sans-serif', bg:rs.bg, color:rs.color, border:rs.border, borderWidth:2, h:errPillH, padX:22, align:'right', draw:draw});
     }
-    if(item.errors !== '' && item.errors != null){
-      var isZero = (item.errors === '0'); 
-      var errTxt = isZero ? 'بلا أخطاء ✨' : (isNaN(item.errors) ? ('الأخطاء: ' + item.errors + ' ❌') : ('عدد الأخطاء: ' + item.errors + ' ❌'));
+
+    if(hasErrors){
       var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      
-      var errorFont = item.errors.length > 20 ? '800 22px Cairo, sans-serif' : '800 28px Cairo, sans-serif';
-      drawRoyalPill(ctx, errTxt, leftX, cy, {font:errorFont, bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:60, padX:26, align:'left', draw:draw});
+      var errorPillW = Math.min(innerW - (hasRating ? 300 : 0), ctx.measureText(errTxt).width + 60);
+      errorPillW = Math.max(errorPillW, 220);
+
+      if(draw){
+        var eX = leftX;
+        rr(ctx, eX, cy, errorPillW, errPillH, 14);
+        ctx.fillStyle = es.bg; ctx.fill();
+        ctx.lineWidth = 2; ctx.strokeStyle = es.border; ctx.stroke();
+
+        ctx.fillStyle = es.color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.font = '800 22px Cairo, sans-serif';
+        errorLines.forEach((l, idx) => {
+          var lineY = cy + (errPillH / 2) + (idx - (errorLines.length - 1) / 2) * 26;
+          ctx.fillText(l, eX + errorPillW / 2, lineY);
+        });
+      }
     }
-    cy += 82;
+    cy += errPillH + 20;
   }
   return cy - y;
 }
@@ -1319,23 +1354,23 @@ function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
   var planTxt;
   if(item.nextPlanSr){ planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); }
   else { var u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT; }
-  ctx.font = '700 32px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
-  var boxH = 22 + 38 + planLines.length*44 + 22;
+  ctx.font = '700 28px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
+  var boxH = 22 + 38 + planLines.length*40 + 22;
   var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
   if(draw){
     rr(ctx, boxX, cy - 10, boxW, boxH, 16); ctx.fillStyle = '#fbf3d9'; ctx.fill();
     ctx.save(); ctx.setLineDash([8,5]); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke(); ctx.restore();
-    ctx.font = '800 28px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 30);
+    ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 28);
     planLines.forEach(function(line, i){
-      ctx.font = '700 32px Cairo, sans-serif'; ctx.fillStyle = '#5a4400';
-      ctx.fillText(line, rightX - 20, cy + 30 + 38 + 24 + i*44);
+      ctx.font = '700 28px Cairo, sans-serif'; ctx.fillStyle = '#5a4400';
+      ctx.fillText(line, rightX - 20, cy + 28 + 38 + 20 + i*40);
     });
   }
   return boxH + CARD_PAD_Y*2 - 10;
 }
 
-function layoutReport(ctx, canvasH, nm, data, draw){
+function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
   var y = 0;
   if(draw){
     ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, C_W, canvasH);
@@ -1365,11 +1400,15 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.font = '900 ' + fontSize + 'px Cairo, sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nameTxt, C_W/2, by + bh/2 + 1);
   }
   y = by + bh + 34;
+
+  const dateTimeInfo = formatFullDateAndTime(reportDate);
+
   if(draw){
-    var dateTxt = hijriDate(); ctx.font = '700 24px Cairo, sans-serif';
-    var dW = ctx.measureText('📅  ' + dateTxt).width + 48;
-    rr(ctx, (C_W - dW)/2, y - 30, dW, 50, 25); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
-    ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('📅  ' + dateTxt, C_W/2, y - 5);
+    var fullDateStr = '📅  ' + dateTimeInfo.hijri + '  |  ⏰ ' + dateTimeInfo.time;
+    ctx.font = '700 22px Cairo, sans-serif';
+    var dW = ctx.measureText(fullDateStr).width + 50;
+    rr(ctx, (C_W - dW)/2, y - 30, dW, 52, 26); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
+    ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(fullDateStr, C_W/2, y - 4);
   }
   y += 38;
   var cardX = PAD; var cardW = C_W - PAD*2;
@@ -1406,17 +1445,17 @@ function layoutReport(ctx, canvasH, nm, data, draw){
     ctx.fillStyle = PALETTE.deep; ctx.fillRect(0, y, C_W, fH);
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C_W, y); ctx.lineWidth = 5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.font = '800 26px Cairo, sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.shadowColor = 'transparent'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('مركز خادم القرآن الكريم  |  تقرير متابعة الحفظ', C_W/2, y + 40);
-    ctx.font = '600 19px Cairo, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('تم إصدار التقرير في ' + hijriDate() + '  -  ' + timeStamp(), C_W/2, y + 72);
+    ctx.font = '600 19px Cairo, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('تاريخ التقرير الرسمي: ' + dateTimeInfo.hijri + '  الساعة ' + dateTimeInfo.time, C_W/2, y + 72);
     drawCornerBrackets(ctx, C_W, y + fH, 18, 46, PALETTE.gold);
   }
   return y + fH;
 }
 
-async function drawReport(nm, data){
+async function drawReport(nm, data, reportDate){
   await loadFonts(); var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
-  var totalH = layoutReport(tmp.getContext('2d'), 0, nm, data, false);
+  var totalH = layoutReport(tmp.getContext('2d'), 0, nm, data, reportDate, false);
   var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 700);
-  layoutReport(canvas.getContext('2d'), canvas.height, nm, data, true);
+  layoutReport(canvas.getContext('2d'), canvas.height, nm, data, reportDate, true);
   return canvas;
 }
 
@@ -1431,7 +1470,7 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   modal.appendChild(imgPreview);
 
   var savedNote = document.createElement('div');
-  savedNote.innerHTML = '✅ تم حفظ التقرير في قاعدة البيانات بنجاح';
+  savedNote.innerHTML = '✅ تم حفظ التقرير في قاعدة البيانات بنجاح مع الاحتفاظ بالتاريخ المعتمد';
   savedNote.style.cssText = 'color:#bbf7d0;font-weight:800;font-size:14px;margin-bottom:14px;font-family:Cairo,sans-serif;';
   modal.appendChild(savedNote);
 
@@ -1468,9 +1507,7 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
             a.click();
             customAlert('المتصفح لا يدعم التشيير المباشر، تم تنزيل صورة التقرير.', 'حفظ الصورة 📥');
           }
-        } catch (shareErr) {
-          // تم إلغاء المشاركة من المستخدم أو حدث خطأ بها - البيانات محفوظة بالفعل فلا داعي للقلق
-        }
+        } catch (shareErr) {}
 
         modal.remove();
         finishAfterSaveAndShare();
@@ -1486,7 +1523,6 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   document.body.appendChild(modal);
 }
 
-// تُنفَّذ بعد إغلاق نافذة المعاينة (سواء بعد المشاركة أو الإغلاق المباشر) — تصفير النموذج بالكامل
 function finishAfterSaveAndShare() {
   resetFormForNewStudent();
 }
@@ -1502,9 +1538,9 @@ async function generateAllOutputs() {
   if (submitBtn) { submitBtn.innerHTML = '⏳ جاري الحفظ...'; submitBtn.disabled = true; }
 
   try {
-    var reportCanvas = await drawReport(nm, data);
+    var reportDateToUse = (editContext && originalReportDate) ? originalReportDate : new Date().toISOString();
+    var reportCanvas = await drawReport(nm, data, reportDateToUse);
 
-    // الحفظ أولاً في قاعدة البيانات قبل عرض خيار المشاركة
     var saved = false;
     if (editContext && editContext.docId) {
       if (typeof window.updateReportInFirebase === 'function') {
@@ -1523,7 +1559,6 @@ async function generateAllOutputs() {
       return;
     }
 
-    // البيانات محفوظة الآن بأمان — لم يعد هناك خطر من فقدانها
     formDirty = false;
     clearDraft();
 
