@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة متابعة البطل - مركز خادم القرآن</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<style>
+:root {
+  --green-deep: #04201a;
+  --green-mid: #0b3d2e;
+  --green-light: #14795c;
+  --gold: #d4af37;
+  --gold-light: #fef08a;
+  --cream: #fdfbf5;
+  --card-bg: #ffffff;
+  --text: #17221f;
+  --sub: #64748b;
+  --shadow: 0 10px 25px rgba(4,32,26,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  direction: rtl; font-family: 'Cairo', sans-serif;
+  background: var(--cream); color: var(--text); min-height: 100vh; padding-bottom: 40px;
+}
+.hdr {
+  background: linear-gradient(145deg, #05261f, #083b2f);
+  padding: 24px 16px; text-align: center; color: #fff;
+  border-bottom: 3px solid var(--gold);
+}
+.hdr h1 { font-family: 'Amiri', serif; font-size: 26px; color: var(--gold-light); }
+.hdr-sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
+
+.container { max-width: 720px; margin: 16px auto; padding: 0 12px; }
+
+/* بطاقة تعريف الطالب والنقاط */
+.profile-card {
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
+  color: #fff; border-radius: 20px; padding: 18px;
+  border: 1.5px solid var(--gold); box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.profile-info h2 { font-size: 20px; color: var(--gold-light); font-weight: 900; }
+.profile-info p { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.score-badge {
+  background: rgba(212,175,55,0.15); border: 1.5px solid var(--gold);
+  border-radius: 16px; padding: 10px 16px; text-align: center; min-width: 100px;
+}
+.score-badge .num { font-size: 24px; font-weight: 900; color: var(--gold-light); line-height: 1; }
+.score-badge .lbl { font-size: 10px; font-weight: 700; color: #fff; }
+
+/* الإحصائيات السريعة */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px;
+}
+.stat-box {
+  background: var(--card-bg); border-radius: 14px; padding: 12px;
+  text-align: center; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
+}
+.stat-box i { font-size: 20px; color: var(--green-light); margin-bottom: 4px; display: block; }
+.stat-box .val { font-size: 16px; font-weight: 900; color: var(--green-deep); }
+.stat-box .lbl { font-size: 10px; color: var(--sub); font-weight: 700; }
+
+/* قسم الأوسمة */
+.badges-sec {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
+}
+.sec-title { font-size: 13px; font-weight: 900; color: var(--green-mid); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.badges-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.badge-item {
+  background: #fdf8e6; border: 1px solid var(--gold); border-radius: 12px;
+  padding: 8px 12px; font-size: 11px; font-weight: 800; color: #725304;
+  white-space: nowrap; display: flex; align-items: center; gap: 5px;
+}
+
+/* الرسم البياني */
+.chart-sec {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
+}
+.chart-wrap { position: relative; height: 200px; width: 100%; margin-top: 8px; }
+
+/* أحدث تقرير */
+.latest-report {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
+}
+.report-item {
+  background: #f8faf8; border-radius: 10px; padding: 10px;
+  margin-bottom: 8px; font-size: 12px; border-right: 3px solid var(--green-light);
+}
+.report-item .title { font-weight: 800; color: var(--green-deep); }
+.report-item .desc { color: var(--sub); font-size: 11px; margin-top: 2px; }
+
+.loading { text-align: center; padding: 40px; font-size: 14px; font-weight: 800; color: var(--sub); }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <h1>لوحة متابعة البطل 🏆</h1>
+  <div class="hdr-sub">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
+</header>
+
+<div class="container" id="dash-content">
+  <div class="loading">جاري تحميل بيانات المتابعة... ⏳</div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+  authDomain: "ahmedelzaiady.firebaseapp.com",
+  projectId: "ahmedelzaiady",
+  storageBucket: "ahmedelzaiady.firebasestorage.app",
+  messagingSenderId: "300306825071",
+  appId: "1:300306825071:web:0426ddde56280fa090329a"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function getStudentId() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id');
+}
+
+async function loadDashboard() {
+  const studentId = getStudentId();
+  const container = document.getElementById('dash-content');
+
+  if (!studentId) {
+    container.innerHTML = '<div class="loading">⚠️ لم يتم تحديد الطالب. يرجى فتح اللوحة عبر رابط التقرير الخاص بالطالب.</div>';
+    return;
+  }
+
+  try {
+    const doc = await db.collection('students').doc(studentId).get();
+    if (!doc.exists) {
+      container.innerHTML = '<div class="loading">❌ تعذر إيجاد سجلات الطالب.</div>';
+      return;
+    }
+
+    const student = doc.data();
+    const txs = Array.isArray(student.transactions) ? student.transactions : [];
+    
+    // ترتيب الحصص من الأحدث للأقدم
+    txs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    // حساب النقاط والإحصائيات
+    let totalPoints = 0;
+    let totalErrors = 0;
+    let chartLabels = [];
+    let chartData = [];
+
+    const ratingMap = {
+      'بارك الله فيك 👑': 10,
+      'جيد جداً ⭐': 8,
+      'جيد 👍': 6,
+      'يحتاج مراجعة 📖': 4
+    };
+
+    txs.forEach((tx, idx) => {
+      const pts = ratingMap[tx.generalRating] || 5;
+      totalPoints += pts;
+
+      // حساب الأخطاء المجمعة في التقرير
+      if (tx.academicData) {
+        Object.values(tx.academicData).forEach(sec => {
+          if (sec.currents) {
+            sec.currents.forEach(c => {
+              if (c.errors && !isNaN(c.errors)) totalErrors += parseInt(c.errors);
+            });
+          }
+        });
+      }
+
+      // أخذ آخر 6 حصص للرسم البياني
+      if (idx < 6) {
+        const d = new Date(tx.date);
+        chartLabels.unshift(`${d.getDate()}/${d.getMonth()+1}`);
+        chartData.unshift(pts);
+      }
+    });
+
+    renderUI(student.name || 'البطل', txs, totalPoints, totalErrors, chartLabels, chartData);
+
+  } catch (e) {
+    console.error(e);
+    container.innerHTML = `<div class="loading">❌ حدث خطأ أثناء التحميل: ${e.message}</div>`;
+  }
+}
+
+function renderUI(name, txs, points, errors, chartLabels, chartData) {
+  const container = document.getElementById('dash-content');
+  const latestTx = txs[0] || {};
+
+  container.innerHTML = `
+    <!-- بطاقة الطالب والنقاط -->
+    <div class="profile-card">
+      <div class="profile-info">
+        <h2>${name}</h2>
+        <p>مستوى ممتاز ومستمر في التقدم 🌟</p>
+      </div>
+      <div class="score-badge">
+        <div class="num">${points}</div>
+        <div class="lbl">مجموع النقاط</div>
+      </div>
+    </div>
+
+    <!-- الإحصائيات السريعة -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <i class="ti ti-calendar-check"></i>
+        <div class="val">${txs.length}</div>
+        <div class="lbl">إجمالي الحصص</div>
+      </div>
+      <div class="stat-box">
+        <i class="ti ti-alert-circle"></i>
+        <div class="val">${errors}</div>
+        <div class="lbl">إجمالي الأخطاء</div>
+      </div>
+      <div class="stat-box">
+        <i class="ti ti-award"></i>
+        <div class="val">${Math.floor(points / 20)}</div>
+        <div class="lbl">الأوسمة المكتسبة</div>
+      </div>
+    </div>
+
+    <!-- قسم الأوسمة والتحفيز -->
+    <div class="badges-sec">
+      <div class="sec-title"><i class="ti ti-medal"></i> الأوسمة الشرفية:</div>
+      <div class="badges-list">
+        <div class="badge-item">👑 فارس الحفظ المتقن</div>
+        <div class="badge-item">⭐ الملتزم بالحضور</div>
+        ${points >= 50 ? '<div class="badge-item">🔥 بطل التحدي (50+ نقطة)</div>' : ''}
+      </div>
+    </div>
+
+    <!-- الرسم البياني -->
+    <div class="chart-sec">
+      <div class="sec-title"><i class="ti ti-chart-line"></i> منحنى أداء التقييم (آخر الحصص):</div>
+      <div class="chart-wrap">
+        <canvas id="performanceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- أحدث تقرير -->
+    <div class="latest-report">
+      <div class="sec-title"><i class="ti ti-file-text"></i> ملخص آخر حصة:</div>
+      <div class="report-item">
+        <div class="title">التقييم العام: ${latestTx.generalRating || 'لا يوجد'}</div>
+        <div class="desc">التاريخ: ${latestTx.date ? new Date(latestTx.date).toLocaleDateString('ar-EG') : '-'}</div>
+      </div>
+    </div>
+  `;
+
+  // رسم المخطط البياني
+  const ctx = document.getElementById('performanceChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'مستوى التقييم',
+        data: chartData,
+        borderColor: '#14795c',
+        backgroundColor: 'rgba(20, 121, 92, 0.1)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 10, ticks: { stepSize: 2 } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+</body>
+</html>
