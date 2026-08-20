@@ -452,7 +452,7 @@ function renderReports(list){
         </button>
 
         <button class="btn btn-restore" onclick="restoreAsNew(${realIndex})">
-          <i class="ti ti-copy"></i> استرجاع كسجل جديد
+          <i class="ti ti-copy"></i> متابعه جديده
         </button>
 
         <button class="btn btn-edit" onclick="editReport(${realIndex})">
@@ -882,7 +882,7 @@ function openImageModal(canvas,index){
   close.onclick=closeModal;
 
   const restore=document.createElement("button");
-  restore.textContent="↩️ استرجاع كسجل جديد";
+  restore.textContent="↩️متابعه جديده";
   restore.style.background="#fff7df";
   restore.onclick=()=>{closeModal();restoreAsNew(index)};
 
