@@ -380,6 +380,7 @@ body {
     "يوليو":7, "أغسطس":8, "اغسطس":8, "سبتمبر":9, "أكتوبر":10, "اكتوبر":10, "نوفمبر":11, "ديسمبر":12
   };
 
+  // تحويل التاريخ دائماً لصيغة التاريخ الهجري
   function convertToHijri(dateInput) {
     try {
       let d = new Date();
@@ -482,7 +483,7 @@ body {
           reportsHtml += `
             <div class="report-item">
               <div class="report-info">
-                <h4>📅 التاريخ: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
+                <h4>📅 التاريخ الهجري: ${hijriD} - التقييم: ${tx.generalRating || 'ممتاز'} ${stars}</h4>
                 <p>${tx.desc || ''}</p>
               </div>
               <div class="report-btns">
@@ -872,6 +873,7 @@ body {
     closeBtn.onclick = function(){ closeReportModal(); };
     btnWrap.appendChild(closeBtn);
 
+    // زر استرجاع البيانات كسجل جديد للتحويل لصفحة الإدخال
     var continueBtn = document.createElement('button');
     continueBtn.innerHTML = '↩️ استرجاع كسجل جديد';
     continueBtn.title = 'نقل بيانات الخطة القادمة إلى صفحة الإدخال للبدء في تسجيل تقرير جديد';
