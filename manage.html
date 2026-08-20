@@ -200,14 +200,21 @@ function convertToHijri(dateInput){
     let d;
     if(dateInput && typeof dateInput==="object" && typeof dateInput.toDate==="function"){
       d=dateInput.toDate();
+    }else if(dateInput instanceof Date){
+      d=dateInput;
     }else{
-      d=new Date(dateInput||Date.now());
+      d=new Date(dateInput);
     }
-    if(isNaN(d.getTime()))d=new Date();
+    if(isNaN(d.getTime())) return "التاريخ غير متاح";
 
-    return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-uma",{
-      day:"numeric",month:"long",year:"numeric"
-    }).format(d);
+    const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    return formatter.format(d);
   }catch(e){
     return "التاريخ غير متاح";
   }
