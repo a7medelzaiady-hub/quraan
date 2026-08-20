@@ -2,442 +2,292 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>لوحة متابعة البطل - نظام المتابعة الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة متابعة البطل - مركز خادم القرآن</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <style>
-:root{
-  --green-deep:#04201a;
-  --green-mid:#0b3d2e;
-  --green-card:#0a3527;
-  --green-light:#14795c;
-  --gold:#d4af37;
-  --gold-light:#fef08a;
-  --cream:#fdfbf5;
-  --line:#e5e7eb;
-  --sub:#64748b;
-  --red:#dc2626;
+:root {
+  --green-deep: #04201a;
+  --green-mid: #0b3d2e;
+  --green-light: #14795c;
+  --gold: #d4af37;
+  --gold-light: #fef08a;
+  --cream: #fdfbf5;
+  --card-bg: #ffffff;
+  --text: #17221f;
+  --sub: #64748b;
+  --shadow: 0 10px 25px rgba(4,32,26,0.06);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{
-  direction:rtl;font-family:'Cairo',sans-serif;background:var(--cream);
-  color:#111827;min-height:100vh;padding-bottom:50px;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  direction: rtl; font-family: 'Cairo', sans-serif;
+  background: var(--cream); color: var(--text); min-height: 100vh; padding-bottom: 40px;
 }
-.hdr{
-  background:linear-gradient(160deg,var(--green-deep),var(--green-mid));
-  padding:24px 15px;text-align:center;color:#fff;
-  border-bottom:4px solid var(--gold);
-  box-shadow:0 4px 15px rgba(0,0,0,.15)
+.hdr {
+  background: linear-gradient(145deg, #05261f, #083b2f);
+  padding: 24px 16px; text-align: center; color: #fff;
+  border-bottom: 3px solid var(--gold);
 }
-.hdr-emblem{
-  width:58px;height:58px;margin:0 auto 8px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(212,175,55,.14);border:2px solid var(--gold);
-  color:var(--gold-light);font-size:26px
-}
-.hdr h1{font-size:22px;font-weight:900;color:var(--gold-light);margin-bottom:4px}
-.hdr-subtitle{font-size:12px;color:rgba(255,255,255,.82);font-weight:700}
+.hdr h1 { font-family: 'Amiri', serif; font-size: 26px; color: var(--gold-light); }
+.hdr-sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
 
-.container{max-width:720px;margin:18px auto;padding:0 14px}
+.container { max-width: 720px; margin: 16px auto; padding: 0 12px; }
 
-.sec-card{
-  background:#fff;border-radius:20px;border:1px solid var(--line);
-  box-shadow:0 5px 18px rgba(0,0,0,.04);margin-bottom:18px;overflow:hidden
+/* بطاقة تعريف الطالب والنقاط */
+.profile-card {
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
+  color: #fff; border-radius: 20px; padding: 18px;
+  border: 1.5px solid var(--gold); box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
-.sec-header{
-  background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
-  color:var(--gold-light);padding:14px 18px;font-size:15px;font-weight:900;
-  display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--gold)
+.profile-info h2 { font-size: 20px; color: var(--gold-light); font-weight: 900; }
+.profile-info p { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.score-badge {
+  background: rgba(212,175,55,0.15); border: 1.5px solid var(--gold);
+  border-radius: 16px; padding: 10px 16px; text-align: center; min-width: 100px;
 }
+.score-badge .num { font-size: 24px; font-weight: 900; color: var(--gold-light); line-height: 1; }
+.score-badge .lbl { font-size: 10px; font-weight: 700; color: #fff; }
 
-/* بطاقات التقارير والصور */
-.reports-list{padding:14px}
-.report-item-card{
-  background:#f9fbf9;border:1.5px solid var(--line);border-radius:16px;
-  padding:14px;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,0,0,.03)
+/* الإحصائيات السريعة */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px;
 }
-.report-item-head{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--line)
+.stat-box {
+  background: var(--card-bg); border-radius: 14px; padding: 12px;
+  text-align: center; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
 }
-.report-date{font-size:12px;font-weight:800;color:var(--green-mid)}
-.report-rating-badge{
-  font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;
-  background:#fdf8e6;color:#725304;border:1px solid var(--gold)
-}
+.stat-box i { font-size: 20px; color: var(--green-light); margin-bottom: 4px; display: block; }
+.stat-box .val { font-size: 16px; font-weight: 900; color: var(--green-deep); }
+.stat-box .lbl { font-size: 10px; color: var(--sub); font-weight: 700; }
 
-.btn-view-image{
-  width:100%;padding:10px;margin-top:8px;
-  background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
-  color:var(--gold-light);border:1px solid var(--gold);
-  border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  font-family:'Cairo',sans-serif;transition:.2s
+/* قسم الأوسمة */
+.badges-sec {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
 }
-.btn-view-image:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-
-.report-img-container{
-  margin-top:10px;display:none;text-align:center
-}
-.report-img-container.active{display:block}
-.report-img-preview{
-  width:100%;max-height:520px;object-fit:contain;border-radius:14px;
-  border:2px solid var(--gold);box-shadow:0 5px 15px rgba(0,0,0,.1);
-  cursor:pointer
+.sec-title { font-size: 13px; font-weight: 900; color: var(--green-mid); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.badges-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.badge-item {
+  background: #fdf8e6; border: 1px solid var(--gold); border-radius: 12px;
+  padding: 8px 12px; font-size: 11px; font-weight: 800; color: #725304;
+  white-space: nowrap; display: flex; align-items: center; gap: 5px;
 }
 
-.lightbox-modal{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);
-  z-index:99999;align-items:center;justify-content:center;
-  flex-direction:column;padding:14px;backdrop-filter:blur(4px)
+/* الرسم البياني */
+.chart-sec {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
 }
-.lightbox-modal.active{display:flex}
-.lightbox-img{
-  max-width:96%;max-height:80vh;border-radius:14px;
-  box-shadow:0 10px 35px rgba(0,0,0,.5);margin-bottom:14px;
-  border:2px solid var(--gold)
-}
-.lightbox-actions{
-  display:flex;gap:10px;justify-content:center;width:100%;flex-wrap:wrap
-}
-.lightbox-btn{
-  padding:10px 22px;border-radius:12px;font-size:13px;font-weight:900;
-  cursor:pointer;font-family:'Cairo',sans-serif;border:none;
-  display:flex;align-items:center;gap:6px
-}
-.btn-close{background:#e5e7eb;color:#111827}
-.btn-download{background:var(--green-mid);color:var(--gold-light);border:1px solid var(--gold);text-decoration:none}
+.chart-wrap { position: relative; height: 200px; width: 100%; margin-top: 8px; }
 
-.empty-box,.loading-box{
-  text-align:center;padding:35px;color:var(--sub);font-weight:800;font-size:13px
+/* أحدث تقرير */
+.latest-report {
+  background: var(--card-bg); border-radius: 16px; padding: 14px;
+  margin-top: 14px; border: 1px solid #e2e8e5; box-shadow: var(--shadow);
 }
+.report-item {
+  background: #f8faf8; border-radius: 10px; padding: 10px;
+  margin-bottom: 8px; font-size: 12px; border-right: 3px solid var(--green-light);
+}
+.report-item .title { font-weight: 800; color: var(--green-deep); }
+.report-item .desc { color: var(--sub); font-size: 11px; margin-top: 2px; }
+
+.loading { text-align: center; padding: 40px; font-size: 14px; font-weight: 800; color: var(--sub); }
 </style>
 </head>
-
 <body>
+
 <header class="hdr">
-  <div class="hdr-emblem">🕌</div>
-  <h1 id="student-title-name">لوحة متابعة البطل</h1>
-  <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
+  <h1>لوحة متابعة البطل 🏆</h1>
+  <div class="hdr-sub">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
 </header>
 
-<div class="container">
-  <div class="sec-card">
-    <div class="sec-header">
-      <i class="ti ti-photo"></i>
-      <span>جميع صور تقارير المتابعة والمعاينات 🖼️</span>
-    </div>
-    <div id="reports-list-container" class="reports-list">
-      <div class="loading-box">جاري تحميل تقارير المتابعة... ⏳</div>
-    </div>
-  </div>
+<div class="container" id="dash-content">
+  <div class="loading">جاري تحميل بيانات المتابعة... ⏳</div>
 </div>
 
-<div class="lightbox-modal" id="lightbox-modal">
-  <img src="" alt="تقرير المتابعة" class="lightbox-img" id="lightbox-img">
-  <div class="lightbox-actions">
-    <button class="lightbox-btn btn-close" id="btn-close-modal">إغلاق ✕</button>
-    <a href="" download="" id="lightbox-download-link" class="lightbox-btn btn-download">
-      <i class="ti ti-download"></i> تنزيل صورة التقرير
-    </a>
-  </div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
   authDomain: "ahmedelzaiady.firebaseapp.com",
   projectId: "ahmedelzaiady",
   storageBucket: "ahmedelzaiady.firebasestorage.app",
   messagingSenderId: "300306825071",
-  appId: "1:300306825071:web:0426ddde56280fa090329a",
-  measurementId: "G-WE04GK5XZZ"
+  appId: "1:300306825071:web:0426ddde56280fa090329a"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-const C_W = 1080; const PAD = 44; const CARD_PAD_X = 38; const CARD_PAD_Y = 30;
-const PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5' };
-const SECTIONS = [
-  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
-  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
-  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
-  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
-  {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:' الأذكار', icon:'📿', isQ:true}
-];
-
-function convertToHijri(dateInput){
-  try{
-    let d = (dateInput && typeof dateInput === "object" && typeof dateInput.toDate === "function") ? dateInput.toDate() : new Date(dateInput || Date.now());
-    if(isNaN(d.getTime())) d = new Date();
-    return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-uma", { day:"numeric", month:"long", year:"numeric" }).format(d);
-  }catch(e){ return "التاريخ غير متاح"; }
-}
-
-function rr(ctx,x,y,w,h,r){
-  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
-  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
-  ctx.lineTo(x+r,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
-}
-
-function wrapText(ctx, text, maxWidth){
-  var words = String(text).split(' '); var lines = []; var cur = '';
-  words.forEach(function(w){
-    var test = cur ? cur + ' ' + w : w;
-    if(ctx.measureText(test).width > maxWidth && cur){ lines.push(cur); cur = w; } else { cur = test; }
-  });
-  if(cur) lines.push(cur); return lines.length ? lines : [''];
-}
-
-function drawRoyalPill(ctx, text, anchorX, y, opts){
-  opts = opts || {}; ctx.save(); ctx.font = opts.font || '800 24px sans-serif';
-  var padX = opts.padX != null ? opts.padX : 28; var h = opts.h || 48;
-  var w = ctx.measureText(text).width + padX * 2.5;
-  var left = opts.align === 'left' ? anchorX : (opts.align === 'center' ? anchorX - w/2 : anchorX - w);
-  if(opts.draw !== false){
-    ctx.beginPath(); ctx.moveTo(left + 15, y); ctx.lineTo(left + w - 15, y);
-    ctx.quadraticCurveTo(left + w, y, left + w, y + h/2); ctx.quadraticCurveTo(left + w, y + h, left + w - 15, y + h);
-    ctx.lineTo(left + 15, y + h); ctx.quadraticCurveTo(left, y + h, left, y + h/2); ctx.quadraticCurveTo(left, y, left + 15, y); ctx.closePath();
-    ctx.fillStyle = opts.bg || '#ffffff'; ctx.fill();
-    if(opts.border){ ctx.lineWidth = opts.borderWidth || 2; ctx.strokeStyle = opts.border; ctx.stroke(); }
-    ctx.fillStyle = opts.color || '#111827'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(text, left + w/2, y + h/2 + 2);
-  }
-  ctx.restore(); return w;
-}
-
-function renderItemCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var leftX = x + CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var mainTxt, subTxt = null;
-  if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
-  else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
-  
-  ctx.font = 'bold 36px sans-serif'; 
-  var titleLines = wrapText(ctx, mainTxt, innerW - 100);
-  var titleBlockH = titleLines.length * 48;
-
-  if(draw){
-    titleLines.forEach(function(line, i){
-      ctx.font = 'bold 36px sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-      ctx.fillText(line, rightX, cy + 32 + i*48);
-    });
-  }
-  if(subTxt){
-    var tagY = cy + Math.max(0, titleBlockH/2 - 25);
-    drawRoyalPill(ctx, subTxt, leftX, tagY, {font:'24px sans-serif', bg:'#fdf6e0', color:PALETTE.goldDk, border:PALETTE.gold, borderWidth:1.5, h:48, padX:18, align:'left', draw:draw});
-  }
-  cy += titleBlockH + 20;
-
-  var hasRating = !!item.rating; var hasErrors = item.errors !== '' && item.errors != null;
-  if(hasRating || hasErrors){
-    var errTxt = (item.errors === '0' || !item.errors) ? 'بلا أخطاء ✨' : ('الأخطاء: ' + item.errors);
-    var errPillH = 54;
-    if(hasRating){
-      drawRoyalPill(ctx, item.rating, rightX, cy, {font:'bold 24px sans-serif', bg:'#fdf8e6', color:'#725304', border:PALETTE.gold, borderWidth:2, h:errPillH, padX:22, align:'right', draw:draw});
-    }
-    if(hasErrors){
-      var isZero = (item.errors === '0' || !item.errors);
-      var es = isZero ? {bg:'#e7f5ee', color:PALETTE.mid, border:PALETTE.mid} : {bg:'#fdecec', color:'#9a1d1d', border:'#e0554f'};
-      drawRoyalPill(ctx, errTxt, leftX, cy, {font:'bold 22px sans-serif', bg:es.bg, color:es.color, border:es.border, borderWidth:2, h:errPillH, padX:22, align:'left', draw:draw});
-    }
-    cy += errPillH + 20;
-  }
-  return cy - y;
-}
-
-function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
-  var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var cy = y + CARD_PAD_Y;
-  var planTxt = item.nextPlanSr ? (item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً')) : ('من سؤال ' + item.nextPlanF + ' إلى ' + item.nextPlanT);
-  ctx.font = '28px sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
-  var boxH = 22 + 38 + planLines.length*40 + 22;
-  var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
-  if(draw){
-    rr(ctx, boxX, cy - 10, boxW, boxH, 16); ctx.fillStyle = '#fbf3d9'; ctx.fill();
-    ctx.font = 'bold 26px sans-serif'; ctx.fillStyle = PALETTE.goldDk; ctx.textAlign = 'right';
-    ctx.fillText('🎯 الخطة القادمة', rightX - 20, cy + 28);
-    planLines.forEach(function(line, i){
-      ctx.font = '28px sans-serif'; ctx.fillStyle = '#5a4400';
-      ctx.fillText(line, rightX - 20, cy + 28 + 38 + 20 + i*40);
-    });
-  }
-  return boxH + CARD_PAD_Y*2 - 10;
-}
-
-function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
-  var y = 0;
-  if(draw){ ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, C_W, canvasH); }
-  var hH = 220;
-  if(draw){
-    var hG = ctx.createLinearGradient(0, 0, 0, hH); hG.addColorStop(0, PALETTE.deep); hG.addColorStop(1, PALETTE.mid);
-    ctx.fillStyle = hG; ctx.fillRect(0, 0, C_W, hH);
-    ctx.font = 'bold 48px sans-serif'; ctx.fillStyle = PALETTE.goldLt; ctx.textAlign = 'center'; ctx.fillText('مركز خادم القرآن الكريم', C_W/2, 110);
-  }
-  y = hH;
-  var bh = 90; var bw = C_W - PAD*2; var bx = PAD;
-  if(draw){
-    rr(ctx, bx, y, bw, bh, 30); ctx.fillStyle = PALETTE.gold; ctx.fill();
-    ctx.font = 'bold 38px sans-serif'; ctx.fillStyle = PALETTE.deep; ctx.textAlign = 'center'; ctx.fillText('بطلنا: ' + nm + ' 🏆', C_W/2, y + 56);
-  }
-  y += bh + 40;
-
-  var cardX = PAD; var cardW = C_W - PAD*2;
-  SECTIONS.forEach(function(sec){
-    var sData = data[sec.key]; if(!sData || (!sData.currents.length && !sData.nexts.length)) return;
-    if(draw){
-      ctx.font = 'bold 34px sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.fillText(sec.icon + ' ' + sec.title, cardX + cardW, y + 30);
-    }
-    y += 50;
-    sData.currents.forEach(function(item){
-      var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
-      if(draw){
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill();
-        renderItemCard(ctx, item, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-    sData.nexts.forEach(function(plan){
-      var h = renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, false);
-      if(draw){
-        rr(ctx, cardX, y, cardW, h, 18); ctx.fillStyle = '#ffffff'; ctx.fill();
-        renderNextPlanCard(ctx, plan, sec, cardX, y, cardW, true);
-      }
-      y += h + 16;
-    });
-  });
-  return y + 60;
-}
-
-function generateReportDataUrl(studentName, academicData, reportDate){
-  try{
-    var tmp = document.createElement('canvas'); tmp.width = C_W; tmp.height = 10;
-    var totalH = layoutReport(tmp.getContext('2d'), 0, studentName, academicData, reportDate, false);
-    var canvas = document.createElement('canvas'); canvas.width = C_W; canvas.height = Math.max(totalH, 600);
-    layoutReport(canvas.getContext('2d'), canvas.height, studentName, academicData, reportDate, true);
-    return canvas.toDataURL('image/jpeg', 0.88);
-  }catch(e){
-    return null;
-  }
-}
-
-async function loadStudentDashboard(){
+function getStudentId() {
   const urlParams = new URLSearchParams(window.location.search);
-  const studentId = urlParams.get('id');
+  return urlParams.get('id');
+}
 
-  if(!studentId){
-    document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ لم يتم تحديد الطالب.</div>';
+async function loadDashboard() {
+  const studentId = getStudentId();
+  const container = document.getElementById('dash-content');
+
+  if (!studentId) {
+    container.innerHTML = '<div class="loading">⚠️ لم يتم تحديد الطالب. يرجى فتح اللوحة عبر رابط التقرير الخاص بالطالب.</div>';
     return;
   }
 
-  try{
-    const docRef = doc(db, "students", studentId);
-    const docSnap = await getDoc(docRef);
-
-    if(!docSnap.exists()){
-      document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ بيانات الطالب غير موجودة.</div>';
+  try {
+    const doc = await db.collection('students').doc(studentId).get();
+    if (!doc.exists) {
+      container.innerHTML = '<div class="loading">❌ تعذر إيجاد سجلات الطالب.</div>';
       return;
     }
 
-    const sData = docSnap.data();
-    const studentName = sData.name || "البطل";
-    document.getElementById("student-title-name").innerText = "لوحة متابعة البطل (" + studentName + ")";
-
-    const txs = sData.transactions || [];
-    if(txs.length === 0){
-      document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">لا توجد تقارير مسجلة لهذا الطالب حتى الآن.</div>';
-      return;
-    }
-
+    const student = doc.data();
+    const txs = Array.isArray(student.transactions) ? student.transactions : [];
+    
+    // ترتيب الحصص من الأحدث للأقدم
     txs.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-    const container = document.getElementById("reports-list-container");
-    container.innerHTML = "";
+    // حساب النقاط والإحصائيات
+    let totalPoints = 0;
+    let totalErrors = 0;
+    let chartLabels = [];
+    let chartData = [];
+
+    const ratingMap = {
+      'بارك الله فيك 👑': 10,
+      'جيد جداً ⭐': 8,
+      'جيد 👍': 6,
+      'يحتاج مراجعة 📖': 4
+    };
 
     txs.forEach((tx, idx) => {
-      const hijriDate = convertToHijri(tx.date);
-      const rating = tx.generalRating || "بارك الله فيك 👑";
+      const pts = ratingMap[tx.generalRating] || 5;
+      totalPoints += pts;
 
-      const card = document.createElement("div");
-      card.className = "report-item-card";
+      // حساب الأخطاء المجمعة في التقرير
+      if (tx.academicData) {
+        Object.values(tx.academicData).forEach(sec => {
+          if (sec.currents) {
+            sec.currents.forEach(c => {
+              if (c.errors && !isNaN(c.errors)) totalErrors += parseInt(c.errors);
+            });
+          }
+        });
+      }
 
-      const headDiv = document.createElement("div");
-      headDiv.className = "report-item-head";
-      headDiv.innerHTML = `<span class="report-date">📅 حصة يوم: ${hijriDate}</span><span class="report-rating-badge">${rating}</span>`;
-
-      const btn = document.createElement("button");
-      btn.className = "btn-view-image";
-      btn.innerHTML = `<i class="ti ti-photo"></i> عرض صورة التقرير كاملة 🖼️`;
-
-      const imgBox = document.createElement("div");
-      imgBox.className = "report-img-container";
-      imgBox.id = `img-container-${idx}`;
-
-      btn.onclick = () => toggleReportImage(imgBox, studentName, tx.academicData || {}, tx.date, idx);
-
-      card.appendChild(headDiv);
-      card.appendChild(btn);
-      card.appendChild(imgBox);
-      container.appendChild(card);
+      // أخذ آخر 6 حصص للرسم البياني
+      if (idx < 6) {
+        const d = new Date(tx.date);
+        chartLabels.unshift(`${d.getDate()}/${d.getMonth()+1}`);
+        chartData.unshift(pts);
+      }
     });
 
-  }catch(e){
-    console.error("Dashboard Load Error:", e);
-    document.getElementById("reports-list-container").innerHTML = '<div class="empty-box">❌ حدث خطأ أثناء تحميل التقارير.</div>';
+    renderUI(student.name || 'البطل', txs, totalPoints, totalErrors, chartLabels, chartData);
+
+  } catch (e) {
+    console.error(e);
+    container.innerHTML = `<div class="loading">❌ حدث خطأ أثناء التحميل: ${e.message}</div>`;
   }
 }
 
-function toggleReportImage(box, studentName, academicData, reportDate, index){
-  if(box.classList.contains("active")){
-    box.classList.remove("active");
-    return;
-  }
+function renderUI(name, txs, points, errors, chartLabels, chartData) {
+  const container = document.getElementById('dash-content');
+  const latestTx = txs[0] || {};
 
-  if(!box.innerHTML.trim()){
-    box.innerHTML = '<div style="padding:15px;font-size:12px;font-weight:800;color:var(--green-mid)">جاري تجهيز الصورة... ⏳</div>';
-    box.classList.add("active");
+  container.innerHTML = `
+    <!-- بطاقة الطالب والنقاط -->
+    <div class="profile-card">
+      <div class="profile-info">
+        <h2>${name}</h2>
+        <p>مستوى ممتاز ومستمر في التقدم 🌟</p>
+      </div>
+      <div class="score-badge">
+        <div class="num">${points}</div>
+        <div class="lbl">مجموع النقاط</div>
+      </div>
+    </div>
 
-    setTimeout(() => {
-      const dataUrl = generateReportDataUrl(studentName, academicData, reportDate);
-      if(dataUrl){
-        box.innerHTML = '';
-        const img = document.createElement('img');
-        img.src = dataUrl;
-        img.className = 'report-img-preview';
-        img.onclick = () => openLightbox(dataUrl, `تقرير_${studentName}_${index+1}.jpg`);
-        box.appendChild(img);
-        
-        const note = document.createElement('div');
-        note.style.cssText = 'font-size:10px;color:var(--sub);margin-top:5px;font-weight:700';
-        note.innerText = 'اضغط على الصورة لتكبيرها أو تنزيلها 🔍';
-        box.appendChild(note);
-      } else {
-        box.innerHTML = '<div style="padding:10px;font-size:12px;color:var(--red);font-weight:800">تعذر توليد صورة التقرير.</div>';
-      }
-    }, 50);
-  } else {
-    box.classList.add("active");
-  }
+    <!-- الإحصائيات السريعة -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <i class="ti ti-calendar-check"></i>
+        <div class="val">${txs.length}</div>
+        <div class="lbl">إجمالي الحصص</div>
+      </div>
+      <div class="stat-box">
+        <i class="ti ti-alert-circle"></i>
+        <div class="val">${errors}</div>
+        <div class="lbl">إجمالي الأخطاء</div>
+      </div>
+      <div class="stat-box">
+        <i class="ti ti-award"></i>
+        <div class="val">${Math.floor(points / 20)}</div>
+        <div class="lbl">الأوسمة المكتسبة</div>
+      </div>
+    </div>
+
+    <!-- قسم الأوسمة والتحفيز -->
+    <div class="badges-sec">
+      <div class="sec-title"><i class="ti ti-medal"></i> الأوسمة الشرفية:</div>
+      <div class="badges-list">
+        <div class="badge-item">👑 فارس الحفظ المتقن</div>
+        <div class="badge-item">⭐ الملتزم بالحضور</div>
+        ${points >= 50 ? '<div class="badge-item">🔥 بطل التحدي (50+ نقطة)</div>' : ''}
+      </div>
+    </div>
+
+    <!-- الرسم البياني -->
+    <div class="chart-sec">
+      <div class="sec-title"><i class="ti ti-chart-line"></i> منحنى أداء التقييم (آخر الحصص):</div>
+      <div class="chart-wrap">
+        <canvas id="performanceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- أحدث تقرير -->
+    <div class="latest-report">
+      <div class="sec-title"><i class="ti ti-file-text"></i> ملخص آخر حصة:</div>
+      <div class="report-item">
+        <div class="title">التقييم العام: ${latestTx.generalRating || 'لا يوجد'}</div>
+        <div class="desc">التاريخ: ${latestTx.date ? new Date(latestTx.date).toLocaleDateString('ar-EG') : '-'}</div>
+      </div>
+    </div>
+  `;
+
+  // رسم المخطط البياني
+  const ctx = document.getElementById('performanceChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'مستوى التقييم',
+        data: chartData,
+        borderColor: '#14795c',
+        backgroundColor: 'rgba(20, 121, 92, 0.1)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 10, ticks: { stepSize: 2 } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
 }
 
-function openLightbox(imgSrc, downloadName){
-  document.getElementById("lightbox-img").src = imgSrc;
-  const dl = document.getElementById("lightbox-download-link");
-  dl.href = imgSrc;
-  dl.download = downloadName;
-  document.getElementById("lightbox-modal").classList.add("active");
-}
-
-document.getElementById("btn-close-modal").onclick = () => {
-  document.getElementById("lightbox-modal").classList.remove("active");
-};
-
-document.addEventListener("DOMContentLoaded", loadStudentDashboard);
+document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>
 </body>
 </html>
