@@ -195,16 +195,19 @@ function customAlert(msg){
   m.querySelector("button").onclick=()=>m.remove();
 }
 
+// دالة تحويل موحدة وشاملة لكافة التواريخ إلى الهجري (أم القرى)
 function convertToHijri(dateInput){
+  if(!dateInput) return "التاريخ غير متاح";
   try{
     let d;
-    if(dateInput && typeof dateInput==="object" && typeof dateInput.toDate==="function"){
-      d=dateInput.toDate();
-    }else if(dateInput instanceof Date){
-      d=dateInput;
-    }else{
-      d=new Date(dateInput);
+    if(typeof dateInput === "object" && typeof dateInput.toDate === "function"){
+      d = dateInput.toDate();
+    } else if(dateInput instanceof Date){
+      d = dateInput;
+    } else {
+      d = new Date(dateInput);
     }
+    
     if(isNaN(d.getTime())) return "التاريخ غير متاح";
 
     const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {
@@ -235,6 +238,14 @@ studentsCollection.onSnapshot(snapshot=>{
   snapshot.forEach(doc=>{
     const s=doc.data();
     const txs=Array.isArray(s.transactions)?s.transactions.slice():[];
+    
+    // معالجة تواريخ كل العمليات الداخلية لتصبح بالهجري
+    txs.forEach(tx => {
+      if(tx.date) {
+        tx.hijriDate = convertToHijri(tx.date);
+      }
+    });
+
     txs.sort((a,b)=>dateValue(b.date)-dateValue(a.date));
 
     allStudentsData.push({
@@ -274,10 +285,12 @@ function renderStudents(list){
 
     let lastSession="";
     if(transactions[0]?.date){
+      // استخدام التاريخ الهجري لآخر حصة
+      const formattedHijri = transactions[0].hijriDate || convertToHijri(transactions[0].date);
       lastSession=`
         <span class="last-session-date">
           <i class="ti ti-calendar-event"></i>
-          آخر حصة: ${convertToHijri(transactions[0].date)}
+          آخر حصة: ${formattedHijri}
         </span>`;
     }
 
