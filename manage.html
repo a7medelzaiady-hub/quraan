@@ -10,6 +10,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
+<!-- مكتبات تحويل التاريخ الهجري المضمونة -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+
 <style>
 :root{
   --green-deep:#04201a;
@@ -184,6 +188,13 @@ const studentsCollection=db.collection("students");
 
 let allStudentsData=[];
 
+// أسماء الأشهر الهجرية بالعربية
+const hijriMonths = [
+  "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
+  "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
+  "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+];
+
 function customAlert(msg){
   const m=document.createElement("div");
   m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px";
@@ -200,27 +211,31 @@ function convertToHijri(dateInput){
 
   try{
     let d;
-
     if(typeof dateInput === "object" && typeof dateInput.toDate === "function"){
       d = dateInput.toDate();
-    } 
-    else if(dateInput instanceof Date){
+    } else if(dateInput instanceof Date){
       d = dateInput;
-    } 
-    else {
+    } else {
       d = new Date(dateInput);
     }
 
-    if(isNaN(d.getTime())){
-      return "التاريخ غير متاح";
+    if(isNaN(d.getTime())) return "التاريخ غير متاح";
+
+    // استخدام Moment-Hijri للتحويل الدقيق للمشكلة الظاهرة بالصورة
+    if(window.moment && window.moment.fn.iMonth){
+      const m = moment(d);
+      const day = m.iDate();
+      const monthIndex = m.iMonth();
+      const year = m.iYear();
+      return `${day} ${hijriMonths[monthIndex]} ${year} هـ`;
     }
 
-    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-uma", {
+    // بديل احتياطي متقدم
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", {
       day: "numeric",
       month: "long",
       year: "numeric"
     });
-
     return formatter.format(d) + " هـ";
 
   }catch(e){
