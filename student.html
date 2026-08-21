@@ -11,6 +11,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
+<!-- مكتبات تحويل التاريخ الهجري المضمونة -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+
 <style>
 :root{
   --green-deep:#04201a;
@@ -287,11 +291,11 @@ let student = null;
 let allTransactions = [];
 let currentModal = null;
 
-const monthMap = {
-  "يناير":1,"فبراير":2,"مارس":3,"أبريل":4,"ابريل":4,"مايو":5,"يونيو":6,
-  "يوليو":7,"أغسطس":8,"اغسطس":8,"سبتمبر":9,"أكتوبر":10,"اكتوبر":10,
-  "نوفمبر":11,"ديسمبر":12
-};
+const hijriMonths = [
+  "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
+  "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
+  "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+];
 
 function alertBox(msg){
   const d=document.createElement("div");
@@ -305,19 +309,33 @@ function alertBox(msg){
 }
 
 function convertToHijri(dateInput){
+  if(!dateInput) return "التاريخ غير متاح";
+
   try{
     let d;
     if(dateInput && typeof dateInput==="object" && typeof dateInput.toDate==="function"){
       d=dateInput.toDate();
+    }else if(dateInput instanceof Date){
+      d=dateInput;
     }else{
-      d=new Date(dateInput || Date.now());
+      d=new Date(dateInput);
     }
-    if(isNaN(d.getTime())) d=new Date();
+    if(isNaN(d.getTime())) return "التاريخ غير متاح";
 
-    return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-uma",{
+    if(window.moment && window.moment.fn.iMonth){
+      const m = moment(d);
+      const day = m.iDate();
+      const monthIndex = m.iMonth();
+      const year = m.iYear();
+      return `${day} ${hijriMonths[monthIndex]} ${year} هـ`;
+    }
+
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn",{
       day:"numeric",month:"long",year:"numeric"
-    }).format(d);
+    });
+    return formatter.format(d) + " هـ";
   }catch(e){
+    console.error("خطأ في تحويل التاريخ:", e);
     return "التاريخ غير متاح";
   }
 }
@@ -478,11 +496,6 @@ function escapeHtml(v){
     .replace(/'/g,"&#039;");
 }
 
-/*
-  أهم نقطة في النظام:
-  "استرجاع كسجل جديد" ينسخ التقرير بالكامل، وليس الخطة القادمة فقط.
-  ثم index1.html يستقبل mode=new ويستطيع المستخدم تغيير ما يريد.
-*/
 function restoreAsNew(index){
   const tx=allTransactions[index];
 
@@ -504,7 +517,6 @@ function restoreAsNew(index){
     studentName:student.name||"",
     generalRating:tx.generalRating||"بارك الله فيك",
 
-    // نسخ كامل بيانات السجل السابق
     academicData:academicData
   };
 
@@ -569,7 +581,6 @@ async function deleteReport(index){
   try{
     const txs=[...(student.transactions||[])];
 
-    // allTransactions مرتبة تنازلياً؛ نحتاج السجل نفسه لا الاعتماد على ترتيب Firestore.
     const target=allTransactions[index];
     const originalIndex=txs.indexOf(target);
 
