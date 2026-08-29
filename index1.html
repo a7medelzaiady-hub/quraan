@@ -1088,14 +1088,20 @@ function addNewStudentTab() {
   autoSaveSession();
 }
 
-function closeStudentTab(index) {
-  if (activeTabs.length <= 1) return;
+function closeStudentTab(index, bypassConfirm) {
+  if (!bypassConfirm && activeTabs.length <= 1) return;
   
-  if (confirm('هل أنت تأكد من إغلاق استمارة هذا الطالب؟')) {
+  if (bypassConfirm || confirm('هل أنت تأكد من إغلاق استمارة هذا الطالب؟')) {
     activeTabs.splice(index, 1);
-    if (currentTabIndex >= activeTabs.length) {
+    
+    // إذا أغلقت التبويبات كلها، افتح تبويب جديد فارغ تلقائياً
+    if (activeTabs.length === 0) {
+      activeTabs.push(createEmptyTabObject('tab_' + Date.now()));
+      currentTabIndex = 0;
+    } else if (currentTabIndex >= activeTabs.length) {
       currentTabIndex = activeTabs.length - 1;
     }
+    
     renderTabsBar();
     loadTabStateToForm(activeTabs[currentTabIndex]);
     autoSaveSession();
@@ -1500,7 +1506,7 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       openQuranModal(errorInpId, rowId, isQ);
     } else {
       var currentErrors = inp.value;
-      if (currentErrors === '0' || currentErrors.trim() === '') return;
+      if (currentErrors === '0' || currentErrors.trim() !== '') return;
       
       var list = currentErrors.split('، ').filter(x => x.trim() !== '');
       if (list.length > 0) {
@@ -2130,7 +2136,8 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
 }
 
 function finishAfterSaveAndShare() {
-  resetFormForNewStudent();
+  // إغلاق تبويب الطالب الحالي تلقائياً فور إتمام الحفظ والاستخراج
+  closeStudentTab(currentTabIndex, true);
 }
 
 async function generateAllOutputs() {
