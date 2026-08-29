@@ -1031,10 +1031,13 @@ function renderTabsBar() {
   
   var html = '';
   activeTabs.forEach((tab, index) => {
-    var title = tab.studentName.trim() ? tab.studentName : ('طالب (' + (index + 1) + ')');
+    // إظهار الاسم المكتوب في الخانة أو الاسم الافتراضي إذا كانت الخانة فارغة
+    var currentInputVal = (index === currentTabIndex) ? document.getElementById('inp-student')?.value : tab.studentName;
+    var nameToDisplay = (currentInputVal && currentInputVal.trim()) ? currentInputVal.trim() : (tab.studentName && tab.studentName.trim() ? tab.studentName.trim() : ('طالب (' + (index + 1) + ')'));
+
     var isActive = (index === currentTabIndex);
     html += '<div class="tab-btn ' + (isActive ? 'active' : '') + '" onclick="switchStudentTab(' + index + ')">';
-    html += '<i class="ti ti-user"></i><span>' + title + '</span>';
+    html += '<i class="ti ti-user"></i><span>' + nameToDisplay + '</span>';
     if (activeTabs.length > 1) {
       html += '<span class="close-tab" onclick="event.stopPropagation(); closeStudentTab(' + index + ');">✕</span>';
     }
@@ -1411,6 +1414,7 @@ function pickStudent(name) {
   if (!editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
     window.fetchAndAutoFillLastNextPlan(name);
   }
+  autoSaveSession();
 }
 
 async function addNewStudentAction() {
