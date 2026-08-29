@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مركز خادم القرآن - نظام المتابعة الذكي</title>
+<title>مركز خادم القرآن - نظام المتابعة الذكي Multi-Student</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
@@ -87,23 +87,89 @@ html,body{
   margin-top:5px
 }
 
-/* ===== شريط التنقل ===== */
+/* ===== شريط إدارة تبويبات الطلاب المفتوحة ===== */
+.students-tabs-bar {
+  max-width: 800px;
+  margin: 12px auto 0;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+.students-tabs-bar::-webkit-scrollbar { height: 4px; }
+.students-tabs-bar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--sub);
+  cursor: pointer;
+  transition: .2s;
+  box-shadow: 0 3px 10px rgba(0,0,0,.04);
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--green-mid), var(--green-deep));
+  color: var(--gold-light);
+  border-color: var(--gold);
+  box-shadow: 0 5px 14px rgba(6,44,36,.18);
+}
+.tab-btn .close-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+  color: inherit;
+  font-size: 11px;
+  transition: .15s;
+}
+.tab-btn .close-tab:hover { background: var(--red); color: #fff; }
+
+.add-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #fffdf6, #f7f0d8);
+  border: 1.5px dashed var(--gold);
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 900;
+  color: var(--green-deep);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.add-tab-btn:hover { background: var(--gold-light); }
+
+/* ===== شريط التنقل العلوي ===== */
 .top-nav-btns{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
   max-width:800px;
-  margin:14px auto 0;
+  margin:10px auto 0;
   padding:0 14px
 }
 .nav-btn{
-  min-height:50px;
+  min-height:46px;
   background:#fff;
   color:var(--green-deep);
   border:1.5px solid #d5c483;
-  padding:9px 12px;
+  padding:8px 12px;
   border-radius:14px;
-  font-size:13px;
+  font-size:12.5px;
   font-weight:900;
   cursor:pointer;
   display:flex;
@@ -114,13 +180,9 @@ html,body{
   box-shadow:0 5px 16px rgba(6,44,36,.06);
   transition:.2s
 }
-.nav-btn:first-child{
-  background:linear-gradient(135deg,#fffdf6,#f7f0d8)
-}
 .nav-btn:hover{
   transform:translateY(-2px);
   border-color:var(--gold);
-  box-shadow:0 9px 22px rgba(6,44,36,.11)
 }
 
 /* ===== شريط اختيار نظام الأخطاء ===== */
@@ -596,9 +658,17 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   <div class="hdr-subtitle">تحت إشراف الشيخ عبدالرحمن</div>
 </div>
 
+<!-- شريط تبويبات الطلاب المفتوحة -->
+<div class="students-tabs-bar" id="students-tabs-container">
+  <!-- يتم توليد التبويبات ديناميكياً هنا -->
+  <button class="add-tab-btn" onclick="addNewStudentTab()">
+    <i class="ti ti-plus"></i><span>فتح طالب جديد</span>
+  </button>
+</div>
+
 <div class="top-nav-btns">
   <button class="nav-btn" onclick="addNewStudentAction()">
-    <i class="ti ti-user-plus"></i><span>تسجيل طالب جديد</span>
+    <i class="ti ti-user-plus"></i><span>تسجيل طالب جديد بـ DB</span>
   </button>
   <a href="manage.html" class="nav-btn" id="link-to-manage">
     <i class="ti ti-address-book"></i><span>سجل الطلاب والتقارير</span>
@@ -905,10 +975,133 @@ var cachedStudentsList = [];
 var editContext = null;
 var originalReportDate = null;
 
+// ===== إدارة الملازمة لعدة طلاب مفتوحين بنفس الوقت =====
+var activeTabs = [];
+var currentTabIndex = 0;
+
+function createEmptyTabObject(id) {
+  return {
+    id: id,
+    studentName: '',
+    generalRating: 'بارك الله فيك 👑',
+    editContext: null,
+    originalReportDate: null,
+    academicData: null
+  };
+}
+
+function renderTabsBar() {
+  var container = document.getElementById('students-tabs-container');
+  if (!container) return;
+  
+  var html = '';
+  activeTabs.forEach((tab, index) => {
+    var title = tab.studentName.trim() ? tab.studentName : ('طالب (' + (index + 1) + ')');
+    var isActive = (index === currentTabIndex);
+    html += '<div class="tab-btn ' + (isActive ? 'active' : '') + '" onclick="switchStudentTab(' + index + ')">';
+    html += '<i class="ti ti-user"></i><span>' + title + '</span>';
+    if (activeTabs.length > 1) {
+      html += '<span class="close-tab" onclick="event.stopPropagation(); closeStudentTab(' + index + ');">✕</span>';
+    }
+    html += '</div>';
+  });
+  
+  html += '<button class="add-tab-btn" onclick="addNewStudentTab()"><i class="ti ti-plus"></i><span>فتح طالب جديد</span></button>';
+  container.innerHTML = html;
+}
+
+function captureCurrentTabState() {
+  if (!activeTabs[currentTabIndex]) return;
+  
+  var name = document.getElementById('inp-student').value;
+  var rating = document.getElementById('inp-general-rating').value;
+  
+  var data = {};
+  SECTIONS.forEach(sec => {
+    data[sec.key] = collectSectionData(sec.key, sec.isQ);
+  });
+  
+  activeTabs[currentTabIndex].studentName = name;
+  activeTabs[currentTabIndex].generalRating = rating;
+  activeTabs[currentTabIndex].academicData = data;
+  activeTabs[currentTabIndex].editContext = editContext;
+  activeTabs[currentTabIndex].originalReportDate = originalReportDate;
+}
+
+function switchStudentTab(newIndex) {
+  if (newIndex === currentTabIndex || !activeTabs[newIndex]) return;
+  
+  captureCurrentTabState();
+  currentTabIndex = newIndex;
+  renderTabsBar();
+  loadTabStateToForm(activeTabs[currentTabIndex]);
+}
+
+function addNewStudentTab() {
+  captureCurrentTabState();
+  var newTabId = 'tab_' + Date.now();
+  var newTab = createEmptyTabObject(newTabId);
+  activeTabs.push(newTab);
+  currentTabIndex = activeTabs.length - 1;
+  renderTabsBar();
+  loadTabStateToForm(newTab);
+}
+
+function closeStudentTab(index) {
+  if (activeTabs.length <= 1) return;
+  
+  if (confirm('هل أنت تأكد من إغلاق استمارة هذا الطالب؟')) {
+    activeTabs.splice(index, 1);
+    if (currentTabIndex >= activeTabs.length) {
+      currentTabIndex = activeTabs.length - 1;
+    }
+    renderTabsBar();
+    loadTabStateToForm(activeTabs[currentTabIndex]);
+  }
+}
+
+function loadTabStateToForm(tab) {
+  document.getElementById('inp-student').value = tab.studentName || '';
+  document.getElementById('inp-general-rating').value = tab.generalRating || 'بارك الله فيك 👑';
+  
+  editContext = tab.editContext;
+  originalReportDate = tab.originalReportDate;
+  setEditModeUI(!!editContext);
+
+  SECTIONS.forEach(sec => {
+    document.getElementById(sec.key + '-current-list').innerHTML = '';
+    document.getElementById(sec.key + '-next-list').innerHTML = '';
+    counters[sec.key + '_c'] = 0;
+    counters[sec.key + '_n'] = 0;
+  });
+
+  if (tab.academicData) {
+    restoreFormFromPayload({
+      studentName: tab.studentName,
+      generalRating: tab.generalRating,
+      academicData: tab.academicData
+    });
+  } else {
+    SECTIONS.forEach(sec => {
+      if(!sec.isQ) { 
+        addCurrentSurah(sec.key+'-current-list', sec.key); 
+        addNextSurah(sec.key+'-next-list', sec.key); 
+      } else { 
+        addCurrentQuestion(sec.key+'-current-list', sec.key); 
+        addNextQuestion(sec.key+'-next-list', sec.key); 
+      }
+    });
+  }
+}
+
 // مسح أي مسودات سابقة وتنظيف التخزين المحلّي نهائياً
 localStorage.removeItem('draft_report_temp');
 
 document.addEventListener("DOMContentLoaded", function () {
+  // تهيئة أوّل طالب تلقائياً
+  activeTabs.push(createEmptyTabObject('tab_default'));
+  renderTabsBar();
+
   const savedDataStr = localStorage.getItem("edit_report_payload");
   if (savedDataStr) {
     try {
@@ -1110,6 +1303,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   studentInp.addEventListener('input', async function() {
     var val = this.value.trim();
+    if (activeTabs[currentTabIndex]) {
+      activeTabs[currentTabIndex].studentName = val;
+      renderTabsBar();
+    }
+
     if (!val) {
       studentDrop.style.display = 'none';
       return;
@@ -1146,6 +1344,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function pickStudent(name) {
   document.getElementById('inp-student').value = name;
   document.getElementById('student-ac-drop').style.display = 'none';
+  if (activeTabs[currentTabIndex]) {
+    activeTabs[currentTabIndex].studentName = name;
+    renderTabsBar();
+  }
 
   if (!editContext && typeof window.fetchAndAutoFillLastNextPlan === 'function') {
     window.fetchAndAutoFillLastNextPlan(name);
@@ -1166,7 +1368,6 @@ async function addNewStudentAction() {
         cachedStudentsList.push(studentName);
       }
       customAlert("تم تسجيل الطالب (" + studentName + ") بنجاح في قاعدة البيانات وتجهيز النظام لإدخال التقييمات.", "نجاح التسجيل ✨");
-      resetFormForNewStudent();
     } else if (result.reason === 'exists') {
       customAlert("الطالب (" + studentName + ") مسجل بالفعل في النظام مسبقاً، ولا يمكن تكراره.", "اسم مُكرّر ⚠️");
     } else {
@@ -1197,6 +1398,15 @@ function resetFormForNewStudent() {
   editContext = null;
   originalReportDate = null;
   setEditModeUI(false);
+  
+  if (activeTabs[currentTabIndex]) {
+    activeTabs[currentTabIndex].studentName = '';
+    activeTabs[currentTabIndex].academicData = null;
+    activeTabs[currentTabIndex].editContext = null;
+    activeTabs[currentTabIndex].originalReportDate = null;
+    renderTabsBar();
+  }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1337,7 +1547,7 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
   var startRenderingFrom = Math.max(fromNum, maxPressedNum);
   
   if (startRenderingFrom > toNum) {
-      grid.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--green-deep); font-weight: bold; font-size: 22px; grid-column: 1/-1;">تم الانتهاء من النطاق المحدد للمراجعة 🎉</div>';
+      grid.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--green-deep); font-weight: bold; font-size: 22px; grid-column: 1/-1;">تم الانتهاء من النطاق المحدد للمراجع 🎉</div>';
       return;
   }
 
@@ -1858,6 +2068,7 @@ function finishAfterSaveAndShare() {
 }
 
 async function generateAllOutputs() {
+  captureCurrentTabState();
   var nm = document.getElementById('inp-student').value.trim(); 
   if (!nm) { customAlert('يرجى إدخال اسم الطالب أولاً لاستخراج التقرير.', 'تنبيه ⚠️'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
@@ -1895,11 +2106,6 @@ async function generateAllOutputs() {
     customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message, 'خطأ ❌'); 
   }
 }
-
-SECTIONS.forEach(sec => {
-  if(!sec.isQ) { addCurrentSurah(sec.key+'-current-list', sec.key); addNextSurah(sec.key+'-next-list', sec.key); }
-  else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
-});
 </script>
 </body>
 </html>
