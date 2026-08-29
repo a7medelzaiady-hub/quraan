@@ -153,6 +153,22 @@ html,body{
 }
 .add-tab-btn:hover { background: var(--gold-light); }
 
+.clear-session-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: #fee2e2;
+  border: 1.5px solid #f87171;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--red);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.clear-session-btn:hover { background: var(--red); color: #fff; }
+
 /* ===== شريط التنقل العلوي ===== */
 .top-nav-btns{
   display:grid;
@@ -661,9 +677,6 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
 <!-- شريط تبويبات الطلاب المفتوحة -->
 <div class="students-tabs-bar" id="students-tabs-container">
   <!-- يتم توليد التبويبات ديناميكياً هنا -->
-  <button class="add-tab-btn" onclick="addNewStudentTab()">
-    <i class="ti ti-plus"></i><span>فتح طالب جديد</span>
-  </button>
 </div>
 
 <div class="top-nav-btns">
@@ -990,6 +1003,28 @@ function createEmptyTabObject(id) {
   };
 }
 
+// 1. نظام الحفظ اللحظي لحماية البيانات عند انقطاع الشحن
+function autoSaveSession() {
+  captureCurrentTabState();
+  var sessionData = {
+    activeTabs: activeTabs,
+    currentTabIndex: currentTabIndex
+  };
+  localStorage.setItem('quran_session_backup', JSON.stringify(sessionData));
+}
+
+// 2. زر تصفير الجلسة وبدء يوم جديد
+function clearSavedSession() {
+  if (confirm('هل أنت تأكد من تصفير ومسح جميع التبويبات والبدء بحصة جديدة؟')) {
+    localStorage.removeItem('quran_session_backup');
+    activeTabs = [createEmptyTabObject('tab_default')];
+    currentTabIndex = 0;
+    renderTabsBar();
+    loadTabStateToForm(activeTabs[0]);
+    customAlert("تم تصفير الشاشة والبدء بجلسة جديدة نظيفة ✨", "تصفير الجلسة 🧹");
+  }
+}
+
 function renderTabsBar() {
   var container = document.getElementById('students-tabs-container');
   if (!container) return;
@@ -1007,6 +1042,7 @@ function renderTabsBar() {
   });
   
   html += '<button class="add-tab-btn" onclick="addNewStudentTab()"><i class="ti ti-plus"></i><span>فتح طالب جديد</span></button>';
+  html += '<button class="clear-session-btn" onclick="clearSavedSession()"><i class="ti ti-trash"></i><span>تصفير الجلسة</span></button>';
   container.innerHTML = html;
 }
 
@@ -1035,6 +1071,7 @@ function switchStudentTab(newIndex) {
   currentTabIndex = newIndex;
   renderTabsBar();
   loadTabStateToForm(activeTabs[currentTabIndex]);
+  autoSaveSession();
 }
 
 function addNewStudentTab() {
@@ -1045,6 +1082,7 @@ function addNewStudentTab() {
   currentTabIndex = activeTabs.length - 1;
   renderTabsBar();
   loadTabStateToForm(newTab);
+  autoSaveSession();
 }
 
 function closeStudentTab(index) {
@@ -1057,6 +1095,7 @@ function closeStudentTab(index) {
     }
     renderTabsBar();
     loadTabStateToForm(activeTabs[currentTabIndex]);
+    autoSaveSession();
   }
 }
 
@@ -1094,13 +1133,32 @@ function loadTabStateToForm(tab) {
   }
 }
 
-// مسح أي مسودات سابقة وتنظيف التخزين المحلّي نهائياً
-localStorage.removeItem('draft_report_temp');
-
 document.addEventListener("DOMContentLoaded", function () {
-  // تهيئة أوّل طالب تلقائياً
-  activeTabs.push(createEmptyTabObject('tab_default'));
-  renderTabsBar();
+  // ربط الأحداث للحفظ اللحظي التلقائي عند أي إدخال أو تغيير
+  document.addEventListener('input', autoSaveSession);
+  document.addEventListener('change', autoSaveSession);
+
+  // استعادة التبويبات والمسودات المحفوظة إن وجدت
+  var savedSession = localStorage.getItem('quran_session_backup');
+  var restoredFromBackup = false;
+
+  if (savedSession) {
+    try {
+      var parsed = JSON.parse(savedSession);
+      if (parsed.activeTabs && parsed.activeTabs.length > 0) {
+        activeTabs = parsed.activeTabs;
+        currentTabIndex = parsed.currentTabIndex || 0;
+        renderTabsBar();
+        loadTabStateToForm(activeTabs[currentTabIndex]);
+        restoredFromBackup = true;
+      }
+    } catch(e) {}
+  }
+
+  if (!restoredFromBackup) {
+    activeTabs.push(createEmptyTabObject('tab_default'));
+    renderTabsBar();
+  }
 
   const savedDataStr = localStorage.getItem("edit_report_payload");
   if (savedDataStr) {
@@ -1184,6 +1242,7 @@ window.applyAutoFillData = function(academicData) {
   });
 
   if (hasFilledAny) {
+    autoSaveSession();
     customAlert("تم جلب وتعبئة خطة الحفظ والماضي القادمة تلقائياً لهذا الطالب من التقرير السابق! ✨", "تعبئة تلقائية ذكية ⚡");
   }
 };
@@ -1407,6 +1466,7 @@ function resetFormForNewStudent() {
     renderTabsBar();
   }
   
+  autoSaveSession();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1450,6 +1510,7 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       }
     }
   }
+  autoSaveSession();
 }
 
 async function openQuranModal(errorInpId, rowId, isQ) {
@@ -1547,7 +1608,7 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
   var startRenderingFrom = Math.max(fromNum, maxPressedNum);
   
   if (startRenderingFrom > toNum) {
-      grid.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--green-deep); font-weight: bold; font-size: 22px; grid-column: 1/-1;">تم الانتهاء من النطاق المحدد للمراجع 🎉</div>';
+      grid.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--green-deep); font-weight: bold; font-size: 22px; grid-column: 1/-1;">تم الانتهاء من النطاق المحدد للمراجعة 🎉</div>';
       return;
   }
 
@@ -1619,6 +1680,7 @@ function toggleErrorState(num, isQ) {
   } else {
     inp.value = list.join('، ');
   }
+  autoSaveSession();
 }
 
 function closeQuranModal() {
@@ -1700,9 +1762,9 @@ function setupAC(inp,drop){
     drop.style.display='block';
   });
 }
-function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none';}
-function delRow(id){document.getElementById(id).remove();}
-function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range');}
+function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;document.getElementById(dropId).style.display='none'; autoSaveSession();}
+function delRow(id){document.getElementById(id).remove(); autoSaveSession();}
+function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range'); autoSaveSession();}
 
 function collectSectionData(prefix, isQ) {
   var currents = []; var nexts = [];
