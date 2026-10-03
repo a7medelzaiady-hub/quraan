@@ -399,7 +399,7 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
 }
 .ac-item:hover{background:var(--green-light);color:#fff}
 
-.surah-row,.q-row{
+.surah-row,.q-row,.custom-row{
   display:grid;
   grid-template-columns:1fr 130px;
   gap:9px;
@@ -411,6 +411,7 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   position:relative
 }
 .q-row{grid-template-columns:1fr 1fr}
+.custom-row{grid-template-columns:1fr 1fr}
 .del-btn{
   position:absolute;
   left:-7px;top:-7px;
@@ -655,8 +656,8 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   .sub-sec-title{font-size:10.5px}
   .flbl{font-size:10px}
   .inp{padding:10px 11px;font-size:12px}
-  .surah-row,.q-row{grid-template-columns:1fr 116px;gap:7px;padding:9px}
-  .q-row{grid-template-columns:1fr 1fr}
+  .surah-row,.q-row,.custom-row{grid-template-columns:1fr 116px;gap:7px;padding:9px}
+  .q-row,.custom-row{grid-template-columns:1fr 1fr}
   .counter-box{height:41px}
   .counter-btn{width:33px;font-size:16px}
   .counter-box .error-inp{font-size:10px}
@@ -802,6 +803,25 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
       <div class="sub-sec-title">🎯 الخطة القادمة للاذكار:</div>
       <div id="hd-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('hd-next-list','hd')"><i class="ti ti-plus"></i> إضافة خطة قادمة للحديث</button>
+    </div>
+  </div>
+
+  <!-- القسم اليدوي الجديد -->
+  <div class="section" id="sec-custom">
+    <div class="sec-head">
+      <div class="sec-head-title">
+        <i class="ti ti-edit"></i>
+        <input class="inp" id="inp-custom-title" placeholder="اكتب عنوان القسم اليدوي (مثال: التجويد / المتون / اختبار أجزاء)..." style="background: transparent; color: var(--gold-light); border: 1px solid var(--gold); padding: 6px 10px; font-size: 13px;">
+      </div>
+    </div>
+    <div class="sec-body">
+      <div class="sub-sec-title">✏️ المنهج والتقييم الحالي للقسم اليدوي:</div>
+      <div id="custom-current-list"></div>
+      <button class="add-btn" onclick="addCurrentCustom('custom-current-list','custom')"><i class="ti ti-plus"></i> إضافة منهج/درس حالي</button>
+      <div class="divider"></div>
+      <div class="sub-sec-title">🎯 الخطة القادمة للقسم اليدوي:</div>
+      <div id="custom-next-list"></div>
+      <button class="add-btn next-add" onclick="addNextCustom('custom-next-list','custom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
   </div>
 </div>
@@ -1032,7 +1052,6 @@ function renderTabsBar() {
   
   var html = '';
   activeTabs.forEach((tab, index) => {
-    // إظهار الاسم المكتوب في الخانة أو الاسم الافتراضي إذا كانت الخانة فارغة
     var currentInputVal = (index === currentTabIndex) ? document.getElementById('inp-student')?.value : tab.studentName;
     var nameToDisplay = (currentInputVal && currentInputVal.trim()) ? currentInputVal.trim() : (tab.studentName && tab.studentName.trim() ? tab.studentName.trim() : ('طالب (' + (index + 1) + ')'));
 
@@ -1058,7 +1077,7 @@ function captureCurrentTabState() {
   
   var data = {};
   SECTIONS.forEach(sec => {
-    data[sec.key] = collectSectionData(sec.key, sec.isQ);
+    data[sec.key] = collectSectionData(sec.key, sec.isQ, sec.isCustom);
   });
   
   activeTabs[currentTabIndex].studentName = name;
@@ -1095,7 +1114,6 @@ function closeStudentTab(index, bypassConfirm) {
   if (bypassConfirm || confirm('هل أنت تأكد من إغلاق استمارة هذا الطالب؟')) {
     activeTabs.splice(index, 1);
     
-    // إذا أغلقت التبويبات كلها، افتح تبويب جديد فارغ تلقائياً
     if (activeTabs.length === 0) {
       activeTabs.push(createEmptyTabObject('tab_' + Date.now()));
       currentTabIndex = 0;
@@ -1132,7 +1150,10 @@ function loadTabStateToForm(tab) {
     });
   } else {
     SECTIONS.forEach(sec => {
-      if(!sec.isQ) { 
+      if(sec.isCustom) {
+        addCurrentCustom(sec.key+'-current-list', sec.key);
+        addNextCustom(sec.key+'-next-list', sec.key);
+      } else if(!sec.isQ) { 
         addCurrentSurah(sec.key+'-current-list', sec.key); 
         addNextSurah(sec.key+'-next-list', sec.key); 
       } else { 
@@ -1144,11 +1165,9 @@ function loadTabStateToForm(tab) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // ربط الأحداث للحفظ اللحظي التلقائي عند أي إدخال أو تغيير
   document.addEventListener('input', autoSaveSession);
   document.addEventListener('change', autoSaveSession);
 
-  // استعادة التبويبات والمسودات المحفوظة إن وجدت
   var savedSession = localStorage.getItem('quran_session_backup');
   var restoredFromBackup = false;
 
@@ -1209,7 +1228,13 @@ window.applyAutoFillData = function(academicData) {
   SECTIONS.forEach(sec => {
     const secKey = sec.key;
     const isQ = sec.isQ;
+    const isCustom = sec.isCustom;
     const secData = academicData[secKey];
+
+    if (secData && secData.title && isCustom) {
+      const customTitleInput = document.getElementById('inp-custom-title');
+      if (customTitleInput) customTitleInput.value = secData.title;
+    }
 
     if (secData && secData.nexts && secData.nexts.length > 0) {
       const currentContainer = document.getElementById(secKey + '-current-list');
@@ -1217,7 +1242,15 @@ window.applyAutoFillData = function(academicData) {
       counters[secKey + '_c'] = 0;
 
       secData.nexts.forEach(plan => {
-        if (!isQ) {
+        if (isCustom) {
+          if (plan.nextPlanTxt) {
+            addCurrentCustom(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const mainTxtInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-custom-txt');
+            if (mainTxtInp) mainTxtInp.value = plan.nextPlanTxt;
+            hasFilledAny = true;
+          }
+        } else if (!isQ) {
           if (plan.nextPlanSr) {
             addCurrentSurah(secKey + '-current-list', secKey);
             const idx = counters[secKey + '_c'];
@@ -1276,6 +1309,12 @@ function restoreFormFromPayload(payload) {
     for (let secKey in data) {
       const sectionData = data[secKey];
       const isQ = (secKey === 'mq' || secKey === 'pm' || secKey === 'hd');
+      const isCustom = (secKey === 'custom');
+
+      if (isCustom && sectionData.title) {
+        const titleInp = document.getElementById('inp-custom-title');
+        if (titleInp) titleInp.value = sectionData.title;
+      }
 
       const currentContainer = document.getElementById(secKey + '-current-list');
       const nextContainer = document.getElementById(secKey + '-next-list');
@@ -1286,7 +1325,17 @@ function restoreFormFromPayload(payload) {
 
       if (sectionData.currents && sectionData.currents.length > 0) {
         sectionData.currents.forEach(item => {
-          if (!isQ) {
+          if (isCustom) {
+            addCurrentCustom(secKey + '-current-list', secKey);
+            const idx = counters[secKey + '_c'];
+            const txtInp = document.querySelector('#crow-' + secKey + '-' + idx + ' .main-custom-txt');
+            const ratingSel = document.querySelector('#crow-' + secKey + '-' + idx + ' .rating-sel');
+            const errInp = document.getElementById('err-' + secKey + '-c-' + idx);
+
+            if (txtInp && item.txt) txtInp.value = item.txt;
+            if (ratingSel && item.rating) ratingSel.value = item.rating;
+            if (errInp && (item.errors !== undefined)) errInp.value = item.errors;
+          } else if (!isQ) {
             addCurrentSurah(secKey + '-current-list', secKey);
             const idx = counters[secKey + '_c'];
             const srInp = document.getElementById('sr-' + secKey + '-c-' + idx);
@@ -1323,7 +1372,12 @@ function restoreFormFromPayload(payload) {
 
       if (sectionData.nexts && sectionData.nexts.length > 0) {
         sectionData.nexts.forEach(plan => {
-          if (!isQ) {
+          if (isCustom) {
+            addNextCustom(secKey + '-next-list', secKey);
+            const idx = counters[secKey + '_n'];
+            const txtInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-custom-txt');
+            if (txtInp && plan.nextPlanTxt) txtInp.value = plan.nextPlanTxt;
+          } else if (!isQ) {
             addNextSurah(secKey + '-next-list', secKey);
             const idx = counters[secKey + '_n'];
             const srInp = document.getElementById('sr-' + secKey + '-n-' + idx);
@@ -1449,6 +1503,7 @@ async function addNewStudentAction() {
 function resetFormForNewStudent() {
   document.getElementById('inp-student').value = '';
   document.getElementById('inp-general-rating').selectedIndex = 0;
+  document.getElementById('inp-custom-title').value = '';
   
   SECTIONS.forEach(sec => {
     document.getElementById(sec.key + '-current-list').innerHTML = '';
@@ -1456,7 +1511,10 @@ function resetFormForNewStudent() {
     counters[sec.key + '_c'] = 0;
     counters[sec.key + '_n'] = 0;
     
-    if(!sec.isQ) { 
+    if(sec.isCustom) {
+      addCurrentCustom(sec.key+'-current-list', sec.key);
+      addNextCustom(sec.key+'-next-list', sec.key);
+    } else if(!sec.isQ) { 
       addCurrentSurah(sec.key+'-current-list', sec.key); 
       addNextSurah(sec.key+'-next-list', sec.key); 
     } else { 
@@ -1762,6 +1820,33 @@ function addNextQuestion(containerId, prefix){
   document.getElementById(containerId).appendChild(div);
 }
 
+// دمج إضافات القسم اليدوي
+function addCurrentCustom(containerId, prefix) {
+  var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
+  var div = document.createElement('div'); div.className = 'custom-row'; div.id = 'crow-'+prefix+'-'+idx;
+  var inpErrorId = 'err-'+prefix+'-c-'+idx;
+  var rowId = div.id;
+  div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'crow-'+prefix+'-'+idx+'\')">✕</button>':'')+
+    '<div class="frow" style="grid-column:1/-1;"><input class="inp main-custom-txt" placeholder="اكتب تفاصيل المنهج / الدرس (مثال: أحكام النون الساكنة)..."></div>'+
+    '<div style="grid-column:1/-1; display:grid; grid-template-columns:1fr 140px; gap:10px; margin-top:5px;">'+
+      '<div class="sel-wrap"><select class="inp rating-sel"><option value="">التقييم ✨</option><option value="بارك الله فيك 👑">بارك الله فيك 👑</option><option value="جيد جداً ⭐">جيد جداً ⭐</option><option value="جيد 👍">جيد 👍</option><option value="يحتاج مراجعة 📖">يحتاج مراجعة 📖</option><option value="مُؤَجَّل ⏳">مُؤَجَّل ⏳</option></select></div>'+
+      '<div class="counter-box">'+
+        '<button class="counter-btn minus" type="button" onclick="handleCounterAction(\'minus\', \''+inpErrorId+'\', \''+rowId+'\', true)">-</button>'+
+        '<input class="error-inp" id="'+inpErrorId+'" type="text" placeholder="عدد الأخطاء ❌" value="0" readonly style="pointer-events:none;">'+
+        '<button class="counter-btn plus" type="button" onclick="handleCounterAction(\'plus\', \''+inpErrorId+'\', \''+rowId+'\', true)">+</button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById(containerId).appendChild(div);
+}
+
+function addNextCustom(containerId, prefix) {
+  var key = prefix+'_n'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
+  var div = document.createElement('div'); div.className = 'custom-row'; div.id = 'nrow-'+prefix+'-'+idx;
+  div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'nrow-'+prefix+'-'+idx+'\')">✕</button>':'')+
+    '<div class="frow" style="grid-column:1/-1;"><input class="inp nxt-custom-txt" placeholder="اكتب تفاصيل الخطة القادمة لهذا القسم..."></div>';
+  document.getElementById(containerId).appendChild(div);
+}
+
 function setupAC(inp,drop){
   if(!inp||!drop)return;
   inp.addEventListener('input',function(){
@@ -1777,40 +1862,53 @@ function pickAC(inpId,dropId,name){document.getElementById(inpId).value=name;doc
 function delRow(id){document.getElementById(id).remove(); autoSaveSession();}
 function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.classList.toggle('hidden',val!=='range'); autoSaveSession();}
 
-function collectSectionData(prefix, isQ) {
+function collectSectionData(prefix, isQ, isCustom) {
   var currents = []; var nexts = [];
+  var customTitle = (prefix === 'custom') ? (document.getElementById('inp-custom-title')?.value.trim() || 'قسم إضافي / اختبار') : '';
+
   document.querySelectorAll('[id^="crow-'+prefix+'-"]').forEach(row => {
     var item = { rating: row.querySelector('.rating-sel')?.value || '', errors: row.querySelector('.error-inp')?.value || '0' };
-    if (!isQ) {
+    if (isCustom) {
+      item.txt = row.querySelector('.main-custom-txt')?.value;
+      if (item.txt) currents.push(item);
+    } else if (!isQ) {
       item.sr = row.querySelector('.main-sr')?.value; item.type = row.querySelector('.main-sel')?.value;
       item.f = row.querySelector('.main-f')?.value; item.t = row.querySelector('.main-t')?.value;
+      if (item.sr || item.f) currents.push(item);
     } else {
       item.f = row.querySelector('.main-qf')?.value; item.t = row.querySelector('.main-qt')?.value;
+      if (item.f) currents.push(item);
     }
-    if (item.sr || item.f) currents.push(item);
   });
+
   document.querySelectorAll('[id^="nrow-'+prefix+'-"]').forEach(row => {
     var item = {};
-    if (!isQ) {
+    if (isCustom) {
+      item.nextPlanTxt = row.querySelector('.nxt-custom-txt')?.value;
+      if (item.nextPlanTxt) nexts.push(item);
+    } else if (!isQ) {
       item.nextPlanSr = row.querySelector('.nxt-sr')?.value; item.nextPlanType = row.querySelector('.nxt-sel')?.value;
       item.nextPlanF = row.querySelector('.nxt-f')?.value; item.nextPlanT = row.querySelector('.nxt-t')?.value;
+      if (item.nextPlanSr || item.nextPlanF) nexts.push(item);
     } else {
       item.nextPlanF = row.querySelector('.nxt-qf')?.value; item.nextPlanT = row.querySelector('.nxt-qt')?.value;
+      if (item.nextPlanF) nexts.push(item);
     }
-    if (item.nextPlanSr || item.nextPlanF) nexts.push(item);
   });
-  return { currents: currents, nexts: nexts };
+
+  return { title: customTitle, currents: currents, nexts: nexts };
 }
 
 var C_W = 1080; var PAD = 44; var CARD_PAD_X = 38; var CARD_PAD_Y = 30;
 var PALETTE = { deep:'#04201a', mid:'#0b3d2e', light:'#14795c', gold:'#d4af37', goldLt:'#fef08a', goldDk:'#8a6d0a', cream:'#fdfbf5', ink:'#111827', sub:'#5b6472' };
 var SECTIONS = [
-  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false},
-  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false},
-  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true},
-  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true},
-  {key:'sj', title:'السراج', icon:'💡', isQ:false},
-  {key:'hd', title:' الأذكار', icon:'📿', isQ:true}
+  {key:'ns', title:'السور الجديدة', icon:'📖', isQ:false, isCustom:false},
+  {key:'ps', title:'ماضي السور', icon:'📚', isQ:false, isCustom:false},
+  {key:'mq', title:'المذكرة الجديدة', icon:'📝', isQ:true, isCustom:false},
+  {key:'pm', title:'ماضي المذكرة', icon:'📋', isQ:true, isCustom:false},
+  {key:'sj', title:'السراج', icon:'💡', isQ:false, isCustom:false},
+  {key:'hd', title:'الأذكار', icon:'📿', isQ:true, isCustom:false},
+  {key:'custom', title:'قسم إضافي / اختبار', icon:'✏️', isQ:false, isCustom:true}
 ];
 
 function rr(ctx,x,y,w,h,r){
@@ -1887,13 +1985,14 @@ function drawCornerBrackets(ctx, w, h, inset, len, color){
   ctx.restore();
 }
 
-function drawSectionHeader(ctx, sec, rightX, y, draw){
+function drawSectionHeader(ctx, sec, rightX, y, titleText, draw){
   var r = 32; var cx = rightX - r;
+  var displayTitle = titleText || sec.title;
   if(draw){
     ctx.save(); var g = ctx.createLinearGradient(cx-r, y, cx+r, y+2*r); g.addColorStop(0, PALETTE.mid); g.addColorStop(1, PALETTE.light);
     ctx.beginPath(); ctx.arc(cx, y+r, r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = PALETTE.gold; ctx.stroke();
     ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = PALETTE.goldLt; ctx.fillText(sec.icon, cx, y+r+2);
-    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(sec.title, cx - r - 18, y+r+1); ctx.restore();
+    ctx.font = '900 38px Cairo, sans-serif'; ctx.fillStyle = PALETTE.mid; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(displayTitle, cx - r - 18, y+r+1); ctx.restore();
   }
   return 2*r + 26;
 }
@@ -1901,8 +2000,14 @@ function drawSectionHeader(ctx, sec, rightX, y, draw){
 function renderItemCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var leftX  = x + CARD_PAD_X; var cy = y + CARD_PAD_Y;
   var mainTxt, subTxt = null;
-  if(item.sr){ mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; }
-  else { var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; }
+
+  if(sec.isCustom) {
+    mainTxt = item.txt || '';
+  } else if(item.sr){ 
+    mainTxt = item.sr; subTxt = item.type === 'range' ? ('الآيات ' + item.f + ' - ' + item.t) : 'السورة كاملةً'; 
+  } else { 
+    var u = (sec.key === 'hd') ? 'رقم' : 'سؤال'; mainTxt = 'من ' + u + ' ' + item.f + ' إلى ' + item.t; 
+  }
   
   ctx.font = '700 26px Cairo, sans-serif'; var tagW = subTxt ? (ctx.measureText(subTxt).width + 65) : 0;
   ctx.font = '900 38px Cairo, sans-serif'; 
@@ -1966,8 +2071,15 @@ function renderItemCard(ctx, item, sec, x, y, width, draw){
 function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
   var innerW = width - CARD_PAD_X*2; var rightX = x + width - CARD_PAD_X; var cy = y + CARD_PAD_Y;
   var planTxt;
-  if(item.nextPlanSr){ planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); }
-  else { var u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT; }
+
+  if(sec.isCustom) {
+    planTxt = item.nextPlanTxt || '';
+  } else if(item.nextPlanSr){ 
+    planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); 
+  } else { 
+    var u2 = (sec.key === 'hd') ? 'رقم' : 'سؤال'; planTxt = 'من ' + u2 + ' ' + item.nextPlanF + ' إلى ' + item.nextPlanT; 
+  }
+
   ctx.font = '700 28px Cairo, sans-serif'; var planLines = wrapText(ctx, planTxt, innerW - 48);
   var boxH = 22 + 38 + planLines.length*40 + 22;
   var boxX = x + CARD_PAD_X - 14; var boxW = width - (CARD_PAD_X - 14)*2;
@@ -2028,7 +2140,7 @@ function layoutReport(ctx, canvasH, nm, data, reportDate, draw){
   var cardX = PAD; var cardW = C_W - PAD*2;
   SECTIONS.forEach(function(sec){
     var sData = data[sec.key]; if(!sData || (!sData.currents.length && !sData.nexts.length)) return;
-    y += 8; var headH = drawSectionHeader(ctx, sec, cardX + cardW, y, draw); y += headH + 4;
+    y += 8; var headH = drawSectionHeader(ctx, sec, cardX + cardW, y, sData.title, draw); y += headH + 4;
     sData.currents.forEach(function(item){
       var h = renderItemCard(ctx, item, sec, cardX, y, cardW, false);
       if(draw){
@@ -2138,7 +2250,6 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
 }
 
 function finishAfterSaveAndShare() {
-  // إغلاق تبويب الطالب الحالي تلقائياً فور إتمام الحفظ والاستخراج
   closeStudentTab(currentTabIndex, true);
 }
 
@@ -2147,7 +2258,7 @@ async function generateAllOutputs() {
   var nm = document.getElementById('inp-student').value.trim(); 
   if (!nm) { customAlert('يرجى إدخال اسم الطالب أولاً لاستخراج التقرير.', 'تنبيه ⚠️'); return; }
   var genRating = document.getElementById('inp-general-rating').value;
-  var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ); });
+  var data = {}; SECTIONS.forEach(sec => { data[sec.key] = collectSectionData(sec.key, sec.isQ, sec.isCustom); });
 
   var submitBtn = document.getElementById('main-submit-btn');
   var originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
