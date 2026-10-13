@@ -1,0 +1,11 @@
+{
+  "short_name": "خادم القرآن",
+  "name": "مركز خادم القرآن الكريم",
+  "start_url": "./index1.html",
+  "background_color": "#062c24",
+  "theme_color": "#062c24",
+  "display": "standalone",
+  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "ar"
+}
