@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة خادم القرآن الكريم الرقمية</title>
 
+    <!-- ربط ملف الـ Manifest وإعدادات PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#064e3b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,11 +21,11 @@
 
     <style>
         :root {
-            /* لوحة الألوان المقتبسة من الصورة رقم 3 مع الهوية الذهبية والإسلامية */
-            --bg-page: #e8efec;            /* خلفية فاتحة ومريحة تعكس بروز الأجسام ثلاثية الأبعاد */
-            --brand-deep: #064e3b;          /* أخضر غامق وعميق جداً */
-            --brand-primary: #0b6e52;       /* الأخضر الرئيسي */
-            --brand-light: #10b981;         /* أخضر زاهي للإضاءة */
+            /* لوحة الألوان الهوية الذهبية والإسلامية */
+            --bg-page: #e8efec;
+            --brand-deep: #064e3b;
+            --brand-primary: #0b6e52;
+            --brand-light: #10b981;
             
             --gold-main: #d4af37;
             --gold-light: #fef08a;
@@ -32,7 +38,7 @@
             --danger-red: #dc2626;
             --danger-bg: #fef2f2;
 
-            /* ظلال 3D ناعمة وبارزة للغاية (3D Soft Soft UI / Neumorphism) */
+            /* ظلال 3D ناعمة وبارزة للغاية */
             --shadow-3d-card: 0 12px 28px rgba(6, 78, 59, 0.08), 0 4px 10px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             --shadow-3d-btn: 0 6px 16px rgba(6, 78, 59, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             --shadow-3d-pressed: inset 0 3px 6px rgba(0, 0, 0, 0.15);
@@ -127,7 +133,7 @@
             box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
         }
 
-        /* ===== رأس الصفحة 3D (مستوحى من كارت الرصيد في الصورة 3) ===== */
+        /* ===== رأس الصفحة 3D ===== */
         .header-container {
             padding: 16px 16px 0;
             max-width: 500px;
@@ -238,7 +244,7 @@
             to   { transform: translateX(-50%); }
         }
 
-        /* ===== شبكة البطاقات ثلاثية الأبعاد (3D Neumorphism Design) ===== */
+        /* ===== شبكة البطاقات ثلاثية الأبعاد ===== */
         .cards-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -272,7 +278,6 @@
             margin-bottom: 14px;
         }
 
-        /* الأيقونة البارزة 3D */
         .card-icon-3d {
             width: 52px;
             height: 52px;
@@ -320,7 +325,6 @@
             margin-top: auto;
         }
 
-        /* زر الإجراء الرئيسي 3D (مطابق للأزرار البارزة في الصورة 3) */
         .btn-3d-main {
             flex-grow: 1;
             height: 48px;
@@ -345,7 +349,6 @@
             box-shadow: var(--shadow-3d-pressed);
         }
 
-        /* زر المشاركة 3D */
         .btn-3d-icon {
             width: 48px;
             height: 48px;
@@ -368,7 +371,6 @@
             color: var(--brand-deep);
         }
 
-        /* كارت المشرفين البارز الأحمر */
         .card-secure-3d {
             background: #ffffff;
             border: 1.5px solid #fecaca;
@@ -387,7 +389,7 @@
             box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
         }
 
-        /* ===== PIN Pad فاخر ثلاثي الأبعاد ===== */
+        /* ===== PIN Pad ثلاثي الأبعاد ===== */
         #password-modal {
             position: fixed;
             inset: 0;
@@ -585,7 +587,7 @@
         </div>
     </div>
 
-    <!-- شبكة المحتوى 3D Neumorphism -->
+    <!-- شبكة المحتوى 3D -->
     <main class="cards-grid">
 
         <!-- كارت 1 -->
@@ -778,6 +780,15 @@
                     alert(`📋 تم نسخ رابط [${title}] بنجاح!`);
                 });
             }
+        }
+
+        // تسجيل مستقبل الخدمة PWA Service Worker للعمل بدون إنترنت
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('تم تفعيل الخدمة بنجاح:', reg.scope))
+                    .catch(err => console.log('فشل تسجيل الخدمة:', err));
+            });
         }
     </script>
 </body>
