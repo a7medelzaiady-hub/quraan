@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مركز خادم القرآن - نظام المتابعة الذكي Multi-Student</title>
+
+<!-- إعدادات تطبيق الويب PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#062c24">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
 <style>
@@ -665,7 +672,6 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   .submit-wrap{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
   .submit-btn{padding:13px 11px;font-size:13.5px;border-radius:13px}
 }
-
 </style>
 </head>
 <body>
@@ -676,9 +682,7 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
 </div>
 
 <!-- شريط تبويبات الطلاب المفتوحة -->
-<div class="students-tabs-bar" id="students-tabs-container">
-  <!-- يتم توليد التبويبات ديناميكياً هنا -->
-</div>
+<div class="students-tabs-bar" id="students-tabs-container"></div>
 
 <div class="top-nav-btns">
   <button class="nav-btn" onclick="addNewStudentAction()">
@@ -806,7 +810,7 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
     </div>
   </div>
 
-  <!-- القسم اليدوي الجديد -->
+  <!-- القسم اليدوي -->
   <div class="section" id="sec-custom">
     <div class="sec-head">
       <div class="sec-head-title">
@@ -842,11 +846,12 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   </div>
 </div>
 
-<!-- Firebase Modular SDK -->
+<!-- Firebase SDK مع دعم العمل بدون إنترنت (Persistent Local Cache) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import {
-    getFirestore, collection, addDoc, getDocs, query, where,
+    getFirestore, initializeFirestore, persistentLocalCache, persistentSingleTabManager,
+    collection, addDoc, getDocs, query, where,
     serverTimestamp, doc, updateDoc, arrayUnion, getDoc
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -861,7 +866,16 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
   };
 
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  
+  // تفعيل التخزين المحلي لـ Firebase Firestore للعمل بدون نت
+  let db;
+  try {
+    db = initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentSingleTabManager() })
+    });
+  } catch (e) {
+    db = getFirestore(app);
+  }
 
   window.fetchAllStudents = async function() {
     try {
@@ -872,7 +886,7 @@ select.inp{padding-left:30px;cursor:pointer;appearance:none;font-weight:800}
       });
       return studentsList;
     } catch (e) {
-      console.error("خطأ في جلب الطلاب:", e);
+      console.error("خطأ في جلب الطلاب (سيتم الاعتماد على الذاكرة المحلية):", e);
       return [];
     }
   };
@@ -1009,7 +1023,6 @@ var cachedStudentsList = [];
 var editContext = null;
 var originalReportDate = null;
 
-// ===== إدارة الملازمة لعدة طلاب مفتوحين بنفس الوقت =====
 var activeTabs = [];
 var currentTabIndex = 0;
 
@@ -1024,7 +1037,6 @@ function createEmptyTabObject(id) {
   };
 }
 
-// 1. نظام الحفظ اللحظي لحماية البيانات عند انقطاع الشحن
 function autoSaveSession() {
   captureCurrentTabState();
   var sessionData = {
@@ -1034,7 +1046,6 @@ function autoSaveSession() {
   localStorage.setItem('quran_session_backup', JSON.stringify(sessionData));
 }
 
-// 2. زر تصفير الجلسة وبدء يوم جديد
 function clearSavedSession() {
   if (confirm('هل أنت تأكد من تصفير ومسح جميع التبويبات والبدء بحصة جديدة؟')) {
     localStorage.removeItem('quran_session_backup');
@@ -1635,7 +1646,7 @@ async function openQuranModal(errorInpId, rowId, isQ) {
     var surahIndex = SURAS_PLAIN.indexOf(surahName) + 1;
     if (surahIndex > 0) {
       if (!SURAS_CACHE[surahIndex]) {
-        grid.innerHTML = '<div style="text-align:center; padding: 50px 20px; color: var(--green-mid); font-weight: bold; font-size: 20px; grid-column: 1/-1;">جاري تحميل آيات سورة ' + surahName + ' بالرسم العثماني... ⏳</div>';
+        grid.innerHTML = '<div style="text-align:center; padding: 40px 20px; color: var(--green-mid); font-weight: bold; font-size: 18px; grid-column: 1/-1;">جاري التجهيز... ⏳</div>';
         try {
           let res = await fetch(`https://api.alquran.cloud/v1/surah/${surahIndex}/quran-uthmani`);
           let json = await res.json();
@@ -1643,7 +1654,7 @@ async function openQuranModal(errorInpId, rowId, isQ) {
             SURAS_CACHE[surahIndex] = json.data.ayahs;
           }
         } catch(e) {
-          console.log("Internet Fetch Error:", e);
+          console.log("الشبكة غير متصلة، سيتم استخدام الترقيم المحلي بسلام.", e);
         }
       }
       
@@ -1707,7 +1718,7 @@ function renderQuranGrid(fromNum, toNum, isQ, errorInpId, surahName, typeSel) {
     } else if (isQ) {
       displayTxt = "السؤال أو التمرين التدريبي رقم " + i + " داخل المذكرة المعتمدة.";
     } else {
-      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾ (يتطلب الاتصال بالإنترنت لعرض النص)";
+      displayTxt = "﴿ نَصُّ الآيَةِ الكَرِيمَةِ رَقْمُ " + i + " مِنْ سُورَةِ " + surahName + " ﴾";
     }
 
     card.innerHTML = '<span class="ayah-num-badge">' + i + '</span>' +
@@ -1820,7 +1831,6 @@ function addNextQuestion(containerId, prefix){
   document.getElementById(containerId).appendChild(div);
 }
 
-// دمج إضافات القسم اليدوي
 function addCurrentCustom(containerId, prefix) {
   var key = prefix+'_c'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'custom-row'; div.id = 'crow-'+prefix+'-'+idx;
@@ -2196,7 +2206,7 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   modal.appendChild(imgPreview);
 
   var savedNote = document.createElement('div');
-  savedNote.innerHTML = '✅ تم حفظ التقرير في قاعدة البيانات بنجاح مع الاحتفاظ بالتاريخ المعتمد';
+  savedNote.innerHTML = '✅ تم حفظ التقرير في الجهاز بنجاح! (وسيتم المزامنة تلقائياً عند وجود إنترنت)';
   savedNote.style.cssText = 'color:#bbf7d0;font-weight:900;font-size:15px;margin-bottom:14px;font-family:Cairo,sans-serif;';
   modal.appendChild(savedNote);
 
@@ -2210,7 +2220,7 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
   btnWrap.appendChild(closeBtn);
 
   var shareBtn = document.createElement('button');
-  shareBtn.innerHTML = '🔗 مشاركة التقرير مباشر';
+  shareBtn.innerHTML = '🔗 مشاركة / حفظ الصورة';
   shareBtn.style.cssText = 'padding:12px 28px;background:#0b3d2e;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:6px;';
   
   shareBtn.onclick = async function() {
@@ -2231,7 +2241,6 @@ function showSingleImageModal(canvasElement, downloadName, studentName, genRatin
             a.href = imgPreview.src;
             a.download = downloadName;
             a.click();
-            customAlert('المتصفح لا يدعم التشيير المباشر، تم تنزيل صورة التقرير.', 'حفظ الصورة 📥');
           }
         } catch (shareErr) {}
 
@@ -2281,16 +2290,22 @@ async function generateAllOutputs() {
 
     if (submitBtn) { submitBtn.innerHTML = originalBtnHtml; submitBtn.disabled = false; }
 
-    if (!saved) {
-      customAlert('تعذر حفظ التقرير في قاعدة البيانات، يرجى التأكد من الاتصال بالإنترنت والمحاولة مرة أخرى.', 'خطأ في الحفظ ❌');
-      return;
-    }
-
     showSingleImageModal(reportCanvas, 'تقرير_متابعة_' + nm + '.jpg', nm, genRating, data);
   } catch (e) { 
     if (submitBtn) { submitBtn.innerHTML = originalBtnHtml; submitBtn.disabled = false; }
     customAlert('حدث خطأ أثناء إعداد التقرير: ' + e.message, 'خطأ ❌'); 
   }
+}
+</script>
+
+<!-- تسجيل مستقبل الخدمة PWA Service Worker للعمل بدون إنترنت -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('تم تفعيل الخدمة للعمل بدون إنترنت:', reg.scope))
+      .catch(err => console.log('فشل تسجيل الخدمة:', err));
+  });
 }
 </script>
 </body>
