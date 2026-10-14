@@ -864,15 +864,15 @@ select.inp{padding-left:32px;cursor:pointer;appearance:none;font-weight:800}
     <div class="sec-head">
       <div class="sec-head-title">
         <i class="ti ti-edit"></i>
-        <input class="inp" id="inp-custom-title" placeholder="اكتب عنوان القسم اليدوي (مثال: التجويد / المتون / اختبار أجزاء)..." style="background: transparent; color: var(--gold-light); border: 1px solid var(--gold); padding: 6px 10px; font-size: 13px;">
+        <input class="inp" id="inp-custom-title" placeholder="اكتب عنوان القسم اليدوي (مثال: التجويد / المتون / اختبار أجزاء)..." style="background: transparent; color: var(--gold-light); border: 1px solid var(--gold); padding: 6px 10px; font-size: 13px;" oninput="updateCustomSectionLabels(this.value)">
       </div>
     </div>
     <div class="sec-body">
-      <div class="sub-sec-title">✏️ المنهج والتقييم الحالي للقسم اليدوي:</div>
+      <div class="sub-sec-title" id="lbl-custom-current">✏️ المنهج والتقييم الحالي للقسم اليدوي:</div>
       <div id="custom-current-list"></div>
       <button class="add-btn" onclick="addCurrentCustom('custom-current-list','custom')"><i class="ti ti-plus"></i> إضافة منهج/درس حالي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة للقسم اليدوي:</div>
+      <div class="sub-sec-title" id="lbl-custom-next">🎯 الخطة القادمة للقسم اليدوي:</div>
       <div id="custom-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('custom-next-list','custom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
@@ -883,15 +883,15 @@ select.inp{padding-left:32px;cursor:pointer;appearance:none;font-weight:800}
     <div class="sec-head">
       <div class="sec-head-title">
         <i class="ti ti-history"></i>
-        <span>ماضي القسم اليدوي</span>
+        <span id="lbl-pcustom-head">ماضي القسم اليدوي</span>
       </div>
     </div>
     <div class="sec-body">
-      <div class="sub-sec-title">✏️ ماضي القسم اليدوي الحالي:</div>
+      <div class="sub-sec-title" id="lbl-pcustom-current">✏️ ماضي القسم اليدوي الحالي:</div>
       <div id="pcustom-current-list"></div>
       <button class="add-btn" onclick="addCurrentCustom('pcustom-current-list','pcustom')"><i class="ti ti-plus"></i> إضافة منهج/درس ماضي</button>
       <div class="divider"></div>
-      <div class="sub-sec-title">🎯 الخطة القادمة لماضي القسم اليدوي:</div>
+      <div class="sub-sec-title" id="lbl-pcustom-next">🎯 الخطة القادمة لماضي القسم اليدوي:</div>
       <div id="pcustom-next-list"></div>
       <button class="add-btn next-add" onclick="addNextQuestion('pcustom-next-list','pcustom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
@@ -1093,6 +1093,27 @@ var originalReportDate = null;
 var activeTabs = [];
 var currentTabIndex = 0;
 
+function updateCustomSectionLabels(val) {
+  var title = (val || '').trim();
+  var mainName = title || 'القسم اليدوي';
+  var pastName = title ? ('ماضي ' + title) : 'ماضي القسم اليدوي';
+
+  var lblCurrent = document.getElementById('lbl-custom-current');
+  if (lblCurrent) lblCurrent.innerHTML = '✏️ المنهج والتقييم الحالي لـ (' + mainName + '):';
+
+  var lblNext = document.getElementById('lbl-custom-next');
+  if (lblNext) lblNext.innerHTML = '🎯 الخطة القادمة لـ (' + mainName + '):';
+
+  var lblPCHead = document.getElementById('lbl-pcustom-head');
+  if (lblPCHead) lblPCHead.innerText = pastName;
+
+  var lblPCCurrent = document.getElementById('lbl-pcustom-current');
+  if (lblPCCurrent) lblPCCurrent.innerHTML = '✏️ ' + pastName + ' الحالي:';
+
+  var lblPCNext = document.getElementById('lbl-pcustom-next');
+  if (lblPCNext) lblPCNext.innerHTML = '🎯 الخطة القادمة لـ (' + pastName + '):';
+}
+
 function createEmptyTabObject(id) {
   return {
     id: id,
@@ -1227,6 +1248,7 @@ function loadTabStateToForm(tab) {
       academicData: tab.academicData
     });
   } else {
+    updateCustomSectionLabels('');
     SECTIONS.forEach(sec => {
       if(sec.isCustom) {
         addCurrentCustom(sec.key+'-current-list', sec.key);
@@ -1309,9 +1331,12 @@ window.applyAutoFillData = function(academicData) {
     const isCustom = sec.isCustom;
     const secData = academicData[secKey];
 
-    if (secData && secData.title && isCustom) {
+    if (secData && secData.title && isCustom && secKey === 'custom') {
       const customTitleInput = document.getElementById('inp-custom-title');
-      if (customTitleInput) customTitleInput.value = secData.title;
+      if (customTitleInput) {
+        customTitleInput.value = secData.title;
+        updateCustomSectionLabels(secData.title);
+      }
     }
 
     if (secData && secData.nexts && secData.nexts.length > 0) {
@@ -1391,7 +1416,10 @@ function restoreFormFromPayload(payload) {
 
       if (isCustom && sectionData.title && secKey === 'custom') {
         const titleInp = document.getElementById('inp-custom-title');
-        if (titleInp) titleInp.value = sectionData.title;
+        if (titleInp) {
+          titleInp.value = sectionData.title;
+          updateCustomSectionLabels(sectionData.title);
+        }
       }
 
       const currentContainer = document.getElementById(secKey + '-current-list');
@@ -1584,6 +1612,7 @@ function resetFormForNewStudent() {
   document.getElementById('inp-student').value = '';
   document.getElementById('inp-general-rating').selectedIndex = 0;
   document.getElementById('inp-custom-title').value = '';
+  updateCustomSectionLabels('');
   
   SECTIONS.forEach(sec => {
     document.getElementById(sec.key + '-current-list').innerHTML = '';
@@ -1935,7 +1964,14 @@ function toggleRange(rngId,val){var el=document.getElementById(rngId);if(el)el.c
 
 function collectSectionData(prefix, isQ, isCustom) {
   var currents = []; var nexts = [];
-  var customTitle = (prefix === 'custom' || prefix === 'pcustom') ? (document.getElementById('inp-custom-title')?.value.trim() || 'قسم إضافي / اختبار') : '';
+  var customTitleInput = document.getElementById('inp-custom-title')?.value.trim();
+  
+  var customTitle = '';
+  if (prefix === 'custom') {
+    customTitle = customTitleInput || 'قسم إضافي / اختبار';
+  } else if (prefix === 'pcustom') {
+    customTitle = customTitleInput ? ('ماضي ' + customTitleInput) : 'ماضي القسم اليدوي';
+  }
 
   document.querySelectorAll('[id^="crow-'+prefix+'-"]').forEach(row => {
     var item = { rating: row.querySelector('.rating-sel')?.value || '', errors: row.querySelector('.error-inp')?.value || '0' };
