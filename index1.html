@@ -859,7 +859,7 @@ select.inp{padding-left:32px;cursor:pointer;appearance:none;font-weight:800}
     </div>
   </div>
 
-  <!-- القسم اليدوي -->
+  <!-- القسم اليدوي (كارت واحد يضم الحالي، الماضي، والخطة القادمة) -->
   <div class="section" id="sec-custom">
     <div class="sec-head">
       <div class="sec-head-title">
@@ -868,32 +868,24 @@ select.inp{padding-left:32px;cursor:pointer;appearance:none;font-weight:800}
       </div>
     </div>
     <div class="sec-body">
+      <!-- 1. المنهج والتقييم الحالي -->
       <div class="sub-sec-title" id="lbl-custom-current">✏️ المنهج والتقييم الحالي للقسم اليدوي:</div>
       <div id="custom-current-list"></div>
       <button class="add-btn" onclick="addCurrentCustom('custom-current-list','custom')"><i class="ti ti-plus"></i> إضافة منهج/درس حالي</button>
+      
       <div class="divider"></div>
-      <div class="sub-sec-title" id="lbl-custom-next">🎯 الخطة القادمة للقسم اليدوي:</div>
-      <div id="custom-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextQuestion('custom-next-list','custom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
-    </div>
-  </div>
-
-  <!-- ماضي القسم اليدوي -->
-  <div class="section" id="sec-pcustom">
-    <div class="sec-head">
-      <div class="sec-head-title">
-        <i class="ti ti-history"></i>
-        <span id="lbl-pcustom-head">ماضي القسم اليدوي</span>
-      </div>
-    </div>
-    <div class="sec-body">
-      <div class="sub-sec-title" id="lbl-pcustom-current">✏️ ماضي القسم اليدوي الحالي:</div>
+      
+      <!-- 2. الماضي الحالي للقسم اليدوي -->
+      <div class="sub-sec-title" id="lbl-pcustom-current">📋 ماضي القسم اليدوي الحالي:</div>
       <div id="pcustom-current-list"></div>
       <button class="add-btn" onclick="addCurrentCustom('pcustom-current-list','pcustom')"><i class="ti ti-plus"></i> إضافة منهج/درس ماضي</button>
+
       <div class="divider"></div>
-      <div class="sub-sec-title" id="lbl-pcustom-next">🎯 الخطة القادمة لماضي القسم اليدوي:</div>
-      <div id="pcustom-next-list"></div>
-      <button class="add-btn next-add" onclick="addNextQuestion('pcustom-next-list','pcustom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
+
+      <!-- 3. الخطة القادمة (حقل نصي مخصص للقسم اليدوي) -->
+      <div class="sub-sec-title" id="lbl-custom-next">🎯 الخطة القادمة للقسم اليدوي:</div>
+      <div id="custom-next-list"></div>
+      <button class="add-btn next-add" onclick="addNextCustom('custom-next-list','custom')"><i class="ti ti-plus"></i> إضافة خطة قادمة</button>
     </div>
   </div>
 </div>
@@ -1101,17 +1093,11 @@ function updateCustomSectionLabels(val) {
   var lblCurrent = document.getElementById('lbl-custom-current');
   if (lblCurrent) lblCurrent.innerHTML = '✏️ المنهج والتقييم الحالي لـ (' + mainName + '):';
 
+  var lblPCCurrent = document.getElementById('lbl-pcustom-current');
+  if (lblPCCurrent) lblPCCurrent.innerHTML = '📋 ' + pastName + ' الحالي:';
+
   var lblNext = document.getElementById('lbl-custom-next');
   if (lblNext) lblNext.innerHTML = '🎯 الخطة القادمة لـ (' + mainName + '):';
-
-  var lblPCHead = document.getElementById('lbl-pcustom-head');
-  if (lblPCHead) lblPCHead.innerText = pastName;
-
-  var lblPCCurrent = document.getElementById('lbl-pcustom-current');
-  if (lblPCCurrent) lblPCCurrent.innerHTML = '✏️ ' + pastName + ' الحالي:';
-
-  var lblPCNext = document.getElementById('lbl-pcustom-next');
-  if (lblPCNext) lblPCNext.innerHTML = '🎯 الخطة القادمة لـ (' + pastName + '):';
 }
 
 function createEmptyTabObject(id) {
@@ -1235,8 +1221,10 @@ function loadTabStateToForm(tab) {
   setEditModeUI(!!editContext);
 
   SECTIONS.forEach(sec => {
-    document.getElementById(sec.key + '-current-list').innerHTML = '';
-    document.getElementById(sec.key + '-next-list').innerHTML = '';
+    var cList = document.getElementById(sec.key + '-current-list');
+    var nList = document.getElementById(sec.key + '-next-list');
+    if (cList) cList.innerHTML = '';
+    if (nList) nList.innerHTML = '';
     counters[sec.key + '_c'] = 0;
     counters[sec.key + '_n'] = 0;
   });
@@ -1250,15 +1238,19 @@ function loadTabStateToForm(tab) {
   } else {
     updateCustomSectionLabels('');
     SECTIONS.forEach(sec => {
+      var cList = document.getElementById(sec.key + '-current-list');
+      var nList = document.getElementById(sec.key + '-next-list');
+      if (!cList && !nList) return;
+
       if(sec.isCustom) {
-        addCurrentCustom(sec.key+'-current-list', sec.key);
-        addNextQuestion(sec.key+'-next-list', sec.key);
+        if (cList) addCurrentCustom(sec.key+'-current-list', sec.key);
+        if (nList) addNextCustom(sec.key+'-next-list', sec.key);
       } else if(!sec.isQ) { 
-        addCurrentSurah(sec.key+'-current-list', sec.key); 
-        addNextSurah(sec.key+'-next-list', sec.key); 
+        if (cList) addCurrentSurah(sec.key+'-current-list', sec.key); 
+        if (nList) addNextSurah(sec.key+'-next-list', sec.key); 
       } else { 
-        addCurrentQuestion(sec.key+'-current-list', sec.key); 
-        addNextQuestion(sec.key+'-next-list', sec.key); 
+        if (cList) addCurrentQuestion(sec.key+'-current-list', sec.key); 
+        if (nList) addNextQuestion(sec.key+'-next-list', sec.key); 
       }
     });
   }
@@ -1479,12 +1471,10 @@ function restoreFormFromPayload(payload) {
       if (sectionData.nexts && sectionData.nexts.length > 0) {
         sectionData.nexts.forEach(plan => {
           if (isCustom) {
-            addNextQuestion(secKey + '-next-list', secKey);
+            addNextCustom(secKey + '-next-list', secKey);
             const idx = counters[secKey + '_n'];
-            const qfInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-qf');
-            const qtInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-qt');
-            if (qfInp && plan.nextPlanF) qfInp.value = plan.nextPlanF;
-            if (qtInp && plan.nextPlanT) qtInp.value = plan.nextPlanT;
+            const txtInp = document.querySelector('#nrow-' + secKey + '-' + idx + ' .nxt-custom-txt');
+            if (txtInp) txtInp.value = plan.nextPlanTxt || (plan.nextPlanF ? ('من رقم ' + plan.nextPlanF + ' إلى ' + plan.nextPlanT) : '');
           } else if (!isQ) {
             addNextSurah(secKey + '-next-list', secKey);
             const idx = counters[secKey + '_n'];
@@ -1615,20 +1605,22 @@ function resetFormForNewStudent() {
   updateCustomSectionLabels('');
   
   SECTIONS.forEach(sec => {
-    document.getElementById(sec.key + '-current-list').innerHTML = '';
-    document.getElementById(sec.key + '-next-list').innerHTML = '';
+    var cList = document.getElementById(sec.key + '-current-list');
+    var nList = document.getElementById(sec.key + '-next-list');
+    if (cList) cList.innerHTML = '';
+    if (nList) nList.innerHTML = '';
     counters[sec.key + '_c'] = 0;
     counters[sec.key + '_n'] = 0;
     
     if(sec.isCustom) {
-      addCurrentCustom(sec.key+'-current-list', sec.key);
-      addNextQuestion(sec.key+'-next-list', sec.key);
+      if (cList) addCurrentCustom(sec.key+'-current-list', sec.key);
+      if (nList) addNextCustom(sec.key+'-next-list', sec.key);
     } else if(!sec.isQ) { 
-      addCurrentSurah(sec.key+'-current-list', sec.key); 
-      addNextSurah(sec.key+'-next-list', sec.key); 
+      if (cList) addCurrentSurah(sec.key+'-current-list', sec.key); 
+      if (nList) addNextSurah(sec.key+'-next-list', sec.key); 
     } else { 
-      addCurrentQuestion(sec.key+'-current-list', sec.key); 
-      addNextQuestion(sec.key+'-next-list', sec.key); 
+      if (cList) addCurrentQuestion(sec.key+'-current-list', sec.key); 
+      if (nList) addNextQuestion(sec.key+'-next-list', sec.key); 
     }
   });
 
@@ -1922,7 +1914,7 @@ function addCurrentQuestion(containerId, prefix){
 function addNextQuestion(containerId, prefix){
   var key = prefix+'_n'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
   var div = document.createElement('div'); div.className = 'q-row'; div.id = 'nrow-'+prefix+'-'+idx;
-  var isRq = (prefix==='hd'||prefix==='phd'||prefix==='custom'||prefix==='pcustom'); var pFrom = isRq?'من رقم':'من س', pTo = isRq?'إلى رقم':'إلى س';
+  var isRq = (prefix==='hd'||prefix==='phd'); var pFrom = isRq?'من رقم':'من س', pTo = isRq?'إلى رقم':'إلى س';
   div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'nrow-'+prefix+'-'+idx+'\')">✕</button>':'')+
     '<div class="frow"><input class="inp num nxt-qf" type="number" placeholder="'+pFrom+'"></div>'+
     '<div class="frow"><input class="inp num nxt-qt" type="number" placeholder="'+pTo+'"></div>';
@@ -1944,6 +1936,15 @@ function addCurrentCustom(containerId, prefix) {
         '<button class="counter-btn plus" type="button" onclick="handleCounterAction(\'plus\', \''+inpErrorId+'\', \''+rowId+'\', true)">+</button>'+
       '</div>'+
     '</div>';
+  document.getElementById(containerId).appendChild(div);
+}
+
+/* دالة إضافة خطة قادمة مخصصة كحقل نصي حر للقسم اليدوي */
+function addNextCustom(containerId, prefix) {
+  var key = prefix+'_n'; counters[key] = (counters[key]||0)+1; var idx = counters[key];
+  var div = document.createElement('div'); div.className = 'custom-row'; div.id = 'nrow-'+prefix+'-'+idx;
+  div.innerHTML = (idx>1?'<button class="del-btn" onclick="delRow(\'nrow-'+prefix+'-'+idx+'\')">✕</button>':'')+
+    '<div class="frow" style="grid-column:1/-1;"><input class="inp nxt-custom-txt" placeholder="اكتب تفاصيل الخطة القادمة (مثال: أحكام الميم الساكنة / باب مخارج الحروف)..."></div>';
   document.getElementById(containerId).appendChild(div);
 }
 
@@ -1991,8 +1992,10 @@ function collectSectionData(prefix, isQ, isCustom) {
   document.querySelectorAll('[id^="nrow-'+prefix+'-"]').forEach(row => {
     var item = {};
     if (isCustom) {
-      item.nextPlanF = row.querySelector('.nxt-qf')?.value; item.nextPlanT = row.querySelector('.nxt-qt')?.value;
-      if (item.nextPlanF) nexts.push(item);
+      item.nextPlanTxt = row.querySelector('.nxt-custom-txt')?.value;
+      item.nextPlanF = row.querySelector('.nxt-qf')?.value;
+      item.nextPlanT = row.querySelector('.nxt-qt')?.value;
+      if (item.nextPlanTxt || item.nextPlanF) nexts.push(item);
     } else if (!isQ) {
       item.nextPlanSr = row.querySelector('.nxt-sr')?.value; item.nextPlanType = row.querySelector('.nxt-sel')?.value;
       item.nextPlanF = row.querySelector('.nxt-f')?.value; item.nextPlanT = row.querySelector('.nxt-t')?.value;
@@ -2183,7 +2186,7 @@ function renderNextPlanCard(ctx, item, sec, x, y, width, draw){
   var planTxt;
 
   if(sec.isCustom) {
-    planTxt = item.nextPlanF ? ('من رقم ' + item.nextPlanF + ' إلى ' + item.nextPlanT) : (item.nextPlanTxt || '');
+    planTxt = item.nextPlanTxt || (item.nextPlanF ? ('من رقم ' + item.nextPlanF + ' إلى ' + item.nextPlanT) : '');
   } else if(item.nextPlanSr){ 
     planTxt = item.nextPlanSr + (item.nextPlanType === 'range' ? (' (الآيات ' + item.nextPlanF + ' - ' + item.nextPlanT + ')') : ' كاملةً'); 
   } else { 
