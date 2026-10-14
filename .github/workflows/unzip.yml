@@ -7,10 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          unzip -o quraan.zip
-          cp -r quraan/. 
-          rm -rf quraan quraan.zip
+      - name: Unzip and commit
+        run: |
+          for f in quraan quraan.txt quraan.zip; do
+            if [ -f "$f" ]; then mv "$f" offline.zip; break; fi
+          done
+          unzip -o offline.zip
+          cp -r quraan-offline/. .
+          rm -rf quraan-offline offline.zip
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add -A
