@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>نظام المتابعة الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<link href="vendor/css/fonts.css" rel="stylesheet">
+<link href="vendor/css/tabler-icons.min.css" rel="stylesheet">
 
 <!-- Firebase SDK (v10 Compat) -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="vendor/js/firebase-app-compat.js"></script>
+<script src="vendor/js/firebase-firestore-compat.js"></script>
 
 <style>
 :root {
@@ -364,6 +364,7 @@ select.inp { padding-left: 32px; cursor: pointer; appearance: none; }
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.warn("offline persistence:",e.code)});
   const studentsCollection = db.collection('students');
 
   let existingStudentsList = [];
@@ -651,7 +652,7 @@ async function openQuranModal(errorInpId, rowId, isQ) {
       if (!SURAS_CACHE[surahIndex]) {
         grid.innerHTML = '<div style="text-align:center; padding: 50px 20px; color: var(--green-mid); font-weight: bold; font-size: 20px; grid-column: 1/-1;">جاري تحميل آيات سورة ' + surahName + ' بالرسم العثماني... ⏳</div>';
         try {
-          let res = await fetch(`https://api.alquran.cloud/v1/surah/${surahIndex}/quran-uthmani`);
+          let res = await fetch(`data/surah/${surahIndex}.json`);
           let json = await res.json();
           if (json && json.data && json.data.ayahs) {
             SURAS_CACHE[surahIndex] = json.data.ayahs;
@@ -1112,5 +1113,6 @@ SECTIONS.forEach(sec => {
   else { addCurrentQuestion(sec.key+'-current-list', sec.key); addNextQuestion(sec.key+'-next-list', sec.key); }
 });
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
 </body>
 </html>

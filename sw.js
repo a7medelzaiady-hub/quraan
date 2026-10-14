@@ -1,65 +1,254 @@
-const CACHE_NAME = 'quran-center-v1';
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manage.html',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap',
-  'https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css',
-  'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js',
-  'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js'
+// Service Worker - نسخة تعمل بدون إنترنت بالكامل
+const CACHE_NAME = 'quran-center-offline-v2';
+const PRECACHE = [
+ "./",
+ "./alakhyar.html",
+ "./croco.html",
+ "./data/quran-uthmani.json",
+ "./data/surah/1.json",
+ "./data/surah/10.json",
+ "./data/surah/100.json",
+ "./data/surah/101.json",
+ "./data/surah/102.json",
+ "./data/surah/103.json",
+ "./data/surah/104.json",
+ "./data/surah/105.json",
+ "./data/surah/106.json",
+ "./data/surah/107.json",
+ "./data/surah/108.json",
+ "./data/surah/109.json",
+ "./data/surah/11.json",
+ "./data/surah/110.json",
+ "./data/surah/111.json",
+ "./data/surah/112.json",
+ "./data/surah/113.json",
+ "./data/surah/114.json",
+ "./data/surah/12.json",
+ "./data/surah/13.json",
+ "./data/surah/14.json",
+ "./data/surah/15.json",
+ "./data/surah/16.json",
+ "./data/surah/17.json",
+ "./data/surah/18.json",
+ "./data/surah/19.json",
+ "./data/surah/2.json",
+ "./data/surah/20.json",
+ "./data/surah/21.json",
+ "./data/surah/22.json",
+ "./data/surah/23.json",
+ "./data/surah/24.json",
+ "./data/surah/25.json",
+ "./data/surah/26.json",
+ "./data/surah/27.json",
+ "./data/surah/28.json",
+ "./data/surah/29.json",
+ "./data/surah/3.json",
+ "./data/surah/30.json",
+ "./data/surah/31.json",
+ "./data/surah/32.json",
+ "./data/surah/33.json",
+ "./data/surah/34.json",
+ "./data/surah/35.json",
+ "./data/surah/36.json",
+ "./data/surah/37.json",
+ "./data/surah/38.json",
+ "./data/surah/39.json",
+ "./data/surah/4.json",
+ "./data/surah/40.json",
+ "./data/surah/41.json",
+ "./data/surah/42.json",
+ "./data/surah/43.json",
+ "./data/surah/44.json",
+ "./data/surah/45.json",
+ "./data/surah/46.json",
+ "./data/surah/47.json",
+ "./data/surah/48.json",
+ "./data/surah/49.json",
+ "./data/surah/5.json",
+ "./data/surah/50.json",
+ "./data/surah/51.json",
+ "./data/surah/52.json",
+ "./data/surah/53.json",
+ "./data/surah/54.json",
+ "./data/surah/55.json",
+ "./data/surah/56.json",
+ "./data/surah/57.json",
+ "./data/surah/58.json",
+ "./data/surah/59.json",
+ "./data/surah/6.json",
+ "./data/surah/60.json",
+ "./data/surah/61.json",
+ "./data/surah/62.json",
+ "./data/surah/63.json",
+ "./data/surah/64.json",
+ "./data/surah/65.json",
+ "./data/surah/66.json",
+ "./data/surah/67.json",
+ "./data/surah/68.json",
+ "./data/surah/69.json",
+ "./data/surah/7.json",
+ "./data/surah/70.json",
+ "./data/surah/71.json",
+ "./data/surah/72.json",
+ "./data/surah/73.json",
+ "./data/surah/74.json",
+ "./data/surah/75.json",
+ "./data/surah/76.json",
+ "./data/surah/77.json",
+ "./data/surah/78.json",
+ "./data/surah/79.json",
+ "./data/surah/8.json",
+ "./data/surah/80.json",
+ "./data/surah/81.json",
+ "./data/surah/82.json",
+ "./data/surah/83.json",
+ "./data/surah/84.json",
+ "./data/surah/85.json",
+ "./data/surah/86.json",
+ "./data/surah/87.json",
+ "./data/surah/88.json",
+ "./data/surah/89.json",
+ "./data/surah/9.json",
+ "./data/surah/90.json",
+ "./data/surah/91.json",
+ "./data/surah/92.json",
+ "./data/surah/93.json",
+ "./data/surah/94.json",
+ "./data/surah/95.json",
+ "./data/surah/96.json",
+ "./data/surah/97.json",
+ "./data/surah/98.json",
+ "./data/surah/99.json",
+ "./grammar.html",
+ "./icon-192.png",
+ "./icon-512.png",
+ "./index.html",
+ "./index1.html",
+ "./index12.html",
+ "./manage.html",
+ "./manage1.html",
+ "./manifest.json",
+ "./mos7af.html",
+ "./part2.html",
+ "./student.html",
+ "./student_dashboard.html",
+ "./student_history.html",
+ "./vendor/css/fontawesome.min.css",
+ "./vendor/css/fonts.css",
+ "./vendor/css/fonts/tabler-icons.ttf",
+ "./vendor/css/fonts/tabler-icons.woff",
+ "./vendor/css/fonts/tabler-icons.woff2",
+ "./vendor/css/tabler-icons.min.css",
+ "./vendor/css/tailwind.css",
+ "./vendor/fonts/amiri-arabic-400-italic.woff2",
+ "./vendor/fonts/amiri-arabic-400-normal.woff2",
+ "./vendor/fonts/amiri-arabic-700-italic.woff2",
+ "./vendor/fonts/amiri-arabic-700-normal.woff2",
+ "./vendor/fonts/amiri-latin-400-italic.woff2",
+ "./vendor/fonts/amiri-latin-400-normal.woff2",
+ "./vendor/fonts/amiri-latin-700-italic.woff2",
+ "./vendor/fonts/amiri-latin-700-normal.woff2",
+ "./vendor/fonts/amiri-latin-ext-400-italic.woff2",
+ "./vendor/fonts/amiri-latin-ext-400-normal.woff2",
+ "./vendor/fonts/amiri-latin-ext-700-italic.woff2",
+ "./vendor/fonts/amiri-latin-ext-700-normal.woff2",
+ "./vendor/fonts/amiri-quran-arabic-400-normal.woff2",
+ "./vendor/fonts/amiri-quran-latin-400-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-arabic-500-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-arabic-700-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-arabic-800-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-500-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-700-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-800-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-ext-500-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-ext-700-normal.woff2",
+ "./vendor/fonts/baloo-bhaijaan-2-latin-ext-800-normal.woff2",
+ "./vendor/fonts/cairo-arabic-400-normal.woff2",
+ "./vendor/fonts/cairo-arabic-500-normal.woff2",
+ "./vendor/fonts/cairo-arabic-600-normal.woff2",
+ "./vendor/fonts/cairo-arabic-700-normal.woff2",
+ "./vendor/fonts/cairo-arabic-800-normal.woff2",
+ "./vendor/fonts/cairo-arabic-900-normal.woff2",
+ "./vendor/fonts/cairo-latin-400-normal.woff2",
+ "./vendor/fonts/cairo-latin-500-normal.woff2",
+ "./vendor/fonts/cairo-latin-600-normal.woff2",
+ "./vendor/fonts/cairo-latin-700-normal.woff2",
+ "./vendor/fonts/cairo-latin-800-normal.woff2",
+ "./vendor/fonts/cairo-latin-900-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-400-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-500-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-600-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-700-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-800-normal.woff2",
+ "./vendor/fonts/cairo-latin-ext-900-normal.woff2",
+ "./vendor/fonts/tajawal-arabic-400-normal.woff2",
+ "./vendor/fonts/tajawal-arabic-500-normal.woff2",
+ "./vendor/fonts/tajawal-arabic-700-normal.woff2",
+ "./vendor/fonts/tajawal-arabic-800-normal.woff2",
+ "./vendor/fonts/tajawal-arabic-900-normal.woff2",
+ "./vendor/fonts/tajawal-latin-400-normal.woff2",
+ "./vendor/fonts/tajawal-latin-500-normal.woff2",
+ "./vendor/fonts/tajawal-latin-700-normal.woff2",
+ "./vendor/fonts/tajawal-latin-800-normal.woff2",
+ "./vendor/fonts/tajawal-latin-900-normal.woff2",
+ "./vendor/js/chart.umd.min.js",
+ "./vendor/js/firebase-app-compat.js",
+ "./vendor/js/firebase-esm.js",
+ "./vendor/js/firebase-firestore-compat.js",
+ "./vendor/js/html2canvas.min.js",
+ "./vendor/js/jszip.min.js",
+ "./vendor/js/moment-hijri.min.js",
+ "./vendor/js/moment.min.js",
+ "./vendor/webfonts/fa-brands-400.ttf",
+ "./vendor/webfonts/fa-brands-400.woff2",
+ "./vendor/webfonts/fa-regular-400.ttf",
+ "./vendor/webfonts/fa-regular-400.woff2",
+ "./vendor/webfonts/fa-solid-900.ttf",
+ "./vendor/webfonts/fa-solid-900.woff2",
+ "./vendor/webfonts/fa-v4compatibility.ttf",
+ "./vendor/webfonts/fa-v4compatibility.woff2",
+ "./%D8%A7%D9%84%D8%A7%D8%B3%D8%A6%D9%84%D9%87%20%D8%A7%D9%84%D9%85%D9%81%D9%8A%D8%AF%D9%87%20%D9%84%D9%84%D8%AD%D9%8A%D8%A7%D9%87%20%D8%A7%D9%84%D8%B3%D8%B9%D9%8A%D8%AF%D9%87.html",
+ "./%D8%A7%D9%84%D8%B3%D8%B1%D8%A7%D8%AC%20%D8%A7%D9%84%D9%85%D9%86%D9%8A%D8%B1.html"
 ];
 
-// تثبيت ملفات التطبيق بالذاكرة المؤقتة
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Caching App Shell');
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.all(PRECACHE.map((u) =>
+        cache.add(new Request(u, {cache: 'reload'})).catch((err) => console.warn('skip', u, err))
+      )))
+      .then(() => self.skipWaiting())
   );
 });
 
-// تفعيل وتحديث الذاكرة
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== CACHE_NAME) {
-          return caches.delete(key);
-        }
-      }));
-    }).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// استرجاع الملفات المخزنة عند قطع الشبكة (Cache First with Network Fallback)
 self.addEventListener('fetch', (e) => {
-  // تجاهل طلبات المزامنة الخاصة بـ Firebase Firestore
-  if (e.request.url.includes('firestore.googleapis.com')) {
-    return;
-  }
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  // Firestore/Google APIs: let the SDK handle its own offline cache
+  if (url.hostname.endsWith('googleapis.com') && url.hostname !== 'fonts.googleapis.com') return;
 
   e.respondWith(
-    caches.match(e.request).then((response) => {
-      if (response) {
-        return response;
-      }
-      return fetch(e.request).then((netResponse) => {
-        // تخزين أية ملفات جديدة تلقائياً
-        if (e.request.method === 'GET' && netResponse.status === 200) {
-          const resClone = netResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, resClone);
-          });
+    caches.match(req, {ignoreSearch: true}).then((hit) => {
+      if (hit) return hit;
+      return fetch(req).then((res) => {
+        if (res && res.status === 200 && (res.type === 'basic' || res.type === 'cors')) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, copy));
         }
-        return netResponse;
+        return res;
       });
     }).catch(() => {
-      // إرجاع صفحة index.html الأساسية عند فتح أية صفحة بدون إنترنت
-      if (e.request.mode === 'navigate') {
-        return caches.match('./index.html');
-      }
+      if (req.mode === 'navigate') return caches.match('./index1.html');
+      return new Response('', {status: 504, statusText: 'Offline'});
     })
   );
 });

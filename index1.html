@@ -11,8 +11,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<link href="vendor/css/fonts.css" rel="stylesheet">
+<link href="vendor/css/tabler-icons.min.css" rel="stylesheet">
 
 <style>
 :root{
@@ -863,12 +863,12 @@ select.inp{padding-left:32px;cursor:pointer;appearance:none;font-weight:800}
 
 <!-- Firebase SDK -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { initializeApp } from "./vendor/js/firebase-esm.js";
   import {
     getFirestore, initializeFirestore, persistentLocalCache, persistentSingleTabManager,
     collection, addDoc, getDocs, query, where,
     serverTimestamp, doc, updateDoc, arrayUnion, getDoc
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  } from "./vendor/js/firebase-esm.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
@@ -1662,7 +1662,7 @@ async function openQuranModal(errorInpId, rowId, isQ) {
       if (!SURAS_CACHE[surahIndex]) {
         grid.innerHTML = '<div style="text-align:center; padding: 40px 20px; color: var(--green-mid); font-weight: bold; font-size: 18px; grid-column: 1/-1;">جاري التجهيز... ⏳</div>';
         try {
-          let res = await fetch(`https://api.alquran.cloud/v1/surah/${surahIndex}/quran-uthmani`);
+          let res = await fetch(`data/surah/${surahIndex}.json`);
           let json = await res.json();
           if (json && json.data && json.data.ayahs) {
             SURAS_CACHE[surahIndex] = json.data.ayahs;

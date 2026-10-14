@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة متابعة البطل - مركز خادم القرآن</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<link href="vendor/css/fonts.css" rel="stylesheet">
+<link href="vendor/css/tabler-icons.min.css" rel="stylesheet">
+<script src="vendor/js/chart.umd.min.js"></script>
+<script src="vendor/js/firebase-app-compat.js"></script>
+<script src="vendor/js/firebase-firestore-compat.js"></script>
 
 <style>
 :root {
@@ -186,6 +186,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.warn("offline persistence:",e.code)});
 
 // تحويل التاريخ إلى التقويم الهجري
 function convertToHijri(dateInput) {
@@ -624,5 +625,6 @@ function closeLightbox() {
 
 document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
 </body>
 </html>

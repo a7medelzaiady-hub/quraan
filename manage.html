@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>سجل الطلاب - نظام المتابعة الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<link href="vendor/css/fonts.css" rel="stylesheet">
+<link href="vendor/css/tabler-icons.min.css" rel="stylesheet">
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="vendor/js/firebase-app-compat.js"></script>
+<script src="vendor/js/firebase-firestore-compat.js"></script>
 
 <!-- مكتبات تحويل التاريخ الهجري المضمونة -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+<script src="vendor/js/moment.min.js"></script>
+<script src="vendor/js/moment-hijri.min.js"></script>
 
 <style>
 :root{
@@ -184,6 +184,7 @@ const firebaseConfig={
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.warn("offline persistence:",e.code)});
 const studentsCollection=db.collection("students");
 
 let allStudentsData=[];
@@ -400,5 +401,6 @@ async function deleteStudentDoc(docId,studentName){
   }
 }
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
 </body>
 </html>

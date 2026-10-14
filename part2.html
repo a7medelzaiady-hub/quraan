@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>مذكرة مركز خادم القرآن الكريم</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link href="vendor/css/fonts.css" rel="stylesheet">
 <style>
 :root {
   --green-deep: #022c1a;
@@ -1275,5 +1275,6 @@ window.addEventListener('scroll', function() {
   else btn.classList.remove('show');
 });
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
 </body>
 </html>
