@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>سجل الطلاب - نظام المتابعة الذكي</title>
+<link href="vendor/css/fonts.css" rel="stylesheet">
+<link href="vendor/css/tabler-icons.min.css" rel="stylesheet">
+
+<script src="vendor/js/firebase-app-compat.js"></script>
+<script src="vendor/js/firebase-firestore-compat.js"></script>
+<script src="./vendor/js/offline-fs.js"></script>
+<script src="./vendor/js/offline-badge.js"></script>
+
+<!-- مكتبات تحويل التاريخ الهجري المضمونة -->
+<script src="vendor/js/moment.min.js"></script>
+<script src="vendor/js/moment-hijri.min.js"></script>
+
+<style>
+:root{
+  --green-deep:#04201a;
+  --green-mid:#0b3d2e;
+  --green-card:#0a3527;
+  --green-light:#14795c;
+  --gold:#d4af37;
+  --gold-light:#fef08a;
+  --cream:#fdfbf5;
+  --line:#e5e7eb;
+  --sub:#64748b;
+  --red:#dc2626;
+  --whatsapp:#25d366;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  direction:rtl;font-family:Cairo,sans-serif;background:var(--cream);
+  color:#111827;min-height:100vh;padding-bottom:40px
+}
+.hdr{
+  background:linear-gradient(160deg,var(--green-deep),var(--green-mid));
+  padding:22px 15px 20px;text-align:center;color:#fff;
+  border-bottom:4px solid var(--gold);
+  box-shadow:0 4px 15px rgba(0,0,0,.15)
+}
+.hdr-emblem{
+  width:52px;height:52px;margin:0 auto 8px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(212,175,55,.14);border:2px solid var(--gold);
+  color:var(--gold-light);font-size:24px
+}
+.hdr h1{font-size:21px;font-weight:900;color:var(--gold-light);margin-bottom:4px}
+.hdr-subtitle{font-size:11px;color:rgba(255,255,255,.78);font-weight:600;margin-bottom:13px}
+.back-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--gold-light);border:1px solid var(--gold);
+  padding:7px 15px;border-radius:20px;text-decoration:none;
+  font-size:12px;font-weight:800;transition:.2s
+}
+.back-btn:hover{background:rgba(212,175,55,.15)}
+
+.container{max-width:680px;margin:16px auto;padding:0 13px}
+.controls-card{
+  background:#fff;border-radius:16px;padding:11px;
+  box-shadow:0 4px 12px rgba(0,0,0,.035);
+  margin-bottom:13px;border:1px solid var(--line)
+}
+.search-box{
+  width:100%;padding:12px 15px;border:1.5px solid var(--line);
+  border-radius:12px;font-size:13px;font-family:Cairo;outline:none;
+  background:#fdfbf7
+}
+.search-box:focus{border-color:var(--green-mid);background:#fff}
+
+.student-card-wrapper{margin-bottom:12px}
+.student-card{
+  width:100%;background:#fff;border-radius:18px;
+  border:1px solid var(--line);overflow:hidden;
+  box-shadow:0 4px 13px rgba(0,0,0,.045);
+  transition:.2s
+}
+.student-header{
+  position:relative;
+  background:linear-gradient(135deg,#063e30,#07533f 60%,#0b6750);
+  color:#fff;padding:14px 16px;min-height:78px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer
+}
+.student-info{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.student-info>.student-icon{
+  width:43px;height:43px;flex:0 0 43px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold-light);font-size:23px;
+  background:rgba(212,175,55,.13);
+  border:1px solid rgba(212,175,55,.35)
+}
+.student-name-col{display:flex;flex-direction:column;gap:3px;min-width:0}
+.student-name{
+  font-size:16px;font-weight:900;color:var(--gold-light);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap
+}
+.badge-reports{
+  background:rgba(212,175,55,.12);color:var(--gold-light);
+  border:1px solid rgba(212,175,55,.4);
+  padding:2px 8px;border-radius:15px;font-size:9px;font-weight:800
+}
+.last-session-date{
+  font-size:10px;font-weight:600;color:rgba(255,255,255,.72);
+  display:flex;align-items:center;gap:4px
+}
+
+/* شريط الأزرار السريعة لولي الأمر والعمليات */
+.student-actions-bar{
+  background:#f8faf8;padding:10px 14px;
+  border-top:1px solid var(--line);
+  display:grid;grid-template-columns:1fr auto;gap:8px;
+  align-items:center
+}
+.btn-dash-share{
+  background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
+  color:var(--gold-light);border:1px solid var(--gold);
+  padding:8px 12px;border-radius:10px;font-size:11px;
+  font-weight:800;font-family:Cairo;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:.2s
+}
+.btn-dash-share:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+
+.delete-student{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;color:var(--sub);
+  border:1px solid var(--line);cursor:pointer;
+  font-size:15px;transition:.2s
+}
+.delete-student:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+.empty-state{
+  text-align:center;padding:38px 20px;color:var(--sub);
+  font-size:13px;font-weight:700;background:#fff;border-radius:16px;
+  border:1px dashed #cbd5e1
+}
+.loading{text-align:center;padding:35px;color:var(--sub);font-size:13px;font-weight:700}
+
+@media(max-width:600px){
+  .container{padding:0 11px;margin-top:13px}
+  .student-header{padding:13px 12px}
+  .student-info{gap:8px}
+  .student-info>.student-icon{width:40px;height:40px;flex-basis:40px;font-size:21px}
+  .student-name{font-size:14px}
+  .last-session-date{font-size:9.5px}
+  .student-actions-bar{grid-template-columns:1fr auto;gap:6px;padding:8px 10px}
+  .btn-dash-share{font-size:10px;padding:7px 10px}
+}
+</style>
+</head>
+
+<body>
+<header class="hdr">
+  <div class="hdr-emblem"><i class="ti ti-users"></i></div>
+  <h1>سجل وتقارير الطلاب</h1>
+  <div class="hdr-subtitle">مركز خادم القرآن الكريم — تحت إشراف الشيخ عبدالرحمن</div>
+  <a href="index1.html" class="back-btn">
+    <i class="ti ti-arrow-right"></i> العودة لصفحة الإدخال
+  </a>
+</header>
+
+<div class="container">
+  <div class="controls-card">
+    <input type="text" class="search-box" id="search-student" placeholder="🔍 ابحث عن اسم البطل...">
+  </div>
+
+  <div id="students-list-container">
+    <div class="loading">جاري تحميل سجلات الطلاب من قاعدة البيانات... ⏳</div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig={
+  apiKey:"AIzaSyAS0NNcZy0t-LN2wCB7p0941jR0bo-MNls",
+  authDomain:"ahmedelzaiady.firebaseapp.com",
+  projectId:"ahmedelzaiady",
+  storageBucket:"ahmedelzaiady.firebasestorage.app",
+  messagingSenderId:"300306825071",
+  appId:"1:300306825071:web:0426ddde56280fa090329a",
+  measurementId:"G-WE04GK5XZZ"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.warn("offline persistence:",e.code)});
+const studentsCollection=db.collection("students");
+
+let allStudentsData=[];
+
+// أسماء الأشهر الهجرية بالعربية
+const hijriMonths = [
+  "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
+  "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
+  "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+];
+
+function customAlert(msg){
+  const m=document.createElement("div");
+  m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px";
+  m.innerHTML=`<div style="background:#fff;padding:23px;border-radius:16px;text-align:center;max-width:380px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,.2);font-family:Cairo">
+    <div style="font-size:14px;font-weight:800;color:#111827;margin-bottom:17px;line-height:1.7">${msg}</div>
+    <button style="padding:9px 30px;background:#0b3d2e;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;font-family:Cairo">حسناً</button>
+  </div>`;
+  document.body.appendChild(m);
+  m.querySelector("button").onclick=()=>m.remove();
+}
+
+function convertToHijri(dateInput){
+  if(!dateInput) return "التاريخ غير متاح";
+
+  try{
+    let d;
+    if(typeof dateInput === "object" && typeof dateInput.toDate === "function"){
+      d = dateInput.toDate();
+    } else if(dateInput instanceof Date){
+      d = dateInput;
+    } else {
+      d = new Date(dateInput);
+    }
+
+    if(isNaN(d.getTime())) return "التاريخ غير متاح";
+
+    // استخدام Moment-Hijri للتحويل الدقيق للمشكلة الظاهرة بالصورة
+    if(window.moment && window.moment.fn.iMonth){
+      const m = moment(d);
+      const day = m.iDate();
+      const monthIndex = m.iMonth();
+      const year = m.iYear();
+      return `${day} ${hijriMonths[monthIndex]} ${year} هـ`;
+    }
+
+    // بديل احتياطي متقدم
+    const formatter = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+    return formatter.format(d) + " هـ";
+
+  }catch(e){
+    console.error("خطأ في تحويل التاريخ:", e);
+    return "التاريخ غير متاح";
+  }
+}
+
+function dateValue(v){
+  if(!v)return 0;
+  try{
+    if(typeof v==="object"&&typeof v.toDate==="function")return v.toDate().getTime();
+    const d=new Date(v);
+    return isNaN(d.getTime())?0:d.getTime();
+  }catch(e){return 0}
+}
+
+studentsCollection.onSnapshot(snapshot=>{
+  allStudentsData=[];
+
+  snapshot.forEach(doc=>{
+    const s=doc.data();
+    const txs=Array.isArray(s.transactions)?s.transactions.slice():[];
+
+    txs.sort((a,b)=>dateValue(b.date)-dateValue(a.date));
+
+    allStudentsData.push({
+      id:doc.id,
+      ...s,
+      transactions:txs
+    });
+  });
+
+  allStudentsData.sort((a,b)=>{
+    const ta=a.transactions?.[0]?.date;
+    const tb=b.transactions?.[0]?.date;
+    return dateValue(tb)-dateValue(ta);
+  });
+
+  renderStudents(allStudentsData);
+},error=>{
+  document.getElementById("students-list-container").innerHTML=
+    `<div class="empty-state">❌ تعذر تحميل السجلات.<br><small>${error.message}</small></div>`;
+});
+
+function renderStudents(list){
+  const container=document.getElementById("students-list-container");
+
+  if(!list.length){
+    container.innerHTML='<div class="empty-state">لا توجد سجلات طلاب محفوظة حتى الآن.</div>';
+    return;
+  }
+
+  container.innerHTML="";
+
+  list.forEach(student=>{
+    const wrapper=document.createElement("div");
+    wrapper.className="student-card-wrapper";
+
+    const transactions=student.transactions||[];
+
+    let lastSession="";
+
+    if(transactions[0]?.date){
+      lastSession=`
+        <span class="last-session-date">
+          <i class="ti ti-calendar-event"></i>
+          آخر حصة: ${convertToHijri(transactions[0].date)}
+        </span>`;
+    }
+
+    wrapper.innerHTML=`
+      <div class="student-card">
+        <div class="student-header" onclick="openStudentProfile('${student.id}')">
+          <div class="student-info">
+            <div class="student-icon">
+              <i class="ti ti-user"></i>
+            </div>
+            <div class="student-name-col">
+              <span class="student-name">
+                ${escapeHtml(student.name||"بدون اسم")}
+                <span class="badge-reports">
+                  ${transactions.length} ${transactions.length===1?"تقرير":"تقارير"}
+                </span>
+              </span>
+              ${lastSession}
+            </div>
+          </div>
+          <i class="ti ti-chevron-left" style="color:var(--gold-light);font-size:20px;"></i>
+        </div>
+
+        <div class="student-actions-bar">
+          <button class="btn-dash-share" onclick="shareParentDashboard('${student.id}', '${escapeHtml(student.name||"البطل")}')">
+            <i class="ti ti-chart-dots"></i>
+            <span>مشاركة لوحة المتابعة لولي الأمر 📊</span>
+          </button>
+
+          <button class="delete-student" title="حذف الطالب" onclick="deleteStudentDoc('${student.id}',${JSON.stringify(student.name||"بدون اسم")})">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(wrapper);
+  });
+}
+
+function escapeHtml(v){
+  return String(v??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function openStudentProfile(studentId){
+  window.location.href="student.html?id="+encodeURIComponent(studentId);
+}
+
+function shareParentDashboard(studentId, studentName) {
+  const currentPath = window.location.pathname;
+  const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+  const dashUrl = `${window.location.origin}${basePath}student_dashboard.html?id=${encodeURIComponent(studentId)}`;
+
+  const msgText = `السلام عليكم ورحمة الله وبركاته 🕌\nيمكنكم متابعة تقرير البطل (${studentName}) عبر لوحة المتابعة من الرابط التالي:`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: `لوحة متابعة البطل ${studentName}`,
+      text: msgText,
+      url: dashUrl
+    }).catch(() => {});
+  } else {
+    const fullMsg = `${msgText}\n${dashUrl}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(fullMsg)}`;
+    window.open(waUrl, '_blank');
+  }
+}
+
+document.getElementById("search-student").addEventListener("input",function(){
+  const val=this.value.trim().toLowerCase();
+  const filtered=allStudentsData.filter(s=>
+    String(s.name||"").toLowerCase().includes(val)
+  );
+  renderStudents(filtered);
+});
+
+async function deleteStudentDoc(docId,studentName){
+  if(!confirm(
+    "⚠️ هل أنت متأكد من حذف الطالب ("+
+    studentName+
+    ") وجميع تقاريره من قاعدة البيانات؟"
+  ))return;
+
+  try{
+    await studentsCollection.doc(docId).delete();
+    customAlert("✅ تم حذف الطالب بنجاح.");
+  }catch(e){
+    customAlert("❌ حدث خطأ أثناء الحذف: "+e.message);
+  }
+}
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
+</body>
+</html>
