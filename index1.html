@@ -1689,7 +1689,7 @@ function handleCounterAction(action, errorInpId, rowId, isQ) {
       openQuranModal(errorInpId, rowId, isQ);
     } else {
       var currentErrors = inp.value;
-      if (currentErrors === '0' || currentErrors.trim() !== '') return;
+      if (!currentErrors || currentErrors === '0') return;
       
       var list = currentErrors.split('، ').filter(x => x.trim() !== '');
       if (list.length > 0) {
